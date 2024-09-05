@@ -32,3 +32,17 @@
   cursor: pointer;
 }
 
+.content {
+  margin-left: 250px;
+  padding: 1px 16px;
+  height: calc(100vh - 100px);
+}
+
+footer{
+  bottom: 0;
+  margin-left: 250px;
+  background-color: #e2e5d8a0;
+  padding: 1px;
+  text-align: center;
+}
+

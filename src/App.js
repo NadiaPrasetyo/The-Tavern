@@ -25,10 +25,14 @@ function App() {
         <Sidebar />
       </aside>
 
-      <main>
+      <main className ="content">
         <h1>Content</h1>
         <p>This is the main content area</p>
       </main>
+
+      <footer>
+        <p>Footer</p>
+      </footer>
 
     </div>
   );
