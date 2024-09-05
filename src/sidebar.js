@@ -1,5 +1,10 @@
 import React from 'react';
 import './App.css';
+import { FaHome } from "react-icons/fa";
+import { RiFridgeFill } from "react-icons/ri";
+import { BiSolidFoodMenu } from "react-icons/bi";
+import { MdLocalGroceryStore } from "react-icons/md";
+
 
 
 function Sidebar() {
@@ -7,6 +12,7 @@ function Sidebar() {
 
     function toggleSidebar() {
         setSideBar(!isClosed);
+        
     }
 
     function openSidebar() {
@@ -34,6 +40,18 @@ function Sidebar() {
     function closeSidebar() {
         return (
             <div className="sidebar closed">
+                <header>
+					<span class="logodisplay"></span>
+				    </header>
+				    <nav id="nav">
+					<ul>
+						<li><a href="/Home" class="active"><FaHome /></a></li>
+						<li><a href="/Inventory"><RiFridgeFill /></a></li>
+						<li><a href="/Weekly-menu"><BiSolidFoodMenu /></a></li>
+						<li><a href="/Grocery-list"><MdLocalGroceryStore /></a></li>
+					</ul>
+				</nav>
+
                 <button className="pullTab" onClick={toggleSidebar}>
                     →
                 </button>

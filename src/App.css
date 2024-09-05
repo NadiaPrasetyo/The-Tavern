@@ -40,6 +40,7 @@
   background-color: #98a567a0;
   margin-top: auto;
   font-size: calc(10px + 1vmin);
+  animation: open 0.5s;
 }
 
   .sidebar > nav {
@@ -80,6 +81,28 @@
         background: #79855b73;
       }
 
+.closed{
+  width: 50px;
+  animation: close 0.5s;
+}
+
+@keyframes close {
+  from {
+    width: 250px;
+  }
+  to {
+    width: 50px;
+  }
+}
+
+@keyframes open {
+  from {
+    width: 50px;
+  }
+  to {
+    width: 250px;
+  }
+}
 
 .pullTab{
   position: absolute;
@@ -94,6 +117,7 @@
 }
 
 .content {
+  font-size: calc(10px + 1vmin);
   margin-left: 250px;
   padding: 1px 16px;
   height: calc(100vh - 100px);
