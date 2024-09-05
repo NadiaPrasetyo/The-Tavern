@@ -40,7 +40,7 @@
   background-color: #98a567a0;
   margin-top: auto;
   font-size: calc(10px + 1vmin);
-  animation: open 0.5s;
+  /* animation: open 0.5s; */
 }
 
   .sidebar > nav {
@@ -125,7 +125,6 @@
 
 footer{
   bottom: 0;
-  margin-left: 250px;
   background-color: #c2c7b028;
   padding: 1px;
   text-align: center;

@@ -1,16 +1,17 @@
 import React from 'react';
-import './App.css';
+import '../App.css';
 import { FaHome } from "react-icons/fa";
 import { RiFridgeFill } from "react-icons/ri";
 import { BiSolidFoodMenu } from "react-icons/bi";
 import { MdLocalGroceryStore } from "react-icons/md";
 
-
-
 function Sidebar() {
     const [isClosed, setSideBar] = React.useState(false);
 
     function toggleSidebar() {
+        if (isClosed) {
+            document.querySelector('.sidebar').style.animation = 'open 0.5s';
+        }
         setSideBar(!isClosed);
         
     }

@@ -1,21 +1,15 @@
 import './App.css';
-import Sidebar from './sidebar.js';
-import { IoMdMenu } from "react-icons/io";
-import React from 'react';
+//import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Inventory from "./pages/Inventory";
+import Menu from "./pages/Weekly-menu";
+import Grocery from "./pages/Grocery-list";
+import NoPage from "./pages/NoPage";
 
-import SignIn from './components/SignIn.js';
+//import SignIn from './components/SignIn.js';
 
 const isDarkMode = false;//default to false
-
-function ProfileBar(props) {
-    return (
-      <div className="profilebar">
-        <p>{props.username}</p>
-        <IoMdMenu className='menuIcon'/>
-      </div>
-    );
-  
-}
 
 
 function App() {
@@ -35,30 +29,17 @@ function App() {
   }
 
   return (
-    
-    <div className="App">
-      <header class = "App-header">
-        <ProfileBar username = "Red"/>
-      </header>
-
-      <aside>
-        <Sidebar />
-      </aside>
-
-      <main className ="content">
-        <h1>Content</h1>
-        <p>This is the main content area</p>
-        <div>
-          <SignIn />
-        </div>
-      </main>
-
-
-      <footer>
-        <p>Footer</p>
-      </footer>
-
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/">
+          <Route index element={<Home />} />
+          <Route path="inventory" element={<Inventory />} />
+          <Route path="weekly-menu" element={<Menu />} />
+          <Route path="grocery-list" element={<Grocery />} />
+          <Route path="*" element={<NoPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
