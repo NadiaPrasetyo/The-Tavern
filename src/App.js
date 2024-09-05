@@ -1,25 +1,38 @@
-import logo from './logo.svg';
 import './App.css';
+import Sidebar from './sidebar.js';
+
+const isDarkMode = false;//default to false
 
 function App() {
+  if (isDarkMode) {
+    document.body.style.backgroundColor = 'black';
+    document.body.style.color = 'white';
+  }
+  else {
+    document.body.style.backgroundColor = '#fffbf6';
+    document.body.style.color = 'black';
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <div className = "userProfile">
+            Username
+        </div>
       </header>
+
+      <aside>
+        <Sidebar />
+      </aside>
+
+      <main>
+        <h1>Content</h1>
+        <p>This is the main content area</p>
+      </main>
+
     </div>
   );
 }
+
 
 export default App;
