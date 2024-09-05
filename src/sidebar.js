@@ -12,6 +12,7 @@ function Sidebar() {
     function openSidebar() {
         return (
             <div className="sidebar">
+            
         
               <button className="pullTab" onClick={toggleSidebar}>
                 ←
