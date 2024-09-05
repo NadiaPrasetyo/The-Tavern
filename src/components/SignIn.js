@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import argon2 from 'argon2-browser';
 
 function SignIn() {
   const [username, setUsername] = useState('');
@@ -9,14 +8,7 @@ function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Hash the password using argon2
-    const hashedPassword = await argon2.hash({
-      pass: password,
-      salt: 'somesalt', // A salt is required
-      time: 2,
-    });
-
-    // Send the username and hashed password to the server
+    // Send the username and raw password to the server
     const response = await fetch('/api/login', {
       method: 'POST',
       headers: {
@@ -24,7 +16,7 @@ function SignIn() {
       },
       body: JSON.stringify({
         username,
-        password: hashedPassword.encoded, // Send the hashed password
+        password,
       }),
     });
 

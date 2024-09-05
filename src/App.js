@@ -3,6 +3,7 @@ import Sidebar from './sidebar.js';
 import { IoMdMenu } from "react-icons/io";
 import React from 'react';
 
+import SignIn from './components/SignIn.js';
 
 const isDarkMode = false;//default to false
 
@@ -47,7 +48,11 @@ function App() {
       <main className ="content">
         <h1>Content</h1>
         <p>This is the main content area</p>
+        <div>
+          <SignIn />
+        </div>
       </main>
+
 
       <footer>
         <p>Footer</p>
