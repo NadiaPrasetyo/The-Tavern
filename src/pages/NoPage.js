@@ -30,7 +30,6 @@ function NoPage() {
     
     <div className="App">
       <header class = "App-header">
-        <ProfileBar username = "Red"/>
       </header>
 
       <aside>
@@ -38,11 +37,7 @@ function NoPage() {
       </aside>
 
       <main className ="content">
-        <h1>Content</h1>
-        <p>This is the main content area</p>
-        <div>
-          <SignIn />
-        </div>
+        <h1>404 Page Not Found</h1>
       </main>
 
 
