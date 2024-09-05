@@ -1,12 +1,27 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap');
 
-.App-header {
-  text-align: right;
-  font-size: calc(10px + 2vmin);
+* {
+  font-family: "Hammersmith One", sans-serif;
 }
 
-.userProfile {
-  padding: 5px;
+.App-header {
+  font-size: calc(10px + 1vmin);
+}
+
+.profilebar{
+  display: flex;
+  justify-content: right;
+  text-align: right;
+  p{
+    margin-right: 10px;
+    margin-top: 10px;
+  }
+  .menuIcon{
+    margin-right: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
 }
 
 .sidebar {
@@ -41,7 +56,7 @@
 footer{
   bottom: 0;
   margin-left: 250px;
-  background-color: #e2e5d8a0;
+  background-color: #c2c7b028;
   padding: 1px;
   text-align: center;
 }

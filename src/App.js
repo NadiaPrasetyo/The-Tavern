@@ -1,8 +1,22 @@
 import './App.css';
 import Sidebar from './sidebar.js';
+import { IoMdMenu } from "react-icons/io";
+import React from 'react';
+
 import SignIn from './components/SignIn.js';
 
 const isDarkMode = false;//default to false
+
+function ProfileBar(props) {
+    return (
+      <div className="profilebar">
+        <p>{props.username}</p>
+        <IoMdMenu className='menuIcon'/>
+      </div>
+    );
+  
+}
+
 
 function App() {
   if (isDarkMode) {
@@ -17,11 +31,8 @@ function App() {
   return (
     
     <div className="App">
-      <header className="App-header">
-        <div className = "userProfile">
-          <p>Username</p>
-          <i class='bx-menu'></i>
-        </div>
+      <header class = "App-header">
+        <ProfileBar username = "Red"/>
       </header>
 
       <aside>
@@ -44,6 +55,8 @@ function App() {
     </div>
   );
 }
+
+
 
 
 export default App;
