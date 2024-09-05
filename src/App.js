@@ -14,10 +14,12 @@ function App() {
   }
 
   return (
+    
     <div className="App">
       <header className="App-header">
         <div className = "userProfile">
-            Username
+          <p>Username</p>
+          <i class='bx-menu'></i>
         </div>
       </header>
 
