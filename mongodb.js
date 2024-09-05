@@ -17,7 +17,7 @@ if (fs.existsSync(envFilePath)) {
 }
 
 const express = require('express');
-const argon2 = require('argon2-browser');
+const argon2 = require('argon2');
 const { MongoClient, ServerApiVersion, Collection } = require('mongodb');
 const bodyParser = require('body-parser');
 
@@ -44,9 +44,8 @@ async function connectToDb() {
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
   }
 }
 connectToDb().catch(console.dir);
@@ -66,8 +65,14 @@ listCollections(database).catch(console.dir);
 
 app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
+    console.log("username: ", username);
+    console.log("password: ", password);
   
     try {
+      // const hashedPassword = await argon2.hash(password); // Hash the password
+
+      // console.log("hashedPassword: ", hashedPassword);
+
       const db = client.db('The-tavern'); // replace with your DB name
       const collection = db.collection('User'); // your users collection
   
