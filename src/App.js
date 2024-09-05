@@ -21,10 +21,16 @@ function App() {
   if (isDarkMode) {
     document.body.style.backgroundColor = 'black';
     document.body.style.color = 'white';
+    document.querySelectorAll('a').forEach(link => {
+      link.style.color = 'white';
+    });
   }
   else {
     document.body.style.backgroundColor = '#fffbf6';
     document.body.style.color = 'black';
+    document.querySelectorAll('a').forEach(link => {
+      link.style.color = 'black';
+    });
   }
 
   return (

@@ -12,7 +12,17 @@ function Sidebar() {
     function openSidebar() {
         return (
             <div className="sidebar">
-            
+                <header>
+					<span class="logodisplay"></span>
+				    </header>
+				    <nav id="nav">
+					<ul>
+						<li><a href="/Home" class="active">Home</a></li>
+						<li><a href="/Inventory">Inventory</a></li>
+						<li><a href="/Weekly-menu">Weekly Menu</a></li>
+						<li><a href="/Grocery-list">Grocery List</a></li>
+					</ul>
+				</nav>
         
               <button className="pullTab" onClick={toggleSidebar}>
                 ←

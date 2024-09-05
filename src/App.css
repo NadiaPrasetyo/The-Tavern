@@ -3,6 +3,10 @@
 
 * {
   font-family: "Hammersmith One", sans-serif;
+  a{
+    color: #000;
+    text-decoration: none;
+  }
 }
 
 .App-header {
@@ -30,10 +34,52 @@
   width: 250px;
   position: fixed;
   z-index: 1;
+  display: block;
   top: 0;
   left: 0;
   background-color: #98a567a0;
+  margin-top: auto;
+  font-size: calc(10px + 1vmin);
 }
+
+  .sidebar > nav {
+    position: relative;
+    top: 35%;
+  }
+
+
+  .sidebar > nav h1 {
+    background: #7d664f9c;
+    color: #fff;
+    font-size: 1.5em;
+    margin: 0;
+    padding: 0.85em 0;
+  }
+.sidebar > nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+  .sidebar > nav ul li {
+    display: block;
+    padding: 0;
+  }
+
+    .sidebar > nav ul li a {
+      -moz-transition: none;
+      -webkit-transition: none;
+      -ms-transition: none;
+      transition: none;
+      border: 0;
+      display: block;
+      padding: 0.85em 0;
+      text-decoration: none;
+    }
+
+      .sidebar > nav ul li a.active {
+        background: #79855b73;
+      }
+
 
 .pullTab{
   position: absolute;
