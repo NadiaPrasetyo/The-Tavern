@@ -4,8 +4,6 @@ import Sidebar from '../components/sidebar.js';
 import React from 'react';
 import ProfileBar from '../components/profilebar.js';
 
-import SignIn from '../components/SignIn.js';
-
 const isDarkMode = false;//default to false
 
 
@@ -39,9 +37,6 @@ function Inventory() {
       <main className ="content">
         <h1>Content</h1>
         <p>This is the main content area</p>
-        <div>
-          <SignIn />
-        </div>
       </main>
 
 

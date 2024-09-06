@@ -6,6 +6,7 @@ import Inventory from "./pages/Inventory";
 import Menu from "./pages/Weekly-menu";
 import Grocery from "./pages/Grocery-list";
 import NoPage from "./pages/NoPage";
+import Login from "./pages/Login";
 
 //import SignIn from './components/SignIn.js';
 
@@ -37,6 +38,7 @@ function App() {
           <Route path="inventory" element={<Inventory />} />
           <Route path="weekly-menu" element={<Menu />} />
           <Route path="grocery-list" element={<Grocery />} />
+          <Route path="login" element={<Login />} />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>

@@ -1,13 +1,12 @@
 import '../App.css';
-import Sidebar from '../components/sidebar.js';
-
 import React from 'react';
-import ProfileBar from '../components/profilebar.js';
+
+import SignIn from '../components/SignIn.js';
 
 const isDarkMode = false;//default to false
 
 
-function Menu() {
+function Login() {
   if (isDarkMode) {
     document.body.style.backgroundColor = 'black';
     document.body.style.color = 'white';
@@ -27,22 +26,13 @@ function Menu() {
     
     <div className="App">
       <header class = "App-header">
-        <ProfileBar username = "Red"/>
       </header>
 
-      <aside>
-        <Sidebar source = "Menu"/>
-      </aside>
-
       <main className ="content">
-        <h1>Content</h1>
-        <p>This is the main content area</p>
+        <div idName ="SignIn-container">
+          <SignIn />
+        </div>
       </main>
-
-
-      <footer>
-        <p>Footer</p>
-      </footer>
 
     </div>
   );
@@ -51,4 +41,4 @@ function Menu() {
 
 
 
-export default Menu;
+export default Login;

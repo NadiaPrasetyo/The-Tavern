@@ -130,3 +130,26 @@ footer{
   text-align: center;
 }
 
+form{
+  display: flex;
+  flex-direction: column;
+  
+
+  margin-top: 50px;
+  input{
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #7d664f9c;
+  }
+  button{
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 100px;
+    border: 1px solid #7d664f9c;
+    background-color: #7d664f9c;
+    color: #fff;
+    cursor: pointer;
+  }
+}

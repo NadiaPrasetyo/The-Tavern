@@ -30,7 +30,7 @@ function SignIn() {
   };
 
   return (
-    <div>
+    <div idName = "SignIn-component">
       <h2>Sign In</h2>
       <form onSubmit={handleSubmit}>
         <div>
