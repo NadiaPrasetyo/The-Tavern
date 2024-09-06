@@ -56,9 +56,11 @@ function SignIn() {
           <li>
             <button type="submit">Sign In</button>
           </li>
+          <li>
+            {message && <p>{message}</p>}
+          </li>
         </ul>
       </form>
-      {message && <p>{message}</p>}
     </div>
   );
 }

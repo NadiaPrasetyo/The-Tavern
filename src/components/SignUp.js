@@ -29,7 +29,7 @@ function SignUp() {
     const data = await response.json();
 
     if (response.status === 200) {
-      setMessage('Login successful');
+      setMessage('Register successful');
     } else {
       setMessage(data.message || 'Error logging in');
     }
@@ -85,9 +85,11 @@ function SignUp() {
                 <li>
                     <button type="submit">Sign Up</button>
                 </li>
+                <li>
+                    {message && <p>{message}</p>}
+                </li>
             </ul>
       </form>
-      {message && <p>{message}</p>}
     </div>
   );
 }
