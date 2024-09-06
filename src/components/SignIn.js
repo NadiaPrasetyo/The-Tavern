@@ -30,26 +30,33 @@ function SignIn() {
   };
 
   return (
-    <div idName = "SignIn-component">
-      <h2>Sign In</h2>
+    <div id = "SignIn-component">
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Username:</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit">Sign In</button>
+        <ul>
+          <li>
+            <h2 className = "form-title">Login</h2>
+
+          </li>
+          <li>
+            <label>Username:</label><br/>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </li>
+          <li>
+            <label>Password:</label><br/>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </li>
+          <li>
+            <button type="submit">Sign In</button>
+          </li>
+        </ul>
       </form>
       {message && <p>{message}</p>}
     </div>

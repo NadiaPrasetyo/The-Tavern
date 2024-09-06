@@ -65,8 +65,6 @@ listCollections(database).catch(console.dir);
 
 app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
-    console.log("username: ", username);
-    console.log("password: ", password);
   
     try {
       // const hashedPassword = await argon2.hash(password); // Hash the password
@@ -96,6 +94,55 @@ app.post('/api/login', async (req, res) => {
       res.status(500).json({ message: "Server error" });
     }
   });
+
+// USER REGISTER
+
+  app.post('/api/register', async (req, res) => {
+    const { username, name, email, password, confirmPassword} = req.body;
+  
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+    // Password validation between 18 to 30 characters
+    if (password.length < 18 || password.length > 30) {
+      return res.status(400).json({ message: "Password must be between 18 and 30 characters" });
+    }
+
+    // Username, email, and name cannot be empty
+    if (!username || !email || !name) {
+      return res.status(400).json({ message: "Please fill in all fields" });
+    }
+
+    try {
+      const hashedPassword = await argon2.hash(password); // Hash the password
+
+      // console.log("hashedPassword: ", hashedPassword);
+
+      const db = client.db('The-tavern'); // replace with your DB name
+      const collection = db.collection('User'); // your users collection
+  
+      // Check if username already exists
+      const user = await collection.findOne({ username });
+      if (user) {
+        return res.status(400).json({ message: "Username already exist" });
+      }
+      // Check if email already exists
+      const emailExist = await collection.findOne({ email });
+      if (emailExist) {
+        return res.status(400).json({ message: "Email already exist" });
+      }
+      
+      // Insert the user into the database
+      await collection.insertOne({ name: name, username: username, email: email, password: hashedPassword });
+
+      // If everything is OK
+      res.status(200).json({ message: "Register successful" });
+  
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
   
   // Start the server
   app.listen(port, () => {
