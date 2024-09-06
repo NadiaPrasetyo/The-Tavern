@@ -33,7 +33,7 @@ function Menu() {
       </header>
 
       <aside>
-        <Sidebar />
+        <Sidebar source = "Menu"/>
       </aside>
 
       <main className ="content">

@@ -33,7 +33,7 @@ function Grocery() {
       </header>
 
       <aside>
-        <Sidebar />
+        <Sidebar source = "Grocery"/>
       </aside>
 
       <main className ="content">

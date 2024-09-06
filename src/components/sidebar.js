@@ -5,10 +5,8 @@ import { RiFridgeFill } from "react-icons/ri";
 import { BiSolidFoodMenu } from "react-icons/bi";
 import { MdLocalGroceryStore } from "react-icons/md";
 
-function Sidebar() {
+function Sidebar(props) {
     const [isClosed, setSideBar] = React.useState(false);
-    const url = window.location.href;
-    const active = url.substring(url.lastIndexOf('/') + 1);
     var template;
 
     function toggleSidebar() {
@@ -23,6 +21,117 @@ function Sidebar() {
         
     }
 
+    function GetActive(openprop){
+
+        console.log(openprop.closed);
+        console.log("source = " + props.source);
+
+        if (props.source === null){
+            props.source = "Home";
+        }
+
+        if (openprop.closed === 'false'){
+        switch(props.source){
+            case "Home":
+                return(
+                    <div>
+                    <li><a href="/Home" class = "active"><FaHome /></a></li>
+                    <li><a href="/Inventory"><RiFridgeFill /></a></li>
+                    <li><a href="/Weekly-menu"><BiSolidFoodMenu /></a></li>
+                    <li><a href="/Grocery-list"><MdLocalGroceryStore /></a></li>
+                    </div>
+
+                );
+            case "Inventory":
+                return(
+                    <div>
+                    <li><a href="/Home"><FaHome /></a></li>
+                    <li><a href="/Inventory" class = "active"><RiFridgeFill /></a></li>
+                    <li><a href="/Weekly-menu"><BiSolidFoodMenu /></a></li>
+                    <li><a href="/Grocery-list"><MdLocalGroceryStore /></a></li>
+                    </div>
+                );
+            case "Menu":
+                return(
+                    <div>
+                    <li><a href="/Home"><FaHome /></a></li>
+                    <li><a href="/Inventory"><RiFridgeFill /></a></li>
+                    <li><a href="/Weekly-menu" class = "active"><BiSolidFoodMenu /></a></li>
+                    <li><a href="/Grocery-list"><MdLocalGroceryStore /></a></li>
+                    </div>
+                );
+            case "Grocery":
+                return(
+                    <div>
+                    <li><a href="/Home"><FaHome /></a></li>
+                    <li><a href="/Inventory"><RiFridgeFill /></a></li>
+                    <li><a href="/Weekly-menu"><BiSolidFoodMenu /></a></li>
+                    <li><a href="/Grocery-list" class = "active"><MdLocalGroceryStore /></a></li>
+                    </div>
+                );
+            default:
+                return(
+                    <div>
+                    <li><a href="/Home" class = "active"><FaHome /></a></li>
+                    <li><a href="/Inventory"><RiFridgeFill /></a></li>
+                    <li><a href="/Weekly-menu"><BiSolidFoodMenu /></a></li>
+                    <li><a href="/Grocery-list"><MdLocalGroceryStore /></a></li>
+                    </div>
+                );
+            
+        }
+    } else if (openprop.closed === 'true'){
+        switch(props.source){
+            case "Home":
+                return(
+                    <div>
+                    <li><a href="/Home" class = "active">Home</a></li>
+                    <li><a href="/Inventory">Inventory</a></li>
+                    <li><a href="/Weekly-menu">Weekly Menu</a></li>
+                    <li><a href="/Grocery-list">Grocery List</a></li>
+                    </div>
+                );
+            case "Inventory":
+                return(
+                    <div>
+                    <li><a href="/Home">Home</a></li>
+                    <li><a href="/Inventory" class = "active">Inventory</a></li>
+                    <li><a href="/Weekly-menu">Weekly Menu</a></li>
+                    <li><a href="/Grocery-list">Grocery List</a></li>
+                    </div>
+                );
+            case "Menu":
+                return(
+                    <div>
+                    <li><a href="/Home">Home</a></li>
+                    <li><a href="/Inventory">Inventory</a></li>
+                    <li><a href="/Weekly-menu" class = "active">Weekly Menu</a></li>
+                    <li><a href="/Grocery-list">Grocery List</a></li>
+                    </div>
+                );  
+            case "Grocery":
+                return(
+                    <div>
+                    <li><a href="/Home">Home</a></li>
+                    <li><a href="/Inventory">Inventory</a></li>
+                    <li><a href="/Weekly-menu">Weekly Menu</a></li>
+                    <li><a href="/Grocery-list" class = "active">Grocery List</a></li>
+                    </div>
+                );
+            default:
+                return(
+                    <div>
+                    <li><a href="/Home" class = "active">Home</a></li>
+                    <li><a href="/Inventory">Inventory</a></li>
+                    <li><a href="/Weekly-menu">Weekly Menu</a></li>
+                    <li><a href="/Grocery-list">Grocery List</a></li>
+                    </div>
+                );
+            
+        }
+    }
+    }
+
 
     function openSidebar() {
         template = (
@@ -32,15 +141,11 @@ function Sidebar() {
 				    </header>
 				    <nav id="nav">
 					<ul>
-						<li><a href="/Home" >Home</a></li>
-						<li><a href="/Inventory">Inventory</a></li>
-						<li><a href="/Weekly-menu">Weekly Menu</a></li>
-						<li><a href="/Grocery-list">Grocery List</a></li>
+						<GetActive closed = 'true'/>
 					</ul>
 				</nav>
         
               <button className="pullTab" onClick={toggleSidebar}>
-                ←
               </button>
             </div>
           );
@@ -56,15 +161,11 @@ function Sidebar() {
 				    </header>
 				    <nav id="nav">
 					<ul>
-						<li><a href="/Home"><FaHome /></a></li>
-						<li><a href="/Inventory"><RiFridgeFill /></a></li>
-						<li><a href="/Weekly-menu"><BiSolidFoodMenu /></a></li>
-						<li><a href="/Grocery-list"><MdLocalGroceryStore /></a></li>
+						<GetActive closed = 'false' />
 					</ul>
 				</nav>
 
                 <button className="pullTab" onClick={toggleSidebar}>
-                    →
                 </button>
             </div>
         );
@@ -73,11 +174,11 @@ function Sidebar() {
     }
 
     if (!isClosed) {
-        return openSidebar(active);
+        return openSidebar();
     }
 
     else {
-        return closeSidebar(active);
+        return closeSidebar();
     }
 
 }

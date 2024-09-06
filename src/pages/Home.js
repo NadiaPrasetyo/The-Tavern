@@ -34,7 +34,7 @@ function Home() {
       </header>
 
       <aside>
-        <Sidebar />
+        <Sidebar source = "Home"/>
       </aside>
 
       <main className ="content">

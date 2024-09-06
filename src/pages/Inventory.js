@@ -33,7 +33,7 @@ function Inventory() {
       </header>
 
       <aside>
-        <Sidebar />
+        <Sidebar source = "Inventory"/>
       </aside>
 
       <main className ="content">
