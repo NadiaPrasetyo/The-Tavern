@@ -83,7 +83,7 @@
 
 .closed{
   width: 50px;
-  animation: close 0.5s;
+  /*animation: close 0.5s;*/
 }
 
 @keyframes close {

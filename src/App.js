@@ -9,7 +9,7 @@ import NoPage from "./pages/NoPage";
 
 //import SignIn from './components/SignIn.js';
 
-const isDarkMode = false;//default to false
+var isDarkMode = false;//default to false
 
 
 function App() {

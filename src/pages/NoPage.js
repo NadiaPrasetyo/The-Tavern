@@ -2,9 +2,6 @@
 import Sidebar from '../components/sidebar.js';
 
 import React from 'react';
-import ProfileBar from '../components/profilebar.js';
-
-import SignIn from '../components/SignIn.js';
 
 const isDarkMode = false;//default to false
 
