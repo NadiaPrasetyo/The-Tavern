@@ -8,6 +8,8 @@ import Grocery from "./pages/Grocery-list";
 import NoPage from "./pages/NoPage";
 import Login from "./pages/Login";
 import Settings from "./pages/Settings";
+import Preference from "./pages/Preference";
+import Options from './pages/Options';
 
 
 var isDarkMode = false;//default to false
@@ -51,6 +53,8 @@ function App() {
           <Route path="weekly-menu" element={<PrivateRoute element={<Menu />} />} />
           <Route path="grocery-list" element={<PrivateRoute element={<Grocery />} />} />
           <Route path="settings" element={<PrivateRoute element={<Settings />} />} />
+          <Route path="preference" element={<PrivateRoute element={<Preference />} />} />
+          <Route path="options" element={<PrivateRoute element={<Options />} />} />
           <Route path="login" element={<Login />} />
           <Route path="*" element={<NoPage />} />
         </Route>
