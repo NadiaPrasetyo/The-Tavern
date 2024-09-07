@@ -30,6 +30,10 @@ function SignUp() {
 
     if (response.status === 200) {
       setMessage('Register successful');
+      localStorage.setItem("isLoggedIn", true);
+      localStorage.setItem("username", username);
+      // Redirect to the home page
+      window.location.href = '/home';
     } else {
       setMessage(data.message || 'Error logging in');
     }

@@ -130,6 +130,8 @@ footer{
   text-align: center;
 }
 
+/* LOGIN STYLE */
+
 form {
   display: inline-block;
   padding: 1rem;
@@ -148,10 +150,9 @@ form li + li {
 
 .login{
   width: 100%;
-  height: 93.25vh;
+  height: 100vh;
   font-size: calc(10px + 1vmin);
   display: flex;
-  background-color: #7d664f9c;
 }
 
 #SignIn-container, #SignUp-container{
@@ -164,7 +165,7 @@ form li + li {
   background-color: #bec6a0;
   display: flex;
   justify-content: center;
-  padding-top: 5%;
+  padding-top: 10%;
   box-shadow: 0 0 10px 0 #0000001a;
   width: 100%;
 }
@@ -226,7 +227,7 @@ form button:hover {
   position: absolute;
   left: 0;
   width: 50%;
-  height: 93.25vh;
+  height: 100vh;
   background-color: #708871;
   display: flex;
   z-index: 100;
@@ -256,4 +257,43 @@ form button:hover {
 
 #SignIn-cover.active{
   display: none;
+}
+
+.tavern-logo{
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+/* Setting */
+
+.setting-item {
+  margin-bottom: 20px;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+input {
+  width: 100%;
+  padding: 10px 40px 10px 10px; /* Padding adjusted to make room for the icon */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.edit-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #7d664f9c;
+}
+
+.edit-icon:hover {
+  color: #98a567a0;
 }

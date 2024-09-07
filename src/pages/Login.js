@@ -3,13 +3,15 @@ import React, { useState } from 'react';
 
 import SignIn from '../components/SignIn.js';
 import SignUp from '../components/SignUp.js';
-import ProfileBar from '../components/profilebar.js';
 
 const isDarkMode = false;//default to false
 
 
 function Login() {
-    const [onRightSide, setOnRightSide] = useState(false);
+  // remove everything from localStorage
+  localStorage.clear();
+
+  const [onRightSide, setOnRightSide] = useState(true);
 
   if (isDarkMode) {
     document.body.style.backgroundColor = 'black';
@@ -29,9 +31,6 @@ function Login() {
   return (
     
     <div className="App">
-      <header class = "App-header">
-        <ProfileBar username = "Red"/>
-      </header>
 
       <main className ="login">
         <div id ="SignIn-container"
@@ -51,12 +50,14 @@ function Login() {
             <div id="SignIn-cover"
             className={onRightSide ? "active" : ""}
             >
+                <img className="tavern-logo" src="/Tavern-logo.png" alt="Tavern Logo" />
                 <h1>Sign In</h1>
                 <p>Already have an account? Login here</p>
             </div>
             <div id="SignUp-cover"
             className={onRightSide ? "active" : ""}
-            >
+            >   
+                <img className="tavern-logo" src="/Tavern-logo.png" alt="Tavern Logo" />
                 <h1>Sign Up</h1>
                 <p>Don't have an account? Register here</p>
             </div>

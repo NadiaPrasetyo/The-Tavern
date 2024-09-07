@@ -27,7 +27,7 @@ function Inventory() {
     
     <div className="App">
       <header class = "App-header">
-        <ProfileBar username = "Red"/>
+        <ProfileBar/>
       </header>
 
       <aside>

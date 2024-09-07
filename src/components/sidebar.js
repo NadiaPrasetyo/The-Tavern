@@ -4,6 +4,9 @@ import { FaHome } from "react-icons/fa";
 import { RiFridgeFill } from "react-icons/ri";
 import { BiSolidFoodMenu } from "react-icons/bi";
 import { MdLocalGroceryStore } from "react-icons/md";
+import { GiCrown } from "react-icons/gi";
+import { GiQuillInk } from "react-icons/gi";
+import { GiTwoHandedSword } from "react-icons/gi";
 
 function Sidebar(props) {
     const [isClosed, setSideBar] = React.useState(false);
@@ -69,6 +72,30 @@ function Sidebar(props) {
                     <li><a href="/Grocery-list" class = "active"><MdLocalGroceryStore /></a></li>
                     </div>
                 );
+            case "Settings":
+                return(
+                    <div>
+                    <li><a href="/Settings" class = "active"><GiCrown /></a></li>
+                    <li><a href="/Preference"><GiQuillInk /></a></li>
+                    <li><a href="/Options"><GiTwoHandedSword /></a></li>
+                    </div>
+                );
+            case "Preference":
+                return(
+                    <div>
+                    <li><a href="/Settings"><GiCrown /></a></li>
+                    <li><a href="/Preference" class = "active"><GiQuillInk /></a></li>
+                    <li><a href="/Options"><GiTwoHandedSword /></a></li>
+                    </div>
+                );
+            case "Options":
+                return(
+                    <div>
+                    <li><a href="/Settings"><GiCrown /></a></li>
+                    <li><a href="/Preference"><GiQuillInk /></a></li>
+                    <li><a href="/Options" class = "active"><GiTwoHandedSword /></a></li>
+                    </div>
+                );
             default:
                 return(
                     <div>
@@ -116,6 +143,30 @@ function Sidebar(props) {
                     <li><a href="/Inventory">Inventory</a></li>
                     <li><a href="/Weekly-menu">Weekly Menu</a></li>
                     <li><a href="/Grocery-list" class = "active">Grocery List</a></li>
+                    </div>
+                );
+            case "Settings":
+                return(
+                    <div>
+                    <li><a href="/Settings" class = "active">Settings</a></li>
+                    <li><a href="/Preference">Preference</a></li>
+                    <li><a href="/Options">Options</a></li>
+                    </div>
+                );
+            case "Preference":
+                return(
+                    <div>
+                    <li><a href="/Settings">Settings</a></li>
+                    <li><a href="/Preference" class = "active">Preference</a></li>
+                    <li><a href="/Options">Options</a></li>
+                    </div>
+                );
+            case "Options":
+                return(
+                    <div>
+                    <li><a href="/Settings">Settings</a></li>
+                    <li><a href="/Preference">Preference</a></li>
+                    <li><a href="/Options" class = "active">Options</a></li>
                     </div>
                 );
             default:
