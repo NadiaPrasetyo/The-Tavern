@@ -87,8 +87,8 @@ app.post('/api/login', async (req, res) => {
         return res.status(400).json({ message: "Invalid credentials" });
       }
   
-      // If everything is OK
-      res.status(200).json({ message: "Login successful" });
+      // If everything is OK, return username, name, and email
+      res.status(200).json({ message: "Login successful", username: user.username, name: user.name, email: user.email });
   
     } catch (error) {
       res.status(500).json({ message: "Server error" });
@@ -137,6 +137,67 @@ app.post('/api/login', async (req, res) => {
 
       // If everything is OK
       res.status(200).json({ message: "Register successful" });
+  
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  // CHANGE PASSWORD
+
+  app.post('/api/change-password', async (req, res) => {
+    const { username, currentPassword, newPassword } = req.body;
+  
+    // Password validation between 18 to 30 characters
+    if (newPassword.length < 18 || newPassword.length > 30) {
+      return res.status(400).json({ message: "Password must be between 18 and 30 characters" });
+    }
+
+    try {
+      const db = client.db('The-tavern'); // replace with your DB name
+      const collection = db.collection('User'); // your users collection
+  
+      // Find user by username
+      const user = await collection.findOne({ username });
+      if (!user) {
+        return res.status(400).json({ message: "User not found" });
+      }
+  
+      // Verify the password using argon2.verify()
+      const isMatch = await argon2.verify(user.password, currentPassword); // password is the hashed password from React
+  
+      if (!isMatch) {
+        return res.status(400).json({ message: "Invalid credentials" });
+      }
+
+      // Hash the new password
+      const hashedPassword = await argon2.hash(newPassword);
+  
+      // Update the password in the database
+      await collection.updateOne({ username }, { $set: { password: hashedPassword } });
+  
+      // If everything is OK
+      res.status(200).json({ message: "", changed: true });
+  
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  // UPDATE USER
+
+  app.post('/api/update-user', async (req, res) => {
+    const { username, name, email } = req.body;
+  
+    try {
+      const db = client.db('The-tavern'); // replace with your DB name
+      const collection = db.collection('User'); // your users collection
+  
+      // Update the user in the database
+      await collection.updateOne({ username }, { $set: { name, email } });
+  
+      // If everything is OK
+      res.status(200).json({ message: "User updated successfully" });
   
     } catch (error) {
       res.status(500).json({ message: "Server error" });

@@ -1,12 +1,12 @@
 import '../App.css'
 import { IoMdMenu } from "react-icons/io";
 
-const username = localStorage.getItem('username');
+const name = localStorage.getItem('name');
 
 function ProfileBar() {
     return (
       <div className="profilebar">
-        <p>{username}</p>
+        <p>{name}</p>
         <IoMdMenu className='menuIcon'/>
       </div>
     );

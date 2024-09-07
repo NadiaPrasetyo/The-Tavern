@@ -32,6 +32,8 @@ function SignUp() {
       setMessage('Register successful');
       localStorage.setItem("isLoggedIn", true);
       localStorage.setItem("username", username);
+      localStorage.setItem("name", name);
+      localStorage.setItem("email", email);
       // Redirect to the home page
       window.location.href = '/home';
     } else {

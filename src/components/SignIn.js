@@ -25,7 +25,10 @@ function SignIn() {
     if (response.status === 200) {
       setMessage('Login successful');
       localStorage.setItem("isLoggedIn", true);
-      localStorage.setItem("username", username);
+      // Save the username, name, and email to localStorage
+      localStorage.setItem("username", data.username);
+      localStorage.setItem("name", data.name);
+      localStorage.setItem("email", data.email);
       // Redirect to the home page
       window.location.href = '/home';
     } else {
