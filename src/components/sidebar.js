@@ -20,6 +20,7 @@ function Sidebar(props) {
         if (isClosed) {
             document.querySelector('.sidebar').style.animation = 'open 0.5s';
             document.querySelector('.content').style.animation = 'shrink 0.5s';
+            document.querySelector('.content').style.left = '250px';
             document.getElementById('sidebar-logo-small').style.animation = 'becomeBig 0.5s';
         }
         
