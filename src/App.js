@@ -12,7 +12,7 @@ import Preference from "./pages/Preference";
 import Options from './pages/Options';
 
 
-var isDarkMode = false;//default to false
+
 const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
 function PrivateRoute({ element }) {
@@ -28,20 +28,7 @@ function PrivateRoute({ element }) {
 
 
 function App() {
-  if (isDarkMode) {
-    document.body.style.backgroundColor = 'black';
-    document.body.style.color = 'white';
-    document.querySelectorAll('a').forEach(link => {
-      link.style.color = 'white';
-    });
-  }
-  else {
-    document.body.style.backgroundColor = '#fffbf6';
-    document.body.style.color = 'black';
-    document.querySelectorAll('a').forEach(link => {
-      link.style.color = 'black';
-    });
-  }
+
 
   return (
     <BrowserRouter>
@@ -67,3 +54,4 @@ function App() {
 
 
 export default App;
+
