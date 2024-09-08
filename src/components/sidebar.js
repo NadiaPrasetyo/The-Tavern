@@ -190,7 +190,7 @@ function Sidebar(props) {
         template = (
             <div className="sidebar">
                 <header>
-					<span class="logodisplay"><img id ="sidebar-logo" src="/Tavern-logo.png" alt="Tavern Logo" /></span>
+					<span class="logodisplay"><a href="/Home"><img id ="sidebar-logo" src="/Tavern-logo.png" alt="Tavern Logo" /></a></span>
 				    </header>
 				    <nav id="nav">
 					<ul>
@@ -210,7 +210,7 @@ function Sidebar(props) {
         template = (
             <div className="sidebar closed">
                 <header>
-					<span class="logodisplay"><img id ="sidebar-logo-small" src="/Tavern-logo-small.png" alt="Tavern Logo" /></span>
+					<span class="logodisplay"><a href= "/Home"><img id ="sidebar-logo-small" src="/Tavern-logo-small.png" alt="Tavern Logo" /></a></span>
 				    </header>
 				    <nav id="nav">
 					<ul>
