@@ -37,7 +37,10 @@ function Home() {
 
         <section className='groceryList'>
             <form>
-              <input type="checkbox" id="item1" name="item1" value="item1"/><span><label for="item1">Item 1</label></span>
+              <h3>Grocery List</h3>
+              <button class = "addGrocery"><IoAddCircle /></button>
+              <input type="checkbox" id="item1" name="item1" value="item1"/>
+              <label for="item1">Item 1</label>
               <input type="checkbox" id="item2" name="item2" value="item2"/>
               <label for="item2">Item 2</label>
               <input type="checkbox" id="item3" name="item3" value="item3"/>
