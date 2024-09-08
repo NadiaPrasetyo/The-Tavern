@@ -197,10 +197,30 @@
 
 /* MAIN CONTENT */
 .content {
+  position: relative;
   font-size: calc(10px + 1vmin);
-  margin-left: 250px;
+  left: 250px;
   padding: 1px 16px;
   height: calc(100vh - 100px);
+  animation-fill-mode: both;
+}
+
+@keyframes shrink {
+  from {
+    left: 50px;
+  }
+  to {
+    left: 250px;
+  }
+}
+
+@keyframes spread {
+  from {
+    left: 250px;
+  }
+  to {
+    left: 50px;
+  }
 }
 
 /* FOOTER */

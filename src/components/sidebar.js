@@ -15,11 +15,14 @@ function Sidebar(props) {
     function toggleSidebar() {
         if (isClosed) {
             document.querySelector('.sidebar').style.animation = 'open 0.5s';
+            document.querySelector('.content').style.animation = 'shrink 0.5s';
             document.getElementById('sidebar-logo-small').style.animation = 'becomeBig 0.5s';
         }
         
         if (!isClosed) {
             document.querySelector('.sidebar').style.animation = 'close 0.5s';
+            document.querySelector('.content').style.animation = 'spread 0.5s';
+            document.querySelector('.content').style.left = '50px';
             document.getElementById('sidebar-logo').style.animation = 'becomeSmall 0.5s';
         }
         setSideBar(!isClosed);
