@@ -1,6 +1,5 @@
 import '../App.css';
 import Sidebar from '../components/sidebar.js';
-
 import React from 'react';
 import ProfileBar from '../components/profilebar.js';
 
@@ -18,8 +17,7 @@ function Inventory() {
       </aside>
 
       <main className ="content">
-        <h1>Content</h1>
-        <p>This is the main content area</p>
+        <h1>Inventory</h1>
       </main>
 
 

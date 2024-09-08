@@ -196,12 +196,19 @@
 
 
 /* MAIN CONTENT */
+
 .content {
   position: relative;
+  display: grid;
+  max-width: 90%;
+  grid-template-columns: repeat(11, 97px);
+  grid-template-rows: repeat(6, 100px);
+  grid-gap: 10px;
+  grid-template-areas: "main";
   font-size: calc(10px + 1vmin);
   left: 250px;
-  padding: 1px 16px;
-  height: calc(100vh - 100px);
+  padding: 1px 25px;
+  max-height: 100%;
   animation-fill-mode: both;
 }
 
@@ -225,6 +232,8 @@
 
 /* FOOTER */
 footer{
+  /* disable display for now: nothing in it */
+  display: none ;
   bottom: 0;
   background-color: #c2c7b028;
   padding: 1px;
@@ -468,4 +477,56 @@ form button:hover {
 .message-form {
   display: flex;
   align-self: center;
+}
+
+/* Home */
+.todayMenu{
+  display: flex;
+  grid-row-start: 1;
+  grid-row-end: 5;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  text-align: center;
+  flex-wrap: wrap;
+  border: solid 1px #e0ecbca0;
+  background: #e0ecbca0;
+  padding: 10px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td{
+  padding: 5px;
+}
+
+th {
+  border-bottom: solid 2px #000000;
+}
+
+.groceryList{
+  grid-row-start: 1;
+  grid-row-end: 5;
+  grid-column-start: 3;
+  grid-column-end: 5;
+  border: solid 1px #e0ecbca0;
+  background: #e0ecbca0;
+  padding: 10px;
+
+  form{
+    /* FUCKING HELLK */
+  }
+}
+
+.addGrocery{
+  border: none;
+  background-color: #00000000;
+  color: #99a477a0;
+  width: 33px;
+}
+
+.addGrocery:hover{
+  background-color: #00000000;
 }

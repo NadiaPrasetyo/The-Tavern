@@ -4,29 +4,12 @@ import React, { useState } from 'react';
 import SignIn from '../components/SignIn.js';
 import SignUp from '../components/SignUp.js';
 
-const isDarkMode = false;//default to false
-
 
 function Login() {
   // remove everything from localStorage
   localStorage.clear();
 
   const [onRightSide, setOnRightSide] = useState(true);
-
-  if (isDarkMode) {
-    document.body.style.backgroundColor = 'black';
-    document.body.style.color = 'white';
-    document.querySelectorAll('a').forEach(link => {
-      link.style.color = 'white';
-    });
-  }
-  else {
-    document.body.style.backgroundColor = '#fffbf6';
-    document.body.style.color = 'black';
-    document.querySelectorAll('a').forEach(link => {
-      link.style.color = 'black';
-    });
-  }
 
   return (
     
