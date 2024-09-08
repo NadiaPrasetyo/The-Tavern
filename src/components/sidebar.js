@@ -15,10 +15,12 @@ function Sidebar(props) {
     function toggleSidebar() {
         if (isClosed) {
             document.querySelector('.sidebar').style.animation = 'open 0.5s';
+            document.getElementById('sidebar-logo-small').style.animation = 'becomeBig 0.5s';
         }
         
         if (!isClosed) {
             document.querySelector('.sidebar').style.animation = 'close 0.5s';
+            document.getElementById('sidebar-logo').style.animation = 'becomeSmall 0.5s';
         }
         setSideBar(!isClosed);
         
@@ -188,7 +190,7 @@ function Sidebar(props) {
         template = (
             <div className="sidebar">
                 <header>
-					<span class="logodisplay"></span>
+					<span class="logodisplay"><img id ="sidebar-logo" src="/Tavern-logo.png" alt="Tavern Logo" /></span>
 				    </header>
 				    <nav id="nav">
 					<ul>
@@ -208,7 +210,7 @@ function Sidebar(props) {
         template = (
             <div className="sidebar closed">
                 <header>
-					<span class="logodisplay"></span>
+					<span class="logodisplay"><img id ="sidebar-logo-small" src="/Tavern-logo-small.png" alt="Tavern Logo" /></span>
 				    </header>
 				    <nav id="nav">
 					<ul>

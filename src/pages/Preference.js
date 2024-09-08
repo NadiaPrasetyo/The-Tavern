@@ -39,19 +39,13 @@ function Preference() {
         {/* Dark Mode */}
 
 
-        {/* Font?? */}
-
-
-        {/* Sidebar Layout? */}
+        {/* Font size  USE SLIDER*/}
 
 
         {/* Menu format for table */}
 
 
-        {/* Download data? */}
-
-
-        {/* Default page after login */}
+        {/* Download data as excel or comma separated list */}
 
 
         {/* Logout */}
