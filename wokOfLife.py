@@ -4,7 +4,6 @@ from pymongo import MongoClient
 
 import requests
 from bs4 import BeautifulSoup
-import csv
 from dotenv import load_dotenv
 import os
 import re
@@ -27,6 +26,7 @@ def remove_non_ascii(text):
 
 # # Starting URL
 base_url = 'https://thewoksoflife.com/visual-recipe-index/'
+veg_url = 'https://thewoksoflife.com/category/recipes/vegetarian/'
 
 
 # Function to scrape a single page of recipes
@@ -79,12 +79,12 @@ def find_next_page(soup):
     else:
         return None
 
-def scrape_by_course(url):
+def scrape_by_category(url, class_name):
     response = requests.get(url)
     base_soup = BeautifulSoup(response.content, 'html.parser')
     
     # get the course links
-    course_links = base_soup.find('li', class_='menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-50587').find('ul', class_='sub-menu').find_all('a')
+    course_links = base_soup.find('li', class_=class_name).find('ul', class_='sub-menu').find_all('a')
     
     for course_link in course_links:
         course_url = course_link['href']
@@ -96,27 +96,28 @@ def scrape_by_course(url):
             print(f"Scraping: {current_url}")
             recipes, soup = scrape_page(current_url, course_name)
 
-            # Write recipes to the CSV
+            # Modify the recipe data to include the tag
             for recipe in recipes:
-                writer.writerow(recipe)
-                collection.insert_one(recipe)
-
+                # find the existing recipe in mongoDB
+                existing_recipe = collection.find_one({'Name': recipe['Name']})
+                if existing_recipe:
+                    # if the exising recipe already has the tag, don't add it again
+                    if recipe['Tag'][0] not in existing_recipe['Tag']:            
+                        recipe['Tag'] = existing_recipe['Tag'] + recipe['Tag']
+                        collection.update_one({'Name': recipe['Name']}, {'$set': recipe})
+                else:
+                    collection.insert_one(recipe)
             # Find the next page
             current_url = find_next_page(soup)
     
 
+# Scrape by category
+course = 'menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-50587'
+collect = 'menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-50586'
+scrape_by_category(base_url, course)
+scrape_by_category(base_url, collect)
+print("Scraping complete!")
 
-# Open a CSV file to store the results
-with open('recipes.csv', 'w', newline='') as csvfile:
-    fieldnames = ['Name', 'Link', 'Ingredients', 'Tag']
-    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-    writer.writeheader()
-
-    # Scrape by course
-    scrape_by_course(base_url)
-
-    print("Scraping complete!")
 
 
 # disconnect from MongoDB
