@@ -9,25 +9,68 @@
   }
 }
 
+/* App */
 .App-header {
   font-size: calc(10px + 1vmin);
 }
 
+/* NAVIGATION BAR */
 .profilebar{
   display: flex;
   justify-content: right;
   text-align: right;
+  max-height: 30px;
   p{
     margin-right: 10px;
-    margin-top: 10px;
+    margin-top: 5px;
   }
   .menuIcon{
-    margin-right: 10px;
-    margin-top: 10px;
+    border: none;
+    background-color: #7d664f9c;
     cursor: pointer;
+  }
+
+  .menuIcon:hover{
+    background-color: #4d3c2a9c;
   }
 }
 
+.menuBar{
+  position: absolute;
+  background-color: #bec6a0;
+  width: 100px;
+  height: 65px;
+  text-align: center;
+  top: 30px;
+  display: none;
+  animation: toggle 0.5s;
+
+  a{
+    -moz-transition: none;
+    -webkit-transition: none;
+    -ms-transition: none;
+    transition: none;
+    border: 0;
+    display: block;
+    padding: 0.4em 0;
+    text-decoration: none;
+  }
+
+  a:hover{
+    background-color: #5e7d4f9c;
+  }
+}
+
+@keyframes toggle {
+  from {
+    height: 0px;
+  }
+  to {
+    height: 65px;
+  }
+}
+
+/* Sidebar */
 .sidebar {
   text-align: center;
   height: 100%;
@@ -46,7 +89,6 @@
   .sidebar > nav {
     margin-top: calc(50px + 1vmin);
   }
-
 
   .sidebar > nav h1 {
     background: #7d664f9c;
@@ -115,6 +157,45 @@
   cursor: pointer;
 }
 
+/* SIDE BAR LOGOS*/
+#sidebar-logo{
+  margin-top: 20px;
+  width: 150px;
+  height: 150px;
+  /* animation: becomeSmall 0.5s; */
+}
+
+#sidebar-logo-small{
+  margin-top: 20px;
+  width: 50px;
+  height: 50px;
+  /* animation: becomeBig 0.5s; */
+}
+
+@keyframes becomeBig {
+  from {
+    width: 50px;
+    height: 50px;
+  }
+  to {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+@keyframes becomeSmall {
+  from {
+    width: 150px;
+    height: 150px;
+  }
+  to {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+
+/* MAIN CONTENT */
 .content {
   font-size: calc(10px + 1vmin);
   margin-left: 250px;
@@ -122,6 +203,7 @@
   height: calc(100vh - 100px);
 }
 
+/* FOOTER */
 footer{
   bottom: 0;
   background-color: #c2c7b028;
@@ -264,43 +346,6 @@ form button:hover {
   width: 200px;
   height: 200px;
   margin: 0 auto;
-}
-
-#sidebar-logo{
-  margin-top: 20px;
-  width: 150px;
-  height: 150px;
-  /* animation: becomeSmall 0.5s; */
-}
-
-#sidebar-logo-small{
-  margin-top: 20px;
-  width: 50px;
-  height: 50px;
-  /* animation: becomeBig 0.5s; */
-
-}
-
-@keyframes becomeBig {
-  from {
-    width: 50px;
-    height: 50px;
-  }
-  to {
-    width: 150px;
-    height: 150px;
-  }
-}
-
-@keyframes becomeSmall {
-  from {
-    width: 150px;
-    height: 150px;
-  }
-  to {
-    width: 50px;
-    height: 50px;
-  }
 }
 
 /* Setting */
