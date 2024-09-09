@@ -21,6 +21,7 @@ function Sidebar(props) {
             document.querySelector('.sidebar').style.animation = 'open 0.5s';
             document.querySelector('.content').style.animation = 'shrink 0.5s';
             document.querySelector('.content').style.left = '250px';
+            document.querySelector('.content').style.width = '74.6%';
             document.getElementById('sidebar-logo-small').style.animation = 'becomeBig 0.5s';
         }
         
@@ -28,6 +29,7 @@ function Sidebar(props) {
             document.querySelector('.sidebar').style.animation = 'close 0.5s';
             document.querySelector('.content').style.animation = 'spread 0.5s';
             document.querySelector('.content').style.left = '50px';
+            document.querySelector('.content').style.width = '100%';
             document.getElementById('sidebar-logo').style.animation = 'becomeSmall 0.5s';
         }
         setSideBarState(!isClosed);
