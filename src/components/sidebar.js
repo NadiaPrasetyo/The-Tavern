@@ -50,7 +50,7 @@ function Sidebar(props) {
             case "Home":
                 return(
                     <div>
-                    <li><a href="/Home" class = "active"><FaHome /></a></li>
+                    <li><a href="/Home" className = "active"><FaHome /></a></li>
                     <li><a href="/Inventory"><RiFridgeFill /></a></li>
                     <li><a href="/Weekly-menu"><BiSolidFoodMenu /></a></li>
                     <li><a href="/Grocery-list"><MdLocalGroceryStore /></a></li>
@@ -61,7 +61,7 @@ function Sidebar(props) {
                 return(
                     <div>
                     <li><a href="/Home"><FaHome /></a></li>
-                    <li><a href="/Inventory" class = "active"><RiFridgeFill /></a></li>
+                    <li><a href="/Inventory" className = "active"><RiFridgeFill /></a></li>
                     <li><a href="/Weekly-menu"><BiSolidFoodMenu /></a></li>
                     <li><a href="/Grocery-list"><MdLocalGroceryStore /></a></li>
                     </div>
@@ -71,7 +71,7 @@ function Sidebar(props) {
                     <div>
                     <li><a href="/Home"><FaHome /></a></li>
                     <li><a href="/Inventory"><RiFridgeFill /></a></li>
-                    <li><a href="/Weekly-menu" class = "active"><BiSolidFoodMenu /></a></li>
+                    <li><a href="/Weekly-menu" className = "active"><BiSolidFoodMenu /></a></li>
                     <li><a href="/Grocery-list"><MdLocalGroceryStore /></a></li>
                     </div>
                 );
@@ -81,13 +81,13 @@ function Sidebar(props) {
                     <li><a href="/Home"><FaHome /></a></li>
                     <li><a href="/Inventory"><RiFridgeFill /></a></li>
                     <li><a href="/Weekly-menu"><BiSolidFoodMenu /></a></li>
-                    <li><a href="/Grocery-list" class = "active"><MdLocalGroceryStore /></a></li>
+                    <li><a href="/Grocery-list" className = "active"><MdLocalGroceryStore /></a></li>
                     </div>
                 );
             case "Settings":
                 return(
                     <div>
-                    <li><a href="/Settings" class = "active"><GiCrown /></a></li>
+                    <li><a href="/Settings" className = "active"><GiCrown /></a></li>
                     <li><a href="/Preference"><GiQuillInk /></a></li>
                     <li><a href="/Options"><GiTwoHandedSword /></a></li>
                     </div>
@@ -96,7 +96,7 @@ function Sidebar(props) {
                 return(
                     <div>
                     <li><a href="/Settings"><GiCrown /></a></li>
-                    <li><a href="/Preference" class = "active"><GiQuillInk /></a></li>
+                    <li><a href="/Preference" className = "active"><GiQuillInk /></a></li>
                     <li><a href="/Options"><GiTwoHandedSword /></a></li>
                     </div>
                 );
@@ -105,13 +105,13 @@ function Sidebar(props) {
                     <div>
                     <li><a href="/Settings"><GiCrown /></a></li>
                     <li><a href="/Preference"><GiQuillInk /></a></li>
-                    <li><a href="/Options" class = "active"><GiTwoHandedSword /></a></li>
+                    <li><a href="/Options" className = "active"><GiTwoHandedSword /></a></li>
                     </div>
                 );
             default:
                 return(
                     <div>
-                    <li><a href="/Home" class = "active"><FaHome /></a></li>
+                    <li><a href="/Home" className = "active"><FaHome /></a></li>
                     <li><a href="/Inventory"><RiFridgeFill /></a></li>
                     <li><a href="/Weekly-menu"><BiSolidFoodMenu /></a></li>
                     <li><a href="/Grocery-list"><MdLocalGroceryStore /></a></li>
@@ -124,7 +124,7 @@ function Sidebar(props) {
             case "Home":
                 return(
                     <div>
-                    <li><a href="/Home" class = "active">Home</a></li>
+                    <li><a href="/Home" className = "active">Home</a></li>
                     <li><a href="/Inventory">Inventory</a></li>
                     <li><a href="/Weekly-menu">Weekly Menu</a></li>
                     <li><a href="/Grocery-list">Grocery List</a></li>
@@ -134,7 +134,7 @@ function Sidebar(props) {
                 return(
                     <div>
                     <li><a href="/Home">Home</a></li>
-                    <li><a href="/Inventory" class = "active">Inventory</a></li>
+                    <li><a href="/Inventory" className = "active">Inventory</a></li>
                     <li><a href="/Weekly-menu">Weekly Menu</a></li>
                     <li><a href="/Grocery-list">Grocery List</a></li>
                     </div>
@@ -144,7 +144,7 @@ function Sidebar(props) {
                     <div>
                     <li><a href="/Home">Home</a></li>
                     <li><a href="/Inventory">Inventory</a></li>
-                    <li><a href="/Weekly-menu" class = "active">Weekly Menu</a></li>
+                    <li><a href="/Weekly-menu" className = "active">Weekly Menu</a></li>
                     <li><a href="/Grocery-list">Grocery List</a></li>
                     </div>
                 );  
@@ -154,13 +154,13 @@ function Sidebar(props) {
                     <li><a href="/Home">Home</a></li>
                     <li><a href="/Inventory">Inventory</a></li>
                     <li><a href="/Weekly-menu">Weekly Menu</a></li>
-                    <li><a href="/Grocery-list" class = "active">Grocery List</a></li>
+                    <li><a href="/Grocery-list" className = "active">Grocery List</a></li>
                     </div>
                 );
             case "Settings":
                 return(
                     <div>
-                    <li><a href="/Settings" class = "active">Settings</a></li>
+                    <li><a href="/Settings" className = "active">Settings</a></li>
                     <li><a href="/Preference">Preference</a></li>
                     <li><a href="/Options">Options</a></li>
                     </div>
@@ -169,7 +169,7 @@ function Sidebar(props) {
                 return(
                     <div>
                     <li><a href="/Settings">Settings</a></li>
-                    <li><a href="/Preference" class = "active">Preference</a></li>
+                    <li><a href="/Preference" className = "active">Preference</a></li>
                     <li><a href="/Options">Options</a></li>
                     </div>
                 );
@@ -178,13 +178,13 @@ function Sidebar(props) {
                     <div>
                     <li><a href="/Settings">Settings</a></li>
                     <li><a href="/Preference">Preference</a></li>
-                    <li><a href="/Options" class = "active">Options</a></li>
+                    <li><a href="/Options" className = "active">Options</a></li>
                     </div>
                 );
             default:
                 return(
                     <div>
-                    <li><a href="/Home" class = "active">Home</a></li>
+                    <li><a href="/Home" className = "active">Home</a></li>
                     <li><a href="/Inventory">Inventory</a></li>
                     <li><a href="/Weekly-menu">Weekly Menu</a></li>
                     <li><a href="/Grocery-list">Grocery List</a></li>
@@ -200,7 +200,7 @@ function Sidebar(props) {
         template = (
             <div className="sidebar">
                 <header>
-					<span class="logodisplay"><a href="/Home"><img id ="sidebar-logo" src="/Tavern-logo.png" alt="Tavern Logo" /></a></span>
+					<span className="logodisplay"><a href="/Home"><img id ="sidebar-logo" src="/Tavern-logo.png" alt="Tavern Logo" /></a></span>
 				    </header>
 				    <nav id="nav">
 					<ul>
@@ -220,7 +220,7 @@ function Sidebar(props) {
         template = (
             <div className="sidebar closed">
                 <header>
-					<span class="logodisplay"><a href= "/Home"><img id ="sidebar-logo-small" src="/Tavern-logo-small.png" alt="Tavern Logo" /></a></span>
+					<span className="logodisplay"><a href= "/Home"><img id ="sidebar-logo-small" src="/Tavern-logo-small.png" alt="Tavern Logo" /></a></span>
 				    </header>
 				    <nav id="nav">
 					<ul>

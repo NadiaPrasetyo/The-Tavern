@@ -207,6 +207,57 @@ app.post('/api/login', async (req, res) => {
     }
   });
 
+  // GET MENU TODAY
+  app.post('/api/get-menu-today', async (req, res) => {
+    try {
+      const db = client.db('The-tavern'); // replace with your DB name
+      const collection = db.collection('Menu'); // your menu collection
+      
+      // Find the menu for today
+      //check day of the week
+      const today = new Date();
+      const day = today.getDay();
+      let day_string = "";
+      switch (day) {
+        case 0:
+          day_string = "Sunday";
+          break;
+        case 1:
+          day_string = "Monday";
+          break;
+        case 2:
+          day_string = "Tuesday";
+          break;
+        case 3:
+          day_string = "Wednesday";
+          break;
+        case 4:
+          day_string = "Thursday";
+          break;
+        case 5:
+          day_string = "Friday";
+          break;
+        case 6:
+          day_string = "Saturday";
+          break;
+      }
+
+       //check username
+       const username = req.body.username;
+      
+      const menu = await collection
+        .find({Username: username, Day: day_string})
+        .toArray();
+  
+      // If everything is OK
+      res.status(200).json({ menu:menu });
+  
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  }
+  );
+
   
   // Start the server
   app.listen(port, () => {
