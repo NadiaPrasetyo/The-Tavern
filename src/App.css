@@ -242,18 +242,18 @@ footer{
 
 /* LOGIN STYLE */
 
-form {
+.login-form {
   display: inline-block;
   padding: 1rem;
 }
 
-ul {
+.login-form ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-form li + li {
+.login-form li + li {
   margin-top: 1em;
 }
 
@@ -285,21 +285,21 @@ form li + li {
   border-bottom: 2px dashed #000;
 }
 
-li p{
+.login-form li p{
   margin: 0;
   width: 40vw;
   max-width: 300px;
 }
 
 
-label {
+.login-form label {
   /* Uniform size & alignment */
   display: inline-block;
   min-width: 90px;
   text-align: left;
 }
 
-input{
+.login-form input, .modal input {
   /* Uniform text field size */
   width: 40vw;
   max-width: 300px;
@@ -310,14 +310,14 @@ input{
   border-radius: 5px;
 }
 
-input:focus{
+.login-form input:focus, .modal input:focus {
   /* Additional highlight for focused elements */
   border-width: 2px;
   border-color: #2f20129c;
   outline: none;
 }
 
-form button {
+.login-form button{
 /* This extra margin represent roughly the same space as the space
    between the labels and their text fields */
   border-radius: 5px;
@@ -329,7 +329,7 @@ form button {
   border-color: #6653409c;
 }
 
-form button:hover {
+.login-form button:hover{
   background-color: #6653409c;
   border-color: #43372b9c;
   cursor: pointer;
@@ -378,6 +378,18 @@ form button:hover {
 }
 
 /* Setting */
+.setting-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  font-size: calc(10px + 1vmin);
+  left: 250px;
+  padding: 1px 16px;
+  height: calc(100vh - 100px);
+  animation-fill-mode: both;
+}
+
+
 .setting-item {
   margin-bottom: 20px;
 }
@@ -425,10 +437,11 @@ form button:hover {
   color: white;
   font-size: 1.5rem;
   cursor: pointer;
-
+  max-width: 200px;
   transition: background-color 0.3s ease;
   position: relative;
-  float: right; /* This makes the button move to the right */
+  /* make it right aligned */
+  align-self: flex-end;
 }
 
 .save-setting:hover {

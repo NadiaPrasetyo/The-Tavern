@@ -43,7 +43,7 @@ function SignUp() {
 
   return (
     <div id = "SignUp-component">
-        <form onSubmit={handleSubmit}>
+        <form className="login-form" onSubmit={handleSubmit}>
             <ul>
                 <li>
                     <h2 className = "form-title">Register</h2>
