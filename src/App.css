@@ -529,18 +529,111 @@ th {
   border: solid 1px #e0ecbca0;
   background: #e0ecbca0;
   padding: 10px;
-
-  form{
+  
+  h4{
+    text-align: center;
+    padding-bottom: 12px;
+    border-bottom: solid 2px #000000;
   }
 }
 
+/* The container of grocery item*/
+.groceryItem {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: calc(10px + 1vmin);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  a{
+    color: #1250c185;
+    font-size: calc(5px + 1vmin);
+    display: none;
+  }
+}
+
+/* Hide the browser's default checkbox */
+.groceryItem input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  border-radius: 20px;
+  top: -4px;
+  left: 5px;
+  height: calc(20px + 1vmin);
+  width: calc(20px + 1vmin);
+  background-color: #fffbf6;
+}
+
+/* On mouse-over, add a grey background color */
+.groceryItem:hover input ~ .checkmark {
+  background-color: #e7e0d8;
+}
+
+/* When the checkbox is checked, add a blue background */
+.groceryItem input:checked~ .checkmark {
+  background-color: #6fac6a93;
+}
+
+/* Strikethrought the text when checkbox is checked */
+.groceryItem input:checked ~ .itemName {
+  text-decoration: line-through;
+}
+
+/* Show add to ingredient button when checkbox is checked */
+.groceryItem input:checked ~ a {
+  display: block;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.groceryItem input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.groceryItem .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
 .addGrocery{
+  font-size: calc(25px + 1vmin);
+  position: relative;
+  left: -3px;
   border: none;
   background-color: #00000000;
-  color: #99a477a0;
+  color: #7d664f9c;
   width: 33px;
 }
 
 .addGrocery:hover{
   background-color: #00000000;
+  cursor: pointer;
+  color: #5846329c;
 }

@@ -37,16 +37,26 @@ function Home() {
 
         <section className='groceryList'>
             <form>
-              <h3>Grocery List</h3>
-              <button class = "addGrocery"><IoAddCircle /></button>
-              <input type="checkbox" id="item1" name="item1" value="item1"/>
-              <label for="item1">Item 1</label>
-              <input type="checkbox" id="item2" name="item2" value="item2"/>
-              <label for="item2">Item 2</label>
-              <input type="checkbox" id="item3" name="item3" value="item3"/>
-              <label for="item3">Item 3</label>
-
-
+              <h4>Grocery List</h4>
+              <button class = "addGrocery"><IoAddCircle /></button><br/>
+              <label class = "groceryItem">
+                <input type="checkbox" id="item1" name="item1" value="item1"/>
+                <span class = "checkmark"></span>
+                <span className='itemName'>Item 1</span>
+                <a href="/Grocery-list/add"> add to Inventory</a>
+              </label><br/>
+              <label class = "groceryItem">
+                <input type="checkbox" id="item2" name="item2" value="item2"/>
+                <span class = "checkmark"></span>
+                <span className='itemName'>Item 2</span>
+                <a href="/Grocery-list/add"> add to Inventory</a>
+              </label><br/>
+              <label class = "groceryItem">
+                <input type="checkbox" id="item3" name="item3" value="item3"/>
+                <span class = "checkmark"></span>
+                <span className='itemName'>Item 3</span>
+                <a href="/Grocery-list/add"> add to Inventory</a>
+              </label><br/>
             </form>
         </section>
       </main>     
