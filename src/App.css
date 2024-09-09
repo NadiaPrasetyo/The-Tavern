@@ -384,7 +384,8 @@ footer{
   flex-direction: column;
   font-size: calc(10px + 1vmin);
   left: 250px;
-  padding: 1px 16px;
+  padding-top: 1px;
+  padding-left: 5vw;
   height: calc(100vh - 100px);
   animation-fill-mode: both;
 }
@@ -399,6 +400,7 @@ footer{
   margin-right: 10vw;
   display: flex;
   flex-direction: row;
+  max-width: 80%;
   align-items: center;
   background-color: #dbc39a77;
 }
@@ -429,7 +431,7 @@ footer{
 
 .save-setting {
   margin-top: 10px;
-  margin-right: 10vw;
+  margin-right: 18vw;
   padding: 10px;
   background-color: #7d664f9c;
   border: none;

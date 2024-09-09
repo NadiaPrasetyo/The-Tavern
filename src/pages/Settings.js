@@ -135,7 +135,7 @@ function Settings() {
         <Sidebar source="Settings" />
       </aside>
 
-      <main className="setting-content">
+      <main className="content setting-content">
         {/* Userame Section */}
         <div className="setting-item">
           <h2>USERNAME</h2>
