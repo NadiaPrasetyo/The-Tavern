@@ -1,8 +1,8 @@
-# pip install requests beautifulsoup4 pymongo
+# pip install beautifulsoup4 pymongo selenium
 
 from pymongo import MongoClient
 
-import requests
+from selenium import webdriver
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 import os
@@ -31,14 +31,22 @@ def clean_up(text):
     return text
 
 
-# # Starting URL
-base_url = 'https://thewoksoflife.com/visual-recipe-index/'
+# Starting URL
+base_url = 'https://preppykitchen.com/recipes/'
 
+# Setup the Chrome driver
+driver = webdriver.Chrome()
+
+# this will go to categories <h2 class=wp-block-heading> -> <a href text> 
+# then to types of dishes <ul class=feast-category-index-list feast-grid-half feast-desktop-grid-fourth feast-category-index-list-overlay> -> <a href> -> <div class=fsci-title> text / we can also take the last part of the url for the type of dish
+# then to recipes <h2 class=entry-title> -> <a class=entry-title-link text>
+# then ingredients <span class=wprm-recipe-ingredient-name> text / if there's nothing, there should be an a link with the ingredient text
 
 # Function to scrape a single page of recipes
 def scrape_page(url, tag):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, 'html.parser')
+    driver.get(url)
+    page_source = driver.page_source
+    soup = BeautifulSoup(page_source, 'html.parser')
 
     # Find all recipes on the page
     recipes = soup.find_all('h2', class_='entry-title')  # Adjust class accordingly
@@ -50,8 +58,9 @@ def scrape_page(url, tag):
         link = recipe.find('a', class_='entry-title-link')['href']
 
         # Get additional details by scraping the individual recipe page
-        recipe_response = requests.get(link)
-        recipe_soup = BeautifulSoup(recipe_response.content, 'html.parser')
+        driver.get(link)
+        recipe_response = driver.page_source
+        recipe_soup = BeautifulSoup(recipe_response, 'html.parser')
 
 
         ingredients = []
@@ -77,7 +86,7 @@ def scrape_page(url, tag):
             'Name': name,
             'Link': link,
             'Ingredients': ingredients,
-            'Tag': [tag]
+            'Tag': tag
         })
     
     return recipe_data, soup
@@ -93,26 +102,42 @@ def find_next_page(soup):
         return next_button['href']
     else:
         return None
-
-def scrape_by_category(url, class_name):
-    response = requests.get(url)
-    base_soup = BeautifulSoup(response.content, 'html.parser')
     
-    # get the course links
-    course_links = base_soup.find('li', class_=class_name).find('ul', class_='sub-menu').find_all('a')
     
-    for course_link in course_links:
-        course_url = course_link['href']
-        course_name = course_link.find('span').text
+def scrape_by_category(url, tag):
+    tags_list = [tag]
+    # Get the types of dishes
+    driver.get(url)
+    response = driver.page_source
+    soup = BeautifulSoup(response, 'html.parser')
+    
+    dishes_types = soup.find('ul', class_='feast-category-index-list feast-grid-half feast-desktop-grid-fourth feast-category-index-list-overlay').find_all('a')
+    
+    for dish_t in dishes_types:
+        dish_link = dish_t['href']
+        dish_name = clean_up(dish_t.find('div', class_='fsci-title').text)
+        print(f"Type of dish: {dish_name}")
+        dish = input("Please fix the Tag, \"NO\" to not add it as a tag, enter to add it as is, or type a new tag: ")
         
-        # scrape the course
-        current_url = course_url
+        # if dish is empty, add it, if "NO" skip it, else use the input
+        if dish == "NO":
+            # not add to tags_list
+            tags_list = tags_list
+        elif dish == "":
+            tags_list.append(dish_name)
+        else:
+            tags_list.append(dish)
+        
+            
+        
+        # Scrape the page
+        current_url = dish_link
         while current_url!=None:
             print(f"Scraping: {current_url}")
-            recipes, soup = scrape_page(current_url, course_name)
-
-            # Modify the recipe data to include the tag
-            for recipe in recipes:
+            recipe_data, soup = scrape_page(current_url, tags_list)
+            
+            # for each recipe, add to the collection if it doesn't exist, else update the tag
+            for recipe in recipe_data:
                 # if recipe has an empty ingredient list, skip it
                 if recipe['Ingredients'] == []:
                     continue
@@ -121,20 +146,47 @@ def scrape_by_category(url, class_name):
                 existing_recipe = collection.find_one({'Name': recipe['Name']})
                 if existing_recipe:
                     # if the exising recipe already has the tag, don't add it again
-                    if recipe['Tag'][0] not in existing_recipe['Tag']:            
+                    if recipe['Tag'] not in existing_recipe['Tag']:            
                         recipe['Tag'] = existing_recipe['Tag'] + recipe['Tag']
                         collection.update_one({'Name': recipe['Name']}, {'$set': recipe})
+                        
                 else:
                     collection.insert_one(recipe)
-            # Find the next page
             current_url = find_next_page(soup)
+        
+        
+        
+        
+        
+
+def scrape_all(url):
+    driver.get(url)
+    response = driver.page_source
+    base_soup = BeautifulSoup(response, 'html.parser')
+    # get the course links
+    category_headers = base_soup.find_all('h2', class_="wp-block-heading")
+    
+    for category_head in category_headers:
+        category_link = category_head.find('a')['href']
+        # if link doesn't have a start of "https://preppykitchen.com/" add it
+        if not category_link.startswith('https://preppykitchen.com'):
+            category_link = 'https://preppykitchen.com' + category_link
+        
+        category_name = clean_up(category_head.find('a').text)
+        # Ask user to change the category name
+        print(f"Category: {category_name}")
+        print("Please fix the category name")
+        print("Press 'Enter' to continue")
+        cat = input()
+        
+        scrape_by_category(category_link, cat)
+        
+        
+        
     
 
 # Scrape by category
-course = 'menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-50587'
-collect = 'menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-50586'
-scrape_by_category(base_url, course)
-scrape_by_category(base_url, collect)
+scrape_all(base_url)
 print("Scraping complete!")
 
 
