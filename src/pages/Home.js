@@ -30,10 +30,8 @@ function getTodayMenu() {
 
 
      const menu = await response.json();
-     console.log("menu: " + menu);
 
     if (response.status === 200) {
-      console.log("menu: " + menu.menu);
       return menu.menu;  // Update the state with the fetched menu
     } else {
       console.log("Error getting today's menu");
@@ -45,11 +43,18 @@ function getTodayMenu() {
   return getTodayMenu();
 }
 
+let counter = 0;
+
 function TodayMenu() {
   const [today, setToday] = React.useState([]);
+  counter ++;
   
   if (today.length === 0) {
     getTodayMenu().then((menu) => {
+      if (counter > 10){
+        setToday([{Name: "No Menu Today"}]);
+        return;
+      }
       setToday(menu);
       return;
     });
@@ -92,65 +97,65 @@ function TodayMenu() {
 
 }
 
-/*const TodayMenu = () => {
+function get5lastGroceryList() {
+  // Get grocery list from the server
+  const get5lastGroceryList = async (e) => {
+    const response = await fetch('/api/get-5-last-grocery-list',{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: localStorage.getItem('username')
+      }),
+    });
 
-  // Fetch the menu using useEffect when the component mounts
-  useEffect(() => {
-    const fetchMenu = async () => {
-      try {
-        const response = await fetch('/api/get-menu-today', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username: localStorage.getItem('username'),
-          }),
-        });
+    const grocery = await response.json();
 
-        const menu = await response.json();
+    if (response.status === 200) {
+      return grocery.grocery;  // Update the state with the fetched grocery list
+    } else {
+      console.log("Error getting grocery list");
+      return [];
+    }
+  }
 
-        if (response.status === 200) {
-          setTodayMenu(menu.menu);  // Update the state with the fetched menu
-        } else {
-          console.log("Error getting today's menu");
-        }
-      } catch (error) {
-        console.log("Error fetching menu:", error);
-      }
-    };
+  return get5lastGroceryList();
+}
 
-    fetchMenu();
-  }, []);  // Empty dependency array ensures the effect runs only once on component mount
-
-  return (
-    <section className='todayMenu'>
-      <table>
-        <thead>
-          <tr>
-            <th>Today</th>
-          </tr>
-        </thead>
-        <tbody>
-          {todayMenu.length > 0 ? (
-            todayMenu.map((item, index) => (
-              <tr key={index}>
-                <td>{item.name}</td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td>Loading...</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </section>
-  );
-}; */
-
+let counter2 = 0;
 function GroceryList() {
-  const groceryList = getGroceryList();
+  const [groceryList, setGroceryList] = React.useState([]);
+  counter2 ++;
+
+  if (groceryList.length === 0) {
+    get5lastGroceryList().then((grocery) => {
+       if (counter2 > 10){
+         setGroceryList([{name: "No grocery list"}]);
+         return;
+       }
+      setGroceryList(grocery);
+      return;
+    });
+  }
+
+  if (groceryList.length === 0) {
+    return (
+      <section className='groceryList'>
+        <form>
+          <h4>Grocery List</h4>
+          <button className = "addGrocery"><IoAddCircle /></button><br/>
+          <label className = "groceryItem">
+            <input type="checkbox" id="item1" name="item1" value="item1"/>
+            <span className = "checkmark"></span>
+            <span className='itemName'>Loading...</span>
+            <a href="/Grocery-list/add"> add to Inventory</a>
+          </label>
+        </form>
+      </section>
+    );
+  } else {
+
   return (
     <section className='groceryList'>
       <form>
@@ -158,15 +163,17 @@ function GroceryList() {
         <button className = "addGrocery"><IoAddCircle /></button><br/>
         {groceryList.map((item, index) => (
           <label key={index} className = "groceryItem">
-            <input type="checkbox" id={item.name} name={item.name} value={item.name}/>
+            <input type="checkbox" id={item.Name} name={item.Name} value={item.Name}/>
             <span className = "checkmark"></span>
-            <span className='itemName'>{item.name}</span>
+            <span className='itemName'>{item.Name}</span>
             <a href="/Grocery-list/add"> add to Inventory</a>
           </label>
         ))}
       </form>
     </section>
   );
+  }
+
 }
 
 function Home() {
