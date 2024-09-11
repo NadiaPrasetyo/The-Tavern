@@ -54,6 +54,7 @@ async function connectToDb() {
 connectToDb().catch(console.dir);
 
 const database = client.db("The-tavern");
+const Recipe = database.collection("RecipeList");
 
 async function listCollections(database){
     const collections = await database.listCollections().toArray();
@@ -280,6 +281,35 @@ app.post('/api/login', async (req, res) => {
     }
   });
 
+  app.get('/api/recipes', async (req, res) => {
+    const page = parseInt(req.query.page) || 1; // Default to page 1 if no page query
+    const limit = parseInt(req.query.limit) || 10; // Limit to 10 recipes per page
+    const searchQuery = req.query.search || ''; // Get the search query
+  
+    const skip = (page - 1) * limit;
+
+    try {
+      // Create a case-insensitive regex to search by recipe name
+      const searchRegex = new RegExp(searchQuery, 'i'); // 'i' for case-insensitive
+
+      // Fetch filtered recipes based on the search query, then apply pagination
+      const recipes = await Recipe.find({ Name: { $regex: searchRegex } }) // Search by name
+        .skip(skip) // Skip previous pages
+        .limit(limit) // Limit the number of results
+        .toArray();
+  
+      const totalRecipes = await Recipe.countDocuments({ Name: { $regex: searchRegex } }); // Count filtered results
+
+      res.json({
+        recipes, // Recipes for the current page
+        currentPage: page,
+        totalPages: Math.ceil(totalRecipes / limit), // Total pages based on search result count
+      });
+    } catch (err) {
+      res.status(500).json({ message: 'Error fetching recipes', error: err });
+    }
+  });
+  
   
   // Start the server
   app.listen(port, () => {
