@@ -277,6 +277,8 @@ def scrape_all(url):
 scrape_all(base_url)
 print("Scraping complete!")
 
+winsound.PlaySound("public/tada-fanfare-a-6313.wav", winsound.SND_FILENAME)
+
 
 
 # disconnect from MongoDB
