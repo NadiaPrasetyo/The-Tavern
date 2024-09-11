@@ -2,6 +2,8 @@
 
 from pymongo import MongoClient
 
+import winsound
+
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
@@ -28,11 +30,14 @@ def clean_up(text):
     text = re.sub(r',\s\)', ')', text)
     # replace "  " with " "
     text = re.sub(r'\s\s', ' ', text)
-    return text
+    return text.capitalize()
 
 
 # # Starting URL
 base_url = 'https://thewoksoflife.com/visual-recipe-index/'
+
+# memoisation of the ingredients to the fixed ones
+fixed_ingredients = {}
 
 
 # Function to scrape a single page of recipes
@@ -47,6 +52,18 @@ def scrape_page(url, tag):
     recipe_data = []
     for recipe in recipes:
         name = clean_up(recipe.find('a', class_='entry-title-link').text)
+        
+        # if recipe already exists, just take the same ingredients and links
+        existing_recipe = collection.find_one({'Name': name})
+        if existing_recipe:
+            recipe_data.append({
+                'Name': name,
+                'Link': existing_recipe['Link'],
+                'Ingredients': existing_recipe['Ingredients'],
+                'Tag': [tag]
+            })
+            continue
+        
         link = recipe.find('a', class_='entry-title-link')['href']
 
         # Get additional details by scraping the individual recipe page
@@ -62,12 +79,23 @@ def scrape_page(url, tag):
                 cleaned_ing = clean_up(ingredient.find('a').text)
             else:
                 cleaned_ing = clean_up(ingredient.text)
-            # if ingredients has digits or units (pound, cup, teaspoon, tsp, tablespoon, tbs, kg, grams, inch), ask the user to fix it
-            if any(char.isdigit() for char in cleaned_ing or 'pound' in cleaned_ing or 'cup' in cleaned_ing or 'teaspoon' in cleaned_ing or 'tsp' in cleaned_ing or 'tablespoon' in cleaned_ing or 'tbs' in cleaned_ing or 'kg' in cleaned_ing or 'grams' in cleaned_ing or 'inch' in cleaned_ing):
+            # if ingredients has digits or units (pound, cup, teaspoon, tsp, tablespoon, tbs, kg, grams, inch, drop, small, medium, large, wad, dollop, drizzle, slice, chop, dash), ask the user to fix it
+            if any(char.isdigit() for char in cleaned_ing or 'pound' in cleaned_ing or 'cup' in cleaned_ing or 'teaspoon' in cleaned_ing or 'tsp' in cleaned_ing or 'tablespoon' in cleaned_ing or 'tbs' in cleaned_ing or 'kg' in cleaned_ing or 'grams' in cleaned_ing or 'inch' in cleaned_ing or 'drop' in cleaned_ing or 'small' in cleaned_ing or 'medium' in cleaned_ing or 'large' in cleaned_ing or 'wad' in cleaned_ing or 'dollop' in cleaned_ing or 'drizzle' in cleaned_ing or 'slice' in cleaned_ing or 'chop' in cleaned_ing or 'dash' in cleaned_ing):
+                # if the ingredient is already fixed, use the fixed one
+                if cleaned_ing in fixed_ingredients:
+                    if fixed_ingredients[cleaned_ing] != '':
+                        ingredients.append(fixed_ingredients[cleaned_ing])
+                    else:
+                        True
+                    continue
+                
                 print(f"Recipe: {name}")
                 print(f"Ingredient: {cleaned_ing}")
+                winsound.PlaySound("public/violin-spiccato-g2-91380.wav", winsound.SND_FILENAME)
                 ing = input("Please fix the ingredient list or enter to skip: ")
+                fixed_ingredients[cleaned_ing] = ing
                 if ing != '': 
+                    ing = clean_up(ing)
                     ingredients.append(ing)
             else:
                 ingredients.append(cleaned_ing)
@@ -76,7 +104,7 @@ def scrape_page(url, tag):
         recipe_data.append({
             'Name': name,
             'Link': link,
-            'Ingredients': ingredients,
+            'Ingredients': list(set(ingredients)),
             'Tag': [tag]
         })
     
@@ -124,7 +152,13 @@ def scrape_by_category(url, class_name):
                     if recipe['Tag'][0] not in existing_recipe['Tag']:            
                         recipe['Tag'] = existing_recipe['Tag'] + recipe['Tag']
                         collection.update_one({'Name': recipe['Name']}, {'$set': recipe})
+                        
+                    if "Wok Of Life" not in existing_recipe['Tag']:
+                        recipe['Tag'] = existing_recipe['Tag'] + ["Wok Of Life"]
+                        collection.update_one({'Name': recipe['Name']}, {'$set': recipe})
                 else:
+                    if "WokOfLife" not in recipe['Tag']:
+                        recipe['Tag'] = recipe['Tag'] + ["Wok Of Life"]
                     collection.insert_one(recipe)
             # Find the next page
             current_url = find_next_page(soup)
