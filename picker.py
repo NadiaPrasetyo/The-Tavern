@@ -11,11 +11,12 @@ import os
 load_dotenv()
 
 MONGODB_URI = os.getenv('MONGODB_URI')
+
 client = MongoClient(MONGODB_URI)
 
 collection = client['The-tavern']['RecipeList']
 
-tags = ["Dessert", "Wok Of Life"]
+tags = ["Main Dishes", "Wok Of Life"]
 
 # get recipes that has the tag from "Tag" field which is an array
 recipes = collection.find({"Tag": {"$all": tags}})
@@ -30,7 +31,7 @@ for recipe in recipes:
     
     print()
     
-    winsound.PlaySound("public/violin-spiccato-g2-91380.wav", winsound.SND_FILENAME)
+    # winsound.PlaySound("public/violin-spiccato-g2-91380.wav", winsound.SND_FILENAME)
     # Ask the user to keep or delete the recipe
     inp = input("Keep (enter) or delete (\"del\")?")
     if inp == "del":
