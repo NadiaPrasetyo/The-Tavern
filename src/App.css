@@ -710,7 +710,6 @@ th {
 
 .bookmark {
   display: block;
-  background-color: #9fac7f;
   border: none;
   padding: 10px 15px;
   margin: 10px 0;
@@ -718,6 +717,15 @@ th {
   border-radius: 50px 0 0 50px;
   /* center items */
   display: flex;
+  transition: background-color 0.3s ease; /* Smooth color transition */
+}
+
+.bookmark-active {
+  background-color: #708871;
+}
+
+.bookmark-inactive {
+  background-color: #9fac7f;
 }
 
 /* EACH BOOKMARK TAB */

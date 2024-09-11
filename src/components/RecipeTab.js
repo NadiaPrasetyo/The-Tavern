@@ -184,16 +184,16 @@ const RecipeTab = () => {
 
       {/* Bookmarks (always visible) */}
       <div className={`bookmarks ${isOpen ? "show" : ""}`} onClick={(e) => e.stopPropagation()}>
-        <div onClick={() => changePage(1)} className="bookmark bookmark-1">
+        <div onClick={() => changePage(1)} className={`bookmark ${currentPage === 1 ? 'bookmark-active' : 'bookmark-inactive'}`}>
           <TbSearch size={30} />
         </div>
-        <div onClick={() => changePage(2)} className="bookmark bookmark-2">
+        <div onClick={() => changePage(2)} className={`bookmark ${currentPage === 2 ? 'bookmark-active' : 'bookmark-inactive'}`}>
           <LuBookOpenCheck size={30}/>
         </div>
-        <div onClick={() => changePage(3)} className="bookmark bookmark-3">
+        <div onClick={() => changePage(3)} className={`bookmark ${currentPage === 3 ? 'bookmark-active' : 'bookmark-inactive'}`}>
           <IoIosHourglass size={30}/>
         </div>
-        <div onClick={() => changePage(4)} className="bookmark bookmark-4">
+        <div onClick={() => changePage(4)} className={`bookmark ${currentPage === 4 ? 'bookmark-active' : 'bookmark-inactive'}`}>
           <MdOutlineStarPurple500 size={30}/>
         </div>
       </div>
