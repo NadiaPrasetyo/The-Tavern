@@ -643,3 +643,86 @@ th {
   cursor: pointer;
   color: #5846329c;
 }
+
+
+/* RECIPE TAB */
+
+/* Container for the book and bookmarks */
+.book-container {
+  position: fixed;
+  right: 300px; /* Start outside the screen */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
+  height: 80%;
+  background-color: #f1f1f1;
+  box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.2);
+  transition: right 0.4s ease-in-out;
+  overflow: hidden;
+  z-index: 10;
+}
+
+/* When the book is open, it slides in */
+.book-container.open {
+  right: 0;
+}
+
+/* The book content styling */
+.book-content {
+  padding: 20px;
+  position: relative;
+}
+
+.book-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.book-page {
+  margin-top: 20px;
+}
+
+/* Bookmarks styles */
+.bookmarks {
+  position: absolute;
+  left: -100px; /* Position bookmarks outside the book */
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.bookmark {
+  display: block;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin: 10px 0;
+  cursor: pointer;
+  border-radius: 0 5px 5px 0;
+  z-index: 20; /* Ensure the bookmarks are above the book */
+  width: 80px;
+}
+
+.bookmark:hover {
+  background-color: #0056b3;
+}
+
+/* Each bookmark has slightly different positioning */
+.bookmark-1 {
+  top: 0;
+}
+.bookmark-2 {
+  top: 50px;
+}
+.bookmark-3 {
+  top: 100px;
+}
