@@ -56,15 +56,6 @@ connectToDb().catch(console.dir);
 const database = client.db("The-tavern");
 const Recipe = database.collection("RecipeList");
 
-async function listCollections(database){
-    const collections = await database.listCollections().toArray();
- 
-    console.log("Collections:");
-    collections.forEach(collection => console.log(` - ${collection.name}`));
-};
-
-listCollections(database).catch(console.dir);
-
 // USER LOGIN
 
 app.post('/api/login', async (req, res) => {
@@ -147,7 +138,7 @@ app.post('/api/login', async (req, res) => {
     }
   });
 
-  // CHANGE PASSWORD
+  // C`HAN`GE PASSWORD
 
   app.post('/api/change-password', async (req, res) => {
     const { username, currentPassword, newPassword } = req.body;
@@ -281,35 +272,93 @@ app.post('/api/login', async (req, res) => {
     }
   });
 
-  app.get('/api/recipes', async (req, res) => {
-    const page = parseInt(req.query.page) || 1; // Default to page 1 if no page query
-    const limit = parseInt(req.query.limit) || 10; // Limit to 10 recipes per page
-    const searchQuery = req.query.search || ''; // Get the search query
-  
+  // POST RECIPES BY NAME AND FILTER
+  app.post('/api/recipes', async (req, res) => {
+    const { page = 1, limit = 10, search = '', includeT = [], excludeT = [], includeI = [], excludeI = [] } = req.body;
     const skip = (page - 1) * limit;
 
     try {
       // Create a case-insensitive regex to search by recipe name
-      const searchRegex = new RegExp(searchQuery, 'i'); // 'i' for case-insensitive
+      const searchRegex = new RegExp(search, 'i'); // 'i' for case-insensitive
 
-      // Fetch filtered recipes based on the search query, then apply pagination
-      const recipes = await Recipe.find({ Name: { $regex: searchRegex } }) // Search by name
+      // Build the query object with search and filters
+      const query = {
+        Name: { $regex: searchRegex }, // Search by name
+      };
+
+      // Use $and to combine multiple filter conditions
+      const andConditions = [];
+
+      // Include tags and ingredients
+      if (includeT.length > 0) {
+        andConditions.push({ Tag: { $all: includeT } }); // Include tags
+      }
+
+      if (includeI.length > 0) {
+        andConditions.push({ Ingredients: { $all: includeI } }); // Include ingredients
+      }
+
+      // Exclude tags and ingredients
+      if (excludeT.length > 0) {
+        andConditions.push({ Tag: { $nin: excludeT } }); // Exclude tags
+      }
+
+      if (excludeI.length > 0) {
+        andConditions.push({ Ingredients: { $nin: excludeI } }); // Exclude ingredients
+      }
+
+      // If there are any conditions, add them to the query
+      if (andConditions.length > 0) {
+        query.$and = andConditions;
+      }
+
+      // Fetch filtered recipes based on the search query and filters, then apply pagination
+      const recipes_all = Recipe.find(query); // Search by name and filters
+
+      // Get paginated recipes
+      const recipes = await recipes_all
         .skip(skip) // Skip previous pages
         .limit(limit) // Limit the number of results
         .toArray();
-  
-      const totalRecipes = await Recipe.countDocuments({ Name: { $regex: searchRegex } }); // Count filtered results
+
+      // Get all tags and ingredients (before pagination)
+      // Aggregation for distinct tags
+      const recipe_tags = await Recipe.aggregate([
+        { $match: Object.keys(query).length ? query : {} },
+        { $unwind: "$Tag" },
+        { $group: { _id: "$Tag" } },
+        { $project: { Tag: "$_id", _id: 0 } }
+      ]).toArray();
+
+      // Convert recipe_tags array to a simple array of tag strings
+      const formatted_tags = recipe_tags.map(tag => tag.Tag);
+
+      // Aggregation for distinct ingredients
+      const recipe_ingredients = await Recipe.aggregate([
+        { $match: Object.keys(query).length ? query : {} },
+        { $unwind: "$Ingredients" },
+        { $group: { _id: "$Ingredients" } },
+        { $project: { Ingredients: "$_id", _id: 0 } }
+      ]).toArray();
+
+      // Convert recipe_ingredients array to a simple array of ingredient strings
+      const formatted_ingredients = recipe_ingredients.map(ingredient => ingredient.Ingredients);
+
+      // Count total recipes
+      const totalRecipes = await Recipe.countDocuments(query); // Count filtered results
 
       res.json({
         recipes, // Recipes for the current page
         currentPage: page,
         totalPages: Math.ceil(totalRecipes / limit), // Total pages based on search result count
+        tags: formatted_tags, // All tags matching the filtered query
+        ingredients: formatted_ingredients, // All ingredients matching the filtered query
       });
     } catch (err) {
       res.status(500).json({ message: 'Error fetching recipes', error: err });
     }
   });
-  
+
   
   // Start the server
   app.listen(port, () => {

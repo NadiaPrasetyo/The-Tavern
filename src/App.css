@@ -44,6 +44,7 @@
   top: 30px;
   display: none;
   animation: toggle 0.5s;
+  z-index: 1000;
 
   a{
     -moz-transition: none;
@@ -653,7 +654,7 @@ th {
   top: 50%;
   transform: translateY(-50%);
   width: 600px;
-  height:80%;
+  height:90%;
   display: flex;
   flex-direction: row-reverse; /* Ensure the tab appears on the right */
   justify-content: flex-start;
@@ -765,7 +766,7 @@ th {
 }
 
 .recipe-containers {
-  max-height: 50vh; /* Set a maximum height for the container */
+  max-height: 65vh; /* Set a maximum height for the container */
   overflow-y: auto;  /* Make the container scrollable if the content exceeds the max height */
 }
 
@@ -942,3 +943,111 @@ th {
   background: transparent; /* Custom track color */
 }
 
+/* FILTER POP UP */
+
+/* Styles for the filter popup */
+.filter-popup {
+  position: fixed;
+  top: 50%;
+  left: -50%;
+  transform: translate(-50%, -40%);
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 80%;
+  max-width: 500px;
+  padding: 20px;
+  z-index: 1000; /* Make sure it appears above other content */
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-popup h3 {
+  margin: 0 0 15px;
+  text-align: justify;
+}
+
+.included-excluded-section {
+  margin-bottom: 20px;
+  display: flex;
+  max-height: 20vh;
+  overflow-y: auto;
+}
+
+.included-items,
+.excluded-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.included-item,
+.excluded-item {
+  background-color: #e0ffe0;
+  padding: 5px 10px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.included-item button,
+.excluded-item button {
+  margin-left: 5px;
+  background-color: #ffcccb;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.no-items {
+  margin: 0 10px;
+}
+
+.columns {
+  display: flex;
+  justify-content: space-between;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.tags-column,
+.ingredients-column {
+  flex: 1;
+  margin: 0 10px;
+}
+
+.tag-item,
+.ingredient-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.tag-item button,
+.ingredient-item button {
+  margin-left: 5px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 3px 6px;
+}
+
+/* Optional: Background overlay for the popup */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 900; /* Ensure it's behind the popup */
+}
