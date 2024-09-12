@@ -4,6 +4,10 @@ import { IoIosHourglass } from "react-icons/io";
 import { MdOutlineStarPurple500 } from "react-icons/md";
 import { LuFilter } from "react-icons/lu";
 import { LuBookOpenCheck } from "react-icons/lu";
+import { AiOutlineInfoCircle } from "react-icons/ai";
+import { MdOutlineStarBorderPurple500 } from "react-icons/md";
+
+import RecipeInfo from './RecipeInfo';
 import '../App.css';
 
 const RecipeTab = () => {
@@ -14,8 +18,13 @@ const RecipeTab = () => {
   const [totalPages, setTotalPages] = useState(1); // The total number of pages
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const [recipePage, setRecipePage] = useState(1); // The current recipe page
+  const [isInfoOpen, setInfoOpen] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
+
 
   const recipesPerPage = 10; // Limit the number of recipes per page
+  const max_tags = 3; // Limit the number of tags to display
+  const max_ingredients = 4; // Limit the number of ingredients to display
 
   // Toggle the book tab when clicking the container
   const toggleBook = () => {
@@ -35,10 +44,6 @@ const RecipeTab = () => {
 
   // Fetch recipes from the server based on the current page and search query
   const fetchRecipes = async (page, query) => {
-    // if the tab is not open, do not fetch recipes
-    if (!isOpen) {
-        return;
-    }
 
     setIsLoading(true);
     try {
@@ -66,8 +71,10 @@ const RecipeTab = () => {
 
   // Fetch recipes when `recipePage` or `searchQuery` changes
   useEffect(() => {
-    fetchRecipes(recipePage, searchQuery);
-  }, [recipePage, searchQuery]);
+    if (isOpen) {
+      fetchRecipes(recipePage, searchQuery);
+    }
+  }, [recipePage, searchQuery, isOpen]);
 
   // Handle pagination (next and previous page)
   const nextPage = () => {
@@ -81,6 +88,17 @@ const RecipeTab = () => {
       setRecipePage(recipePage - 1);
     }
   };
+
+  // Toggle the recipe info modal
+  const toggleInfo = (recipe) => {
+    setSelectedRecipe(recipe);
+    setInfoOpen(!isInfoOpen);
+  };
+
+  const closeInfo = () => {
+    setInfoOpen(false);
+    setSelectedRecipe(null);
+  }
 
   return (
     <div className={`recipe-tab-container ${isOpen ? "open" : ""}`}>
@@ -110,12 +128,32 @@ const RecipeTab = () => {
                   ) : recipes.length > 0 ? (
                     recipes.map((recipe, index) => (
                       <div className='recipe-list' key={index}>
-                        {recipe.Name}
+                        <div className='recipe-title'>
+                          <a href={recipe.Link} target="_blank" rel="noopener noreferrer">
+                            {recipe.Name}
+                          </a>
+                          <div className="icon-container"> {/* Added container for icons */}
+                            <AiOutlineInfoCircle className='info-icon' onClick={() => toggleInfo(recipe)}/>
+                            <MdOutlineStarPurple500 className='star-icon filled' />
+                            <MdOutlineStarBorderPurple500 className='star-icon border' />
+                          </div>
+                        </div>
+                        <div className='recipe-tags'>
+                          {recipe.Tag.slice(0, max_tags).map((tag, index) => (
+                            <span className='r-tag' key={index}>{tag}</span>
+                          ))}
+                        </div>
+                        <div className='recipe-ingredients'>
+                          {recipe.Ingredients.slice(0, max_ingredients).map((ingredient, index) => (
+                            <span className='r-ing' key={index}>{ingredient}</span>
+                          ))}
+                        </div>
                       </div>
                     ))
                   ) : (
                     <div>No recipes found</div>
                   )}
+                  <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} />
                 </div>
 
                 {/* Pagination controls */}

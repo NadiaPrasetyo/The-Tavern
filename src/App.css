@@ -741,12 +741,6 @@ th {
   cursor: default;
 }
 
-.recipe-list {
-  background-color: #f7ffdaa8;
-  margin: 20px 0;
-  width: 100%;
-}
-
 .search-bar-container {
   background-color: #f7ffdaa8;
   margin: 0 10% 2% 0;
@@ -794,3 +788,157 @@ th {
   background-color: #e0ecbca0;
   cursor: not-allowed;
 }
+
+/* RECIPE LIST */
+.recipe-list {
+  background-color: #f7ffdaa8;
+  margin: 20px 0;
+  max-width: 100%; /* Set a maximum width */
+  padding: 10px; /* Add padding for better spacing */
+  position: relative; /* Position relative for icon placement */
+  overflow: hidden; /* Prevent horizontal scroll */
+}
+
+.recipe-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 10px 0;
+  display: flex; /* Use flexbox for layout */
+  justify-content: space-between; /* Space between title and icons */
+  align-items: center; /* Center items vertically */
+}
+
+.recipe-title a {
+  text-decoration: none; /* Remove underline for normal state */
+  color: inherit; /* Inherit color from parent */
+}
+
+.recipe-title a:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+.icon-container {
+  display: flex; /* Flexbox for icon layout */
+  padding-right: 10px; /* Add padding to the left of icons */
+}
+
+.info-icon, .star-icon {
+  cursor: pointer; /* Change cursor to pointer for interactivity */
+  margin-left: 10px; /* Add space between icons */
+}
+
+/* Tags styling */
+.recipe-tags {
+  display: flex; /* Use flexbox for tags */
+  flex-wrap: wrap; /* Allow tags to wrap to a new line */
+  margin-top: 5px; /* Add spacing above tags */
+}
+
+.r-tag {
+  background-color: #a6815cad;
+  color: white;
+  padding: 5px;
+  border-radius: 50px;
+  margin: 0 5px 5px 0; /* Space between tags */
+}
+
+/* Ingredients styling */
+.recipe-ingredients {
+  margin-top: 5px; /* Add spacing above ingredients */
+}
+
+.r-ing {
+  background-color: #799f73a8;
+  color: white;
+  padding: 5px;
+  border-radius: 50px;
+  margin: 0 5px 5px 0; /* Space between ingredients */
+  display: inline-block; /* Ensure each ingredient is on a new line if long */
+}
+
+/* Hide filled star */
+.star-icon.filled {
+  display: none; /* Use this class to hide filled star */
+}
+
+.star-icon.filled.show {
+  display: inline; /* Show filled star on hover */
+}
+
+.star-icon.border {
+  display: inline; /* Show border star by default */
+}
+
+.star-icon.border.show {
+  display: none; /* Hide border star on hover */
+}
+
+/* RECIPE INFO */
+
+.recipe-info-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  border-radius: 50px 0 0 50px; /* Rounded corners on the left */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure modal is on top */
+}
+
+.recipe-info-content {
+  background-color: white;
+  max-height: 60vh; /* Set a maximum height for modal */
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px; /* Set a max width for modal */
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow-y: auto; /* Allow modal to scroll if content exceeds max height */
+}
+
+.recipe-info-content h2 {
+  margin: 0 0 10px;
+}
+
+.recipe-info-content ul {
+  list-style-type: square;
+  padding: 0 0 0 20px;
+}
+
+.recipe-info-content button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #4CAF50; /* Green background */
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.recipe-info-content button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+/* SCROLLER STYLE */
+
+.recipe-info-content::-webkit-scrollbar, .recipe-containers::-webkit-scrollbar {
+  width: 15px;
+  height: 8px;
+}
+
+.recipe-info-content::-webkit-scrollbar-thumb, .recipe-containers::-webkit-scrollbar-thumb {
+  background-color: #a6815c; /* Custom thumb color */
+}
+
+.recipe-info-content::-webkit-scrollbar-thumb:hover, .recipe-containers::-webkit-scrollbar-thumb:hover {
+  background-color: #8d664a; /* Custom thumb color on hover */
+}
+
+.recipe-info-content::-webkit-scrollbar-track, .recipe-containers::-webkit-scrollbar-track {
+  background: transparent; /* Custom track color */
+}
+
