@@ -671,6 +671,7 @@ th {
   height: 31px;
   border: solid 1px #00000000;
   border-radius: 50px;
+  text-indent: 5px;
 }
 
 @keyframes openRight {

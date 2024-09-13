@@ -3,6 +3,7 @@ import Sidebar from '../components/sidebar.js';
 import React from 'react';
 import ProfileBar from '../components/profilebar.js';
 import { IoAddCircle } from "react-icons/io5";
+import { prettyDOM } from '@testing-library/react';
 
 
 
@@ -149,8 +150,12 @@ function GroceryList() {
 
       if (response.status === 200) {
         console.log("Grocery item added");
+        document.querySelector('.addGroceryItem').value = '';
+        document.querySelector('.addGroceryItem').placeholder = 'Grocery item added to the list';
       } else if(response.status === 409){
         console.log("Grocery item already exists");
+        document.querySelector('.addGroceryItem').value = '';
+        document.querySelector('.addGroceryItem').placeholder = 'Grocery item already exists in the list';
       }else {
         console.log("Error adding grocery item");
       }
@@ -166,6 +171,7 @@ function GroceryList() {
     if (!groceryItemOpen) {
       button.style.animation = 'moveRight 0.5s';
       button.style.left = '250px';
+      groceryItem.placeholder = 'Add grocery item...';
       groceryItem.style.animation = 'openRight 0.5s';
       groceryItem.style.display = 'block';
 
@@ -179,6 +185,7 @@ function GroceryList() {
         addGroceryItem(value);
       }
       
+      setTimeout(() => {
       button.style.animation = 'moveLeft 0.5s';
       button.style.left = '-3px';
       groceryItem.style.animation = 'closeLeft 0.5s';
@@ -188,6 +195,7 @@ function GroceryList() {
         groceryItem.style.display = 'none';
       }
       , 500);
+      }, 1500);
     }
 
     setGroceryItemOpen(!groceryItemOpen);
@@ -200,10 +208,16 @@ function GroceryList() {
     }
   }
 
+  function addToInventory() {
+    // Add the specified grocery item to the inventory and remove it from the grocery list
+
+
+  }
+
   if (groceryList.length === 0) {
     return (
       <section className='groceryList'>
-        <form>
+        <form onkeydown="return event.key != 'Enter';">
           <h4>Grocery List</h4>
           <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add grocery item..."/>
           <button className = "addGrocery" type='button' onClick={addGrocery}><IoAddCircle /></button><br/>
@@ -219,7 +233,7 @@ function GroceryList() {
   } else {
     return (
       <section className='groceryList'>
-        <form>
+        <form onkeydown="return event.key != 'Enter';">
           <h4>Grocery List</h4>
           <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add grocery item..."/>
           <button className = "addGrocery" type='button' onClick={addGrocery}><IoAddCircle /></button><br/>
@@ -228,7 +242,7 @@ function GroceryList() {
               <input type="checkbox" id={item.Name} name={item.Name} value={item.Name}/>
               <span className = "checkmark"></span>
               <span className='itemName'>{item.Name}</span>
-              <a href="/Grocery-list/add"> add to Inventory</a>
+              <a onClick={addToInventory}> add to Inventory</a>
             </label>
           ))}
         </form>
@@ -238,6 +252,12 @@ function GroceryList() {
 }
 
 function Home() {
+  document.onkeydown = function(event) {
+    if (event.keyCode === 13) {  // 13 is the keyCode for the 'Enter' key
+      event.preventDefault();  // Prevent the default form submission
+      document.querySelector('.addGrocery').click();  // Simulate a button click
+    }
+  };
 
   return (
     
