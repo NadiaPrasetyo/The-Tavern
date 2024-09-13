@@ -5,14 +5,6 @@ import ProfileBar from '../components/profilebar.js';
 import { IoAddCircle } from "react-icons/io5";
 
 
-function getGroceryList() {
-  // Get grocery list from the server
-  return [
-    { name: 'Item 1' },
-    { name: 'Item 2' },
-    { name: 'Item 3' },
-  ];
-}
 
 function getTodayMenu() {
   const getTodayMenu = async (e) => {
@@ -139,12 +131,82 @@ function GroceryList() {
     });
   }
 
+  const [groceryItemOpen, setGroceryItemOpen] = React.useState(false);
+  function addGroceryItem(value) {
+      const addGroceryItem = async (e) => {
+      const response = await fetch('/api/add-grocery-item',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Username: localStorage.getItem('username'),
+          Name: value,
+          Category: 'Grocery'//default category
+          
+        }),
+      });
+
+      if (response.status === 200) {
+        console.log("Grocery item added");
+      } else if(response.status === 409){
+        console.log("Grocery item already exists");
+      }else {
+        console.log("Error adding grocery item");
+      }
+    }
+
+    return addGroceryItem();
+  }
+
+  function addGrocery() {
+    const groceryItem = document.querySelector('.addGroceryItem');
+    const button = document.querySelector('.addGrocery');
+
+    if (!groceryItemOpen) {
+      button.style.animation = 'moveRight 0.5s';
+      button.style.left = '250px';
+      groceryItem.style.animation = 'openRight 0.5s';
+      groceryItem.style.display = 'block';
+
+    } else{
+      const value = groceryItem.value;
+      if (value === '') {
+        console.log("Grocery item is empty");
+      // Do nothing if the grocery item is empty
+      } else {
+        // Add the grocery item to the list in the database
+        addGroceryItem(value);
+      }
+      
+      button.style.animation = 'moveLeft 0.5s';
+      button.style.left = '-3px';
+      groceryItem.style.animation = 'closeLeft 0.5s';
+
+      // Hide the grocery item input after 0.5 seconds
+      setTimeout(() => {
+        groceryItem.style.display = 'none';
+      }
+      , 500);
+    }
+
+    setGroceryItemOpen(!groceryItemOpen);
+    if(groceryItemOpen){
+      // Update the grocery list
+      get5lastGroceryList().then((grocery) => {
+        setGroceryList(grocery);
+        return;
+      });
+    }
+  }
+
   if (groceryList.length === 0) {
     return (
       <section className='groceryList'>
         <form>
           <h4>Grocery List</h4>
-          <button className = "addGrocery"><IoAddCircle /></button><br/>
+          <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add grocery item..."/>
+          <button className = "addGrocery" type='button' onClick={addGrocery}><IoAddCircle /></button><br/>
           <label className = "groceryItem">
             <input type="checkbox" id="item1" name="item1" value="item1"/>
             <span className = "checkmark"></span>
@@ -155,25 +217,24 @@ function GroceryList() {
       </section>
     );
   } else {
-
-  return (
-    <section className='groceryList'>
-      <form>
-        <h4>Grocery List</h4>
-        <button className = "addGrocery"><IoAddCircle /></button><br/>
-        {groceryList.map((item, index) => (
-          <label key={index} className = "groceryItem">
-            <input type="checkbox" id={item.Name} name={item.Name} value={item.Name}/>
-            <span className = "checkmark"></span>
-            <span className='itemName'>{item.Name}</span>
-            <a href="/Grocery-list/add"> add to Inventory</a>
-          </label>
-        ))}
-      </form>
-    </section>
-  );
+    return (
+      <section className='groceryList'>
+        <form>
+          <h4>Grocery List</h4>
+          <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add grocery item..."/>
+          <button className = "addGrocery" type='button' onClick={addGrocery}><IoAddCircle /></button><br/>
+          {groceryList.map((item, index) => (
+            <label key={index} className = "groceryItem">
+              <input type="checkbox" id={item.Name} name={item.Name} value={item.Name}/>
+              <span className = "checkmark"></span>
+              <span className='itemName'>{item.Name}</span>
+              <a href="/Grocery-list/add"> add to Inventory</a>
+            </label>
+          ))}
+        </form>
+      </section>
+    );
   }
-
 }
 
 function Home() {

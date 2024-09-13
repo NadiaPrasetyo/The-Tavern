@@ -272,6 +272,30 @@ app.post('/api/login', async (req, res) => {
     }
   });
 
+  //ADD 1 item to grocery list
+  app.post('/api/add-grocery-item', async (req, res) => {
+    try {
+      const db = client.db('The-tavern'); // replace with your DB name
+      const collection = db.collection('GroceryList'); // your grocery collection
+
+      //check that the collection doesn't already have the item
+      const item = await collection.findOne({Username: req.body.Username, Name: req.body.Name});
+      if (item) {
+        return res.status(409).json({ message: "Item already exist" });
+      }
+
+      // Add the item to the grocery list
+      await collection.insertOne(req.body);
+      console.log(req.body);
+  
+      // If everything is OK
+      res.status(200).json({ message: "Item added to grocery list" });
+  
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
   // POST RECIPES BY NAME AND FILTER
   app.post('/api/recipes', async (req, res) => {
     const { page = 1, limit = 10, search = '', includeT = [], excludeT = [], includeI = [], excludeI = [] } = req.body;
