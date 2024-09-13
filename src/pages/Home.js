@@ -208,9 +208,55 @@ function GroceryList() {
     }
   }
 
-  function addToInventory() {
+  function addToInventory(event) {
     // Add the specified grocery item to the inventory and remove it from the grocery list
 
+    //get the specific item that the a is clicked on
+    const item = event.target.parentNode.querySelector('.itemName').textContent;
+    console.log(item);
+
+    const addToInventory = async (e) => {
+      const response = await fetch('/api/add-to-inventory',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Username: localStorage.getItem('username'),
+          Name: item,
+          Category: 'Inventory'//default category
+        }),
+      });
+
+      if (response.status === 200) {
+        console.log("Grocery item added to inventory");
+        // Remove the grocery item from the list
+        const response2 = await fetch('/api/remove-grocery-item',{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            Username: localStorage.getItem('username'),
+            Name: item,
+          }),
+        });
+        // Update the grocery list
+
+        if (response2.status === 200) {
+          get5lastGroceryList().then((grocery) => {
+          setGroceryList(grocery);
+          return;
+        });
+        } else {
+          console.log("Error removing grocery item from list");
+        }
+      
+      } else {
+        console.log("Error adding grocery item to inventory");
+      }
+    }
+    addToInventory();
 
   }
 
