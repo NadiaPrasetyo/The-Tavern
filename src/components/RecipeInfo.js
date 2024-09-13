@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { IoMdClose } from "react-icons/io";
 import '../App.css'; 
 
 const RecipeInfo = ({ isOpen, onClose, recipe }) => {
@@ -23,21 +24,27 @@ const RecipeInfo = ({ isOpen, onClose, recipe }) => {
 
   return (
     <div className="recipe-info-overlay" onClick={onClose}>
-      <div className="recipe-info-content" onClick={(e) => e.stopPropagation()}>
-        <h2>{recipe.Name}</h2>
-        <h3>Tags:</h3>
-        <ul>
-          {recipe.Tag.map((tag, index) => (
-            <li className='recipe-tags' key={index}>{tag}</li>
-          ))}
-        </ul>
-        <h3>Ingredients:</h3>
-        <ul>
-          {recipe.Ingredients.map((ingredient, index) => (
-            <li className='recipe-ingredients' key={index}>{ingredient}</li>
-          ))}
-        </ul>
-        <button onClick={onClose}>Close</button>
+      <div className="recipe-info-background background">
+        <div className="recipe-info-content" onClick={(e) => e.stopPropagation()}>
+          <h2>{recipe.Name}</h2>
+          <div className='scrollable'>
+            {/* add image depending on origin tag (Wok Of Life, or Preppy Kitchen) */}
+            {recipe.Tag.includes('Wok Of Life') ? <img className='origin-image' src='WokOfLife.jpeg' alt='Wok Of Life logo' /> : null}
+            {recipe.Tag.includes('Preppy Kitchen') ? <img className='origin-image' src='PreppyKitchen.jpeg' alt='Preppy Kitchen logo' /> : null}
+            <div className='recipe-tags-container'>
+              {recipe.Tag.map((tag, index) => (
+                <div className='recipe-tags-info' key={index}>{tag}</div>
+              ))}
+            </div>
+            <div className='ingredients-header'>INGREDIENTS</div>
+            <ul className='recipe-ingredients-container'>
+              {recipe.Ingredients.map((ingredient, index) => (
+                <li className='recipe-ingredients-info' key={index}>{ingredient}</li>
+              ))}
+            </ul>
+          </div>
+          <IoMdClose className='x-button' onClick={onClose}></IoMdClose>
+        </div>
       </div>
     </div>
   );

@@ -933,22 +933,49 @@ th {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensure modal is on top */
+  z-index: 900; /* Ensure modal is on top */
 }
 
 .recipe-info-content {
-  background-color: white;
-  max-height: 60vh; /* Set a maximum height for modal */
+  position: relative;
+  background-color: #d7e1b2bd;
   padding: 20px;
+}
+
+.recipe-info-background {
+  max-height: 75vh; /* Set a maximum height for modal */
   border-radius: 8px;
-  max-width: 500px; /* Set a max width for modal */
+  max-width: 40vw; /* Set a max width for modal */
   width: 100%;
+  margin: 20px 0 0 20px; /* Add margin for spacing */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  overflow-y: auto; /* Allow modal to scroll if content exceeds max height */
+  overflow-y: hidden;
+  overflow-x: hidden; /* Hide horizontal scroll */
+}
+
+.scrollable {
+  max-height: 60vh; /* Set a maximum height for the scrollable content */
+  overflow-y: auto; /* Allow content to scroll if it exceeds max height */
+}
+
+.x-button {
+  position: absolute;
+  top: 20px; /* Adjust this value as needed for spacing */
+  right: 20px; /* Adjust this value as needed for spacing */
+  background-color: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.origin-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
 }
 
 .recipe-info-content h2 {
-  margin: 0 0 10px;
+  margin: 0 0 10px 10px;
 }
 
 .recipe-info-content ul {
@@ -956,36 +983,55 @@ th {
   padding: 0 0 0 20px;
 }
 
-.recipe-info-content button {
-  margin-top: 10px;
-  padding: 5px 10px;
-  border: none;
-  background-color: #4CAF50; /* Green background */
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
+.recipe-tags-container {
+  display: flex; /* Flexbox for tag layout */
+  flex-wrap: wrap; /* Allow tags to wrap to the next line */
 }
 
-.recipe-info-content button:hover {
-  background-color: #45a049; /* Darker green on hover */
+.recipe-tags-info {
+  background-color: #e4d0eb;
+  padding: 5px 10px;
+  margin: 0 5px 5px 0; /* Space between tags */
+  border-radius: 50px;
+  margin-top: 5px; /* Add spacing above tags */
+}
+
+.ingredients-header {
+  font-size: 1.25rem;
+  margin-top: 10px; /* Add spacing above ingredients */
+  /* gap between characters */
+  letter-spacing: 2px;
+}
+
+.recipe-ingredients-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two equal columns */
+  gap: 5px; /* Add some space between the columns */
+  column-gap: 30px; /* Add some space between the columns */
+  padding: 0; /* Remove padding from the container */
+}
+
+.recipe-ingredients-info {
+  list-style-type: square; /* Remove default list styling */
+  padding-left: 2px; /* Add some padding for the individual list items */
 }
 
 /* SCROLLER STYLE */
 
-.recipe-info-content::-webkit-scrollbar, .recipe-containers::-webkit-scrollbar {
+.scrollable::-webkit-scrollbar, .recipe-containers::-webkit-scrollbar {
   width: 15px;
   height: 8px;
 }
 
-.recipe-info-content::-webkit-scrollbar-thumb, .recipe-containers::-webkit-scrollbar-thumb {
+.scrollable::-webkit-scrollbar-thumb, .recipe-containers::-webkit-scrollbar-thumb {
   background-color: #a6815c; /* Custom thumb color */
 }
 
-.recipe-info-content::-webkit-scrollbar-thumb:hover, .recipe-containers::-webkit-scrollbar-thumb:hover {
+.scrollable::-webkit-scrollbar-thumb:hover, .recipe-containers::-webkit-scrollbar-thumb:hover {
   background-color: #8d664a; /* Custom thumb color on hover */
 }
 
-.recipe-info-content::-webkit-scrollbar-track, .recipe-containers::-webkit-scrollbar-track {
+.scrollable::-webkit-scrollbar-track, .recipe-containers::-webkit-scrollbar-track {
   background: transparent; /* Custom track color */
 }
 

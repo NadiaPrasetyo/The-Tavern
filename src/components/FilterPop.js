@@ -209,6 +209,10 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
                     )}
                 </div>
             </div>
+            <button className='x-button' onClick={onClose}>
+                X
+            </button>
+            
         </div>
     );
 };
