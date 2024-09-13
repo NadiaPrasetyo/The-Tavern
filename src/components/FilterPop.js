@@ -68,6 +68,7 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
                 setAvailableIngredientsState(availableIngredientsState.filter((i) => i !== item));
             }
         }
+        
     };
 
     // Remove an item from included/excluded
@@ -93,15 +94,22 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
                 // just remove from excluded items
             }
         }
+        console.log("Included Items: ", includedItems);
+        console.log("Excluded Items: ", excludedItems);
     };
+
+    function printStatus(){
+        console.log("Included Items: ", includedItems);
+        console.log("Excluded Items: ", excludedItems);
+    }
 
     return (
         <div className="filter-popup">
             <h3>Filter</h3>
 
             {/* Included/Excluded Section */}
-            <div className="included-excluded-section">
-                <div className="included-items">
+            <div className="included-excluded-section" onChange={printStatus()}>
+                <div className="included-items" >
                     {includedItems.length > 0 ? (
                         includedItems.map((item, index) => (
                             <span key={index} className="included-item" onClick={() => removeItem(item, "include")}>
