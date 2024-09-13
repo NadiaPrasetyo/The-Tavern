@@ -8,6 +8,11 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
     const [availableTagsState, setAvailableTagsState] = useState(availableTags);
     const [availableIngredientsState, setAvailableIngredientsState] = useState(availableIngredients);
 
+    const [includedTags, setIncludedTags] = useState([]);
+    const [excludedTags, setExcludedTags] = useState([]);
+    const [includedIngredients, setIncludedIngredients] = useState([]);
+    const [excludedIngredients, setExcludedIngredients] = useState([]);
+
     // Close the popup when the Esc key is pressed
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -47,68 +52,99 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
 
     if (!isOpen) return null; // Don't render anything if not open
 
-    // Add include/exclude an item
-    const addItem = (item, type) => {
+    // Add include/exclude a tag
+    const addTag = (item, type) => {
         if (type === "include") {
+            let temp = [...includedTags, item];
+            onFiltersChange(temp, excludedTags, includedIngredients, excludedIngredients);
 
             setIncludedItems([...includedItems, item]); // Add to included
-            // Remove from available tags/ingredients
-            if (availableTags.includes(item)) {
-                setAvailableTagsState(availableTagsState.filter((i) => i !== item));
-            } else {
-                setAvailableIngredientsState(availableIngredientsState.filter((i) => i !== item));
-            }
+            // Remove from available tags
+            setAvailableTagsState(availableTagsState.filter((i) => i !== item));
+            // Add to included tags
+            setIncludedTags([...includedTags, item]);
         } else if (type === "exclude") {
+            let temp = [...excludedTags, item];
+            onFiltersChange(includedTags, temp, includedIngredients, excludedIngredients);
 
             setExcludedItems([...excludedItems, item]); // Add to excluded
-            // Remove from available tags/ingredients
-            if (availableTags.includes(item)) {
-                setAvailableTagsState(availableTagsState.filter((i) => i !== item));
-            } else {
-                setAvailableIngredientsState(availableIngredientsState.filter((i) => i !== item));
-            }
+            // Remove from available tags
+            setAvailableTagsState(availableTagsState.filter((i) => i !== item));
+            // Add to excluded tags
+            setExcludedTags([...excludedTags, item]);
         }
         
+    };
+
+    // Add include/exclude an ingredient
+    const addIngredient = (item, type) => {
+        if (type === "include") {
+            let temp = [...includedIngredients, item];
+            onFiltersChange(includedTags, excludedTags, temp, excludedIngredients);
+
+
+            setIncludedItems([...includedItems, item]); // Add to included
+            // Remove from available ingredients
+            setAvailableIngredientsState(availableIngredientsState.filter((i) => i !== item));
+            // Add to included ingredients
+            setIncludedIngredients([...includedIngredients, item]);
+        } else if (type === "exclude") {
+            let temp = [...excludedIngredients, item];
+            onFiltersChange(includedTags, excludedTags, includedIngredients, temp);
+
+            setExcludedItems([...excludedItems, item]); // Add to excluded
+            // Remove from available ingredients
+            setAvailableIngredientsState(availableIngredientsState.filter((i) => i !== item));
+            // Add to excluded ingredients
+            setExcludedIngredients([...excludedIngredients, item]);
+        }
     };
 
     // Remove an item from included/excluded
     const removeItem = (item, type) => {
         if (type === "include") {
-            setIncludedItems(includedItems.filter((i) => i !== item));
-            // Add back to available tags/ingredients in sorted order
-            if (availableTags.includes(item)) {
-                setAvailableTagsState(prevTags => insertInSortedOrder(prevTags, item));
-            } else if (availableIngredients.includes(item)) {
-                setAvailableIngredientsState(prevIngredients => insertInSortedOrder(prevIngredients, item));
+            setIncludedItems(includedItems.filter((i) => i !== item)); // Remove from included
+            
+            // check if the item is a tag or ingredient
+            if (includedTags.includes(item)) {
+                let temp = includedTags.filter((i) => i !== item);
+                onFiltersChange(temp, excludedTags, includedIngredients, excludedIngredients);
+
+                setIncludedTags(includedTags.filter((i) => i !== item)); // Remove from included tags
+                setAvailableTagsState(insertInSortedOrder(availableTagsState, item)); // Add to available tags
             } else {
-                // just remove from included items
+                let temp = includedIngredients.filter((i) => i !== item);
+                onFiltersChange(includedTags, excludedTags, temp, excludedIngredients);
+
+                setIncludedIngredients(includedIngredients.filter((i) => i !== item)); // Remove from included ingredients
+                setAvailableIngredientsState(insertInSortedOrder(availableIngredientsState, item)); // Add to available ingredients
             }
         } else if (type === "exclude") {
-            setExcludedItems(excludedItems.filter((i) => i !== item));
-            // Add back to available tags/ingredients in sorted order
-            if (availableTags.includes(item)) {
-                setAvailableTagsState(prevTags => insertInSortedOrder(prevTags, item));
-            } else if (availableIngredients.includes(item)) {
-                setAvailableIngredientsState(prevIngredients => insertInSortedOrder(prevIngredients, item));
+            setExcludedItems(excludedItems.filter((i) => i !== item)); // Remove from excluded
+
+            // check if the item is a tag or ingredient
+            if (excludedTags.includes(item)) {
+                let temp = excludedTags.filter((i) => i !== item);
+                onFiltersChange(includedTags, temp, includedIngredients, excludedIngredients);
+
+                setExcludedTags(excludedTags.filter((i) => i !== item)); // Remove from excluded tags
+                setAvailableTagsState(insertInSortedOrder(availableTagsState, item)); // Add to available tags
             } else {
-                // just remove from excluded items
+                let temp = excludedIngredients.filter((i) => i !== item);
+                onFiltersChange(includedTags, excludedTags, includedIngredients, temp);
+
+                setExcludedIngredients(excludedIngredients.filter((i) => i !== item)); // Remove from excluded ingredients
+                setAvailableIngredientsState(insertInSortedOrder(availableIngredientsState, item)); // Add to available ingredients
             }
         }
-        console.log("Included Items: ", includedItems);
-        console.log("Excluded Items: ", excludedItems);
     };
-
-    function printStatus(){
-        console.log("Included Items: ", includedItems);
-        console.log("Excluded Items: ", excludedItems);
-    }
 
     return (
         <div className="filter-popup">
             <h3>Filter</h3>
 
             {/* Included/Excluded Section */}
-            <div className="included-excluded-section" onChange={printStatus()}>
+            <div className="included-excluded-section">
                 <div className="included-items" >
                     {includedItems.length > 0 ? (
                         includedItems.map((item, index) => (
@@ -140,11 +176,11 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
                     {availableTagsState.length > 0 ? (
                         availableTagsState.map((tag, index) => (
                             <div key={index} className="tag-item">
-                                <button onClick={() => addItem(tag, "include")}>
+                                <button onClick={() => addTag(tag, "include")}>
                                     +
                                 </button>
                                 <span>{tag}</span>
-                                <button onClick={() => addItem(tag, "exclude")}>
+                                <button onClick={() => addTag(tag, "exclude")}>
                                     -
                                 </button>
                             </div>
@@ -159,11 +195,11 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
                     {availableIngredientsState.length > 0 ? (
                         availableIngredientsState.map((ingredient, index) => (
                             <div key={index} className="ingredient-item">
-                                <button onClick={() => addItem(ingredient, "include")}>
+                                <button onClick={() => addIngredient(ingredient, "include")}>
                                     +
                                 </button>
                                 <span>{ingredient}</span>
-                                <button onClick={() => addItem(ingredient, "exclude")}>
+                                <button onClick={() => addIngredient(ingredient, "exclude")}>
                                     -
                                 </button>
                             </div>

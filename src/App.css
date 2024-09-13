@@ -696,11 +696,11 @@ th {
 
 .recipe-tab-container {
   position: fixed;
-  right: -580px; /* Start at the edge of the screen */
+  right: calc(-40vw + 20px); /* Start at the edge of the screen */
   top: 50%;
   transform: translateY(-50%);
-  width: 600px;
-  height:90%;
+  width: 40vw;
+  height: 90vh;
   display: flex;
   flex-direction: row-reverse; /* Ensure the tab appears on the right */
   justify-content: flex-start;

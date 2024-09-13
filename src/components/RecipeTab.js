@@ -24,8 +24,10 @@ const RecipeTab = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false); // The filter popup state
   const [availableTags, setAvailableTags] = useState([]); // The available tags for filtering
   const [availableIngredients, setAvailableIngredients] = useState([]); // The available ingredients for filtering
-  const [includedItems, setIncludedItems] = useState([]); // The included items for filtering
-  const [excludedItems, setExcludedItems] = useState([]); // The excluded items for filtering
+  const [includedTags, setIncludedTags] = useState([]); // The included tags for filtering
+  const [excludedTags, setExcludedTags] = useState([]); // The excluded tags for filtering
+  const [includedIngredients, setIncludedIngredients] = useState([]); // The included ingredients for filtering
+  const [excludedIngredients, setExcludedIngredients] = useState([]); // The excluded ingredients for filtering
 
 
   const recipesPerPage = 10; // Limit the number of recipes per page
@@ -34,12 +36,29 @@ const RecipeTab = () => {
 
   // Toggle the book tab when clicking the container
   const toggleBook = () => {
+    // close the filter popup when the book tab is closed
+    if (isOpen) {
+      setIsFilterOpen(false);
+    }
+    // close the recipe info modal when the book tab is closed
+    if (isInfoOpen) {
+      setInfoOpen(false);
+      setSelectedRecipe(null);
+    }
+
     setIsOpen(!isOpen);
   };
 
   // Change the content of the book based on the clicked bookmark
   const changePage = (page) => {
     setCurrentPage(page);
+    // close the filter popup when changing the page
+    setIsFilterOpen(false);
+    // close the recipe info modal when changing the page
+    if (isInfoOpen) {
+      setInfoOpen(false);
+      setSelectedRecipe(null);
+    }
   };
 
   // Handle the search input change and reset the page to 1
@@ -84,8 +103,8 @@ const RecipeTab = () => {
 
         setTotalPages(data.totalPages); // Set the total number of pages
 
-        setAvailableIngredients(data.ingredients); // Set the available ingredients for filtering
-        setAvailableTags(data.tags); // Set the available tags for filtering
+        setAvailableIngredients(data.ingredients.sort()); // Set the available ingredients for filtering
+        setAvailableTags(data.tags.sort()); // Set the available tags for filtering
 
 
     } catch (error) {
@@ -94,16 +113,12 @@ const RecipeTab = () => {
     setIsLoading(false);
   };
 
-  // Fetch recipes when `recipePage`, `searchQuery`, `includedItems`, or `excludedItems` changes
+  // Fetch recipes when `recipePage`, `searchQuery`, `includedTags`, `excludedTags`, `includedIngredients`, or `excludedIngredients` change
   useEffect(() => {
     if (isOpen) {
-        const includedTags = includedItems.filter(item => availableTags.includes(item));
-        const excludedTags = excludedItems.filter(item => availableTags.includes(item));
-        const includedIngredients = includedItems.filter(item => availableIngredients.includes(item));
-        const excludedIngredients = excludedItems.filter(item => availableIngredients.includes(item));
         fetchRecipes(recipePage, searchQuery, includedTags, excludedTags, includedIngredients, excludedIngredients);
     }
-  }, [recipePage, searchQuery, isOpen, includedItems, excludedItems]);
+  }, [recipePage, searchQuery, isOpen, includedTags, excludedTags, includedIngredients, excludedIngredients]);
 
 
   // Handle pagination (next and previous page)
@@ -139,10 +154,11 @@ const RecipeTab = () => {
     setIsFilterOpen(false);
   }
 
-  const handleFiltersChange = (included, excluded) => {
-    console.log("Filters changed:", included, excluded);
-    setIncludedItems(included);
-    setExcludedItems(excluded);
+  const handleFiltersChange = (includedTags, excludedTags, includedIngredients, excludedIngredients) => {
+    setIncludedTags(includedTags);
+    setExcludedTags(excludedTags);
+    setIncludedIngredients(includedIngredients);
+    setExcludedIngredients(excludedIngredients);
     setRecipePage(1); // Reset the current page to 1 whenever the filters change
   };
 
