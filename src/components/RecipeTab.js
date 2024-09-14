@@ -256,10 +256,7 @@ const RecipeTab = () => {
                   <LuFilter className='filter-icon' />
                 </div>
                 <div className='recipe-containers custom-scroll'>
-                  <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 1</div>
-                  <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 2</div>
-                  <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 3</div>
-                  <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 4</div>
+                  <div className='recipe-list' onClick={(e) => e.stopPropagation()}>COMING SOON!</div>
                 </div>
               </div>
             }
