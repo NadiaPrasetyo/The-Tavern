@@ -184,7 +184,7 @@ const RecipeTab = () => {
                 </div>
 
                 {/* Recipe container with pagination */}
-                <div className='recipe-containers' onClick={(e) => e.stopPropagation()}>
+                <div className='recipe-containers custom-scroll' onClick={(e) => e.stopPropagation()}>
                   {isLoading ? (
                     <div>Loading...</div>
                   ) : recipes.length > 0 ? (
@@ -239,7 +239,7 @@ const RecipeTab = () => {
                   <TbSearch className='search-icon' />
                   <LuFilter className='filter-icon' />
                 </div>
-                <div className='recipe-containers'>
+                <div className='recipe-containers custom-scroll'>
                   <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 1</div>
                   <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 2</div>
                   <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 3</div>
@@ -255,7 +255,7 @@ const RecipeTab = () => {
                   <TbSearch className='search-icon' />
                   <LuFilter className='filter-icon' />
                 </div>
-                <div className='recipe-containers'>
+                <div className='recipe-containers custom-scroll'>
                   <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 1</div>
                   <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 2</div>
                   <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 3</div>
@@ -271,7 +271,7 @@ const RecipeTab = () => {
                   <TbSearch className='search-icon' />
                   <LuFilter className='filter-icon' />
                 </div>
-                <div className='recipe-containers'>
+                <div className='recipe-containers custom-scroll'>
                   <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 1</div>
                   <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 2</div>
                   <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 3</div>

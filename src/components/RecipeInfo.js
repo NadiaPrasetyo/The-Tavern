@@ -27,7 +27,7 @@ const RecipeInfo = ({ isOpen, onClose, recipe }) => {
       <div className="recipe-info-background background">
         <div className="recipe-info-content" onClick={(e) => e.stopPropagation()}>
           <h2>{recipe.Name}</h2>
-          <div className='scrollable'>
+          <div className='scrollable custom-scroll'>
             {/* add image depending on origin tag (Wok Of Life, or Preppy Kitchen) */}
             {recipe.Tag.includes('Wok Of Life') ? <img className='origin-image' src='WokOfLife.jpeg' alt='Wok Of Life logo' /> : null}
             {recipe.Tag.includes('Preppy Kitchen') ? <img className='origin-image' src='PreppyKitchen.jpeg' alt='Preppy Kitchen logo' /> : null}

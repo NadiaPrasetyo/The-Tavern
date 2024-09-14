@@ -975,7 +975,7 @@ th {
 }
 
 .recipe-info-content h2 {
-  margin: 0 0 10px 10px;
+  margin: 0 20px 10px 0;
 }
 
 .recipe-info-content ul {
@@ -989,7 +989,7 @@ th {
 }
 
 .recipe-tags-info {
-  background-color: #e4d0eb;
+  background-color: #e3c1efa4;
   padding: 5px 10px;
   margin: 0 5px 5px 0; /* Space between tags */
   border-radius: 50px;
@@ -1018,37 +1018,42 @@ th {
 
 /* SCROLLER STYLE */
 
-.scrollable::-webkit-scrollbar, .recipe-containers::-webkit-scrollbar {
+.custom-scroll::-webkit-scrollbar{
   width: 15px;
   height: 8px;
 }
 
-.scrollable::-webkit-scrollbar-thumb, .recipe-containers::-webkit-scrollbar-thumb {
+.custom-scroll::-webkit-scrollbar-thumb {
   background-color: #a6815c; /* Custom thumb color */
 }
 
-.scrollable::-webkit-scrollbar-thumb:hover, .recipe-containers::-webkit-scrollbar-thumb:hover {
+.custom-scroll::-webkit-scrollbar-thumb:hover {
   background-color: #8d664a; /* Custom thumb color on hover */
 }
 
-.scrollable::-webkit-scrollbar-track, .recipe-containers::-webkit-scrollbar-track {
+.custom-scroll::-webkit-scrollbar-track {
   background: transparent; /* Custom track color */
 }
 
 /* FILTER POP UP */
 
 /* Styles for the filter popup */
-.filter-popup {
+.filter-popup-background {
   position: fixed;
   top: 50%;
   left: -50%;
   transform: translate(-50%, -40%);
   background-color: white;
-  border: 1px solid #ccc;
+  width: 80%;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  width: 80%;
-  max-width: 500px;
+  z-index: 800; /* Ensure it's behind the popup */
+}
+
+.filter-popup {
+  background-color: #d7e1b2bd;
+  border: 1px solid #ccc;
+  border-radius: 8px;
   padding: 20px;
   z-index: 1000; /* Make sure it appears above other content */
   display: flex;
@@ -1058,6 +1063,7 @@ th {
 .filter-popup h3 {
   margin: 0 0 15px;
   text-align: justify;
+  letter-spacing: 2px;
 }
 
 .included-excluded-section {
@@ -1071,31 +1077,34 @@ th {
 .excluded-items {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
 .included-item,
-.excluded-item {
-  background-color: #e0ffe0;
+.excluded-item,
+.no-items {
   padding: 5px 10px;
-  border-radius: 4px;
+  border-radius: 50px;
+  margin: auto 2px;
   display: flex;
   align-items: center;
 }
 
-.included-item button,
-.excluded-item button {
-  margin-left: 5px;
-  background-color: #ffcccb;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  padding: 2px 6px;
+.included-item {
+  border: 2px solid #85bac59c;
+  background-color: #bfe6f0bc;
+}
+
+.excluded-item {
+  border: 2px solid #d6a8bbcf;
+  background-color: #f1cbdac2;
 }
 
 .no-items {
-  margin: 0 10px;
+  cursor: default;
+  border: 2px solid #5f7a60b3;
+  background-color: #9baa74c6;
 }
 
 .columns {
@@ -1103,12 +1112,30 @@ th {
   justify-content: space-between;
   max-height: 40vh;
   overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.columns h4 {
+  margin: 0 0 10px 10px;
+  text-align: justify;
+  letter-spacing: 2px;
 }
 
 .tags-column,
 .ingredients-column {
   flex: 1;
   margin: 0 10px;
+  min-width: 100px;
+}
+
+.column-separator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%; /* Place it in the middle */
+  width: 2px;
+  background-color: black; /* Light gray color for the separator */
 }
 
 .tag-item,
@@ -1116,30 +1143,46 @@ th {
   display: flex;
   justify-content: space-between;
   padding: 5px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 50px;
   margin-bottom: 10px;
   align-items: center;
 }
 
+.tag-item {
+  border: 2px solid #ff6d3365;
+  background-color: #fdf69ba7;
+}
+
+.ingredient-item {
+  border: 2px solid #843cff94;
+  background-color: #d2b7ebbc;
+}
+
 .tag-item button,
 .ingredient-item button {
-  margin-left: 5px;
-  background-color: #4CAF50;
+  margin: 0 5px;
+  height: 25px;
+  width: 25px;
   color: white;
-  border: none;
-  border-radius: 4px;
+  border-radius: 50px;
   cursor: pointer;
   padding: 3px 6px;
 }
 
-/* Optional: Background overlay for the popup */
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 900; /* Ensure it's behind the popup */
+.include {
+  border-color: #88b9c3a8;
+  background-color: #b8e2edb1;
+}
+
+.include:hover {
+  background-color: #81bdc9a8;
+}
+
+.exclude {
+  border-color: #e5b3c7d4;
+  background-color: #edc6d5c7;
+}
+
+.exclude:hover {
+  background-color: #ecb3c9d4;
 }

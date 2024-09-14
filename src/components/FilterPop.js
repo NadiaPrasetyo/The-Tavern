@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { IoMdClose } from "react-icons/io";
 import "../App.css";
 
 const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onFiltersChange }) => {
@@ -140,79 +141,80 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
     };
 
     return (
-        <div className="filter-popup">
-            <h3>Filter</h3>
+        <div className="filter-popup-background">
+            <div className="filter-popup">
+                <h3>FILTERS</h3>
 
-            {/* Included/Excluded Section */}
-            <div className="included-excluded-section">
-                <div className="included-items" >
-                    {includedItems.length > 0 ? (
-                        includedItems.map((item, index) => (
-                            <span key={index} className="included-item" onClick={() => removeItem(item, "include")}>
-                                {item}
-                            </span>
-                        ))
-                    ) : (
-                        <span className="no-items">No items included</span>
-                    )}
+                {/* Included/Excluded Section */}
+                <div className="included-excluded-section custom-scroll">
+                    <div className="included-items" >
+                        {includedItems.length > 0 ? (
+                            includedItems.map((item, index) => (
+                                <span key={index} className="included-item" onClick={() => removeItem(item, "include")}>
+                                    {item}
+                                </span>
+                            ))
+                        ) : (
+                            <span className="no-items">No items included</span>
+                        )}
+                    </div>
+                    <div className="excluded-items">
+                        {excludedItems.length > 0 ? (
+                            excludedItems.map((item, index) => (
+                                <span key={index} className="excluded-item" onClick={() => removeItem(item, "exclude")}>
+                                    {item}
+                                </span>
+                            ))
+                        ) : (
+                            <span className="no-items">No items excluded</span>
+                        )}
+                    </div>
                 </div>
-                <div className="excluded-items">
-                    {excludedItems.length > 0 ? (
-                        excludedItems.map((item, index) => (
-                            <span key={index} className="excluded-item" onClick={() => removeItem(item, "exclude")}>
-                                {item}
-                            </span>
-                        ))
-                    ) : (
-                        <span className="no-items">No items excluded</span>
-                    )}
+
+                {/* Two Columns: Tags and Ingredients */}
+                <div className="columns custom-scroll">
+                    <div className="tags-column">
+                        <h4>TAGS</h4>
+                        {availableTagsState.length > 0 ? (
+                            availableTagsState.map((tag, index) => (
+                                <div key={index} className="tag-item">
+                                    <button className="include" onClick={() => addTag(tag, "include")}>
+                                        +
+                                    </button>
+                                    <span>{tag}</span>
+                                    <button className="exclude" onClick={() => addTag(tag, "exclude")}>
+                                        -
+                                    </button>
+                                </div>
+                            ))
+                        ) : (
+                            <span className="no-items">No tags available</span>
+                        )}
+                    </div>
+
+                    <div className="column-separator"></div>
+
+                    <div className="ingredients-column">
+                        <h4>INGREDIENTS</h4>
+                        {availableIngredientsState.length > 0 ? (
+                            availableIngredientsState.map((ingredient, index) => (
+                                <div key={index} className="ingredient-item">
+                                    <button className="include" onClick={() => addIngredient(ingredient, "include")}>
+                                        +
+                                    </button>
+                                    <span>{ingredient}</span>
+                                    <button className="exclude" onClick={() => addIngredient(ingredient, "exclude")}>
+                                        -
+                                    </button>
+                                </div>
+                            ))
+                        ) : (
+                            <span className="no-items">No ingredients available</span>
+                        )}
+                    </div>
                 </div>
+                <IoMdClose className='x-button' onClick={onClose}></IoMdClose>
             </div>
-
-            {/* Two Columns: Tags and Ingredients */}
-            <div className="columns">
-                <div className="tags-column">
-                    <h4>Tags</h4>
-                    {availableTagsState.length > 0 ? (
-                        availableTagsState.map((tag, index) => (
-                            <div key={index} className="tag-item">
-                                <button onClick={() => addTag(tag, "include")}>
-                                    +
-                                </button>
-                                <span>{tag}</span>
-                                <button onClick={() => addTag(tag, "exclude")}>
-                                    -
-                                </button>
-                            </div>
-                        ))
-                    ) : (
-                        <span className="no-items">No tags available</span>
-                    )}
-                </div>
-
-                <div className="ingredients-column">
-                    <h4>Ingredients</h4>
-                    {availableIngredientsState.length > 0 ? (
-                        availableIngredientsState.map((ingredient, index) => (
-                            <div key={index} className="ingredient-item">
-                                <button onClick={() => addIngredient(ingredient, "include")}>
-                                    +
-                                </button>
-                                <span>{ingredient}</span>
-                                <button onClick={() => addIngredient(ingredient, "exclude")}>
-                                    -
-                                </button>
-                            </div>
-                        ))
-                    ) : (
-                        <span className="no-items">No ingredients available</span>
-                    )}
-                </div>
-            </div>
-            <button className='x-button' onClick={onClose}>
-                X
-            </button>
-            
         </div>
     );
 };
