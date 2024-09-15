@@ -379,8 +379,31 @@ app.post('/api/login', async (req, res) => {
       }
 
       // Fetch filtered recipes based on the search query and filters, then apply pagination
-      const recipes_all = Recipe.find(query); // Search by name and filters
+      let recipes_all = Recipe.find(query); // Search by name and filters
 
+      let length = await Recipe.countDocuments(query); // Count filtered results
+
+      // if there's no recipe found, try to search by tags
+      if (length === 0) {
+        const query = {
+          Tag: { $regex: searchRegex }, // Search by tag
+        };
+        if (andConditions.length > 0) {
+          query.$and = andConditions;
+        }
+        recipes_all = Recipe.find(query); // Search by tag
+        length = await Recipe.countDocuments(query); // Count filtered results
+        // if there's no recipe found, try to search by ingredients
+        if (length === 0) {
+          const query = {
+            Ingredients: { $regex: searchRegex }, // Search by ingredients
+          };
+          if (andConditions.length > 0) {
+            query.$and = andConditions;
+          }
+          recipes_all = Recipe.find(query); // Search by ingredients
+        }
+      }
       // Get paginated recipes
       const recipes = await recipes_all
         .skip(skip) // Skip previous pages
@@ -506,6 +529,136 @@ app.post('/api/login', async (req, res) => {
   
     } catch (error) {
       res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  // GET RECOMENDED RECIPES
+  app.post('/api/recommendation', async (req, res) => {
+    const { username, page = 1, limit = 10, search = '', includeT = [], excludeT = [], includeI = [], excludeI = []} = req.body;
+    const skip = (page - 1) * limit;
+
+    const userInventory = await database.collection('Inventory').find({Username: username}).get().map(item => item.Name);
+    console.log(userInventory);
+
+    // if user has no inventory, return empty array
+    if (userInventory.length === 0) {
+      return res.json({
+        recipes: [], // Empty array
+        currentPage: page,
+        totalPages: 0, // No pages
+        tags: [], // Empty array
+        ingredients: [], // Empty array
+      });
+    }
+
+    try {
+      // Create a case-insensitive regex to search by recipe name
+      const searchRegex = new RegExp(search, 'i'); // 'i' for case-insensitive
+
+      // Build the query object with search and filters
+      const query = {
+        Name: { $regex: searchRegex }, // Search by name
+      };
+
+      // Use $and to combine multiple filter conditions
+      const andConditions = [];
+
+      // Include tags and ingredients
+      if (includeT.length > 0) {
+        andConditions.push({ Tag: { $all: includeT } }); // Include tags
+      }
+
+      if (includeI.length > 0) {
+        andConditions.push({ Ingredients: { $all: includeI } }); // Include ingredients
+      }
+
+      // Exclude tags and ingredients
+      if (excludeT.length > 0) {
+        andConditions.push({ Tag: { $nin: excludeT } }); // Exclude tags
+      }
+
+      if (excludeI.length > 0) {
+        andConditions.push({ Ingredients: { $nin: excludeI } }); // Exclude ingredients
+      }
+
+      // If there are any conditions, add them to the query
+      if (andConditions.length > 0) {
+        query.$and = andConditions;
+      }
+
+
+      // Use aggregation to find recipes and match the user's inventory with recipe ingredients
+      const recipes_all = await Recipe.aggregate([
+        { $match: query },
+        {
+          $addFields: {
+            matchedIngredients: {
+              $size: {
+                $filter: {
+                  input: "$Ingredients",
+                  as: "ingredient",
+                  cond: { $in: ["$$ingredient", userInventory] } // Match user's inventory with recipe ingredients
+                }
+              }
+            }
+          }
+        },
+        { $match: { matchedIngredients: { $gt: 0 } } }, // Ensure at least one matching ingredient
+        { $sort: { matchedIngredients: -1 } }, // Sort by the number of matched ingredients (descending)
+        { $skip: skip }, // Skip previous pages
+        { $limit: limit } // Limit the number of results
+      ]).toArray();
+
+      // Count total recipes matching the user's inventory
+      const totalRecipes = await Recipe.aggregate([
+        { $match: query },
+        {
+          $addFields: {
+            matchedIngredients: {
+              $size: {
+                $filter: {
+                  input: "$Ingredients",
+                  as: "ingredient",
+                  cond: { $in: ["$$ingredient", userInventory] }
+                }
+              }
+            }
+          }
+        },
+        { $match: { matchedIngredients: { $gt: 0 } } }, // Ensure at least one matching ingredient
+        { $count: "total" }
+      ]).toArray();
+
+      const total = totalRecipes.length > 0 ? totalRecipes[0].total : 0;
+
+      // Get all tags and ingredients (before pagination)
+      const recipe_tags = await Recipe.aggregate([
+        { $match: Object.keys(query).length ? query : {} },
+        { $unwind: "$Tag" },
+        { $group: { _id: "$Tag" } },
+        { $project: { Tag: "$_id", _id: 0 } }
+      ]).toArray();
+
+      const formatted_tags = recipe_tags.map(tag => tag.Tag);
+
+      const recipe_ingredients = await Recipe.aggregate([
+        { $match: Object.keys(query).length ? query : {} },
+        { $unwind: "$Ingredients" },
+        { $group: { _id: "$Ingredients" } },
+        { $project: { Ingredients: "$_id", _id: 0 } }
+      ]).toArray();
+
+      const formatted_ingredients = recipe_ingredients.map(ingredient => ingredient.Ingredients);
+
+      res.json({
+        recipes: recipes_all, // Recipes for the current page
+        currentPage: page,
+        totalPages: Math.ceil(total / limit), // Total pages based on matching result count
+        tags: formatted_tags, // All tags matching the filtered query
+        ingredients: formatted_ingredients, // All ingredients matching the filtered query
+      });
+    } catch (err) {
+      res.status(500).json({ message: 'Error fetching recipes', error: err });
     }
   });
 

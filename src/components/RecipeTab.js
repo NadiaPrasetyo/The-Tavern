@@ -15,6 +15,7 @@ const RecipeTab = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1); // The current page
   const [searchQuery, setSearchQuery] = useState(''); // The search input value
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery); // Add a debounced version of the search query
   const [recipes, setRecipes] = useState([]); // The fetched recipes
   const [totalPages, setTotalPages] = useState(1); // The total number of pages
   const [isLoading, setIsLoading] = useState(false); // Loading state
@@ -107,6 +108,17 @@ const RecipeTab = () => {
     };
   }, [isOpen]);
 
+  // Debounce the search input
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 500); // Delay of 500ms
+  
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
+
 
   // Change the content of the book based on the clicked bookmark
   const changePage = (page) => {
@@ -177,13 +189,12 @@ const RecipeTab = () => {
     setIsLoading(false);
   };
 
-  // Fetch recipes when `recipePage`, `searchQuery`, `includedTags`, `excludedTags`, `includedIngredients`, or `excludedIngredients` change
   useEffect(() => {
     if (isOpen) {
-      fetchRecipes(recipePage, searchQuery, includedTags, excludedTags, includedIngredients, excludedIngredients);
+      fetchRecipes(recipePage, debouncedSearchQuery, includedTags, excludedTags, includedIngredients, excludedIngredients);
     }
-  }, [recipePage, searchQuery, isOpen, includedTags, excludedTags, includedIngredients, excludedIngredients]);
-
+  }, [recipePage, debouncedSearchQuery, isOpen, includedTags, excludedTags, includedIngredients, excludedIngredients]);
+  
 
   // Handle pagination (next and previous page)
   const nextPage = () => {
@@ -331,9 +342,39 @@ const RecipeTab = () => {
     setIsLoadingFavourites(false);
   };
 
-  // RECCOMENDATION FUNCTIONS
+  // RECOMENDATION FUNCTIONS
 
-  // recomendation is 10 recipes that the user has the most ingredients for (from inventory)
+  // Get all recommendation recipes
+  const getRecommendations = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/recommendation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: localStorage.getItem('username'),
+          page: recipePage,
+          limit: recipesPerPage,
+          search: searchQuery,
+          includeT: includedTags,
+          excludeT: excludedTags,
+          includeI: includedIngredients,
+          excludeI: excludedIngredients
+        }),
+      });
+
+      const data = await response.json();
+      console.log(data.recipe);
+      console.log(data.tags);
+      console.log(data.ingredients);
+
+    } catch (error) {
+      console.error("Error getting recommendations:", error);
+    }
+    setIsLoading(false);
+  };
 
   return (
     <div className={`recipe-tab-container ${isOpen ? "open" : ""}`} ref={containerRef}>
@@ -421,10 +462,21 @@ const RecipeTab = () => {
                   <TbSearch className='search-icon' />
                   <LuFilter className='filter-icon' onClick={() => toggleFilter()} />
                 </div>
+
                 <div className='recipe-containers custom-scroll' style={{maxHeight: containerMaxHeight}} onClick={(e) => e.stopPropagation()}>
                   <div className='recipe-list'>Recipe 1</div>
                   <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} />
                   <FilterPopup isOpen={isFilterOpen} onClose={closeFilter} availableTags={availableTags} availableIngredients={availableIngredients} onFiltersChange={handleFiltersChange} />
+                </div>
+                {/* Pagination controls */}
+                <div className='pagination-controls' onClick={(e) => e.stopPropagation()}>
+                  <button className='prev-btn' onClick={prevPage} disabled={recipePage === 1}>
+                    Previous
+                  </button>
+                  <span className='page-num'>Page {recipePage} of {totalPages}</span>
+                  <button className='next-btn' onClick={nextPage} disabled={recipePage === totalPages}>
+                    Next
+                  </button>
                 </div>
               </div>
             }
