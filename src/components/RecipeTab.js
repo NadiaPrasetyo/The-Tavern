@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { TbSearch } from "react-icons/tb";
 import { IoIosHourglass } from "react-icons/io";
 import { MdOutlineStarPurple500 } from "react-icons/md";
@@ -32,8 +32,10 @@ const RecipeTab = () => {
   const [favouriteSet, setFavouriteSet] = useState(new Set()); // Set for favorite recipes
   const [isLoadingFavourites, setIsLoadingFavourites] = useState(false); // Loading state for favourites
 
-  // Favourite recipes (max 10)
+  const containerRef = useRef(null); // Reference to the container element
+  const [containerMaxHeight, setContainerMaxHeight] = useState(0); 
 
+  const favouriteMax = 10; // Maximum number of favourite recipes
   const recipesPerPage = 10; // Limit the number of recipes per page
   const max_tags = 3; // Limit the number of tags to display
   const max_ingredients = 4; // Limit the number of ingredients to display
@@ -57,6 +59,54 @@ const RecipeTab = () => {
 
     setIsOpen(!isOpen);
   };
+
+  function getComputedMaxHeight() {
+    // get container height
+    const containerHeight = containerRef.current.offsetHeight;
+    let totalHeaderHeight = 0;
+    const headerHeight = containerRef.current.querySelector('.tab-title').offsetHeight;
+    totalHeaderHeight += headerHeight;
+    if (containerRef.current.querySelector('.search-bar-container')) {
+      const searchHeight = containerRef.current.querySelector('.search-bar-container').offsetHeight;
+      totalHeaderHeight += searchHeight;
+    }
+    if (containerRef.current.querySelector('.pagination-controls')){
+      const paginationHeight = containerRef.current.querySelector('.pagination-controls').offsetHeight;
+      totalHeaderHeight += paginationHeight + 30; // 20 is the padding/margin
+    }
+    // Calculate available height for recipes
+    const availableHeight = containerHeight - totalHeaderHeight - 40; // Adjust for any extra padding/margins
+    return availableHeight > 0 ? availableHeight : 0;
+  }
+
+  useEffect(() => {
+    if (isOpen) {
+      // Recalculate max height after the currentPage changes
+      setContainerMaxHeight(getComputedMaxHeight());
+    }
+  }, [currentPage, isOpen]);  
+
+  // Debounce resize handler to avoid multiple recalculations on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (isOpen) {
+        setContainerMaxHeight(getComputedMaxHeight());
+      }
+    };
+
+    const debounceResize = () => {
+      clearTimeout(window.resizeTimeout);
+      window.resizeTimeout = setTimeout(handleResize, 100); // 100ms debounce
+    };
+
+    window.addEventListener('resize', debounceResize);
+
+    return () => {
+      window.removeEventListener('resize', debounceResize);
+      clearTimeout(window.resizeTimeout);
+    };
+  }, [isOpen]);
+
 
   // Change the content of the book based on the clicked bookmark
   const changePage = (page) => {
@@ -189,7 +239,7 @@ const RecipeTab = () => {
         body: JSON.stringify({
           username: localStorage.getItem('username'),
           recipe: recipe.Name,
-          max_favourites: 10,
+          max_favourites: favouriteMax,
         }),
       });
 
@@ -281,8 +331,12 @@ const RecipeTab = () => {
     setIsLoadingFavourites(false);
   };
 
+  // RECCOMENDATION FUNCTIONS
+
+  // recomendation is 10 recipes that the user has the most ingredients for (from inventory)
+
   return (
-    <div className={`recipe-tab-container ${isOpen ? "open" : ""}`}>
+    <div className={`recipe-tab-container ${isOpen ? "open" : ""}`} ref={containerRef}>
       {/* Book content area */}
       <div className='book-container background' onClick={toggleBook}>
         <div className="book-container" onClick={toggleBook}>
@@ -303,7 +357,7 @@ const RecipeTab = () => {
                 </div>
 
                 {/* Recipe container with pagination */}
-                <div className='recipe-containers custom-scroll' onClick={(e) => e.stopPropagation()}>
+                <div className='recipe-containers custom-scroll' style={{maxHeight: containerMaxHeight}} onClick={(e) => e.stopPropagation()}>
                   {isLoading ? (
                     <div>Loading...</div>
                   ) : recipes.length > 0 ? (
@@ -356,11 +410,22 @@ const RecipeTab = () => {
             {currentPage === 2 &&
               <div className='recommendation-tab'>
                 <div className='tab-title'>RECOMMENDATION</div>
-                <div className='recipe-containers custom-scroll no-search' onClick={(e) => e.stopPropagation()}>
+                <div className='search-bar-container' onClick={(e) => e.stopPropagation()}>
+                  <input
+                    className='search-bar'
+                    type='text'
+                    placeholder='Search for recipes'
+                    value={searchQuery}
+                    onChange={handleSearch} // Trigger search and page reset on input change
+                  />
+                  <TbSearch className='search-icon' />
+                  <LuFilter className='filter-icon' onClick={() => toggleFilter()} />
+                </div>
+                <div className='recipe-containers custom-scroll' style={{maxHeight: containerMaxHeight}} onClick={(e) => e.stopPropagation()}>
                   <div className='recipe-list'>Recipe 1</div>
                   <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} />
+                  <FilterPopup isOpen={isFilterOpen} onClose={closeFilter} availableTags={availableTags} availableIngredients={availableIngredients} onFiltersChange={handleFiltersChange} />
                 </div>
-                
               </div>
             }
             {currentPage === 3 &&
@@ -371,7 +436,7 @@ const RecipeTab = () => {
                   <TbSearch className='search-icon' />
                   <LuFilter className='filter-icon' />
                 </div>
-                <div className='recipe-containers custom-scroll' onClick={(e) => e.stopPropagation()}>
+                <div className='recipe-containers custom-scroll'  style={{maxHeight: containerMaxHeight}}  onClick={(e) => e.stopPropagation()}>
                   <div className='recipe-list'>COMING SOON!</div>
                   <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} />
                 </div>
@@ -380,7 +445,7 @@ const RecipeTab = () => {
             {currentPage === 4 &&
               <div className='favourite-tab'>
                 <div className='tab-title'>FAVOURITES</div>
-                <div className='recipe-containers custom-scroll no-search' onClick={(e) => e.stopPropagation()}>
+                <div className='recipe-containers custom-scroll' style={{maxHeight: containerMaxHeight}} onClick={(e) => e.stopPropagation()}>
                   {isLoadingFavourites ? (
                     <div>Loading favourites...</div>
                   ) : favouriteRecipes.length > 0 ? (
