@@ -16,7 +16,7 @@ function Options() {
         <Sidebar source = "Options"/>
       </aside>
 
-      <main className ="content">
+      <main className ="content setting-content">
         <h1>Options</h1>
 
         {/* Grocer */}

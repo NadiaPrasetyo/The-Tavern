@@ -198,10 +198,6 @@ function Settings() {
         <button className='save-setting' onClick={handleSave}>SAVE</button>
       </main>
 
-      <footer>
-        <p>Footer</p>
-      </footer>
-
       {/* Password Modal */}
       {showPasswordModal && (
         <div className="modal">

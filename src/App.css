@@ -393,7 +393,7 @@ footer{
   left: 250px;
   padding-top: 1px;
   padding-left: 5vw;
-  height: calc(100vh - 100px);
+  height: calc(100vh - 50px);
   animation-fill-mode: both;
 }
 
@@ -737,12 +737,6 @@ th {
   height: 100%;
 }
 
-.book-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 /* Bookmarks */
 .bookmarks {
   position: absolute;
@@ -812,12 +806,7 @@ th {
 }
 
 .recipe-containers {
-  max-height: 65vh; /* Set a maximum height for the container */
   overflow-y: auto;  /* Make the container scrollable if the content exceeds the max height */
-}
-
-.no-search {
-  max-height: 75vh; /* Set a maximum height for the container */
 }
 
 .pagination-controls {
