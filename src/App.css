@@ -1158,13 +1158,13 @@ th {
 
 .tag-item {
   /* fit item */
-  border: 2px solid #ff6d3365;
-  background-color: #fdf69ba7;
+  border: 2px solid #dab378a7;
+  background-color: #f6f099a7;
 }
 
 .ingredient-item {
-  border: 2px solid #843cff94;
-  background-color: #d2b7ebbc;
+  border: 2px solid #c090d2bb;
+  background-color: #e8c8f4bb;
 }
 
 .tag-item button,
