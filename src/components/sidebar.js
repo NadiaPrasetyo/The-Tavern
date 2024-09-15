@@ -29,7 +29,7 @@ function Sidebar(props) {
             document.querySelector('.sidebar').style.animation = 'close 0.5s';
             document.querySelector('.content').style.animation = 'spread 0.5s';
             document.querySelector('.content').style.left = '50px';
-            document.querySelector('.content').style.width = '100%';
+            document.querySelector('.content').style.width = '90%';
             document.getElementById('sidebar-logo').style.animation = 'becomeSmall 0.5s';
         }
         setSideBarState(!isClosed);
