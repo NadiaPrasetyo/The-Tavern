@@ -338,6 +338,43 @@ app.post('/api/login', async (req, res) => {
     }
   });
 
+  //GET RANDOM RECIPE
+  app.get('/api/get-random-recipe', async (req, res) => {
+    try {
+      const db = client.db('The-tavern'); // replace with your DB name
+      const collection = db.collection('RecipeList'); // your recipe collection
+      
+      // Find a random recipe
+      const recipe = await collection.aggregate([{ $sample: { size: 1 } }]).toArray();
+  
+      // If everything is OK
+      res.status(200).json({ recipe: recipe });
+  
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  //GET RECIPE BY NAME
+  app.post('/api/find-recipe', async (req, res) => {
+    try {
+      const db = client.db('The-tavern'); // replace with your DB name
+      const collection = db.collection('RecipeList'); // your recipe collection
+      
+      // Find the recipe by name
+      const recipe = await collection
+        .find({Name: req.body.Name})
+        .toArray();
+  
+      // If everything is OK
+      res.status(200).json({ recipe: recipe });
+  
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  }); 
+
+
   // POST RECIPES BY NAME AND FILTER
   app.post('/api/recipes', async (req, res) => {
     const { page = 1, limit = 10, search = '', includeT = [], excludeT = [], includeI = [], excludeI = [] } = req.body;

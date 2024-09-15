@@ -228,8 +228,9 @@ function GroceryList() {
         }),
       });
 
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 409) {
         console.log("Grocery item added to inventory");
+
         // Remove the grocery item from the list
         const response2 = await fetch('/api/remove-grocery-item',{
           method: 'POST',
@@ -265,8 +266,10 @@ function GroceryList() {
       <section className='groceryList'>
         <form onkeydown="return event.key != 'Enter';">
           <h4>Grocery List</h4>
+          <div>
           <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add grocery item..."/>
           <button className = "addGrocery" type='button' onClick={addGrocery}><IoAddCircle /></button><br/>
+          </div>
           <label className = "groceryItem">
             <input type="checkbox" id="item1" name="item1" value="item1"/>
             <span className = "checkmark"></span>
@@ -281,8 +284,10 @@ function GroceryList() {
       <section className='groceryList'>
         <form onkeydown="return event.key != 'Enter';">
           <h4>Grocery List</h4>
+          <div>
           <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add grocery item..."/>
           <button className = "addGrocery" type='button' onClick={addGrocery}><IoAddCircle /></button><br/>
+          </div>
           {groceryList.map((item, index) => (
             <label key={index} className = "groceryItem">
               <input type="checkbox" id={item.Name} name={item.Name} value={item.Name}/>
@@ -295,6 +300,108 @@ function GroceryList() {
       </section>
     );
   }
+}
+
+function getRandomRecipe() {
+  const getRandom = async (e) => {
+    const response = await fetch('/api/get-random-recipe',{
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const recipe = await response.json();
+
+    if (response.status === 200) {
+      console.log("Random recipe: " +  recipe.recipe);
+      return recipe.recipe;  // Update the state with the fetched recipe
+    } else {
+      console.log("Error getting recipe");
+      return [];
+    }
+  }
+  return getRandom();
+}
+
+function findRecipe(RecipeName) {
+  const findRecipe = async (e) => {
+    const response = await fetch('/api/find-recipe',{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Username: localStorage.getItem('username'),
+        Name: RecipeName
+      }),
+    });
+
+    const recipe = await response.json();
+
+    if (response.status === 200) {
+      console.log(recipe.recipe);
+      return recipe.recipe;  // Update the state with the fetched recipe
+    } else {
+      console.log("Error finding recipe");
+      return [];
+    }
+  }
+  return findRecipe();
+}
+
+let counter3 = 0;
+function QuickRecipe(){
+  const [source, setSource] = React.useState("");
+
+  if(source === "") {
+    counter3 ++;
+    if (counter3 > 10){
+      console.log("Something went wrong with the recipe");
+      return;
+    }
+
+    getTodayMenu().then((menu) => {
+      //if no menu today, get random recipe
+      if (menu.length === 0){
+        console.log("No menu today");
+        //get random recipe
+        getRandomRecipe().then((recipe) => {
+          setSource(recipe[0].Link);
+        });
+        return;
+      }
+      //find recipe source
+      findRecipe(menu[0].Name).then((recipe) => {
+        console.log("Recipe found: " + recipe);
+        if (recipe.length === 0){
+          console.log("No recipe found");
+          return;
+        }
+        setSource(recipe[0].Link);
+      });
+
+    });
+  }
+
+  if (source === "") {
+    return (
+      <section className='quickRecipe'>
+        <div className='iframeContainer'>
+          <p>Loading...</p>
+        </div>
+      </section>
+    );
+  }
+
+  return(
+    <section className='quickRecipe'>
+      <div className='iframeContainer'>
+      <iframe src={source} height = "545" title="QuickRecipe" ></iframe>
+      </div>
+    </section>
+  );
+  
 }
 
 function Home() {
@@ -319,7 +426,7 @@ function Home() {
       <main className ="content">
         <TodayMenu />
         <GroceryList />
-        
+        <QuickRecipe />        
       </main>     
 
 
