@@ -2,6 +2,7 @@ import '../App.css';
 import Sidebar from '../components/sidebar.js';
 import React from 'react';
 import ProfileBar from '../components/profilebar.js';
+import RecipeTab from '../components/RecipeTab.js';
 
 function Menu() {
 
@@ -18,6 +19,7 @@ function Menu() {
 
       <main className ="content">
         <h1>Week</h1>
+        <RecipeTab />
       </main>
 
 

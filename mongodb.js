@@ -425,6 +425,90 @@ app.post('/api/login', async (req, res) => {
     }
   });
 
+  // ADD RECIPE TO FAVORITE
+  app.post('/api/add-favorite-recipe', async (req, res) => {
+    const {username, recipe, max_favourites} = req.body;
+
+    try {
+      const db = client.db('The-tavern'); 
+      const collection = db.collection('Favourites'); // your favorite recipe collection
+
+      //check that the collection doesn't already have the item
+      const item = await collection.findOne({Username: username, Name: recipe});
+      if (item) {
+        return res.status(409).json({ message: "Recipe already exist" });
+      }
+
+      // if user already have max_favourites amount of recipes
+      const count = await collection.countDocuments({Username: username});
+      if (count >= max_favourites) {
+        return res.status(409).json({ message: "You already have the maximum amount of favorite recipes" });
+      }
+
+      // Add the item to the favorite recipe
+      await collection.insertOne({Username: username, Name: recipe});
+      // console.log(req.body);
+  
+      // If everything is OK
+      res.status(200).json({ message: "Recipe added to favorite" });
+  
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  // REMOVE RECIPE FROM FAVORITE (DELETE REQUEST)
+  app.delete('/api/remove-favorite-recipe', async (req, res) => {
+    const {username, recipe} = req.body;
+    try {
+      const db = client.db('The-tavern'); // replace with your DB name
+      const collection = db.collection('Favourites'); // your favorite recipe collection
+
+      // Check if the recipe exists
+      const item = await collection.findOne({Username: username, Name: recipe});
+      if (!item) {
+        return res.status(404).json({ message: "Recipe not found" });
+      }
+
+      // Remove the item from the favorite recipe
+      await collection.deleteOne({Username: username, Name: recipe});
+      // console.log(req.body);
+  
+      // If everything is OK
+      res.status(200).json({ message: "Recipe removed from favorite" });
+  
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  // GET FAVORITE RECIPES
+  app.get('/api/get-favorite-recipes', async (req, res) => {
+    const {username} = req.query;
+    try {
+      const db = client.db('The-tavern'); // replace with your DB name
+      const collection = db.collection('Favourites'); // your favorite recipe collection
+
+      // Find the favorite recipes
+      const recipes = await collection
+        .find({Username: username})
+        .toArray();
+      
+      // get the full recipe details
+      const recipeList = [];
+      for (const recipe of recipes) {
+        const recipeDetails = await Recipe.findOne({Name: recipe.Name});
+        recipeList.push(recipeDetails);
+      }
+  
+      // If everything is OK
+      res.status(200).json({ favourites: recipeList });
+  
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
   
   // Start the server
   app.listen(port, () => {

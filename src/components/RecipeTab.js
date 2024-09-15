@@ -28,7 +28,11 @@ const RecipeTab = () => {
   const [excludedTags, setExcludedTags] = useState([]); // The excluded tags for filtering
   const [includedIngredients, setIncludedIngredients] = useState([]); // The included ingredients for filtering
   const [excludedIngredients, setExcludedIngredients] = useState([]); // The excluded ingredients for filtering
+  const [favouriteRecipes, setFavouriteRecipes] = useState([]); // State for favourite recipes
+  const [favouriteSet, setFavouriteSet] = useState(new Set()); // Set for favorite recipes
+  const [isLoadingFavourites, setIsLoadingFavourites] = useState(false); // Loading state for favourites
 
+  // Favourite recipes (max 10)
 
   const recipesPerPage = 10; // Limit the number of recipes per page
   const max_tags = 3; // Limit the number of tags to display
@@ -46,6 +50,11 @@ const RecipeTab = () => {
       setSelectedRecipe(null);
     }
 
+    // if closed get favourites
+    if (!isOpen) {
+      getFavourites();
+    }
+
     setIsOpen(!isOpen);
   };
 
@@ -59,6 +68,11 @@ const RecipeTab = () => {
       setInfoOpen(false);
       setSelectedRecipe(null);
     }
+
+    // Fetch favourite recipes when the Favourites page is clicked
+    if (page === 4) {
+      getFavourites();
+    }
   };
 
   // Handle the search input change and reset the page to 1
@@ -68,47 +82,47 @@ const RecipeTab = () => {
   };
 
   // Fetch recipes from the server based on the current page, search query, includedItems, and excludedItems
-  const fetchRecipes = async (page, query, includedTags = [],  excludedTags = [], includedIngredients = [],  excludedIngredients = []) => {
+  const fetchRecipes = async (page, query, includedTags = [], excludedTags = [], includedIngredients = [], excludedIngredients = []) => {
     setIsLoading(true);
     try {
-        const response = await fetch('/api/recipes', {
-            method: 'POST', // Change to POST
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                page,
-                limit: recipesPerPage,
-                search: query,
-                includeT : includedTags,
-                excludeT : excludedTags,
-                includeI : includedIngredients,
-                excludeI : excludedIngredients
-            }),
-        });
-        
-        const data = await response.json();
+      const response = await fetch('/api/recipes', {
+        method: 'POST', // Change to POST
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          page,
+          limit: recipesPerPage,
+          search: query,
+          includeT: includedTags,
+          excludeT: excludedTags,
+          includeI: includedIngredients,
+          excludeI: excludedIngredients
+        }),
+      });
 
-        // if data.recipes is undefined, set it to an empty array
-        if (!data.recipes) {
-            data.recipes = [];
-        }
+      const data = await response.json();
 
-        setRecipes(data.recipes); // Set the recipes returned from the backend
+      // if data.recipes is undefined, set it to an empty array
+      if (!data.recipes) {
+        data.recipes = [];
+      }
 
-        // if total pages is undefined or less than 1, set it to 1
-        if (!data.totalPages || data.totalPages < 1) {
-            data.totalPages = 1;
-        }
+      setRecipes(data.recipes); // Set the recipes returned from the backend
 
-        setTotalPages(data.totalPages); // Set the total number of pages
+      // if total pages is undefined or less than 1, set it to 1
+      if (!data.totalPages || data.totalPages < 1) {
+        data.totalPages = 1;
+      }
 
-        setAvailableIngredients(data.ingredients.sort()); // Set the available ingredients for filtering
-        setAvailableTags(data.tags.sort()); // Set the available tags for filtering
+      setTotalPages(data.totalPages); // Set the total number of pages
+
+      setAvailableIngredients(data.ingredients.sort()); // Set the available ingredients for filtering
+      setAvailableTags(data.tags.sort()); // Set the available tags for filtering
 
 
     } catch (error) {
-        console.error("Error fetching recipes:", error);
+      console.error("Error fetching recipes:", error);
     }
     setIsLoading(false);
   };
@@ -116,7 +130,7 @@ const RecipeTab = () => {
   // Fetch recipes when `recipePage`, `searchQuery`, `includedTags`, `excludedTags`, `includedIngredients`, or `excludedIngredients` change
   useEffect(() => {
     if (isOpen) {
-        fetchRecipes(recipePage, searchQuery, includedTags, excludedTags, includedIngredients, excludedIngredients);
+      fetchRecipes(recipePage, searchQuery, includedTags, excludedTags, includedIngredients, excludedIngredients);
     }
   }, [recipePage, searchQuery, isOpen, includedTags, excludedTags, includedIngredients, excludedIngredients]);
 
@@ -162,6 +176,111 @@ const RecipeTab = () => {
     setRecipePage(1); // Reset the current page to 1 whenever the filters change
   };
 
+  // FAVOURITES FUNCTIONS
+
+  // Add a recipe to favourites using a post request
+  const addFavourite = async (recipe) => {
+    try {
+      const response = await fetch('/api/add-favorite-recipe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: localStorage.getItem('username'),
+          recipe: recipe.Name,
+          max_favourites: 10,
+        }),
+      });
+
+      const data = await response.json();
+      if (response.status === 409) {
+        // make it known that the user has reached the maximum number of favourites
+        alert(data.message);
+        return false;
+      } else if (response.status === 200) {
+        return true;
+      }
+
+    } catch (error) {
+      console.error("Error adding favourite:", error);
+    }
+  };
+
+
+  // Remove a recipe from favourites using a delete request
+  const removeFavourite = async (recipe) => {
+    try {
+      const response = await fetch('/api/remove-favorite-recipe', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: localStorage.getItem('username'),
+          recipe: recipe.Name,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.status === 404) {
+        console.log(data.message);
+        return false;
+      } else if (response.status === 200) {
+        console.log(data.message);
+        return true;
+      }
+
+    } catch (error) {
+      console.error("Error removing favourite:", error);
+    }
+  };
+
+  // Toggle a recipe as a favorite
+  const toggleFavourite = async (recipe) => {
+    const updatedFavourites = new Set(favouriteSet);
+
+    if (favouriteSet.has(recipe.Name)) {
+      const removeSuccess = await removeFavourite(recipe); // Update backend and check for success
+      if (removeSuccess) {
+        updatedFavourites.delete(recipe.Name);
+        setFavouriteSet(updatedFavourites); // Only update the state if successful
+      }
+    } else {
+      const addSuccess = await addFavourite(recipe); // Update backend and check for success
+      if (addSuccess) {
+        updatedFavourites.add(recipe.Name);
+        setFavouriteSet(updatedFavourites); // Only update the state if successful
+      }
+    }
+  };
+
+
+  // Get all favourite recipes
+  const getFavourites = async () => {
+    setIsLoadingFavourites(true);
+    try {
+      const username = localStorage.getItem('username');
+      const response = await fetch(`/api/get-favorite-recipes?username=${encodeURIComponent(username)}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+      setFavouriteRecipes(data.favourites);
+      const favSet = new Set(data.favourites.map((recipe) => recipe.Name));
+      setFavouriteSet(favSet);
+
+
+    } catch (error) {
+      console.error("Error getting favourites:", error);
+    }
+    setIsLoadingFavourites(false);
+  };
+
   return (
     <div className={`recipe-tab-container ${isOpen ? "open" : ""}`}>
       {/* Book content area */}
@@ -196,8 +315,11 @@ const RecipeTab = () => {
                           </a>
                           <div className="icon-container"> {/* Added container for icons */}
                             <AiOutlineInfoCircle className='info-icon' onClick={() => toggleInfo(recipe)} />
-                            <MdOutlineStarPurple500 className='star-icon filled' />
-                            <MdOutlineStarBorderPurple500 className='star-icon border' />
+                            { favouriteSet.has(recipe.Name) ? (
+                              <MdOutlineStarPurple500 className='star-icon filled' onClick={() => toggleFavourite(recipe)} />
+                            ) : (
+                              <MdOutlineStarBorderPurple500 className='star-icon border' onClick={() => toggleFavourite(recipe)} />
+                            )}
                           </div>
                         </div>
                         <div className='recipe-tags'>
@@ -213,7 +335,7 @@ const RecipeTab = () => {
                       </div>
                     ))
                   ) : (
-                    <div>No recipes found</div>
+                    <div className='no-result'>No recipes found</div>
                   )}
                   <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} />
                   <FilterPopup isOpen={isFilterOpen} onClose={closeFilter} availableTags={availableTags} availableIngredients={availableIngredients} onFiltersChange={handleFiltersChange} />
@@ -234,17 +356,11 @@ const RecipeTab = () => {
             {currentPage === 2 &&
               <div className='recommendation-tab'>
                 <div className='tab-title'>RECOMMENDATION</div>
-                <div className='search-bar-container' onClick={(e) => e.stopPropagation()}>
-                  <input className='search-bar' type='text' placeholder='Search for recipes' />
-                  <TbSearch className='search-icon' />
-                  <LuFilter className='filter-icon' />
+                <div className='recipe-containers custom-scroll no-search' onClick={(e) => e.stopPropagation()}>
+                  <div className='recipe-list'>Recipe 1</div>
+                  <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} />
                 </div>
-                <div className='recipe-containers custom-scroll'>
-                  <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 1</div>
-                  <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 2</div>
-                  <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 3</div>
-                  <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 4</div>
-                </div>
+                
               </div>
             }
             {currentPage === 3 &&
@@ -255,24 +371,50 @@ const RecipeTab = () => {
                   <TbSearch className='search-icon' />
                   <LuFilter className='filter-icon' />
                 </div>
-                <div className='recipe-containers custom-scroll'>
-                  <div className='recipe-list' onClick={(e) => e.stopPropagation()}>COMING SOON!</div>
+                <div className='recipe-containers custom-scroll' onClick={(e) => e.stopPropagation()}>
+                  <div className='recipe-list'>COMING SOON!</div>
+                  <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} />
                 </div>
               </div>
             }
             {currentPage === 4 &&
               <div className='favourite-tab'>
                 <div className='tab-title'>FAVOURITES</div>
-                <div className='search-bar-container' onClick={(e) => e.stopPropagation()}>
-                  <input className='search-bar' type='text' placeholder='Search for recipes' />
-                  <TbSearch className='search-icon' />
-                  <LuFilter className='filter-icon' />
-                </div>
-                <div className='recipe-containers custom-scroll'>
-                  <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 1</div>
-                  <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 2</div>
-                  <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 3</div>
-                  <div className='recipe-list' onClick={(e) => e.stopPropagation()}>Recipe 4</div>
+                <div className='recipe-containers custom-scroll no-search' onClick={(e) => e.stopPropagation()}>
+                  {isLoadingFavourites ? (
+                    <div>Loading favourites...</div>
+                  ) : favouriteRecipes.length > 0 ? (
+                    favouriteRecipes.map((recipe, index) => (
+                      <div className='recipe-list' key={index}>
+                        <div className='recipe-title'>
+                          <a href={recipe.Link} target="_blank" rel="noopener noreferrer">
+                            {recipe.Name}
+                          </a>
+                          <div className="icon-container">
+                            <AiOutlineInfoCircle className='info-icon' onClick={() => toggleInfo(recipe)} />
+                            { favouriteSet.has(recipe.Name) ? (
+                              <MdOutlineStarPurple500 className='star-icon filled' onClick={() => toggleFavourite(recipe)} />
+                            ) : (
+                              <MdOutlineStarBorderPurple500 className='star-icon border' onClick={() => toggleFavourite(recipe)} />
+                            )}
+                          </div>
+                        </div>
+                        <div className='recipe-tags'>
+                          {recipe.Tag.slice(0, max_tags).map((tag, index) => (
+                            <span className='r-tag' key={index}>{tag}</span>
+                          ))}
+                        </div>
+                        <div className='recipe-ingredients'>
+                          {recipe.Ingredients.slice(0, max_ingredients).map((ingredient, index) => (
+                            <span className='r-ing' key={index}>{ingredient}</span>
+                          ))}
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className='no-result'>No favourite recipes found</div>
+                  )}
+                  <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} />
                 </div>
               </div>
             }

@@ -464,7 +464,7 @@ footer{
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  z-index: 1000;
+  z-index: 900;
 }
 
 .modal-content {
@@ -816,6 +816,10 @@ th {
   overflow-y: auto;  /* Make the container scrollable if the content exceeds the max height */
 }
 
+.no-search {
+  max-height: 75vh; /* Set a maximum height for the container */
+}
+
 .pagination-controls {
   display: flex;
   justify-content: center;
@@ -834,6 +838,11 @@ th {
 .prev-btn:disabled, .next-btn:disabled {
   background-color: #e0ecbca0;
   cursor: not-allowed;
+}
+
+.no-result {
+  margin: 20px;
+  font-size: 1.25rem;
 }
 
 /* RECIPE LIST */
@@ -884,7 +893,7 @@ th {
 .r-tag {
   background-color: #a6815cad;
   color: white;
-  padding: 5px;
+  padding: 5px 10px;
   border-radius: 50px;
   margin: 0 5px 5px 0; /* Space between tags */
 }
@@ -897,27 +906,10 @@ th {
 .r-ing {
   background-color: #799f73a8;
   color: white;
-  padding: 5px;
+  padding: 5px 10px;
   border-radius: 50px;
   margin: 0 5px 5px 0; /* Space between ingredients */
   display: inline-block; /* Ensure each ingredient is on a new line if long */
-}
-
-/* Hide filled star */
-.star-icon.filled {
-  display: none; /* Use this class to hide filled star */
-}
-
-.star-icon.filled.show {
-  display: inline; /* Show filled star on hover */
-}
-
-.star-icon.border {
-  display: inline; /* Show border star by default */
-}
-
-.star-icon.border.show {
-  display: none; /* Hide border star on hover */
 }
 
 /* RECIPE INFO */
@@ -1018,9 +1010,15 @@ th {
 
 /* SCROLLER STYLE */
 
-.custom-scroll::-webkit-scrollbar{
-  width: 15px;
-  height: 8px;
+.custom-scroll {
+  scrollbar-width: auto; 
+  scrollbar-color: #a6815c transparent; 
+}
+
+/* Webkit browsers (Chrome, Edge, Safari) */
+.custom-scroll::-webkit-scrollbar {
+  width: 15px; /* Width of the scrollbar */
+  height: 8px; /* Height of horizontal scrollbar */
 }
 
 .custom-scroll::-webkit-scrollbar-thumb {
@@ -1031,8 +1029,14 @@ th {
   background-color: #8d664a; /* Custom thumb color on hover */
 }
 
+/* Track with a gradient to create the illusion of a thinner middle */
 .custom-scroll::-webkit-scrollbar-track {
-  background: transparent; /* Custom track color */
+  background: linear-gradient(to right, transparent 25%, #f7ffdaa8 50%, transparent 75%); /* Gradient background */
+  border-radius: 10px;
+}
+
+.custom-scroll::-webkit-scrollbar-corner {
+  background: transparent; /* For the bottom-right corner of scrollbars */
 }
 
 /* FILTER POP UP */
@@ -1055,7 +1059,7 @@ th {
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 20px;
-  z-index: 1000; /* Make sure it appears above other content */
+  z-index: 900; /* Make sure it appears above other content */
   display: flex;
   flex-direction: column;
 }
