@@ -1048,7 +1048,7 @@ th {
   left: -50%;
   transform: translate(-50%, -40%);
   background-color: white;
-  width: 80%;
+  width: 90%;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   z-index: 800; /* Ensure it's behind the popup */
@@ -1111,6 +1111,10 @@ th {
   background-color: #9baa74c6;
 }
 
+.included-item:hover, .excluded-item:hover {
+  text-decoration: line-through;
+}
+
 .columns {
   display: flex;
   justify-content: space-between;
@@ -1153,6 +1157,7 @@ th {
 }
 
 .tag-item {
+  /* fit item */
   border: 2px solid #ff6d3365;
   background-color: #fdf69ba7;
 }
@@ -1164,6 +1169,7 @@ th {
 
 .tag-item button,
 .ingredient-item button {
+  visibility: hidden;
   margin: 0 5px;
   height: 25px;
   width: 25px;
@@ -1171,6 +1177,11 @@ th {
   border-radius: 50px;
   cursor: pointer;
   padding: 3px 6px;
+}
+
+.tag-item:hover button,
+.ingredient-item:hover button {
+  visibility: visible;
 }
 
 .include {
