@@ -397,7 +397,7 @@ function QuickRecipe(){
   return(
     <section className='quickRecipe'>
       <div className='iframeContainer'>
-      <iframe src={source} height = "545" title="QuickRecipe" ></iframe>
+      <iframe  className='recipeiFrame' src={source} title="QuickRecipe" ></iframe>
       </div>
     </section>
   );
