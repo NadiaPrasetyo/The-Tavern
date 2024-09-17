@@ -355,6 +355,44 @@ app.post('/api/login', async (req, res) => {
     }
   });
 
+  //GET QUICK FRUITS
+  app.post('/api/get-quick-fruits', async (req, res) => {
+    try {
+      const db = client.db('The-tavern'); // replace with your DB name
+      const collection = db.collection('Inventory'); // your quick fruits collection
+      
+      // Find the quick fruits
+      const fruits = await collection
+        .find({Username: req.body.Username, Category: "Fruits"})
+        .toArray();
+  
+      // If everything is OK
+      res.status(200).json({ fruits: fruits });
+  
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  //GET QUICK VEGETABLES
+  app.post('/api/get-quick-vegetables', async (req, res) => {
+    try {
+      const db = client.db('The-tavern'); // replace with your DB name
+      const collection = db.collection('Inventory'); // your quick vegetables collection
+      
+      // Find the quick vegetables
+      const vegetables = await collection
+        .find({Username: req.body.Username, Category: "Vegetables"})
+        .toArray();
+  
+      // If everything is OK
+      res.status(200).json({ vegetables: vegetables });
+  
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
   //GET RECIPE BY NAME
   app.post('/api/find-recipe', async (req, res) => {
     try {

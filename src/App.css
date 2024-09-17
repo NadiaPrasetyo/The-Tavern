@@ -713,6 +713,32 @@ th {
   width: 100%;
 }
 
+/* QUICK INGREDIENT AT HOME*/
+.quickIngredient{
+  display: flex;
+  grid-row: 1;
+  grid-column: 10;
+  text-align: center;
+  flex-wrap: wrap;
+  border: solid 1px #e0ecbca0;
+  background: #e0ecbca0;
+  padding: 10px;
+
+  table{
+    /* makes sure each column is the same size */
+    table-layout: fixed;
+  }
+
+  /* middle line between columns */
+  .first{
+  border-right: solid 2px #000000;
+  }
+
+  th{
+    font-size: calc(20px + 1vmin);
+  }
+}
+
 /* RECIPE TAB */
 
 .recipe-tab-container {
