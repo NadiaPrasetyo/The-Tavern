@@ -6,13 +6,14 @@ import { LuFilter } from "react-icons/lu";
 import { LuBookOpenCheck } from "react-icons/lu";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { MdOutlineStarBorderPurple500 } from "react-icons/md";
+import { Droppable } from 'react-beautiful-dnd';
+import Recipe from './Recipe';
 
 import RecipeInfo from './RecipeInfo';
 import FilterPopup from './FilterPop';
 import '../App.css';
-import { isVisible } from '@testing-library/user-event/dist/utils';
 
-const RecipeTab = () => {
+const RecipeTab = ({ menu, setMenu }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1); // The current page
   const [searchQuery, setSearchQuery] = useState(''); // The search input value
@@ -183,6 +184,10 @@ const RecipeTab = () => {
       }
 
       setRecipes(data.recipes); // Set the recipes returned from the backend
+      setMenu({
+        ...menu,
+        ['RecipeList']: data.recipes,
+      })
 
       // if total pages is undefined or less than 1, set it to 1
       if (!data.totalPages || data.totalPages < 1) {
@@ -480,39 +485,21 @@ const RecipeTab = () => {
 
                 {/* Recipe container with pagination */}
                 <div className='recipe-containers custom-scroll' style={{maxHeight: containerMaxHeight}} onClick={(e) => e.stopPropagation()}>
-                  {isLoading ? (
-                    <div>Loading...</div>
-                  ) : recipes.length > 0 ? (
-                    recipes.map((recipe, index) => (
-                      <div className='recipe-list' key={index}>
-                        <div className='recipe-title'>
-                          <a href={recipe.Link} target="_blank" rel="noopener noreferrer">
-                            {recipe.Name}
-                          </a>
-                          <div className="icon-container"> {/* Added container for icons */}
-                            <AiOutlineInfoCircle className='info-icon' onClick={() => toggleInfo(recipe)} />
-                            { favouriteSet.has(recipe.Name) ? (
-                              <MdOutlineStarPurple500 className='star-icon filled' onClick={() => toggleFavourite(recipe)} />
-                            ) : (
-                              <MdOutlineStarBorderPurple500 className='star-icon border' onClick={() => toggleFavourite(recipe)} />
-                            )}
-                          </div>
-                        </div>
-                        <div className='recipe-tags'>
-                          {recipe.Tag.slice(0, max_tags).map((tag, index) => (
-                            <span className='r-tag' key={index}>{tag}</span>
-                          ))}
-                        </div>
-                        <div className='recipe-ingredients'>
-                          {recipe.Ingredients.slice(0, max_ingredients).map((ingredient, index) => (
-                            <span className='r-ing' key={index}>{ingredient}</span>
-                          ))}
-                        </div>
+                  <Droppable droppableId="RecipeList">
+                    {(dropProvided) => (
+                      <div className='drop' ref={dropProvided.innerRef} {...dropProvided.droppableProps}>
+                        {isLoading ? (
+                          <div>Loading...</div>
+                        ) : recipes.length > 0 ? (
+                          recipes.map((recipe, index) => (
+                            <Recipe key={recipe.Name} recipe={recipe} index={index} toggleInfo={toggleInfo} toggleFavourite={toggleFavourite} favouriteSet={favouriteSet}/>
+                          ))
+                        ) : (
+                          <div className='no-result'>No recipes found</div>
+                        )}
                       </div>
-                    ))
-                  ) : (
-                    <div className='no-result'>No recipes found</div>
-                  )}
+                    )}
+                  </Droppable>
                 </div>
 
                 {/* Pagination controls */}

@@ -1270,3 +1270,24 @@ th {
 .exclude:hover {
   background-color: #ecb3c9d4;
 }
+
+/* WEEKLY MENU */
+
+.menu-table {
+  display: flex;
+  justify-content: space-between;
+}
+
+.day-column {
+  width: calc(65vw / 7);
+
+  padding: 10px;
+  border: 1px solid #ccc;
+  min-height: 100px;
+  background-color: #f8f8f8;
+  transition: width 0.3s ease;
+}
+
+.recipe-drop-area {
+  min-height: 50px;
+}
