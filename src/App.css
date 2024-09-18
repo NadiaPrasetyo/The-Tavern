@@ -789,6 +789,7 @@ th {
 .tab-title {
   border-radius: 5px 0 0 0;
   padding: 5px 0 20px 10px;
+  width: 80%;
   /* spacing between characters 2px */
   letter-spacing: 3px;
   font-size: x-large;
@@ -884,6 +885,37 @@ th {
 .info-icon, .star-icon {
   cursor: pointer; /* Change cursor to pointer for interactivity */
   margin-left: 10px; /* Add space between icons */
+}
+
+.recommendation-info {
+  position: absolute; /* Position the recommendation info */
+  top: 30px; /* Align to the top of the container */
+  right: 70px; /* Align to the right of the container */
+  cursor: pointer;
+  font-size: 1.75rem;
+}
+
+.rec-info-popup {
+  position: absolute;
+  top: 60px; /* Adjust position as needed */
+  right: 0;
+  width: 200px; /* Adjust width as needed */
+  padding: 10px;
+  background-color: white; /* Background color of the popup */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.rec-info-popup::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent #f9f9f9 transparent;
 }
 
 /* Tags styling */
@@ -1157,6 +1189,7 @@ th {
   border-radius: 50px;
   margin-bottom: 10px;
   align-items: center;
+  cursor: default;
 }
 
 .tag-item {

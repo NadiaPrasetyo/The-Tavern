@@ -10,6 +10,7 @@ import { MdOutlineStarBorderPurple500 } from "react-icons/md";
 import RecipeInfo from './RecipeInfo';
 import FilterPopup from './FilterPop';
 import '../App.css';
+import { isVisible } from '@testing-library/user-event/dist/utils';
 
 const RecipeTab = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,6 +33,11 @@ const RecipeTab = () => {
   const [favouriteRecipes, setFavouriteRecipes] = useState([]); // State for favourite recipes
   const [favouriteSet, setFavouriteSet] = useState(new Set()); // Set for favorite recipes
   const [isLoadingFavourites, setIsLoadingFavourites] = useState(false); // Loading state for favourites
+  const [recommendationRecipes, setRecommendationRecipes] = useState([]); // State for recommendation recipes
+  const [isOpenRecommendation, setIsOpenRecommendation] = useState(false); // The recommendation tab state
+  const [recipePageRecommendation, setRecipePageRecommendation] = useState(1); // The current recipe page for recommendations
+  const [recommendationMessage, setRecommendationMessage] = useState('No recommendations'); // The recommendation message
+  const [isVisibleRecPopUp, setIsVisibleRecPopUp] = useState(false); // The recommendation info popup state
 
   const containerRef = useRef(null); // Reference to the container element
   const [containerMaxHeight, setContainerMaxHeight] = useState(0); 
@@ -131,6 +137,12 @@ const RecipeTab = () => {
       setSelectedRecipe(null);
     }
 
+    if (page === 2) {
+      setIsOpenRecommendation(true);
+    } else {
+      setIsOpenRecommendation(false);
+    }
+
     // Fetch favourite recipes when the Favourites page is clicked
     if (page === 4) {
       getFavourites();
@@ -190,21 +202,29 @@ const RecipeTab = () => {
   };
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && currentPage === 1) {
       fetchRecipes(recipePage, debouncedSearchQuery, includedTags, excludedTags, includedIngredients, excludedIngredients);
     }
-  }, [recipePage, debouncedSearchQuery, isOpen, includedTags, excludedTags, includedIngredients, excludedIngredients]);
+  }, [recipePage, debouncedSearchQuery, isOpen, includedTags, excludedTags, includedIngredients, excludedIngredients, currentPage]);
   
 
   // Handle pagination (next and previous page)
   const nextPage = () => {
-    if (recipePage < totalPages) {
+    if (isOpenRecommendation) {
+      if (recipePageRecommendation < totalPages) {
+        setRecipePageRecommendation(recipePageRecommendation + 1);
+      }
+    } else if (recipePage < totalPages) {
       setRecipePage(recipePage + 1);
     }
   };
 
   const prevPage = () => {
-    if (recipePage > 1) {
+    if (isOpenRecommendation) {
+      if (recipePageRecommendation > 1) {
+        setRecipePageRecommendation(recipePageRecommendation - 1);
+      }
+    } else if (recipePage > 1) {
       setRecipePage(recipePage - 1);
     }
   };
@@ -235,6 +255,7 @@ const RecipeTab = () => {
     setIncludedIngredients(includedIngredients);
     setExcludedIngredients(excludedIngredients);
     setRecipePage(1); // Reset the current page to 1 whenever the filters change
+    setRecipePageRecommendation(1); // Reset the current page to 1 whenever the filters change
   };
 
   // FAVOURITES FUNCTIONS
@@ -345,7 +366,7 @@ const RecipeTab = () => {
   // RECOMENDATION FUNCTIONS
 
   // Get all recommendation recipes
-  const getRecommendations = async () => {
+  const fetchRecommendations = async (page, query, includedTags = [], excludedTags = [], includedIngredients = [], excludedIngredients = []) => {
     setIsLoading(true);
     try {
       const response = await fetch('/api/recommendation', {
@@ -355,9 +376,9 @@ const RecipeTab = () => {
         },
         body: JSON.stringify({
           username: localStorage.getItem('username'),
-          page: recipePage,
+          page: page,
           limit: recipesPerPage,
-          search: searchQuery,
+          search: query,
           includeT: includedTags,
           excludeT: excludedTags,
           includeI: includedIngredients,
@@ -366,15 +387,75 @@ const RecipeTab = () => {
       });
 
       const data = await response.json();
-      console.log(data.recipe);
-      console.log(data.tags);
-      console.log(data.ingredients);
+
+      // if data.recipes is undefined, set it to an empty array
+      if (!data.recipes) {
+        data.recipes = [];
+        setRecommendationMessage('No recommendations');
+      }
+
+      if (data.recipes.length === 0) {
+        setRecommendationMessage(data.message);
+      }
+
+      setRecommendationRecipes(data.recipes); // Set the recipes returned from the backend
+      setTotalPages(data.totalPages); // Set the total number of pages
+      setAvailableIngredients(data.ingredients.sort()); // Set the available ingredients for filtering
+      setAvailableTags(data.tags.sort()); // Set the available tags for filtering
 
     } catch (error) {
       console.error("Error getting recommendations:", error);
     }
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    if (isOpenRecommendation) {
+      console.log('fetching recommendations');
+      fetchRecommendations(recipePageRecommendation, debouncedSearchQuery, includedTags, excludedTags, includedIngredients, excludedIngredients);
+    }
+  }, [recipePageRecommendation, debouncedSearchQuery, isOpenRecommendation, includedTags, excludedTags, includedIngredients, excludedIngredients]);
+
+  // Toggle the recommendation info modal
+
+  const toggleRecInfo = (e) => {
+    e.stopPropagation();
+    setIsVisibleRecPopUp(!isVisibleRecPopUp);
+  }
+
+
+  // Close the popup when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      if (isVisibleRecPopUp) {
+        setIsVisibleRecPopUp(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        setIsVisibleRecPopUp(false);
+      }
+    });
+
+    // Set a timeout to close the popup automatically after 10 seconds
+    const timeoutId = setTimeout(() => {
+      if (isVisibleRecPopUp) {
+        setIsVisibleRecPopUp(false);
+      }
+    }, 10000); // 10 seconds
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          setIsVisibleRecPopUp(false);
+        }
+      });
+      clearTimeout(timeoutId); // Clear the timeout on cleanup
+    };
+  }, [isVisibleRecPopUp]);
 
   return (
     <div className={`recipe-tab-container ${isOpen ? "open" : ""}`} ref={containerRef}>
@@ -432,8 +513,6 @@ const RecipeTab = () => {
                   ) : (
                     <div className='no-result'>No recipes found</div>
                   )}
-                  <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} />
-                  <FilterPopup isOpen={isFilterOpen} onClose={closeFilter} availableTags={availableTags} availableIngredients={availableIngredients} onFiltersChange={handleFiltersChange} />
                 </div>
 
                 {/* Pagination controls */}
@@ -451,6 +530,12 @@ const RecipeTab = () => {
             {currentPage === 2 &&
               <div className='recommendation-tab'>
                 <div className='tab-title'>RECOMMENDATION</div>
+                <AiOutlineInfoCircle className='recommendation-info' onClick={toggleRecInfo}/>
+                {isVisibleRecPopUp && (
+                  <div className="rec-info-popup">
+                    <p>We recommend recipes based on the ingredients you have. The more matching ingredients, the higher the recipe appears.</p>
+                  </div>
+                )}
                 <div className='search-bar-container' onClick={(e) => e.stopPropagation()}>
                   <input
                     className='search-bar'
@@ -464,17 +549,47 @@ const RecipeTab = () => {
                 </div>
 
                 <div className='recipe-containers custom-scroll' style={{maxHeight: containerMaxHeight}} onClick={(e) => e.stopPropagation()}>
-                  <div className='recipe-list'>Recipe 1</div>
-                  <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} />
-                  <FilterPopup isOpen={isFilterOpen} onClose={closeFilter} availableTags={availableTags} availableIngredients={availableIngredients} onFiltersChange={handleFiltersChange} />
+                  {isLoading ? (
+                    <div>Loading recommendations...</div>
+                  ) : recommendationRecipes.length > 0 ? (
+                    recommendationRecipes.map((recipe, index) => (
+                      <div className='recipe-list' key={index}>
+                        <div className='recipe-title'>
+                          <a href={recipe.Link} target="_blank" rel="noopener noreferrer">
+                            {recipe.Name}
+                          </a>
+                          <div className="icon-container">
+                            <AiOutlineInfoCircle className='info-icon' onClick={() => toggleInfo(recipe)} />
+                            { favouriteSet.has(recipe.Name) ? (
+                              <MdOutlineStarPurple500 className='star-icon filled' onClick={() => toggleFavourite(recipe)} />
+                            ) : (
+                              <MdOutlineStarBorderPurple500 className='star-icon border' onClick={() => toggleFavourite(recipe)} />
+                            )}
+                          </div>
+                        </div>
+                        <div className='recipe-tags'>
+                          {recipe.Tag.slice(0, max_tags).map((tag, index) => (
+                            <span className='r-tag' key={index}>{tag}</span>
+                          ))}
+                        </div>
+                        <div className='recipe-ingredients'>
+                          {recipe.Ingredients.slice(0, max_ingredients).map((ingredient, index) => (
+                            <span className='r-ing' key={index}>{ingredient}</span>
+                          ))}
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className='no-result'>{recommendationMessage}</div>
+                  )}
                 </div>
                 {/* Pagination controls */}
                 <div className='pagination-controls' onClick={(e) => e.stopPropagation()}>
                   <button className='prev-btn' onClick={prevPage} disabled={recipePage === 1}>
                     Previous
                   </button>
-                  <span className='page-num'>Page {recipePage} of {totalPages}</span>
-                  <button className='next-btn' onClick={nextPage} disabled={recipePage === totalPages}>
+                  <span className='page-num'>Page {recipePageRecommendation} of {totalPages}</span>
+                  <button className='next-btn' onClick={nextPage} disabled={recipePageRecommendation === totalPages}>
                     Next
                   </button>
                 </div>
@@ -490,7 +605,6 @@ const RecipeTab = () => {
                 </div>
                 <div className='recipe-containers custom-scroll'  style={{maxHeight: containerMaxHeight}}  onClick={(e) => e.stopPropagation()}>
                   <div className='recipe-list'>COMING SOON!</div>
-                  <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} />
                 </div>
               </div>
             }
@@ -531,10 +645,13 @@ const RecipeTab = () => {
                   ) : (
                     <div className='no-result'>No favourite recipes found</div>
                   )}
-                  <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} />
                 </div>
               </div>
             }
+            <div onClick={(e) => e.stopPropagation()}>
+              <FilterPopup isOpen={isFilterOpen} onClose={closeFilter} availableTags={availableTags} availableIngredients={availableIngredients} onFiltersChange={handleFiltersChange} />
+              <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} />
+            </div>
           </div>
         </div>
       </div>

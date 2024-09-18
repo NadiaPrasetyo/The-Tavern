@@ -574,21 +574,22 @@ app.post('/api/login', async (req, res) => {
     const { username, page = 1, limit = 10, search = '', includeT = [], excludeT = [], includeI = [], excludeI = []} = req.body;
     const skip = (page - 1) * limit;
 
-    const userInventory = await database.collection('Inventory').find({Username: username}).get().map(item => item.Name);
-    console.log(userInventory);
-
-    // if user has no inventory, return empty array
-    if (userInventory.length === 0) {
-      return res.json({
-        recipes: [], // Empty array
-        currentPage: page,
-        totalPages: 0, // No pages
-        tags: [], // Empty array
-        ingredients: [], // Empty array
-      });
-    }
-
     try {
+      const userInventories = await database.collection('Inventory').find({Username: username}).toArray();
+      const userInventory = userInventories.map(inventory => inventory.Name);
+  
+      // if user has no inventory, return empty array
+      if (userInventory.length === 0) {
+        return res.json({
+          recipes: [], // Empty array
+          currentPage: page,
+          totalPages: 1, // only 1 page
+          tags: [], // Empty array
+          ingredients: [], // Empty array
+          message: "No inventory found, please initialise your inventory first."
+        });
+      }
+
       // Create a case-insensitive regex to search by recipe name
       const searchRegex = new RegExp(search, 'i'); // 'i' for case-insensitive
 
@@ -667,6 +668,17 @@ app.post('/api/login', async (req, res) => {
       ]).toArray();
 
       const total = totalRecipes.length > 0 ? totalRecipes[0].total : 0;
+
+      if (total === 0) {
+        return res.json({
+          recipes: [], // Empty array
+          currentPage: page,
+          totalPages: 1, // only 1 page
+          tags: [], // Empty array
+          ingredients: [], // Empty array
+          message: "No recipes found matching your inventory."
+        });
+      }
 
       // Get all tags and ingredients (before pagination)
       const recipe_tags = await Recipe.aggregate([
