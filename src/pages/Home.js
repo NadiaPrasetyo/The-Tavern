@@ -4,6 +4,8 @@ import React from 'react';
 import ProfileBar from '../components/profilebar.js';
 import { IoAddCircle } from "react-icons/io5";
 import { prettyDOM } from '@testing-library/react';
+import { GiFruitBowl } from "react-icons/gi";
+import { LuSalad } from "react-icons/lu";
 
 
 
@@ -397,12 +399,143 @@ function QuickRecipe(){
   return(
     <section className='quickRecipe'>
       <div className='iframeContainer'>
-      <iframe src={source} height = "545" title="QuickRecipe" ></iframe>
+      <iframe  className='recipeiFrame' src={source} title="QuickRecipe" ></iframe>
       </div>
     </section>
   );
   
 }
+
+function getQuickFruits() {
+  const getQuickFruits = async (e) => {
+    // Get quick fruits from the server
+
+    const response = await fetch('/api/get-quick-fruits',{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Username: localStorage.getItem('username')
+      }),
+    });
+
+    const fruits = await response.json();
+
+    if (response.status === 200) {
+      return fruits.fruits;  // Update the state with the fetched fruits
+    } else {
+      console.log("Error getting quick fruits");
+      return [];
+    }
+  }
+
+  return getQuickFruits();
+}
+
+function getQuickVegetables() {
+  const getQuickVegetables = async (e) => {
+    // Get quick vegetables from the server
+
+    const response = await fetch('/api/get-quick-vegetables',{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Username: localStorage.getItem('username')
+      }),
+    });
+
+    const vegetables = await response.json();
+
+    if (response.status === 200) {
+      return vegetables.vegetables;  // Update the state with the fetched vegetables
+    } else {
+      console.log("Error getting quick vegetables");
+      return [];
+    }
+  }
+
+  return getQuickVegetables();
+}
+
+let counter4 = 0;
+function QuickIngredient(){
+  counter4 ++;
+  const [fruits, setFruit] = React.useState([]);
+  const [vegetables, setVegetable] = React.useState([]);
+
+  if (fruits.length === 0) {
+    if (counter4 > 10){
+      setFruit([{Name: "Fruits"}]);
+      return;
+    }
+
+    getQuickFruits().then((fruit) => {
+      setFruit(fruit);
+      return;
+    });
+  }
+
+  if (vegetables.length === 0) {
+    if (counter4 > 10){
+      setVegetable([{Name: "Vegetables"}]);
+      return;
+    }
+    getQuickVegetables().then((vegetable) => {
+      setVegetable(vegetable);
+      return;
+    }
+    );
+  }
+
+
+  if (fruits === "" && vegetables === "") {
+    return (
+      <section className='quickIngredient'>
+      <table>
+        <tr>
+          <th className='first'><GiFruitBowl /></th>
+          <th><LuSalad /></th>
+        </tr>
+          <tbody>
+            <tr>
+              <td className='first'>Loading...</td>
+              <td>Loading...</td>
+            </tr>
+          </tbody>
+      </table>
+    </section>
+    );
+  }
+
+  return(
+    <section className='quickIngredient'>
+      <table>
+        <tr>
+          <th className='first'><GiFruitBowl /></th>
+          <th><LuSalad /></th>
+        </tr>
+          <tbody>
+            <tr>
+              <td className='first'>
+                {fruits.map((item, index) => (
+                  <li key={index}>{item.Name}</li>
+                ))}
+              </td>
+              <td>
+                {vegetables.map((item, index) => (
+                  <li key={index}>{item.Name}</li>
+                ))}
+              </td>
+            </tr>
+          </tbody>
+      </table>
+    </section>
+  );
+}
+
 
 function Home() {
   document.onkeydown = function(event) {
@@ -426,7 +559,8 @@ function Home() {
       <main className ="content">
         <TodayMenu />
         <GroceryList />
-        <QuickRecipe />        
+        <QuickRecipe />
+        <QuickIngredient />        
       </main>     
 
 
