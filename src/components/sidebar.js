@@ -23,6 +23,9 @@ function Sidebar(props) {
             document.querySelector('.content').style.left = '250px';
             document.querySelector('.content').style.width = '74.6%';
             document.getElementById('sidebar-logo-small').style.animation = 'becomeBig 0.5s';
+            if (props.setIsOpen !== undefined) {
+                props.setIsOpen(true);
+            }
         }
         
         if (!isClosed) {
@@ -31,6 +34,9 @@ function Sidebar(props) {
             document.querySelector('.content').style.left = '50px';
             document.querySelector('.content').style.width = '90%';
             document.getElementById('sidebar-logo').style.animation = 'becomeSmall 0.5s';
+            if (props.setIsOpen !== undefined) {
+                props.setIsOpen(false);
+            }
         }
         setSideBarState(!isClosed);
         console.log("isClosed = " + isClosed);

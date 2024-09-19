@@ -13,7 +13,7 @@ import RecipeInfo from './RecipeInfo';
 import FilterPopup from './FilterPop';
 import '../App.css';
 
-const RecipeTab = ({ menu, setMenu }) => {
+const RecipeTab = ({ menu, setMenu, isOpenDrag }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1); // The current page
   const [searchQuery, setSearchQuery] = useState(''); // The search input value
@@ -41,7 +41,7 @@ const RecipeTab = ({ menu, setMenu }) => {
   const [isVisibleRecPopUp, setIsVisibleRecPopUp] = useState(false); // The recommendation info popup state
 
   const containerRef = useRef(null); // Reference to the container element
-  const [containerMaxHeight, setContainerMaxHeight] = useState(0); 
+  const [containerMaxHeight, setContainerMaxHeight] = useState(0);
 
   const favouriteMax = 10; // Maximum number of favourite recipes
   const recipesPerPage = 10; // Limit the number of recipes per page
@@ -78,7 +78,7 @@ const RecipeTab = ({ menu, setMenu }) => {
       const searchHeight = containerRef.current.querySelector('.search-bar-container').offsetHeight;
       totalHeaderHeight += searchHeight;
     }
-    if (containerRef.current.querySelector('.pagination-controls')){
+    if (containerRef.current.querySelector('.pagination-controls')) {
       const paginationHeight = containerRef.current.querySelector('.pagination-controls').offsetHeight;
       totalHeaderHeight += paginationHeight + 30; // 20 is the padding/margin
     }
@@ -92,7 +92,7 @@ const RecipeTab = ({ menu, setMenu }) => {
       // Recalculate max height after the currentPage changes
       setContainerMaxHeight(getComputedMaxHeight());
     }
-  }, [currentPage, isOpen]);  
+  }, [currentPage, isOpen]);
 
   // Debounce resize handler to avoid multiple recalculations on window resize
   useEffect(() => {
@@ -120,7 +120,7 @@ const RecipeTab = ({ menu, setMenu }) => {
     const handler = setTimeout(() => {
       setDebouncedSearchQuery(searchQuery);
     }, 500); // Delay of 500ms
-  
+
     return () => {
       clearTimeout(handler);
     };
@@ -211,7 +211,7 @@ const RecipeTab = ({ menu, setMenu }) => {
       fetchRecipes(recipePage, debouncedSearchQuery, includedTags, excludedTags, includedIngredients, excludedIngredients);
     }
   }, [recipePage, debouncedSearchQuery, isOpen, includedTags, excludedTags, includedIngredients, excludedIngredients, currentPage]);
-  
+
 
   // Handle pagination (next and previous page)
   const nextPage = () => {
@@ -484,22 +484,31 @@ const RecipeTab = ({ menu, setMenu }) => {
                 </div>
 
                 {/* Recipe container with pagination */}
-                <div className='recipe-containers custom-scroll' style={{maxHeight: containerMaxHeight}} onClick={(e) => e.stopPropagation()}>
-                  <Droppable droppableId="RecipeList">
-                    {(dropProvided) => (
-                      <div className='drop' ref={dropProvided.innerRef} {...dropProvided.droppableProps}>
-                        {isLoading ? (
-                          <div>Loading...</div>
-                        ) : recipes.length > 0 ? (
-                          recipes.map((recipe, index) => (
-                            <Recipe key={recipe.Name} recipe={recipe} index={index} toggleInfo={toggleInfo} toggleFavourite={toggleFavourite} favouriteSet={favouriteSet}/>
-                          ))
-                        ) : (
-                          <div className='no-result'>No recipes found</div>
-                        )}
-                      </div>
-                    )}
-                  </Droppable>
+                <div className='recipe-containers custom-scroll' style={{ maxHeight: containerMaxHeight }} onClick={(e) => e.stopPropagation()}>
+                  {isLoading ? (
+                    <div>Loading...</div>
+                  ) : recipes.length > 0 ? (
+                    <Droppable droppableId="RecipeList">
+                      {(provided) => (
+                        <div className='drop'
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}>
+                          {recipes.map((recipe, index) => (
+                            <Recipe recipe={recipe} 
+                            index={index} 
+                            toggleInfo={toggleInfo} 
+                            toggleFavourite={toggleFavourite} 
+                            favouriteSet={favouriteSet}
+                            max_tags={max_tags}
+                            max_ingredients={max_ingredients}/>
+                          ))}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  ) : (
+                    <div className='no-result'>No recipes found</div>
+                  )}
                 </div>
 
                 {/* Pagination controls */}
@@ -517,7 +526,7 @@ const RecipeTab = ({ menu, setMenu }) => {
             {currentPage === 2 &&
               <div className='recommendation-tab'>
                 <div className='tab-title'>RECOMMENDATION</div>
-                <AiOutlineInfoCircle className='recommendation-info' onClick={toggleRecInfo}/>
+                <AiOutlineInfoCircle className='recommendation-info' onClick={toggleRecInfo} />
                 {isVisibleRecPopUp && (
                   <div className="rec-info-popup">
                     <p>We recommend recipes based on the ingredients you have. The more matching ingredients, the higher the recipe appears.</p>
@@ -535,7 +544,7 @@ const RecipeTab = ({ menu, setMenu }) => {
                   <LuFilter className='filter-icon' onClick={() => toggleFilter()} />
                 </div>
 
-                <div className='recipe-containers custom-scroll' style={{maxHeight: containerMaxHeight}} onClick={(e) => e.stopPropagation()}>
+                <div className='recipe-containers custom-scroll' style={{ maxHeight: containerMaxHeight }} onClick={(e) => e.stopPropagation()}>
                   {isLoading ? (
                     <div>Loading recommendations...</div>
                   ) : recommendationRecipes.length > 0 ? (
@@ -547,7 +556,7 @@ const RecipeTab = ({ menu, setMenu }) => {
                           </a>
                           <div className="icon-container">
                             <AiOutlineInfoCircle className='info-icon' onClick={() => toggleInfo(recipe)} />
-                            { favouriteSet.has(recipe.Name) ? (
+                            {favouriteSet.has(recipe.Name) ? (
                               <MdOutlineStarPurple500 className='star-icon filled' onClick={() => toggleFavourite(recipe)} />
                             ) : (
                               <MdOutlineStarBorderPurple500 className='star-icon border' onClick={() => toggleFavourite(recipe)} />
@@ -590,7 +599,7 @@ const RecipeTab = ({ menu, setMenu }) => {
                   <TbSearch className='search-icon' />
                   <LuFilter className='filter-icon' />
                 </div>
-                <div className='recipe-containers custom-scroll'  style={{maxHeight: containerMaxHeight}}  onClick={(e) => e.stopPropagation()}>
+                <div className='recipe-containers custom-scroll' style={{ maxHeight: containerMaxHeight }} onClick={(e) => e.stopPropagation()}>
                   <div className='recipe-list'>COMING SOON!</div>
                 </div>
               </div>
@@ -598,7 +607,7 @@ const RecipeTab = ({ menu, setMenu }) => {
             {currentPage === 4 &&
               <div className='favourite-tab'>
                 <div className='tab-title'>FAVOURITES</div>
-                <div className='recipe-containers custom-scroll' style={{maxHeight: containerMaxHeight}} onClick={(e) => e.stopPropagation()}>
+                <div className='recipe-containers custom-scroll' style={{ maxHeight: containerMaxHeight }} onClick={(e) => e.stopPropagation()}>
                   {isLoadingFavourites ? (
                     <div>Loading favourites...</div>
                   ) : favouriteRecipes.length > 0 ? (
@@ -610,7 +619,7 @@ const RecipeTab = ({ menu, setMenu }) => {
                           </a>
                           <div className="icon-container">
                             <AiOutlineInfoCircle className='info-icon' onClick={() => toggleInfo(recipe)} />
-                            { favouriteSet.has(recipe.Name) ? (
+                            {favouriteSet.has(recipe.Name) ? (
                               <MdOutlineStarPurple500 className='star-icon filled' onClick={() => toggleFavourite(recipe)} />
                             ) : (
                               <MdOutlineStarBorderPurple500 className='star-icon border' onClick={() => toggleFavourite(recipe)} />

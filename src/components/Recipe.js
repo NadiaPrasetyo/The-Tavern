@@ -1,19 +1,18 @@
-// Recipe.js
 import React from 'react';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
 import { MdOutlineStarBorderPurple500, MdOutlineStarPurple500 } from 'react-icons/md';
 import { Draggable } from 'react-beautiful-dnd';
 
-const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet }) => {
-  const max_tags = 3;
-  const max_ingredients = 4;
+const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet, max_tags, max_ingredients, useIdAsDraggableId }) => {
+
+  // Use `id` as the draggableId if specified, otherwise use `Name`
+  const draggableId = useIdAsDraggableId ? recipe.id : recipe.Name;
 
   return (
-    <Draggable key={recipe.Name} draggableId={recipe.Name} index={index}>
+    <Draggable key={draggableId} draggableId={draggableId} index={index}>
       {(provided) => (
         <div
           className='recipe-list'
-          key={recipe.Name}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
@@ -22,13 +21,15 @@ const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet }) =>
             <a href={recipe.Link} target="_blank" rel="noopener noreferrer">
               {recipe.Name}
             </a>
-            <div className="icon-container"> {/* Added container for icons */}
+            <div className="icon-container">
               <AiOutlineInfoCircle className='info-icon' onClick={() => toggleInfo(recipe)} />
-              { favouriteSet && favouriteSet.has(recipe.Name) ? (
-                <MdOutlineStarPurple500 className='star-icon filled' onClick={() => toggleFavourite(recipe)} />
-              ) : (
-                <MdOutlineStarBorderPurple500 className='star-icon border' onClick={() => toggleFavourite(recipe)} />
-              )}
+              {favouriteSet != null ? (
+                favouriteSet.has(recipe.Name) ? (
+                  <MdOutlineStarPurple500 className='star-icon filled' onClick={() => toggleFavourite(recipe)} />
+                ) : (
+                  <MdOutlineStarBorderPurple500 className='star-icon border' onClick={() => toggleFavourite(recipe)} />
+                )
+              ) : null}
             </div>
           </div>
           <div className='recipe-tags'>

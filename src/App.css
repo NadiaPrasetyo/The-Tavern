@@ -1291,3 +1291,20 @@ th {
 .recipe-drop-area {
   min-height: 50px;
 }
+
+.menu-column {
+  border-right: 3px solid black;
+  min-height: 100px;
+  background-color: #e8ccec;
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: width 0.3s ease;
+}
+
+.day-title {
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 2px;
+  border-bottom: 3px solid black;
+}
