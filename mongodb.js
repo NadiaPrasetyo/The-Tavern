@@ -767,7 +767,6 @@ app.get('/api/get-menu', async (req, res) => {
 
     const mondayRecipes = [];
     for (const recipe of monday) {
-      console.log(recipe.Name);
       // use regex to search for the recipe name for case insensitivity
       const searchRegex = new RegExp(recipe.Name, 'i');
       const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
