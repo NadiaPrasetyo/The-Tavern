@@ -526,6 +526,19 @@ th {
   border-bottom: solid 2px #000000;
 }
 
+.weekCalendar{
+  display: flex;
+  grid-row: 4;
+  grid-column: 1;
+  width: 200px;
+  height: 100px;
+  text-align: center;
+  flex-wrap: wrap;
+  border: solid 1px #e0ecbca0;
+  background: #e0ecbca0;
+  padding: 10px;
+}
+
 .groceryList{
   grid-row: 2/5;
   grid-column: 10;
@@ -737,6 +750,28 @@ th {
   th{
     font-size: calc(20px + 1vmin);
   }
+}
+
+/* INVENTORY PAGE*/
+#ingredient-content{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: calc(10px + 1vmin);
+  overflow: auto;
+}
+
+.inventory{
+  display: flex;
+  border: solid 1px #badce9b9;
+  background: #badce9b9;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  h4{
+    padding-bottom: 10px;
+    border-bottom: solid 2px #000000;
+  }
+  margin-bottom: 10px;
 }
 
 /* RECIPE TAB */
