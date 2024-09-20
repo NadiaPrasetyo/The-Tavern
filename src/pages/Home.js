@@ -536,6 +536,55 @@ function QuickIngredient(){
   );
 }
 
+function WeekCalendar() {
+  //get the dates of the week
+  const today = new Date();
+  const day = today.getDay();
+  const weekStart = new Date(today);
+  weekStart.setDate(today.getDate() - day + 1);
+
+  //add ONLY the date numbers to the array
+  const dates = [];
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(weekStart);
+    date.setDate(weekStart.getDate() + i);
+    dates.push(date);
+  }
+
+  function trimDate(index, date) {
+    //if today, change the colour to a different colour
+    if (index === day) {
+      return <span style={{background: ' #79855b73', borderRadius: '20px', paddingLeft: '3px', paddingRight: '3px'}}>{date.toDateString().slice(8, 10)}</span>;
+    }
+    return date.toDateString().slice(8, 10);
+  }
+
+  return (
+    <section className='weekCalendar'>
+      <table>
+        <tr>
+          <th>M</th>
+          <th>T</th>
+          <th>W</th>
+          <th>T</th>
+          <th>F</th>
+          <th>S</th>
+          <th>S</th>
+        </tr>
+        <tbody>
+          <tr>
+            {dates.map((date, index) => (
+              <td key={index}>{trimDate(index, date)}</td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+
+    </section>
+  );
+}
+        
+
 
 function Home() {
   document.onkeydown = function(event) {
@@ -558,6 +607,7 @@ function Home() {
 
       <main className ="content">
         <TodayMenu />
+        <WeekCalendar />
         <GroceryList />
         <QuickRecipe />
         <QuickIngredient />        
