@@ -752,6 +752,28 @@ th {
   }
 }
 
+/* INVENTORY PAGE*/
+#ingredient-content{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: calc(10px + 1vmin);
+  overflow: auto;
+}
+
+.inventory{
+  display: flex;
+  border: solid 1px #badce9b9;
+  background: #badce9b9;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  h4{
+    padding-bottom: 10px;
+    border-bottom: solid 2px #000000;
+  }
+  margin-bottom: 10px;
+}
+
 /* RECIPE TAB */
 
 .recipe-tab-container {
