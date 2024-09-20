@@ -13,7 +13,7 @@ import RecipeInfo from './RecipeInfo';
 import FilterPopup from './FilterPop';
 import '../App.css';
 
-const RecipeTab = ({ menu, setMenu, isOpenDrag }) => {
+const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1); // The current page
   const [searchQuery, setSearchQuery] = useState(''); // The search input value
@@ -48,24 +48,26 @@ const RecipeTab = ({ menu, setMenu, isOpenDrag }) => {
   const max_tags = 3; // Limit the number of tags to display
   const max_ingredients = 4; // Limit the number of ingredients to display
 
+  // if there's changes in isOpenDrag, set isOpen to it
+  useEffect(() => {
+    setIsOpen(isOpenDrag);
+  }, [isOpenDrag]);
+
   // Toggle the book tab when clicking the container
   const toggleBook = () => {
     // close the filter popup when the book tab is closed
-    if (isOpen) {
-      setIsFilterOpen(false);
-    }
-    // close the recipe info modal when the book tab is closed
-    if (isInfoOpen) {
-      setInfoOpen(false);
-      setSelectedRecipe(null);
-    }
-
+    setIsFilterOpen(false);
+    // close the recipe info modal 
+    setInfoOpen(false);
+    setSelectedRecipe(null);
+    
     // if closed get favourites
     if (!isOpen) {
       getFavourites();
     }
 
     setIsOpen(!isOpen);
+    setIsOpenDrag(!isOpen);
   };
 
   function getComputedMaxHeight() {

@@ -64,11 +64,16 @@ function Menu() {
     fetchMenu();
   } , []);
 
-  const handleOnDragStart = () => {
-    setIsDragging(true);
-    setWasRecipeTabOpen(recipeTabOpen);
-    setRecipeTabOpen(false);
+  const handleOnDragStart = (start) => {
+    // Check if the drag starts from RecipeList
+    if (start.source.droppableId === 'RecipeList') {
+      setWasRecipeTabOpen(recipeTabOpen); // Store the current state
+      setRecipeTabOpen(false); // Close the recipe tab only if the source is RecipeList
+    }
+    
+    setIsDragging(true); // Indicate that dragging has started
   };
+  
   
   const handleOnDragEnd = (result) => {
     setIsDragging(false);
@@ -90,8 +95,6 @@ function Menu() {
         ...menu.RecipeList[source.index],
         id: `${menu.RecipeList[source.index].Name}-${Date.now()}`
       };
-
-      console.log(clonedRecipe);
 
       const destinationDay = menu[destination.droppableId];
 
@@ -159,7 +162,7 @@ function Menu() {
               {days.map((day, index) => (
                 <MenuColumn columnId={day} items={menu[day]} widthpx={sidebarOpen ? '165.5px' : '200px'} />
               ))}
-              <RecipeTab menu={menu} setMenu={setMenu} isOpenDrag={recipeTabOpen} />
+              <RecipeTab menu={menu} setMenu={setMenu} isOpenDrag={recipeTabOpen} setIsOpenDrag={setRecipeTabOpen} />
             </div>
           )}
         </main>
