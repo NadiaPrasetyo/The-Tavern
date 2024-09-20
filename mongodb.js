@@ -767,7 +767,13 @@ app.get('/api/get-menu', async (req, res) => {
 
     const mondayRecipes = [];
     for (const recipe of monday) {
-      const recipeDetails = await recipeCollection.findOne({ Name: recipe.Name });
+      console.log(recipe.Name);
+      // use regex to search for the recipe name for case insensitivity
+      const searchRegex = new RegExp(recipe.Name, 'i');
+      const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
+      if (!recipeDetails) {
+        continue;
+      }
       // add an id to the recipe with name + timestamp to avoid duplicates
       recipeDetails.id = `${recipeDetails.Name}-${Date.now()}`;
       mondayRecipes.push(recipeDetails);
@@ -780,7 +786,11 @@ app.get('/api/get-menu', async (req, res) => {
 
     const tuesdayRecipes = [];
     for (const recipe of tuesday) {
-      const recipeDetails = await recipeCollection.findOne({ Name: recipe.Name });
+      const searchRegex = new RegExp(recipe.Name, 'i');
+      const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
+      if (!recipeDetails) {
+        continue;
+      }
       recipeDetails.id = `${recipeDetails.Name}-${Date.now()}`;
       tuesdayRecipes.push(recipeDetails);
     }
@@ -792,7 +802,11 @@ app.get('/api/get-menu', async (req, res) => {
 
     const wednesdayRecipes = [];
     for (const recipe of wednesday) {
-      const recipeDetails = await recipeCollection.findOne({ Name: recipe.Name });
+      const searchRegex = new RegExp(recipe.Name, 'i');
+      const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
+      if (!recipeDetails) {
+        continue;
+      }
       recipeDetails.id = `${recipeDetails.Name}-${Date.now()}`;
       wednesdayRecipes.push(recipeDetails);
     }
@@ -804,7 +818,11 @@ app.get('/api/get-menu', async (req, res) => {
 
     const thursdayRecipes = [];
     for (const recipe of thursday) {
-      const recipeDetails = await recipeCollection.findOne({ Name: recipe.Name });
+      const searchRegex = new RegExp(recipe.Name, 'i');
+      const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
+      if (!recipeDetails) {
+        continue;
+      }
       recipeDetails.id = `${recipeDetails.Name}-${Date.now()}`;
       thursdayRecipes.push(recipeDetails);
     }
@@ -816,7 +834,11 @@ app.get('/api/get-menu', async (req, res) => {
 
     const fridayRecipes = [];
     for (const recipe of friday) {
-      const recipeDetails = await recipeCollection.findOne({ Name: recipe.Name });
+      const searchRegex = new RegExp(recipe.Name, 'i');
+      const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
+      if (!recipeDetails) {
+        continue;
+      }
       recipeDetails.id = `${recipeDetails.Name}-${Date.now()}`;
       fridayRecipes.push(recipeDetails);
     }
@@ -828,7 +850,11 @@ app.get('/api/get-menu', async (req, res) => {
 
     const saturdayRecipes = [];
     for (const recipe of saturday) {
-      const recipeDetails = await recipeCollection.findOne({ Name: recipe.Name });
+      const searchRegex = new RegExp(recipe.Name, 'i');
+      const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
+      if (!recipeDetails) {
+        continue;
+      }
       recipeDetails.id = `${recipeDetails.Name}-${Date.now()}`;
       saturdayRecipes.push(recipeDetails);
     }
@@ -840,7 +866,11 @@ app.get('/api/get-menu', async (req, res) => {
 
     const sundayRecipes = [];
     for (const recipe of sunday) {
-      const recipeDetails = await recipeCollection.findOne({ Name: recipe.Name });
+      const searchRegex = new RegExp(recipe.Name, 'i');
+      const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
+      if (!recipeDetails) {
+        continue;
+      }
       recipeDetails.id = `${recipeDetails.Name}-${Date.now()}`;
       sundayRecipes.push(recipeDetails);
     }
