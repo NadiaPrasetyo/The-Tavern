@@ -15,7 +15,7 @@ const MenuColumn = ({ columnId, items, widthpx }) => {
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                     style={{
-                        width: widthpx,
+                        width: widthpx
                     }}
                 >
                     <h3 className='day-title'>{columnId}</h3>

@@ -10,9 +10,9 @@ const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet, max_
 
   return (
     <Draggable key={draggableId} draggableId={draggableId} index={index}>
-      {(provided) => (
+      {(provided, snapshot) => (
         <div
-          className='recipe-list'
+          className={`recipe-list ${snapshot.isDragging && !useIdAsDraggableId ? 'dragging' : ''}`}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}

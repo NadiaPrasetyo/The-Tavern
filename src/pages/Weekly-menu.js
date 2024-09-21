@@ -1,17 +1,14 @@
 import '../App.css';
 import Sidebar from '../components/sidebar.js';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import ProfileBar from '../components/profilebar.js';
 import RecipeTab from '../components/RecipeTab.js';
-
 import MenuColumn from '../components/MenuColumn.js';
-
 
 function Menu() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-  const [isDragging, setIsDragging] = useState(false);
   const [recipeTabOpen, setRecipeTabOpen] = useState(false);
   const [wasRecipeTabOpen, setWasRecipeTabOpen] = useState(false);
 
@@ -21,15 +18,14 @@ function Menu() {
     setIsLoading(true);
     try {
       const username = localStorage.getItem('username');
-      const reponse = await fetch(`/api/get-menu?username=${encodeURIComponent(username)}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-      const data = await reponse.json();
-      
+      const response = await fetch(`/api/get-menu?username=${encodeURIComponent(username)}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+
       setMenu({
         ...menu,
         Monday: data.Monday,
@@ -41,12 +37,10 @@ function Menu() {
         Sunday: data.Sunday,
       });
       setIsLoading(false);
-
     } catch (error) {
       console.error('Error:', error);
     }
   };
-
 
   const [menu, setMenu] = useState({
     RecipeList: [],
@@ -59,24 +53,20 @@ function Menu() {
     Sunday: [],
   });
 
-  // when this component mounts, fetch the menu
   useEffect(() => {
     fetchMenu();
-  } , []);
+  }, []);
 
   const handleOnDragStart = (start) => {
-    // Check if the drag starts from RecipeList
     if (start.source.droppableId === 'RecipeList') {
-      setWasRecipeTabOpen(recipeTabOpen); // Store the current state
-      setRecipeTabOpen(false); // Close the recipe tab only if the source is RecipeList
+      setWasRecipeTabOpen(recipeTabOpen);
+      setRecipeTabOpen(false);
+    } else {
+      setWasRecipeTabOpen(recipeTabOpen);
     }
-    
-    setIsDragging(true); // Indicate that dragging has started
   };
-  
-  
+
   const handleOnDragEnd = (result) => {
-    setIsDragging(false);
     setRecipeTabOpen(wasRecipeTabOpen);
     const { source, destination } = result;
 
@@ -88,26 +78,21 @@ function Menu() {
     }
 
     if (source.droppableId === 'RecipeList') {
-      // if the destination is the recipeList go back
       if (destination.droppableId === 'RecipeList') return;
 
-      const clonedRecipe = { 
+      const clonedRecipe = {
         ...menu.RecipeList[source.index],
-        id: `${menu.RecipeList[source.index].Name}-${Date.now()}`
+        id: `${menu.RecipeList[source.index].Name}-${Date.now()}`,
       };
 
       const destinationDay = menu[destination.droppableId];
-
       destinationDay.splice(destination.index, 0, clonedRecipe);
 
       setMenu({
         ...menu,
         [destination.droppableId]: destinationDay,
       });
-
-
     } else if (destination.droppableId === 'RecipeList') {
-      // remove from the source but do not add to the recipeList
       const sourceDay = menu[source.droppableId];
       sourceDay.splice(source.index, 1);
 
@@ -115,8 +100,7 @@ function Menu() {
         ...menu,
         [source.droppableId]: sourceDay,
       });
-    }
-    else if (source.droppableId !== destination.droppableId) {
+    } else if (source.droppableId !== destination.droppableId) {
       const sourceDay = menu[source.droppableId];
       const destinationDay = menu[destination.droppableId];
       const [removed] = sourceDay.splice(source.index, 1);
@@ -137,47 +121,50 @@ function Menu() {
         [source.droppableId]: day,
       });
     }
-  
-    
   };
 
   return (
-    <DragDropContext 
-    onDragStart={handleOnDragStart} 
-    onDragEnd={handleOnDragEnd}>
+    <DragDropContext onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd}>
       <div className="App">
-        <header class = "App-header">
-          <ProfileBar/>
+        <header className="App-header">
+          <ProfileBar />
         </header>
 
         <aside>
-          <Sidebar source = "Menu" setIsOpen={setSidebarOpen} />
+          <Sidebar source="Menu" setIsOpen={setSidebarOpen} />
         </aside>
 
-        <main className ="content">
-          {isLoading? (
+        <main className="content">
+          {isLoading ? (
             <p>Loading...</p>
           ) : (
-            <div className="menu-table">
-              {days.map((day, index) => (
-                <MenuColumn columnId={day} items={menu[day]} widthpx={sidebarOpen ? '165.5px' : '200px'} />
-              ))}
-              <RecipeTab menu={menu} setMenu={setMenu} isOpenDrag={recipeTabOpen} setIsOpenDrag={setRecipeTabOpen} />
+            <div>
+              <div className="menu-table custom-scroll">
+                {days.map((day) => (
+                  <MenuColumn
+                    key={day}
+                    columnId={day}
+                    items={menu[day]}
+                    widthpx={sidebarOpen ? '10.6vw' : '12.6vw'}
+                  />
+                ))}
+              </div>
+              <RecipeTab
+                menu={menu}
+                setMenu={setMenu}
+                isOpenDrag={recipeTabOpen}
+                setIsOpenDrag={setRecipeTabOpen}
+              />
             </div>
           )}
         </main>
 
-
         <footer>
           <p>Footer</p>
         </footer>
-
       </div>
     </DragDropContext>
   );
 }
-
-
-
 
 export default Menu;

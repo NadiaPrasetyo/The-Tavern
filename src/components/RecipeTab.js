@@ -48,7 +48,7 @@ const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag }) => {
   const max_tags = 3; // Limit the number of tags to display
   const max_ingredients = 4; // Limit the number of ingredients to display
 
-  // if there's changes in isOpenDrag, set isOpen to it
+  // if there's changes in isOpenDrag, set isOpen to it 
   useEffect(() => {
     setIsOpen(isOpenDrag);
   }, [isOpenDrag]);
@@ -418,7 +418,6 @@ const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag }) => {
 
   useEffect(() => {
     if (isOpenRecommendation) {
-      console.log('fetching recommendations');
       fetchRecommendations(recipePageRecommendation, debouncedSearchQuery, includedTags, excludedTags, includedIngredients, excludedIngredients);
     }
   }, [recipePageRecommendation, debouncedSearchQuery, isOpenRecommendation, includedTags, excludedTags, includedIngredients, excludedIngredients]);
@@ -492,8 +491,7 @@ const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag }) => {
                   ) : recipes.length > 0 ? (
                     <Droppable droppableId="RecipeList">
                       {(provided) => (
-                        <div className='drop'
-                          ref={provided.innerRef}
+                        <div ref={provided.innerRef}
                           {...provided.droppableProps}>
                           {recipes.map((recipe, index) => (
                             <Recipe recipe={recipe} 

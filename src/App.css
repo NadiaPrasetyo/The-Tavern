@@ -779,8 +779,7 @@ th {
 .recipe-tab-container {
   position: fixed;
   right: calc(-40vw + 20px); /* Start at the edge of the screen */
-  top: 50%;
-  transform: translateY(-50%);
+  top: calc(50% - 45vh);
   width: 40vw;
   height: 90vh;
   display: flex;
@@ -788,6 +787,7 @@ th {
   justify-content: flex-start;
   transition: right 0.4s ease-in-out;
   border-radius: 50px 0 0 50px;
+  z-index: 10;
 }
 
 .recipe-tab-container.open {
@@ -799,7 +799,6 @@ th {
   height: 100%;
   background-color: #98a567a0;
   box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.2);
-  transition: transform 0.4s ease-in-out;
   overflow: hidden;
   cursor: auto; /* Prevent the book content from being clickable */
   border-radius: 50px 0 0 50px;
@@ -808,10 +807,6 @@ th {
 
 .background {
   background-color: white;
-}
-
-.book-container.open {
-  transform: translateX(50px); /* Shift the tab left by 50px when open */
 }
 
 .book-content {
@@ -1013,6 +1008,12 @@ th {
   border-radius: 50px;
   margin: 0 5px 5px 0; /* Space between ingredients */
   display: inline-block; /* Ensure each ingredient is on a new line if long */
+}
+
+/* DRAGGING */
+
+.dragging {
+  pointer-events: none;
 }
 
 /* RECIPE INFO */
@@ -1309,31 +1310,16 @@ th {
 /* WEEKLY MENU */
 
 .menu-table {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
   justify-content: space-between;
-}
-
-.day-column {
-  width: calc(65vw / 7);
-
-  padding: 10px;
-  border: 1px solid #ccc;
-  min-height: 100px;
-  background-color: #f8f8f8;
-  transition: width 0.3s ease;
-}
-
-.recipe-drop-area {
-  min-height: 50px;
+  height: 90vh;
+  overflow-y: auto;
 }
 
 .menu-column {
   border-right: 3px solid black;
-  min-height: 100px;
   background-color: #e8ccec;
-  max-height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
   transition: width 0.3s ease;
 }
 
