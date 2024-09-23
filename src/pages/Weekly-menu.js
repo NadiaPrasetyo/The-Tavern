@@ -5,12 +5,25 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import ProfileBar from '../components/profilebar.js';
 import RecipeTab from '../components/RecipeTab.js';
 import MenuColumn from '../components/MenuColumn.js';
+import RecipeInfo from '../components/RecipeInfo.js';
 
 function Menu() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [recipeTabOpen, setRecipeTabOpen] = useState(false);
   const [wasRecipeTabOpen, setWasRecipeTabOpen] = useState(false);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
+  
+  const closeInfo = () => {
+    setIsInfoOpen(false);
+    setSelectedRecipe(null);
+  };
+
+  const toggleInfo = (recipe) => {
+    setSelectedRecipe(recipe);
+    setIsInfoOpen(true);
+  };
 
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -123,6 +136,13 @@ function Menu() {
     }
   };
 
+  const updateItems = (day, items) => {
+    setMenu({
+      ...menu,
+      [day]: items,
+    });
+  };
+
   return (
     <DragDropContext onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd}>
       <div className="App">
@@ -146,6 +166,8 @@ function Menu() {
                     columnId={day}
                     items={menu[day]}
                     widthpx={sidebarOpen ? '10.6vw' : '12.6vw'}
+                    toggleInfo={toggleInfo}
+                    updateItems={updateItems}
                   />
                 ))}
               </div>
@@ -157,6 +179,7 @@ function Menu() {
               />
             </div>
           )}
+          <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} />
         </main>
 
         <footer>

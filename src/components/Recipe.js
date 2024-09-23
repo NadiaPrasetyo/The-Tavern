@@ -1,9 +1,10 @@
 import React from 'react';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
+import { RiDeleteBack2Fill } from "react-icons/ri";
 import { MdOutlineStarBorderPurple500, MdOutlineStarPurple500 } from 'react-icons/md';
 import { Draggable } from 'react-beautiful-dnd';
 
-const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet, max_tags, max_ingredients, useIdAsDraggableId }) => {
+const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet, max_tags, max_ingredients, useIdAsDraggableId, removeRecipe }) => {
 
   // Use `id` as the draggableId if specified, otherwise use `Name`
   const draggableId = useIdAsDraggableId ? recipe.id : recipe.Name;
@@ -29,7 +30,9 @@ const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet, max_
                 ) : (
                   <MdOutlineStarBorderPurple500 className='star-icon border' onClick={() => toggleFavourite(recipe)} />
                 )
-              ) : null}
+              ) : 
+                <RiDeleteBack2Fill className='remove-icon' onClick={() => removeRecipe(recipe)} />
+              }
             </div>
           </div>
           <div className='recipe-tags'>
