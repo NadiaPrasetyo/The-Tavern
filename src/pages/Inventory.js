@@ -36,6 +36,7 @@ function getInventory(){
 let counter = 0;
 function GetAllInventory() {
   const [inventoryList, setInventoryList] = React.useState([]);
+  
   counter++;
 
   if(inventoryList.length === 0){
@@ -47,28 +48,57 @@ function GetAllInventory() {
     });
   }
 
+  let categories;
+  if (inventoryList.length > 0) {
+    //each inventory item has a category, separate the unique ones
+    categories = [...new Set(inventoryList.map(item => item.Category))];
+  } else {
+    categories = [{Name: "Please create an Inventory List first"}];
+  }
+
+  function addInventoryItem(item, category) {
+    // Add the inventory item to the database
+    fetch('/api/add-inventory-item', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: localStorage.getItem('username'),
+        item: item,
+        category: category
+      }),
+    }).then((response) => {
+      if (response.status === 200) {
+        console.log("Inventory item added successfully");
+      } else {
+        console.log("Error adding inventory item");
+      }
+    });
+  }
+
   
   const [groceryItemOpen, setGroceryItemOpen] = React.useState(false);
 
-  function addInventory() {
+  function addInventory(category) {
     const groceryItem = document.querySelector('.addGroceryItem');
     const button = document.querySelector('.addGrocery');
   
     if (!groceryItemOpen) {
       button.style.animation = 'moveRight 0.5s';
       button.style.left = '250px';
-      groceryItem.placeholder = 'Add grocery item...';
+      groceryItem.placeholder = 'Add inventory item...';
       groceryItem.style.animation = 'openRight 0.5s';
       groceryItem.style.display = 'block';
   
     } else{
       const value = groceryItem.value;
       if (value === '') {
-        console.log("Grocery item is empty");
-      // Do nothing if the grocery item is empty
+        console.log("Inventory item is empty");
+        // Do nothing if the grocery item is empty
       } else {
         // Add the grocery item to the list in the database
-        //addGroceryItem(value);
+        addInventoryItem(value, category);
       }
       
       setTimeout(() => {
@@ -84,37 +114,59 @@ function GetAllInventory() {
       }, 1500);
     }
   
-    setGroceryItemOpen(!groceryItemOpen);
-    if(groceryItemOpen){
-      // Update the grocery list
-      // get5lastGroceryList().then((grocery) => {
-      //   setGroceryList(grocery);
-      //   return;
-      // });
+     setGroceryItemOpen(!groceryItemOpen);
+     if(groceryItemOpen){
+       // Update the inventory list
+        getInventory().then((inventory) => {
+          setInventoryList(inventory);
+        }
+      );
     }
   }
+
   
+  function GetEachCategoryList(category, inventoryList) {
+    const categoryList = inventoryList.filter(item => item.Category === category);
+    
+    return (
+      <div>
+      <section className='inventory'>
+      <form onkeydown="return event.key != 'Enter';">
+        <h4>{category}</h4>
+        <div>
+            <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add inventory item..."/>
+            <button className = "addGrocery" type='button' onClick={addInventory(category)}><IoAddCircle /></button><br/>
+        </div>
+        <ul>
+          {categoryList.map((item) => (
+            <li key={item.Name}>{item.Name}</li>
+          ))}
+        </ul>
+      </form>
+      </section>
+      
+      </div>
+    );
+  }
+  
+  if (inventoryList.length === 0) {
+    return (
+    <section className='inventory'>
+      <h4>Inventory</h4>
+      <ul>
+        <li>Loading...</li>
+      </ul>
+    </section>
+    );
+  } 
 
   return (
         //for each category, display the category name and the items in that category
 
     <div>
-    <section className='inventory'>
-    <form onkeydown="return event.key != 'Enter';">
-      <h4>Category Name</h4>
-      <div>
-          <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add inventory item..."/>
-          <button className = "addGrocery" type='button' onClick={addInventory}><IoAddCircle /></button><br/>
-      </div>
-      <li>Egg</li>
-      <li>Apple</li>
-      <li>Orange</li>
-      <li>Carrot</li>
-      <li>Chicken</li>
-      <li>Beef</li>
-    </form>
-    </section>
-    
+      {categories.map((category) => (
+        GetEachCategoryList(category, inventoryList)
+      ))}    
     </div>
   );
 
@@ -125,7 +177,7 @@ function Inventory() {
   return (
     
     <div className="App">
-      <header class = "App-header">
+      <header className = "App-header">
         <ProfileBar/>
       </header>
 
