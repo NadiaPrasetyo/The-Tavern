@@ -472,6 +472,8 @@ function QuickIngredient(){
     }
 
     getQuickFruits().then((fruit) => {
+      //trim the array to only 3 items
+      fruit = fruit.slice(0, 3);
       setFruit(fruit);
       return;
     });
@@ -483,6 +485,8 @@ function QuickIngredient(){
       return;
     }
     getQuickVegetables().then((vegetable) => {
+      //trim the array to only 3 items
+      vegetable = vegetable.slice(0, 3);
       setVegetable(vegetable);
       return;
     }
@@ -552,7 +556,7 @@ function WeekCalendar() {
 
   function trimDate(index, date) {
     //if today, change the colour to a different colour
-    if (index === day) {
+    if (index === day - 1) {
       return <span style={{background: ' #79855b73', borderRadius: '20px', paddingLeft: '3px', paddingRight: '3px'}}>{date.toDateString().slice(8, 10)}</span>;
     }
     return date.toDateString().slice(8, 10);

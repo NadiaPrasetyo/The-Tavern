@@ -898,8 +898,10 @@ app.post('/api/get-inventory', async (req, res) => {
 
     // Find the inventory
     const inventory = await collection
-      .find({ Username: req.body.username })
+      .find({ Username: req.body.Username })
       .toArray();
+
+    console.log(inventory);
 
     // If everything is OK
     res.status(200).json({ inventory: inventory });
@@ -917,9 +919,11 @@ app.post('/api/add-inventory-item', async (req, res) => {
 
     //check that the collection doesn't already have the item
     const item = await collection.findOne({ Username: req.body.Username, Name: req.body.Name });
-    if (item) {
-      return res.status(409).json({ message: "Item already exist" });
-    }
+
+     if (item!=null) {
+        // throw an error if the item already exists in the user's inventory
+       return res.status(409).json({ message: "Item already exist" });
+     }
 
     // Add the item to the inventory
     await collection.insertOne(req.body);

@@ -15,7 +15,7 @@ function getInventory(){
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: localStorage.getItem('username')
+        Username: localStorage.getItem('username')
       }),
     });
 
@@ -36,16 +36,17 @@ function getInventory(){
 let counter = 0;
 function GetAllInventory() {
   const [inventoryList, setInventoryList] = React.useState([]);
-  
   counter++;
 
   if(inventoryList.length === 0){
+    console.log("Getting inventory list" + counter);
     if (counter >= 10) {
       setInventoryList([{Name: "Please create an Inventory List first"}]);
-    }
+    } else {
     getInventory().then((inventory) => {
       setInventoryList(inventory);
     });
+    }
   }
 
   let categories;
@@ -57,20 +58,29 @@ function GetAllInventory() {
   }
 
   function addInventoryItem(item, category) {
+    console.log("Adding inventory item: " + item + " to category: " + category);
     // Add the inventory item to the database
+
     fetch('/api/add-inventory-item', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: localStorage.getItem('username'),
-        item: item,
-        category: category
+        Username: localStorage.getItem('username'),
+        Name: item,
+        Category: category
       }),
     }).then((response) => {
       if (response.status === 200) {
         console.log("Inventory item added successfully");
+        // Update the inventory list
+        getInventory().then((inventory) => {
+          console.log("Inventory list updated");
+          setInventoryList(inventory);
+          return;
+        });
+
       } else {
         console.log("Error adding inventory item");
       }
@@ -82,8 +92,6 @@ function GetAllInventory() {
 
   function addInventory(event, category) {
     //get the source button
-    // <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add inventory item..."/>
-    //         <button className = "addGrocery" type='button' onClick={addInventory(category)}><IoAddCircle /></button><br/>
     
     const buttonClick = event.target;
     const button = buttonClick.closest('.addGrocery');
@@ -98,7 +106,7 @@ function GetAllInventory() {
       groceryItem.style.display = 'block';
   
     } else{
-      const value = groceryItem.value;
+      const value = groceryItem.value.trim();
       if (value === '') {
         console.log("Inventory item is empty");
         // Do nothing if the grocery item is empty
@@ -121,13 +129,6 @@ function GetAllInventory() {
     }
   
      setGroceryItemOpen(!groceryItemOpen);
-     if(groceryItemOpen){
-       // Update the inventory list
-        getInventory().then((inventory) => {
-          setInventoryList(inventory);
-        }
-      );
-    }
   }
 
   
@@ -163,7 +164,7 @@ function GetAllInventory() {
       </ul>
     </section>
     );
-  } 
+  } else{
 
   return (
         //for each category, display the category name and the items in that category
@@ -174,6 +175,7 @@ function GetAllInventory() {
       ))}    
     </div>
   );
+  }
 
 }
 
