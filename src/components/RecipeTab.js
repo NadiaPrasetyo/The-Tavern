@@ -644,7 +644,7 @@ const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag }) => {
                 </div>
               </div>
             }
-            <div onClick={(e) => e.stopPropagation()}>
+            <div className='popup' onClick={(e) => e.stopPropagation()}>
               <FilterPopup isOpen={isFilterOpen} onClose={closeFilter} availableTags={availableTags} availableIngredients={availableIngredients} onFiltersChange={handleFiltersChange} />
               <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} />
             </div>
