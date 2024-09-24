@@ -41,7 +41,7 @@ function GetAllInventory() {
   if(inventoryList.length === 0){
     console.log("Getting inventory list" + counter);
     if (counter >= 10) {
-      setInventoryList([{Name: "Please create an Inventory List first"}]);
+      setInventoryList([{Name: "Please add your inventory!", Category: "Inventory"}]);
     } else {
     getInventory().then((inventory) => {
       setInventoryList(inventory);
@@ -54,7 +54,7 @@ function GetAllInventory() {
     //each inventory item has a category, separate the unique ones
     categories = [...new Set(inventoryList.map(item => item.Category))];
   } else {
-    categories = [{Name: "Please create an Inventory List first"}];
+    categories = [{Inventory}];//default category is Inventory
   }
 
   function addInventoryItem(item, category) {
@@ -92,7 +92,6 @@ function GetAllInventory() {
 
   function addInventory(event, category) {
     //get the source button
-    
     const buttonClick = event.target;
     const button = buttonClick.closest('.addGrocery');
     const groceryItem = buttonClick.closest('.InventoryInputContainer').querySelector('.addGroceryItem');
@@ -131,6 +130,50 @@ function GetAllInventory() {
      setGroceryItemOpen(!groceryItemOpen);
   }
 
+  function addCategory(event, confirmedPopup) {
+    const buttonClick = event.target;
+
+    if (!confirmedPopup) {
+      //get the source button
+      const popup = document.querySelector('.popupAddCategory');
+      popup.style.display = 'block';
+    } else {
+
+    const categoryElement = buttonClick.closest('.popupAddCategory').querySelector('.addCategoryItem');
+    const category = categoryElement.value.trim();//get the category name
+    
+    if (category === null || category === '') {
+      return;
+    }
+    // Add the category to the database
+    fetch('/api/add-category', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Username: localStorage.getItem('username'),
+        Category: category,
+        Name: ''
+      }),
+    }).then((response) => {
+      if (response.status === 200) {
+        console.log("Category added successfully");
+        // Update the inventory list
+        getInventory().then((inventory) => {
+          console.log("Inventory list updated");
+          setInventoryList(inventory);
+          return;
+        });
+
+      } else {
+        console.log("Error adding category");
+      }
+    });
+    categoryElement.value = '';//clear the input field
+    document.querySelector('.popupAddCategory').style.display = 'none';//hide the popup
+    }
+  }
   
   function GetEachCategoryList(category, inventoryList) {
     const categoryList = inventoryList.filter(item => item.Category === category);
@@ -172,7 +215,12 @@ function GetAllInventory() {
     <div>
       {categories.map((category) => (
         GetEachCategoryList(category, inventoryList)
-      ))}    
+      ))}
+      <button className='addCategory' type='button' onClick={(event)=> addCategory(event, false)}>Add Category</button>  
+      <div className = "popupAddCategory">
+        <input type="text" className="addCategoryItem" name="categoryItem" placeholder="Add category..." />
+        <button className="addCategory" type='button' onClick={(event) => addCategory(event, true)}><IoAddCircle /></button><br />
+      </div>
     </div>
   );
   }
