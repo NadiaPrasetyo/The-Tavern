@@ -14,7 +14,19 @@ function Menu() {
   const [wasRecipeTabOpen, setWasRecipeTabOpen] = useState(false);
   const [isInfoOpen, setIsInfoOpen] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  
+  const [hasChanges, setHasChanges] = useState(false);
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const [menu, setMenu] = useState({
+    RecipeList: [],
+    Monday: [],
+    Tuesday: [],
+    Wednesday: [],
+    Thursday: [],
+    Friday: [],
+    Saturday: [],
+    Sunday: [],
+  });
+
   const closeInfo = () => {
     setIsInfoOpen(false);
     setSelectedRecipe(null);
@@ -24,8 +36,6 @@ function Menu() {
     setSelectedRecipe(recipe);
     setIsInfoOpen(true);
   };
-
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   const fetchMenu = async () => {
     setIsLoading(true);
@@ -55,20 +65,55 @@ function Menu() {
     }
   };
 
-  const [menu, setMenu] = useState({
-    RecipeList: [],
-    Monday: [],
-    Tuesday: [],
-    Wednesday: [],
-    Thursday: [],
-    Friday: [],
-    Saturday: [],
-    Sunday: [],
-  });
-
   useEffect(() => {
     fetchMenu();
   }, []);
+
+  const updateMenu = async () => {
+    if (!hasChanges) return; // Only update if there are changes
+    try {
+      const username = localStorage.getItem('username');
+      const response = await fetch('/api/update-menu', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: localStorage.getItem('username'),
+          menu: menu,
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+      setHasChanges(false); // Reset the flag after successful update
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  // Autosave every 5 minutes if changes were made
+  useEffect(() => {
+    const interval = setInterval(() => {
+      updateMenu(); // This will only update if hasChanges is true
+    }, 30000); // 5 minutes
+
+    return () => clearInterval(interval); // Cleanup the interval on unmount
+  }, [hasChanges, menu]);
+
+  // Add event listener for page unload (refresh, navigate away, or close tab)
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (hasChanges) {
+        updateMenu(); // Save changes before unloading the page
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [hasChanges]);
 
   const handleOnDragStart = (start) => {
     if (start.source.droppableId === 'RecipeList') {
@@ -134,6 +179,7 @@ function Menu() {
         [source.droppableId]: day,
       });
     }
+    setHasChanges(true);
   };
 
   const updateItems = (day, items) => {
@@ -141,6 +187,7 @@ function Menu() {
       ...menu,
       [day]: items,
     });
+    setHasChanges(true);
   };
 
   return (

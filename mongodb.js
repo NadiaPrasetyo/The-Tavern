@@ -719,22 +719,23 @@ app.post('/api/recommendation', async (req, res) => {
     }
 
     // Get all tags and ingredients (before pagination)
-    const recipe_tags = await Recipe.aggregate([
-      { $match: Object.keys(query).length ? query : {} },
-      { $unwind: "$Tag" },
-      { $group: { _id: "$Tag" } },
-      { $project: { Tag: "$_id", _id: 0 } }
-    ]).toArray();
+    const [recipe_tags, recipe_ingredients] = await Promise.all([
+      Recipe.aggregate([
+        { $match: Object.keys(query).length ? query : {} },
+        { $unwind: "$Tag" },
+        { $group: { _id: "$Tag" } },
+        { $project: { Tag: "$_id", _id: 0 } }
+      ]).toArray(),
 
+      Recipe.aggregate([
+        { $match: Object.keys(query).length ? query : {} },
+        { $unwind: "$Ingredients" },
+        { $group: { _id: "$Ingredients" } },
+        { $project: { Ingredients: "$_id", _id: 0 } }
+      ]).toArray()
+    ]);
+    
     const formatted_tags = recipe_tags.map(tag => tag.Tag);
-
-    const recipe_ingredients = await Recipe.aggregate([
-      { $match: Object.keys(query).length ? query : {} },
-      { $unwind: "$Ingredients" },
-      { $group: { _id: "$Ingredients" } },
-      { $project: { Ingredients: "$_id", _id: 0 } }
-    ]).toArray();
-
     const formatted_ingredients = recipe_ingredients.map(ingredient => ingredient.Ingredients);
 
     res.json({
@@ -760,10 +761,17 @@ app.get('/api/get-menu', async (req, res) => {
     const recipeCollection = db.collection('RecipeList'); // your recipe collection
 
     // get the recipes names per day
-    const monday = await collection
-      .find({ Username: username, Day: "Monday" },
-        { Name: 1, _id: 0 })
-      .toArray();
+    const [monday, tuesday, wednesday, thursday, friday, saturday, sunday] = await Promise.all([
+      collection.find({ Username: username, Day: "Monday" }, { Name: 1, _id: 0 }).toArray(),
+      collection.find({ Username: username, Day: "Tuesday" }, { Name: 1, _id: 0 }).toArray(),
+      collection.find({ Username: username, Day: "Wednesday" }, { Name: 1, _id: 0 }).toArray(),
+      collection.find({ Username: username, Day: "Thursday" }, { Name: 1, _id: 0 }).toArray(),
+      collection.find({ Username: username, Day: "Friday" }, { Name: 1, _id: 0 }).toArray(),
+      collection.find({ Username: username, Day: "Saturday" }, { Name: 1, _id: 0 }).toArray(),
+      collection.find({ Username: username, Day: "Sunday" }, { Name: 1, _id: 0 }).toArray()
+    ]);
+    
+    // get the recipe details for each day
 
     const mondayRecipes = [];
     for (const recipe of monday) {
@@ -778,11 +786,6 @@ app.get('/api/get-menu', async (req, res) => {
       mondayRecipes.push(recipeDetails);
     }
 
-    const tuesday = await collection
-      .find({ Username: username, Day: "Tuesday" },
-        { Name: 1, _id: 0 })
-      .toArray();
-
     const tuesdayRecipes = [];
     for (const recipe of tuesday) {
       const searchRegex = new RegExp(recipe.Name, 'i');
@@ -793,11 +796,6 @@ app.get('/api/get-menu', async (req, res) => {
       recipeDetails.id = `${recipeDetails.Name}-${Date.now()}`;
       tuesdayRecipes.push(recipeDetails);
     }
-
-    const wednesday = await collection
-      .find({ Username: username, Day: "Wednesday" },
-        { Name: 1, _id: 0 })
-      .toArray();
 
     const wednesdayRecipes = [];
     for (const recipe of wednesday) {
@@ -810,11 +808,6 @@ app.get('/api/get-menu', async (req, res) => {
       wednesdayRecipes.push(recipeDetails);
     }
 
-    const thursday = await collection
-      .find({ Username: username, Day: "Thursday" },
-        { Name: 1, _id: 0 })
-      .toArray();
-
     const thursdayRecipes = [];
     for (const recipe of thursday) {
       const searchRegex = new RegExp(recipe.Name, 'i');
@@ -825,11 +818,6 @@ app.get('/api/get-menu', async (req, res) => {
       recipeDetails.id = `${recipeDetails.Name}-${Date.now()}`;
       thursdayRecipes.push(recipeDetails);
     }
-
-    const friday = await collection
-      .find({ Username: username, Day: "Friday" },
-        { Name: 1, _id: 0 })
-      .toArray();
 
     const fridayRecipes = [];
     for (const recipe of friday) {
@@ -842,11 +830,6 @@ app.get('/api/get-menu', async (req, res) => {
       fridayRecipes.push(recipeDetails);
     }
 
-    const saturday = await collection
-      .find({ Username: username, Day: "Saturday" },
-        { Name: 1, _id: 0 })
-      .toArray();
-
     const saturdayRecipes = [];
     for (const recipe of saturday) {
       const searchRegex = new RegExp(recipe.Name, 'i');
@@ -857,11 +840,6 @@ app.get('/api/get-menu', async (req, res) => {
       recipeDetails.id = `${recipeDetails.Name}-${Date.now()}`;
       saturdayRecipes.push(recipeDetails);
     }
-
-    const sunday = await collection
-      .find({ Username: username, Day: "Sunday" },
-        { Name: 1, _id: 0 })
-      .toArray();
 
     const sundayRecipes = [];
     for (const recipe of sunday) {
@@ -904,6 +882,52 @@ app.post('/api/get-inventory', async (req, res) => {
     // If everything is OK
     res.status(200).json({ inventory: inventory });
 
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// UPDATE MENU
+app.post('/api/update-menu', async (req, res) => {
+  const { username, menu } = req.body;
+
+  try {
+    const db = client.db('The-tavern'); // replace with your DB name
+    const collection = db.collection('Menu'); // your menu collection
+
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+    // get the names of the recipes for each day
+    const [monday, tuesday, wednesday, thursday, friday, saturday, sunday] = days.map(day => {
+      return menu[day].map(recipe => recipe.Name);
+    });
+
+    await Promise.all([
+      collection.deleteMany({ Username: username, Day: "Monday" }).then(() => 
+      collection.insertMany(monday.map(recipe => ({ Username: username, Day: "Monday", Name: recipe })))
+      ),
+      collection.deleteMany({ Username: username, Day: "Tuesday" }).then(() => 
+      collection.insertMany(tuesday.map(recipe => ({ Username: username, Day: "Tuesday", Name: recipe })))
+      ),
+      collection.deleteMany({ Username: username, Day: "Wednesday" }).then(() => 
+      collection.insertMany(wednesday.map(recipe => ({ Username: username, Day: "Wednesday", Name: recipe })))
+      ),
+      collection.deleteMany({ Username: username, Day: "Thursday" }).then(() => 
+      collection.insertMany(thursday.map(recipe => ({ Username: username, Day: "Thursday", Name: recipe })))
+      ),
+      collection.deleteMany({ Username: username, Day: "Friday" }).then(() => 
+      collection.insertMany(friday.map(recipe => ({ Username: username, Day: "Friday", Name: recipe })))
+      ),
+      collection.deleteMany({ Username: username, Day: "Saturday" }).then(() => 
+      collection.insertMany(saturday.map(recipe => ({ Username: username, Day: "Saturday", Name: recipe })))
+      ),
+      collection.deleteMany({ Username: username, Day: "Sunday" }).then(() => 
+      collection.insertMany(sunday.map(recipe => ({ Username: username, Day: "Sunday", Name: recipe })))
+      )
+    ]);
+
+    // If everything is OK
+    res.status(200).json({ message: "Menu updated successfully" });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

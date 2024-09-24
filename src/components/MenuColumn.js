@@ -26,7 +26,7 @@ const MenuColumn = ({ columnId, items, widthpx, toggleInfo, updateItems }) => {
                         <Recipe recipe={item} 
                         index={index} 
                         toggleInfo={toggleInfo}
-                        max_tags={2}
+                        max_tags={0}
                         max_ingredients={0}
                         useIdAsDraggableId={true}
                         removeRecipe={removeRecipe}
