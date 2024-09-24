@@ -805,6 +805,11 @@ th {
   margin-bottom: 10px;
 }
 
+.removeFromInventory:hover{
+  text-decoration: line-through;
+  cursor: pointer;
+}
+
 /* RECIPE TAB */
 
 .recipe-tab-container {

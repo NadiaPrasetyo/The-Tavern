@@ -993,6 +993,24 @@ app.post('/api/add-category', async (req, res) => {
   }
 });
 
+// REMOVE INVENTORY ITEM
+app.post('/api/remove-inventory-item', async (req, res) => {
+  try {
+    const db = client.db('The-tavern'); // replace with your DB name
+    const collection = db.collection('Inventory'); // your inventory collection
+
+    // Remove the item from the inventory
+    await collection.deleteOne(req.body);
+    // console.log(req.body);
+
+    // If everything is OK
+    res.status(200).json({ message: "Item removed from inventory" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
