@@ -265,10 +265,6 @@ function Inventory() {
   document.onkeydown = function(event) {
     if (event.keyCode === 13) {  // 13 is the keyCode for the 'Enter' key
       event.preventDefault();  // Prevent the default form submission
-      if (document.querySelector('.addCategoryItem').value !== '') {
-        //submit the category
-        document.querySelector('.addCategory').click();  // Simulate a button click
-      } else{
         //submit the specific inventory item that is being added i.e the input field is not empty
         //get all the add grocery buttons
         const addGroceryButtons = document.querySelectorAll('.addGrocery');
@@ -279,8 +275,6 @@ function Inventory() {
             break;
           }
         }
-
-      }
     }
   };
 
