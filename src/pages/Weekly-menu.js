@@ -8,6 +8,7 @@ import MenuColumn from '../components/MenuColumn.js';
 import RecipeInfo from '../components/RecipeInfo.js';
 
 function Menu() {
+  const max_recipes_per_day = 6;
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [recipeTabOpen, setRecipeTabOpen] = useState(false);
@@ -72,7 +73,6 @@ function Menu() {
   const updateMenu = async () => {
     if (!hasChanges) return; // Only update if there are changes
     try {
-      const username = localStorage.getItem('username');
       const response = await fetch('/api/update-menu', {
         method: 'POST',
         headers: {
@@ -137,6 +137,11 @@ function Menu() {
 
     if (source.droppableId === 'RecipeList') {
       if (destination.droppableId === 'RecipeList') return;
+      // if destination already has max recipes, return
+      if (menu[destination.droppableId].length >= max_recipes_per_day) {
+        alert('Maximum number of recipes reached for '+ destination.droppableId);
+        return;
+      }
 
       const clonedRecipe = {
         ...menu.RecipeList[source.index],
@@ -159,6 +164,10 @@ function Menu() {
         [source.droppableId]: sourceDay,
       });
     } else if (source.droppableId !== destination.droppableId) {
+      if (menu[destination.droppableId].length >= max_recipes_per_day) {
+        alert('Maximum number of recipes reached for '+ destination.droppableId);
+        return;
+      }
       const sourceDay = menu[source.droppableId];
       const destinationDay = menu[destination.droppableId];
       const [removed] = sourceDay.splice(source.index, 1);
@@ -170,6 +179,10 @@ function Menu() {
         [destination.droppableId]: destinationDay,
       });
     } else {
+      if (menu[destination.droppableId].length >= max_recipes_per_day) {
+        alert('Maximum number of recipes reached for '+ destination.droppableId);
+        return;
+      }
       const day = menu[source.droppableId];
       const [removed] = day.splice(source.index, 1);
       day.splice(destination.index, 0, removed);

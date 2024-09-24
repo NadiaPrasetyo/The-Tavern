@@ -1361,8 +1361,16 @@ th {
 
 .menu-column {
   border-right: 3px solid black;
-  background-color: #e8ccec;
+  background-color: #d9b0dda4;
   transition: width 0.3s ease;
+}
+
+.menu-recipe {
+  background-color: #d79fde97;
+}
+
+.menu-recipe:hover {
+  background-color: #cc75d797;
 }
 
 .day-title {
