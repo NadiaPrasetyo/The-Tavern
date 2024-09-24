@@ -156,6 +156,7 @@ const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag }) => {
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
     setRecipePage(1); // Reset the current page to 1 whenever the search input changes
+    setRecipePageRecommendation(1); // Reset the current page to 1 whenever the search input changes
   };
 
   // Fetch recipes from the server based on the current page, search query, includedItems, and excludedItems
@@ -363,6 +364,10 @@ const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag }) => {
       const favSet = new Set(data.favourites.map((recipe) => recipe.Name));
       setFavouriteSet(favSet);
 
+      setMenu({
+        ...menu,
+        ['RecipeList']: data.favourites,
+      });
 
     } catch (error) {
       console.error("Error getting favourites:", error);
@@ -410,6 +415,11 @@ const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag }) => {
       setAvailableIngredients(data.ingredients.sort()); // Set the available ingredients for filtering
       setAvailableTags(data.tags.sort()); // Set the available tags for filtering
 
+      setMenu({
+        ...menu,
+        ['RecipeList']: data.recipes,
+      });
+
     } catch (error) {
       console.error("Error getting recommendations:", error);
     }
@@ -445,12 +455,12 @@ const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag }) => {
       }
     });
 
-    // Set a timeout to close the popup automatically after 10 seconds
+    // Set a timeout to close the popup automatically after 5 seconds
     const timeoutId = setTimeout(() => {
       if (isVisibleRecPopUp) {
         setIsVisibleRecPopUp(false);
       }
-    }, 10000); // 10 seconds
+    }, 5000); 
 
     return () => {
       document.removeEventListener('click', handleClickOutside);
@@ -548,40 +558,30 @@ const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag }) => {
                   {isLoading ? (
                     <div>Loading recommendations...</div>
                   ) : recommendationRecipes.length > 0 ? (
-                    recommendationRecipes.map((recipe, index) => (
-                      <div className='recipe-list' key={index}>
-                        <div className='recipe-title'>
-                          <a href={recipe.Link} target="_blank" rel="noopener noreferrer">
-                            {recipe.Name}
-                          </a>
-                          <div className="icon-container">
-                            <AiOutlineInfoCircle className='info-icon' onClick={() => toggleInfo(recipe)} />
-                            {favouriteSet.has(recipe.Name) ? (
-                              <MdOutlineStarPurple500 className='star-icon filled' onClick={() => toggleFavourite(recipe)} />
-                            ) : (
-                              <MdOutlineStarBorderPurple500 className='star-icon border' onClick={() => toggleFavourite(recipe)} />
-                            )}
-                          </div>
-                        </div>
-                        <div className='recipe-tags'>
-                          {recipe.Tag.slice(0, max_tags).map((tag, index) => (
-                            <span className='r-tag' key={index}>{tag}</span>
+                    <Droppable droppableId="RecipeList">
+                      {(provided) => (
+                        <div ref={provided.innerRef}
+                          {...provided.droppableProps}>
+                          {recommendationRecipes.map((recipe, index) => (
+                            <Recipe recipe={recipe} 
+                            index={index} 
+                            toggleInfo={toggleInfo} 
+                            toggleFavourite={toggleFavourite} 
+                            favouriteSet={favouriteSet}
+                            max_tags={max_tags}
+                            max_ingredients={max_ingredients}/>
                           ))}
+                          {provided.placeholder}
                         </div>
-                        <div className='recipe-ingredients'>
-                          {recipe.Ingredients.slice(0, max_ingredients).map((ingredient, index) => (
-                            <span className='r-ing' key={index}>{ingredient}</span>
-                          ))}
-                        </div>
-                      </div>
-                    ))
+                      )}
+                    </Droppable>
                   ) : (
                     <div className='no-result'>{recommendationMessage}</div>
                   )}
                 </div>
                 {/* Pagination controls */}
                 <div className='pagination-controls' onClick={(e) => e.stopPropagation()}>
-                  <button className='prev-btn' onClick={prevPage} disabled={recipePage === 1}>
+                  <button className='prev-btn' onClick={prevPage} disabled={recipePageRecommendation === 1}>
                     Previous
                   </button>
                   <span className='page-num'>Page {recipePageRecommendation} of {totalPages}</span>
@@ -611,33 +611,23 @@ const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag }) => {
                   {isLoadingFavourites ? (
                     <div>Loading favourites...</div>
                   ) : favouriteRecipes.length > 0 ? (
-                    favouriteRecipes.map((recipe, index) => (
-                      <div className='recipe-list' key={index}>
-                        <div className='recipe-title'>
-                          <a href={recipe.Link} target="_blank" rel="noopener noreferrer">
-                            {recipe.Name}
-                          </a>
-                          <div className="icon-container">
-                            <AiOutlineInfoCircle className='info-icon' onClick={() => toggleInfo(recipe)} />
-                            {favouriteSet.has(recipe.Name) ? (
-                              <MdOutlineStarPurple500 className='star-icon filled' onClick={() => toggleFavourite(recipe)} />
-                            ) : (
-                              <MdOutlineStarBorderPurple500 className='star-icon border' onClick={() => toggleFavourite(recipe)} />
-                            )}
-                          </div>
-                        </div>
-                        <div className='recipe-tags'>
-                          {recipe.Tag.slice(0, max_tags).map((tag, index) => (
-                            <span className='r-tag' key={index}>{tag}</span>
+                    <Droppable droppableId="RecipeList">
+                      {(provided) => (
+                        <div ref={provided.innerRef}
+                          {...provided.droppableProps}>
+                          {favouriteRecipes.map((recipe, index) => (
+                            <Recipe recipe={recipe} 
+                            index={index} 
+                            toggleInfo={toggleInfo} 
+                            toggleFavourite={toggleFavourite} 
+                            favouriteSet={favouriteSet}
+                            max_tags={max_tags}
+                            max_ingredients={max_ingredients}/>
                           ))}
+                          {provided.placeholder}
                         </div>
-                        <div className='recipe-ingredients'>
-                          {recipe.Ingredients.slice(0, max_ingredients).map((ingredient, index) => (
-                            <span className='r-ing' key={index}>{ingredient}</span>
-                          ))}
-                        </div>
-                      </div>
-                    ))
+                      )}
+                    </Droppable>
                   ) : (
                     <div className='no-result'>No favourite recipes found</div>
                   )}
