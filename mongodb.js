@@ -993,6 +993,120 @@ app.post('/api/add-category', async (req, res) => {
   }
 });
 
+// REMOVE INVENTORY ITEM
+app.post('/api/remove-inventory-item', async (req, res) => {
+  try {
+    const db = client.db('The-tavern'); // replace with your DB name
+    const collection = db.collection('Inventory'); // your inventory collection
+
+    // Remove the item from the inventory
+    await collection.deleteOne(req.body);
+    // console.log(req.body);
+
+    // If everything is OK
+    res.status(200).json({ message: "Item removed from inventory" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+//GET GROCERY LIST
+app.post('/api/get-grocery', async (req, res) => {
+  try {
+    const db = client.db('The-tavern'); // replace with your DB name
+    const collection = db.collection('GroceryList'); // your grocery collection
+
+    // Find the grocery list
+    const grocery = await collection
+      .find({ Username: req.body.Username })
+      .toArray();
+
+    // If everything is OK
+    res.status(200).json({ grocery: grocery });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ADD GROCERY ITEM
+app.post('/api/add-grocery-item-list', async (req, res) => {
+  try {
+    const db = client.db('The-tavern'); // replace with your DB name
+    const collection = db.collection('GroceryList'); // your inventory collection
+
+    //check that the collection doesn't already have the item
+    const item = await collection.findOne({ Username: req.body.Username, Name: req.body.Name });
+
+     if (item!=null) {
+        // throw an error if the item already exists in the user's inventory
+       return res.status(409).json({ message: "Item already exist" });
+     }
+
+    //check that that the collection doesn't have an empty name item
+    const item2 = await collection.findOne({ Username: req.body.Username, Category: req.body.Category ,Name: "" });
+    if (item2!=null) {
+      //replace the empty name item with the new item
+      await collection.updateOne({ Username: req.body.Username, Category: req.body.Category ,Name: "" }, { $set: req.body });
+      return res.status(200).json({ message: "Item added to grocery" });
+    }
+
+    // Add the item to the inventory
+    await collection.insertOne(req.body);
+    // console.log(req.body);
+
+    // If everything is OK
+    res.status(200).json({ message: "Item added to grocery" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+  
+// ADD GROCERY CATEGORY
+app.post('/api/add-grocery-category', async (req, res) => {
+  try {
+    const db = client.db('The-tavern'); // replace with your DB name
+    const collection = db.collection('GroceryList'); // your inventory collection
+
+    //check that the collection doesn't already have the item
+    const item = await collection.findOne({ Username: req.body.Username, Category: req.body.Category });
+
+    if (item) {
+      return res.status(409).json({ message: "Category already exist" });
+    }
+
+    // Add the item to the inventory
+    await collection.insertOne(req.body);
+
+    // If everything is OK
+    res.status(200).json({ message: "Category added to grocery" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// REMOVE GROCERY ITEM
+app.post('/api/remove-grocery-item', async (req, res) => {
+  try {
+    const db = client.db('The-tavern'); // replace with your DB name
+    const collection = db.collection('GroceryList'); // your inventory collection
+
+    // Remove the item from the inventory
+    await collection.deleteOne(req.body);
+    // console.log(req.body);
+
+    // If everything is OK
+    res.status(200).json({ message: "Item removed from grocery" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

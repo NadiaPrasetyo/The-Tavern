@@ -74,6 +74,8 @@ function GetAllInventory() {
     }).then((response) => {
       if (response.status === 200) {
         console.log("Inventory item added successfully");
+        //clear the input field
+        document.querySelector('.addGroceryItem').value = '';
         // Update the inventory list
         getInventory().then((inventory) => {
           console.log("Inventory list updated");
@@ -177,6 +179,36 @@ function GetAllInventory() {
   
   function GetEachCategoryList(category, inventoryList) {
     const categoryList = inventoryList.filter(item => item.Category === category);
+    function removeItem(event) {
+      const item = event.target.textContent;
+      console.log("Removing item: " + item);
+      // Remove the item from the database
+      fetch('/api/remove-inventory-item', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Username: localStorage.getItem('username'),
+          Name: item,
+          Category: category
+        }),
+      }).then((response) => {
+        if (response.status === 200) {
+          console.log("Item removed successfully");
+          // Update the inventory list
+          getInventory().then((inventory) => {
+            console.log("Inventory list updated");
+            setInventoryList(inventory);
+            return;
+          });
+
+        } else {
+          console.log("Error removing item");
+        }
+      }
+      );
+    }
     
     return (
       <div>
@@ -189,7 +221,9 @@ function GetAllInventory() {
             </div>
             <ul>
               {categoryList.map((item) => (
-                <li key={item.Name}>{item.Name}</li>
+                <li key={item.Name}>
+                <a className="removeFromInventory" key={item.Name} onClick={removeItem}>{item.Name}</a>
+                </li>
               ))}
             </ul>
           </form>
@@ -228,6 +262,21 @@ function GetAllInventory() {
 }
 
 function Inventory() {
+  document.onkeydown = function(event) {
+    if (event.keyCode === 13) {  // 13 is the keyCode for the 'Enter' key
+      event.preventDefault();  // Prevent the default form submission
+        //submit the specific inventory item that is being added i.e the input field is not empty
+        //get all the add grocery buttons
+        const addGroceryButtons = document.querySelectorAll('.addGrocery');
+        for (let i = 0; i < addGroceryButtons.length; i++) {
+          //find the button that is currently open and has the input field filled
+          if (addGroceryButtons[i].style.left === '250px') {
+            addGroceryButtons[i].click();
+            break;
+          }
+        }
+    }
+  };
 
   return (
     

@@ -275,7 +275,7 @@ function GroceryList() {
             <input type="checkbox" id="item1" name="item1" value="item1"/>
             <span className = "checkmark"></span>
             <span className='itemName'>Loading...</span>
-            <a href="/Grocery-list/add"> add to Inventory</a>
+            <a href="#"> add to Inventory</a>
           </label>
         </form>
       </section>

@@ -805,6 +805,25 @@ th {
   margin-bottom: 10px;
 }
 
+.removeFromInventory:hover{
+  text-decoration: line-through;
+  cursor: pointer;
+}
+
+/* GROCERY LIST PAGE */
+.grocery{
+  display: flex;
+  border: solid 1px #ecb9c9b1;
+  background: #ecb9c9b1;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  h4{
+    padding-bottom: 10px;
+    border-bottom: solid 2px #000000;
+  }
+  margin-bottom: 10px;
+}
+
 /* RECIPE TAB */
 
 .recipe-tab-container {
