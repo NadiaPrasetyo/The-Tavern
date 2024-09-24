@@ -215,7 +215,6 @@ function GroceryList() {
 
     //get the specific item that the a is clicked on
     const item = event.target.parentNode.querySelector('.itemName').textContent;
-    console.log(item);
 
     const addToInventory = async (e) => {
       const response = await fetch('/api/add-to-inventory',{

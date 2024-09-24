@@ -80,9 +80,15 @@ function GetAllInventory() {
   
   const [groceryItemOpen, setGroceryItemOpen] = React.useState(false);
 
-  function addInventory(category) {
-    const groceryItem = document.querySelector('.addGroceryItem');
-    const button = document.querySelector('.addGrocery');
+  function addInventory(event, category) {
+    //get the source button
+    // <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add inventory item..."/>
+    //         <button className = "addGrocery" type='button' onClick={addInventory(category)}><IoAddCircle /></button><br/>
+    
+    const buttonClick = event.target;
+    const button = buttonClick.closest('.addGrocery');
+    const groceryItem = buttonClick.closest('.InventoryInputContainer').querySelector('.addGroceryItem');
+    
   
     if (!groceryItemOpen) {
       button.style.animation = 'moveRight 0.5s';
@@ -130,21 +136,20 @@ function GetAllInventory() {
     
     return (
       <div>
-      <section className='inventory'>
-      <form onkeydown="return event.key != 'Enter';">
-        <h4>{category}</h4>
-        <div>
-            <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add inventory item..."/>
-            <button className = "addGrocery" type='button' onClick={addInventory(category)}><IoAddCircle /></button><br/>
-        </div>
-        <ul>
-          {categoryList.map((item) => (
-            <li key={item.Name}>{item.Name}</li>
-          ))}
-        </ul>
-      </form>
-      </section>
-      
+        <section className='inventory'>
+          <form onKeyDown={(event) => event.key !== 'Enter'}>
+            <h4>{category}</h4>
+            <div className='InventoryInputContainer'>
+              <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add inventory item..." />
+              <button className="addGrocery" type='button' onClick={(event) => addInventory(event, category)}><IoAddCircle /></button><br />
+            </div>
+            <ul>
+              {categoryList.map((item) => (
+                <li key={item.Name}>{item.Name}</li>
+              ))}
+            </ul>
+          </form>
+        </section>
       </div>
     );
   }
