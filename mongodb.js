@@ -876,8 +876,10 @@ app.post('/api/get-inventory', async (req, res) => {
 
     // Find the inventory
     const inventory = await collection
-      .find({ Username: req.body.username })
+      .find({ Username: req.body.Username })
       .toArray();
+
+    console.log(inventory);
 
     // If everything is OK
     res.status(200).json({ inventory: inventory });
@@ -928,6 +930,32 @@ app.post('/api/update-menu', async (req, res) => {
 
     // If everything is OK
     res.status(200).json({ message: "Menu updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ADD INVENTORY ITEM
+app.post('/api/add-inventory-item', async (req, res) => {
+  try {
+    const db = client.db('The-tavern'); // replace with your DB name
+    const collection = db.collection('Inventory'); // your inventory collection
+
+    //check that the collection doesn't already have the item
+    const item = await collection.findOne({ Username: req.body.Username, Name: req.body.Name });
+
+     if (item!=null) {
+        // throw an error if the item already exists in the user's inventory
+       return res.status(409).json({ message: "Item already exist" });
+     }
+
+    // Add the item to the inventory
+    await collection.insertOne(req.body);
+    // console.log(req.body);
+
+    // If everything is OK
+    res.status(200).json({ message: "Item added to inventory" });
+
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
