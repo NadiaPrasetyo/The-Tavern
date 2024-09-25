@@ -1574,7 +1574,8 @@ th {
   display: flex;
   flex-direction: row;
   background-color: #dbc39a77;
-  padding: 15px 20px;
+  padding: 2vh 1.5vw;
+  max-width: 150px;
   width: 80%;
   font-size: 1rem;
   border: 3px solid #6653409c;
