@@ -771,6 +771,11 @@ th {
     border-bottom: solid 2px #000000;
   }
   margin-bottom: 10px;
+  .edit-icon{
+    margin-left: 5px;
+    position: relative;
+    top: 5px;
+  }
 }
 
 .addCategory{
@@ -824,6 +829,15 @@ th {
     border-bottom: solid 2px #000000;
   }
   margin-bottom: 10px;
+  .edit-icon{
+    margin-left: 5px;
+    position: relative;
+    top: 5px;
+  }
+
+  .checkmark{
+    top: 2px;
+  }
 }
 
 /* RECIPE TAB */

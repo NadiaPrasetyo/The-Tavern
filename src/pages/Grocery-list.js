@@ -3,6 +3,7 @@ import Sidebar from '../components/sidebar.js';
 import React from 'react';
 import ProfileBar from '../components/profilebar.js';
 import { IoAddCircle } from "react-icons/io5";
+import { AiOutlineEdit } from "react-icons/ai";
 
 
 function getGrocery(){
@@ -248,6 +249,7 @@ function GetAllGrocery() {
                   <input type="checkbox" id={item.Name} name={item.Name} value={item.Name}/>
                   <span className = "checkmark"></span>
                   <span className='itemName'>{item.Name}</span>
+                  <AiOutlineEdit className="edit-icon" />
                   <a onClick={addToInventory}> add to Inventory</a>
                 </label>
               ))}
