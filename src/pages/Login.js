@@ -7,7 +7,9 @@ import SignUp from '../components/SignUp.js';
 
 function Login() {
   // remove everything from localStorage
+  const isDarkMode = localStorage.getItem('isDarkMode');
   localStorage.clear();
+  localStorage.setItem('isDarkMode', isDarkMode);
 
   const [onRightSide, setOnRightSide] = useState(true);
 

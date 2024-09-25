@@ -1,18 +1,97 @@
 import '../App.css';
 import Sidebar from '../components/sidebar.js';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ProfileBar from '../components/profilebar.js';
 
 import { MdOutlineLightMode } from "react-icons/md";
 import { MdOutlineDarkMode } from "react-icons/md";
+import { VscTriangleDown } from "react-icons/vsc";
 
 
 function Preference() {
-  const [isDarkMode, setIsDarkMode] = React.useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [displayOption, setDisplayOptions] = useState(false);
+  const [selectedDay, setSelectedDay] = useState('Monday');
+  const [displayConfirm, setDisplayConfirm] = useState(false);
+  const [fontSize, setFontSize] = useState(16);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
+  }
+
+  const fetchPreference = async () => {
+    const username = localStorage.getItem('username');
+    const response = await fetch(`/api/get-preference?username=${encodeURIComponent(username)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    // if preference exists, set the preference
+    if (data.DarkMode) {
+      setIsDarkMode(data.DarkMode);
+    }
+    if (data.FirstDay) {
+      setSelectedDay(data.FirstDay);
+    }
+  }
+
+  const fetchData = async (method) => {
+    // not implemented yet
+    return;
+
+    const username = localStorage.getItem('username');
+    const response = await fetch(`/api/get-preference?username=${encodeURIComponent(username)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    if (method === 'excel') {
+      // download Grocery List as Excel
+
+      // download Inventory as Excel
+
+      // download Menu as Excel
+
+      // download Favorites as Excel
+    } else if (method === 'csv') {
+      // download Grocery List as CSV
+
+      // download Inventory as CSV
+
+      // download Menu as CSV
+
+      // download Favorites as CSV
+
+    }
+  }
+
+  const deleteAccount = async () => {
+    const username = localStorage.getItem('username');
+    const response = await fetch(`/api/delete-account?username=${encodeURIComponent(username)}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    if (data.success) {
+      // redirect to login page
+      window.location.href = '/login';
+    }
+  }
+
+  useEffect(() => {
+    fetchPreference();
+  }, []);
+
+  // redirect to /login
+  const logout = () => {
+    window.location.href = '/login';
   }
 
   return (
@@ -42,36 +121,47 @@ function Preference() {
         </div>
 
 
-        {/* Font size  USE SLIDER*/}
-        <div class="pref font-size">
+        {/* Font size  USE SLIDER */}
+        <div className="pref font-size">
           <h2>Font Size</h2>
-          <input type="range" min="1" max="100" value="50" class="slider" id="myRange"/>
+          <input 
+            type="range" 
+            min="1" 
+            max="100" 
+            value={fontSize} 
+            className="slider" 
+            id="myRange" 
+            onChange={(e) => setFontSize(e.target.value)}
+          />
+          <span className='font-size-text'>{fontSize}</span>
         </div>
 
-
         {/* Menu format for table */}
-        <div class="pref menu-format">
+        <div className="pref menu-format">
           <h2>Menu Format</h2>
           {/* which day is the first day */}
-          <div class="menu-format-day">
+          <div className="menu-format-day">
             <label for="first-day">First Day of the Week</label>
             {/* hoverable drop down */}
-            <div className='dropdown-container dropdown-bordered'>
-              <div class="dropdown-toggle hover-dropdown">
-                Monday
+              <div className="dropbtn" onMouseEnter={() => setDisplayOptions(true)} onMouseLeave={() => setDisplayOptions(false)} onClick={() => setDisplayOptions(!displayOption)} >
+                <div className='chosen'>{selectedDay}</div>
+                <VscTriangleDown className="triangle-down"/>
               </div>
-              <div className='dropdown-menu'>
-                <ul>
-                  <li><div className='day-option'>Monday</div></li>
-                  <li><div className='day-option'>Tuesday</div></li>
-                  <li><div className='day-option'>Wednesday</div></li>
-                  <li><div className='day-option'>Thursday</div></li>
-                  <li><div className='day-option'>Friday</div></li>
-                  <li><div className='day-option'>Saturday</div></li>
-                  <li><div className='day-option'>Sunday</div></li>
-                </ul>
-              </div>
-            </div>
+              { displayOption ? (
+                <div className='dropdown-menu' onMouseEnter={() => setDisplayOptions(true)} onMouseLeave={() => setDisplayOptions(false)}>
+                  <div className='background'>
+                    <div className='color-overlay'>
+                      <div className='day-option' onClick={() => setSelectedDay('Monday')}>Monday</div>
+                      <div className='day-option' onClick={() => setSelectedDay('Tuesday')}>Tuesday</div>
+                      <div className='day-option' onClick={() => setSelectedDay('Wednesday')}>Wednesday</div>
+                      <div className='day-option' onClick={() => setSelectedDay('Thursday')}>Thursday</div>
+                      <div className='day-option' onClick={() => setSelectedDay('Friday')}>Friday</div>
+                      <div className='day-option' onClick={() => setSelectedDay('Saturday')}>Saturday</div>
+                      <div className='day-option' onClick={() => setSelectedDay('Sunday')}>Sunday</div>
+                    </div>
+                  </div>
+                </div>
+              ) : null }
           </div>
         </div>
 
@@ -79,23 +169,38 @@ function Preference() {
         {/* Download data as excel or comma separated list */}
         <div class="pref download-data">
           <h2>Download Data</h2>
-          <button>Download as Excel</button>
-          <button>Download as CSV</button>
+          <button onClick={() => fetchData('excel')}>Download as Excel</button>
+          <button onClick={() => fetchData('csv')}>Download as CSV</button>
         </div>
 
         {/* Logout */}
         <div class="pref logout">
           <h2>Logout</h2>
-          <button>Logout</button>
+          <button onClick={() => logout()}>Logout</button>
         </div>
 
 
         {/* Delete account */}
         <div class="pref delete-account">
           <h2>Delete Account</h2>
-          <button className='delete-acc'>Delete Account</button>
+          <button className='delete-acc' onClick={() => setDisplayConfirm(true)}>Delete Account</button>
         </div>
       </main>
+
+      {/* Password Modal */}
+      {displayConfirm && (
+        <div className="modal">
+          <div className="modal-content delete-popup">
+            <h2>Delete Account</h2>
+            <p>This is irreversible change</p>
+
+            <div className="modal-buttons preference">
+              <button onClick={() => setDisplayConfirm(false)}>Cancel</button>
+              <button className='delete-acc' onClick={() => deleteAccount()}>Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
 
 
       <footer>
@@ -105,8 +210,5 @@ function Preference() {
     </div>
   );
 }
-
-
-
 
 export default Preference;
