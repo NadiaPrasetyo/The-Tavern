@@ -541,12 +541,11 @@ function QuickIngredient(){
 
 function WeekCalendar() {
   const firstDay = localStorage.getItem('firstDay');
+
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const daysArranged = days.slice(days.indexOf(firstDay)).concat(days.slice(0, days.indexOf(firstDay)));
   const daysShortArranged = daysArranged.map(day => day.slice(0, 1));
 
-  console.log(daysArranged);
-  console.log(daysShortArranged);
   // Get the dates of the week based on the firstDay
   const today = new Date();
   const day = today.getDay(); // 0 (Sunday) - 6 (Saturday)
@@ -558,7 +557,7 @@ function WeekCalendar() {
   if (firstDayIndex > day - 1) {
     weekStart.setDate(today.getDate() - (day + 6 - firstDayIndex));
   } else {
-    weekStart.setDate(today.getDate() - (day - firstDayIndex));
+    weekStart.setDate(today.getDate() - (day - 1 - firstDayIndex));
   }
 
   // Add ONLY the date numbers to the array

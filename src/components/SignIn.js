@@ -29,8 +29,6 @@ function SignIn() {
       localStorage.setItem("username", data.username);
       localStorage.setItem("name", data.name);
       localStorage.setItem("email", data.email);
-      // Redirect to the home page
-      window.location.href = '/home';
     } else {
       setMessage(data.message || 'Error logging in');
     }
@@ -53,6 +51,8 @@ function SignIn() {
     } else {
       localStorage.setItem('firstDay', 'Monday');
     }
+    // Redirect to the home page
+    window.location.href = '/home';
 
   };
 
