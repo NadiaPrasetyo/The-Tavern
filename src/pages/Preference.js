@@ -151,10 +151,9 @@ function Preference() {
   const updatePreference = async () => {
     const username = localStorage.getItem('username');
 
-    const preference = {
-      DarkMode: isDarkMode,
-      FirstDay: selectedDay,
-    };
+    const preference = {};
+    if (isDarkMode) preference.DarkMode = isDarkMode;
+    if (selectedDay !== 'Monday') preference.FirstDay = selectedDay;
 
     const response = await fetch('/api/update-preference', {
       method: 'POST',
