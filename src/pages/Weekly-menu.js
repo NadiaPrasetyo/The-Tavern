@@ -16,7 +16,11 @@ function Menu() {
   const [isInfoOpen, setIsInfoOpen] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [hasChanges, setHasChanges] = useState(false);
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const daysDefault = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const firstDay = localStorage.getItem('firstDay');
+  // arrange days based on first day of the week 
+  const days = daysDefault.slice(daysDefault.indexOf(firstDay)).concat(daysDefault.slice(0, daysDefault.indexOf(firstDay)));
+
   const [menu, setMenu] = useState({
     RecipeList: [],
     Monday: [],

@@ -66,8 +66,8 @@ app.post('/api/login', async (req, res) => {
 
     // console.log("hashedPassword: ", hashedPassword);
 
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('User'); // your users collection
+   
+    const collection = database.collection('User'); // your users collection
 
     // Find user by username
     const user = await collection.findOne({ username });
@@ -113,8 +113,8 @@ app.post('/api/register', async (req, res) => {
 
     // console.log("hashedPassword: ", hashedPassword);
 
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('User'); // your users collection
+   
+    const collection = database.collection('User'); // your users collection
 
     // Check if username already exists
     const user = await collection.findOne({ username });
@@ -149,8 +149,8 @@ app.post('/api/change-password', async (req, res) => {
   }
 
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('User'); // your users collection
+   
+    const collection = database.collection('User'); // your users collection
 
     // Find user by username
     const user = await collection.findOne({ username });
@@ -185,8 +185,8 @@ app.post('/api/update-user', async (req, res) => {
   const { username, name, email } = req.body;
 
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('User'); // your users collection
+   
+    const collection = database.collection('User'); // your users collection
 
     // Update the user in the database
     await collection.updateOne({ username }, { $set: { name, email } });
@@ -202,8 +202,8 @@ app.post('/api/update-user', async (req, res) => {
 // GET MENU TODAY
 app.post('/api/get-menu-today', async (req, res) => {
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('Menu'); // your menu collection
+   
+    const collection = database.collection('Menu'); // your menu collection
 
     // Find the menu for today
     //check day of the week
@@ -253,8 +253,8 @@ app.post('/api/get-menu-today', async (req, res) => {
 // GET 5 LATEST GROCERY LIST
 app.post('/api/get-5-last-grocery-list', async (req, res) => {
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('GroceryList'); // your grocery collection
+   
+    const collection = database.collection('GroceryList'); // your grocery collection
 
     // Find the 5 latest grocery list
     const grocery = await collection
@@ -275,8 +275,8 @@ app.post('/api/get-5-last-grocery-list', async (req, res) => {
 //ADD 1 item to grocery list
 app.post('/api/add-grocery-item', async (req, res) => {
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('GroceryList'); // your grocery collection
+   
+    const collection = database.collection('GroceryList'); // your grocery collection
 
     //check that the collection doesn't already have the item
     const item = await collection.findOne({ Username: req.body.Username, Name: req.body.Name });
@@ -299,8 +299,8 @@ app.post('/api/add-grocery-item', async (req, res) => {
 //ADD 1 item to inventory
 app.post('/api/add-to-inventory', async (req, res) => {
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('Inventory'); // your inventory collection
+   
+    const collection = database.collection('Inventory'); // your inventory collection
 
     //check that the collection doesn't already have the item
     const item = await collection.findOne({ Username: req.body.Username, Name: req.body.Name });
@@ -323,8 +323,8 @@ app.post('/api/add-to-inventory', async (req, res) => {
 //REMOVE 1 item from grocery list
 app.post('/api/remove-grocery-item', async (req, res) => {
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('GroceryList'); // your grocery collection
+   
+    const collection = database.collection('GroceryList'); // your grocery collection
 
     // Remove the item from the grocery list
     await collection.deleteOne(req.body);
@@ -341,8 +341,8 @@ app.post('/api/remove-grocery-item', async (req, res) => {
 //GET RANDOM RECIPE
 app.get('/api/get-random-recipe', async (req, res) => {
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('RecipeList'); // your recipe collection
+   
+    const collection = database.collection('RecipeList'); // your recipe collection
 
     // Find a random recipe
     const recipe = await collection.aggregate([{ $sample: { size: 1 } }]).toArray();
@@ -358,8 +358,8 @@ app.get('/api/get-random-recipe', async (req, res) => {
 //GET QUICK FRUITS
 app.post('/api/get-quick-fruits', async (req, res) => {
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('Inventory'); // your quick fruits collection
+   
+    const collection = database.collection('Inventory'); // your quick fruits collection
 
     // Find the quick fruits
     const fruits = await collection
@@ -377,8 +377,8 @@ app.post('/api/get-quick-fruits', async (req, res) => {
 //GET QUICK VEGETABLES
 app.post('/api/get-quick-vegetables', async (req, res) => {
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('Inventory'); // your quick vegetables collection
+   
+    const collection = database.collection('Inventory'); // your quick vegetables collection
 
     // Find the quick vegetables
     const vegetables = await collection
@@ -393,26 +393,6 @@ app.post('/api/get-quick-vegetables', async (req, res) => {
   }
 });
 
-//GET RECIPE BY NAME
-app.post('/api/find-recipe', async (req, res) => {
-  try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('RecipeList'); // your recipe collection
-
-    // Find the recipe by name
-    const recipe = await collection
-      .find({ Name: req.body.Name })
-      .toArray();
-
-    // If everything is OK
-    res.status(200).json({ recipe: recipe });
-
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-
 // POST RECIPES BY NAME AND FILTER
 app.post('/api/recipes', async (req, res) => {
   const { page = 1, limit = 10, search = '', includeT = [], excludeT = [], includeI = [], excludeI = [] } = req.body;
@@ -423,7 +403,7 @@ app.post('/api/recipes', async (req, res) => {
     const searchRegex = new RegExp(search, 'i'); // 'i' for case-insensitive
 
     // Build the query object with search and filters
-    const query = {
+    let query = {
       Name: { $regex: searchRegex }, // Search by name
     };
 
@@ -460,7 +440,7 @@ app.post('/api/recipes', async (req, res) => {
 
     // if there's no recipe found, try to search by tags
     if (length === 0) {
-      const query = {
+      query = {
         Tag: { $regex: searchRegex }, // Search by tag
       };
       if (andConditions.length > 0) {
@@ -470,7 +450,7 @@ app.post('/api/recipes', async (req, res) => {
       length = await Recipe.countDocuments(query); // Count filtered results
       // if there's no recipe found, try to search by ingredients
       if (length === 0) {
-        const query = {
+        query = {
           Ingredients: { $regex: searchRegex }, // Search by ingredients
         };
         if (andConditions.length > 0) {
@@ -528,8 +508,7 @@ app.post('/api/add-favorite-recipe', async (req, res) => {
   const { username, recipe, max_favourites } = req.body;
 
   try {
-    const db = client.db('The-tavern');
-    const collection = db.collection('Favourites'); // your favorite recipe collection
+    const collection = database.collection('Favourites'); // your favorite recipe collection
 
     //check that the collection doesn't already have the item
     const item = await collection.findOne({ Username: username, Name: recipe });
@@ -559,8 +538,8 @@ app.post('/api/add-favorite-recipe', async (req, res) => {
 app.delete('/api/remove-favorite-recipe', async (req, res) => {
   const { username, recipe } = req.body;
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('Favourites'); // your favorite recipe collection
+   
+    const collection = database.collection('Favourites'); // your favorite recipe collection
 
     // Check if the recipe exists
     const item = await collection.findOne({ Username: username, Name: recipe });
@@ -584,8 +563,8 @@ app.delete('/api/remove-favorite-recipe', async (req, res) => {
 app.get('/api/get-favorite-recipes', async (req, res) => {
   const { username } = req.query;
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('Favourites'); // your favorite recipe collection
+   
+    const collection = database.collection('Favourites'); // your favorite recipe collection
 
     // Find the favorite recipes
     const recipes = await collection
@@ -756,9 +735,9 @@ app.get('/api/get-menu', async (req, res) => {
   const { username } = req.query;
 
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('Menu'); // your menu collection
-    const recipeCollection = db.collection('RecipeList'); // your recipe collection
+   
+    const collection = database.collection('Menu'); // your menu collection
+    const recipeCollection = database.collection('RecipeList'); // your recipe collection
 
     // get the recipes names per day
     const [monday, tuesday, wednesday, thursday, friday, saturday, sunday] = await Promise.all([
@@ -871,8 +850,8 @@ app.get('/api/get-menu', async (req, res) => {
 // GET INVENTORY
 app.post('/api/get-inventory', async (req, res) => {
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('Inventory'); // your inventory collection
+   
+    const collection = database.collection('Inventory'); // your inventory collection
 
     // Find the inventory
     const inventory = await collection
@@ -894,8 +873,8 @@ app.post('/api/update-menu', async (req, res) => {
   const { username, menu } = req.body;
 
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('Menu'); // your menu collection
+   
+    const collection = database.collection('Menu'); // your menu collection
 
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -938,8 +917,8 @@ app.post('/api/update-menu', async (req, res) => {
 // ADD INVENTORY ITEM
 app.post('/api/add-inventory-item', async (req, res) => {
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('Inventory'); // your inventory collection
+   
+    const collection = database.collection('Inventory'); // your inventory collection
 
     //check that the collection doesn't already have the item
     const item = await collection.findOne({ Username: req.body.Username, Name: req.body.Name });
@@ -972,8 +951,8 @@ app.post('/api/add-inventory-item', async (req, res) => {
 // ADD CATEGORY
 app.post('/api/add-category', async (req, res) => {
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('Inventory'); // your inventory collection
+   
+    const collection = database.collection('Inventory'); // your inventory collection
 
     //check that the collection doesn't already have the item
     const item = await collection.findOne({ Username: req.body.Username, Category: req.body.Category });
@@ -996,8 +975,8 @@ app.post('/api/add-category', async (req, res) => {
 // REMOVE INVENTORY ITEM
 app.post('/api/remove-inventory-item', async (req, res) => {
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('Inventory'); // your inventory collection
+   
+    const collection = database.collection('Inventory'); // your inventory collection
 
     // Remove the item from the inventory
     await collection.deleteOne(req.body);
@@ -1014,8 +993,8 @@ app.post('/api/remove-inventory-item', async (req, res) => {
 //GET GROCERY LIST
 app.post('/api/get-grocery', async (req, res) => {
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('GroceryList'); // your grocery collection
+   
+    const collection = database.collection('GroceryList'); // your grocery collection
 
     // Find the grocery list
     const grocery = await collection
@@ -1033,8 +1012,8 @@ app.post('/api/get-grocery', async (req, res) => {
 // ADD GROCERY ITEM
 app.post('/api/add-grocery-item-list', async (req, res) => {
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('GroceryList'); // your inventory collection
+   
+    const collection = database.collection('GroceryList'); // your inventory collection
 
     //check that the collection doesn't already have the item
     const item = await collection.findOne({ Username: req.body.Username, Name: req.body.Name });
@@ -1067,8 +1046,8 @@ app.post('/api/add-grocery-item-list', async (req, res) => {
 // ADD GROCERY CATEGORY
 app.post('/api/add-grocery-category', async (req, res) => {
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('GroceryList'); // your inventory collection
+   
+    const collection = database.collection('GroceryList'); // your inventory collection
 
     //check that the collection doesn't already have the item
     const item = await collection.findOne({ Username: req.body.Username, Category: req.body.Category });
@@ -1091,8 +1070,8 @@ app.post('/api/add-grocery-category', async (req, res) => {
 // REMOVE GROCERY ITEM
 app.post('/api/remove-grocery-item', async (req, res) => {
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('GroceryList'); // your inventory collection
+   
+    const collection = database.collection('GroceryList'); // your inventory collection
 
     // Remove the item from the inventory
     await collection.deleteOne(req.body);
@@ -1110,8 +1089,8 @@ app.post('/api/remove-grocery-item', async (req, res) => {
 app.get('/api/get-preference', async (req, res) => {
   const { username } = req.query;
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('Preferences'); // your preferences collection
+   
+    const collection = database.collection('Preferences'); // your preferences collection
 
     // Find the preferences
     const preferences = await collection
@@ -1134,8 +1113,8 @@ app.post('/api/update-preference', async (req, res) => {
   const { username, preferences } = req.body;
 
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const collection = db.collection('Preferences'); // your preferences collection
+   
+    const collection = database.collection('Preferences'); // your preferences collection
 
     // Update the preferences in the database    
     await collection.updateOne({ Username: username }, { $set: preferences }, { upsert: true });
@@ -1151,11 +1130,11 @@ app.post('/api/update-preference', async (req, res) => {
 app.get('/api/get-data', async (req, res) => {
   const { username } = req.query;
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const GroceryList = db.collection('GroceryList'); // your grocery collection
-    const Inventory = db.collection('Inventory'); // your inventory collection
-    const Menu = db.collection('Menu'); // your menu collection
-    const Favorites = db.collection('Favourites'); // your favorite collection
+   
+    const GroceryList = database.collection('GroceryList'); // your grocery collection
+    const Inventory = database.collection('Inventory'); // your inventory collection
+    const Menu = database.collection('Menu'); // your menu collection
+    const Favorites = database.collection('Favourites'); // your favorite collection
 
     // Find the data
     const [grocery, inventory, menu, favorites] = await Promise.all([
@@ -1183,15 +1162,15 @@ app.get('/api/get-data', async (req, res) => {
 
 // DELETE ACCOUNT
 app.delete('/api/delete-account', async (req, res) => {
-  const { username } = req.query;
+  const { username } = req.body;
   try {
-    const db = client.db('The-tavern'); // replace with your DB name
-    const GroceryList = db.collection('GroceryList'); // your grocery collection
-    const Inventory = db.collection('Inventory'); // your inventory collection
-    const Menu = db.collection('Menu'); // your menu collection
-    const Favorites = db.collection('Favourites'); // your favorite collection
-    const Preferences = db.collection('Preferences'); // your preferences collection
-    const User = db.collection('Users'); // your user collection
+   
+    const GroceryList = database.collection('GroceryList'); // your grocery collection
+    const Inventory = database.collection('Inventory'); // your inventory collection
+    const Menu = database.collection('Menu'); // your menu collection
+    const Favorites = database.collection('Favourites'); // your favorite collection
+    const Preferences = database.collection('Preferences'); // your preferences collection
+    const User = database.collection('User'); // your users collection
 
     // Delete the data
     await Promise.all([
@@ -1199,8 +1178,8 @@ app.delete('/api/delete-account', async (req, res) => {
       Inventory.deleteMany({ Username: username }),
       Menu.deleteMany({ Username: username }),
       Favorites.deleteMany({ Username: username }),
-      Preferences.deleteOne({ Username: username }),
-      User.deleteOne({ Username: username })
+      Preferences.deleteMany({ Username: username }),
+      User.deleteOne({ username })
     ]);
 
     // If everything is OK

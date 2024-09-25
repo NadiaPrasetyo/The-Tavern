@@ -34,6 +34,9 @@ function SignUp() {
       localStorage.setItem("username", username);
       localStorage.setItem("name", name);
       localStorage.setItem("email", email);
+
+      localStorage.setItem('firstDay', 'Monday');
+      localStorage.setItem('isDarkMode', false);
       // Redirect to the home page
       window.location.href = '/home';
     } else {

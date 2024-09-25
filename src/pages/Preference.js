@@ -16,7 +16,7 @@ function Preference() {
   const [displayOption, setDisplayOptions] = useState(false);
   const [selectedDay, setSelectedDay] = useState('Monday');
   const [displayConfirm, setDisplayConfirm] = useState(false);
-  const [fontSize, setFontSize] = useState(16);
+  // const [fontSize, setFontSize] = useState(16);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -56,16 +56,20 @@ function Preference() {
 
   const downloadExcel = async (jsonArray, names) => {
     const workbook = new Workbook();
+    let count = 0;
 
     Object.keys(jsonArray).forEach((key, index) => {
-      const sheetName = names ? names[index] : `Sheet${index + 1}`;
-      const worksheet = workbook.addWorksheet(sheetName);
       const data = jsonArray[key];
-      const headers = Object.keys(data[0]);
-      worksheet.columns = headers.map(header => ({ header, key: header }));
-      data.forEach(item => {
-      worksheet.addRow(item);
-      });
+      if (data.length > 0) {
+        const sheetName = names ? names[index] : `Sheet${count + 1}`;
+        const worksheet = workbook.addWorksheet(sheetName);
+        const headers = Object.keys(data[0]);
+        worksheet.columns = headers.map(header => ({ header, key: header }));
+        data.forEach(item => {
+        worksheet.addRow(item);
+        });
+        count += 1;
+      }
     });
 
     // Generate Excel file buffer
@@ -77,9 +81,7 @@ function Preference() {
   };
 
   const downloadJSON = (data, name) => {
-    console.log(data);
     const jsonString = JSON.stringify(data, null, 2); // Convert data to JSON string with pretty formatting
-    console.log(jsonString);
     const blob = new Blob([jsonString], { type: 'application/json' });
     const fileName = name ? `${name}.json` : 'data.json';
     saveAs(blob, fileName);
@@ -104,39 +106,42 @@ function Preference() {
 
     } else if (method === 'csv') {
       // download Grocery List as CSV
-      downloadCSV(dataArray.grocery, 'groceryList');
+      if (dataArray.grocery.length > 0) downloadCSV(dataArray.grocery, 'groceryList');
       // download Inventory as CSV
-      downloadCSV(dataArray.inventory, 'inventory');
+      if (dataArray.inventory.length > 0) downloadCSV(dataArray.inventory, 'inventory');
       // download Menu as CSV
-      downloadCSV(dataArray.menu, 'menu');
+      if (dataArray.menu.length > 0) downloadCSV(dataArray.menu, 'menu');
       // download Favorites as CSV
-      downloadCSV(dataArray.favorites, 'favorites');
+      if (dataArray.favorites.length > 0) downloadCSV(dataArray.favorites, 'favorites');
 
     } else if (method === 'json') {
       // download Grocery List as JSON
-      downloadJSON(dataArray.grocery, 'groceryList');
+      if (dataArray.grocery.length > 0) downloadJSON(dataArray.grocery, 'groceryList');
       // download Inventory as JSON
-      downloadJSON(dataArray.inventory, 'inventory');
+      if (dataArray.inventory.length > 0) downloadJSON(dataArray.inventory, 'inventory');
       // download Menu as JSON
-      downloadJSON(dataArray.menu, 'menu');
+      if (dataArray.menu.length > 0) downloadJSON(dataArray.menu, 'menu');
       // download Favorites as JSON
-      downloadJSON(dataArray.favorites, 'favorites');
+      if (dataArray.favorites.length > 0) downloadJSON(dataArray.favorites, 'favorites');
     }
   }
 
   const deleteAccount = async () => {
-    const username = localStorage.getItem('username');
-    const response = await fetch(`/api/delete-account?username=${encodeURIComponent(username)}`, {
+    const response = await fetch('/api/delete-account', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        username: localStorage.getItem('username'),
+      }),
     });
     const data = await response.json();
-    if (data.success) {
-      // redirect to login page
-      window.location.href = '/login';
-    }
+    console.log(data.message);
+    
+    // redirect to login page
+    window.location.href = '/login';
+    
   }
 
   useEffect(() => {
@@ -146,13 +151,10 @@ function Preference() {
   const updatePreference = async () => {
     const username = localStorage.getItem('username');
 
-    const preference = {};
-    if (isDarkMode) {
-      preference.DarkMode = isDarkMode;
-    }
-    if (selectedDay !== 'Monday') {
-      preference.FirstDay = selectedDay;
-    }
+    const preference = {
+      DarkMode: isDarkMode,
+      FirstDay: selectedDay,
+    };
 
     const response = await fetch('/api/update-preference', {
       method: 'POST',
@@ -195,7 +197,7 @@ function Preference() {
   return (
     
     <div className="App">
-      <header class = "App-header">
+      <header className = "App-header">
         <ProfileBar/>
       </header>
 
@@ -206,11 +208,11 @@ function Preference() {
       <main className ="content setting-content">
         <h1>Preference</h1>
         {/* Dark Mode */}
-        <div class="pref dark-mode">
+        <div className="pref dark-mode">
           <h2>Dark Mode</h2>
           <input className="checkbox" type="checkbox" id="toggle"/>
           <div className={isDarkMode ? 'dark' : 'light'}>
-            <label className='toggle' for="toggle" onClick={toggleDarkMode}>
+            <label className='toggle' onClick={toggleDarkMode}>
               <MdOutlineLightMode className='icon light-mode'/>
               <MdOutlineDarkMode className='icon dark-mode'/>
               <span className="ball"></span>
@@ -220,7 +222,7 @@ function Preference() {
 
 
         {/* Font size  USE SLIDER */}
-        <div className="pref font-size">
+        {/* <div className="pref font-size">
           <h2>Font Size</h2>
           <input 
             type="range" 
@@ -232,14 +234,14 @@ function Preference() {
             onChange={(e) => setFontSize(e.target.value)}
           />
           <span className='font-size-text'>{fontSize}</span>
-        </div>
+        </div> */}
 
         {/* Menu format for table */}
         <div className="pref menu-format">
           <h2>Menu Format</h2>
           {/* which day is the first day */}
           <div className="menu-format-day">
-            <label for="first-day">First Day of the Week</label>
+            <label>First Day of the Week</label>
             {/* hoverable drop down */}
               <div className="dropbtn" onMouseEnter={() => setDisplayOptions(true)} onMouseLeave={() => setDisplayOptions(false)} onClick={() => setDisplayOptions(!displayOption)} >
                 <div className='chosen'>{selectedDay}</div>
@@ -265,7 +267,7 @@ function Preference() {
 
 
         {/* Download data as excel or comma separated list */}
-        <div class="pref download-data">
+        <div className="pref download-data">
           <h2>Download Data</h2>
           <button onClick={() => fetchData('excel')}>as Excel</button>
           <button onClick={() => fetchData('csv')}>as CSV</button>
@@ -273,14 +275,14 @@ function Preference() {
         </div>
 
         {/* Logout */}
-        <div class="pref logout">
+        <div className="pref logout">
           <h2>Logout</h2>
           <button onClick={() => logout()}>Logout</button>
         </div>
 
 
         {/* Delete account */}
-        <div class="pref delete-account">
+        <div className="pref delete-account">
           <h2>Delete Account</h2>
           <button className='delete-acc' onClick={() => setDisplayConfirm(true)}>Delete Account</button>
         </div>
@@ -291,7 +293,7 @@ function Preference() {
         <div className="modal">
           <div className="modal-content delete-popup">
             <h2>Delete Account</h2>
-            <p>This is irreversible change</p>
+            <p>This is an irreversible change</p>
 
             <div className="modal-buttons preference">
               <button onClick={() => setDisplayConfirm(false)}>Cancel</button>

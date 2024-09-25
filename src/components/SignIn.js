@@ -29,11 +29,31 @@ function SignIn() {
       localStorage.setItem("username", data.username);
       localStorage.setItem("name", data.name);
       localStorage.setItem("email", data.email);
-      // Redirect to the home page
-      window.location.href = '/home';
     } else {
       setMessage(data.message || 'Error logging in');
     }
+
+    // get preferences and add to local storage
+    const response2 = await fetch(`/api/get-preference?username=${encodeURIComponent(data.username)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data2 = await response2.json();
+    if (data2.preferences.DarkMode) {
+      localStorage.setItem('isDarkMode', data2.preferences.DarkMode);
+    } else {
+      localStorage.setItem('isDarkMode', false);
+    }
+    if (data2.preferences.FirstDay) {
+      localStorage.setItem('firstDay', data2.preferences.FirstDay);
+    } else {
+      localStorage.setItem('firstDay', 'Monday');
+    }
+    // Redirect to the home page
+    window.location.href = '/home';
+
   };
 
   return (
