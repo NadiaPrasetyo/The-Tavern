@@ -818,6 +818,18 @@ th {
   cursor: pointer;
 }
 
+.editItem{
+  color: black;
+  background-color: #ffffff00;
+  border: none;
+  font-size: calc(10px + 1vmin);
+
+  &:focus{
+    outline: none;
+  }
+}
+
+
 /* GROCERY LIST PAGE */
 .grocery{
   display: flex;

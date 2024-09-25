@@ -1,6 +1,6 @@
 import '../App.css';
 import Sidebar from '../components/sidebar.js';
-import React from 'react';
+import React, {useState} from 'react';
 import ProfileBar from '../components/profilebar.js';
 import { IoAddCircle } from "react-icons/io5";
 import { AiOutlineEdit } from "react-icons/ai";
@@ -178,11 +178,35 @@ function GetAllInventory() {
     }
   }
   
-  function GetEachCategoryList(category, inventoryList) {
+  function GetEachCategoryList({ category, inventoryList }) {
     const categoryList = inventoryList.filter(item => item.Category === category);
+  
+    // State to track input values and editable fields
+    const [inputValues, setInputValues] = useState(categoryList.map(item => ({ ...item })));
+    const [isEditable, setIsEditable] = useState(categoryList.map(() => ({ name: false, category: false })));
+  
+    // Handle input change
+    const handleInputChange = (e, index, field) => {
+      const { value } = e.target;
+      setInputValues(prevValues =>
+        prevValues.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+      );
+    };
+  
+      // Toggle edit mode for both Name and Category
+    const handleEditClick = (index) => {
+      setIsEditable(prevEditable =>
+        prevEditable.map((editable, i) =>
+          i === index ? !editable : editable
+        )
+      );
 
-    function handleEditClick(item) {
-    }
+      // Auto-save changes when toggling off the edit mode
+      if (isEditable[index]) {
+        console.log('Auto-saving changes for item at index', index, ':', inputValues[index]);
+        // Add your logic to persist the changes to the backend API
+      }
+    };
 
     function removeItem(event) {
       const item = event.target.textContent;
@@ -207,12 +231,15 @@ function GetAllInventory() {
             setInventoryList(inventory);
             return;
           });
-
         } else {
           console.log("Error removing item");
         }
-      }
-      );
+      });
+    }
+
+    // Return nothing if there are no items in the category list
+    if (!categoryList || categoryList.length === 0) {
+      return null;
     }
     
     return (
@@ -225,10 +252,39 @@ function GetAllInventory() {
               <button className="addGrocery" type='button' onClick={(event) => addInventory(event, category)}><IoAddCircle /></button><br />
             </div>
             <ul>
-              {categoryList.map((item) => (
-                <li key={item.Name}>
-                  <a className="removeFromInventory" key={item.Name} onClick={removeItem}>{item.Name}</a>
-                  <AiOutlineEdit className="edit-icon" onClick={handleEditClick(item.Name)}/>
+              {inputValues.map((item, index) => (
+                <li key={index}>
+
+                  {/* Remove item */}
+                  <a className="removeFromInventory" onClick={() => removeItem(item.Name)}>
+                    {item.Name}
+                  </a>
+
+                  {/* Name input */}
+                  <input
+                    type="text"
+                    className="editItem"
+                    value={item.Name}
+                    disabled={!isEditable[index]}
+                    onChange={(e) => handleInputChange(e, index, 'Name')}
+                  />
+
+                  
+
+                  {/* Edit icon to toggle both fields */}
+                  <AiOutlineEdit
+                    className="edit-icon"
+                    onClick={() => handleEditClick(index)}
+                  />
+
+                  {/* Category input */}
+                  <input
+                    type="text"
+                    className="editItem editCategory"
+                    value={item.Category}
+                    disabled={!isEditable[index]}
+                    onChange={(e) => handleInputChange(e, index, 'Category')}
+                  />
                 </li>
               ))}
             </ul>
@@ -254,7 +310,7 @@ function GetAllInventory() {
 
     <div>
       {categories.map((category) => (
-        GetEachCategoryList(category, inventoryList)
+        <GetEachCategoryList key={category} category={category} inventoryList={inventoryList} />
       ))}
       <button className='addCategory' type='button' onClick={(event)=> addCategory(event, false)}>Add Category</button>  
       <div className = "popupAddCategory">
