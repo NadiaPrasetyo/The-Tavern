@@ -389,8 +389,9 @@ footer{
   flex-direction: column;
   font-size: calc(10px + 1vmin);
   padding: 1px 0 1px 50px;
-  height: 100%;
+  height: calc(100vh - 35px);
   animation-fill-mode: both;
+  overflow: auto;
 }
 
 .setting-item {
@@ -1446,11 +1447,11 @@ th {
 }
 
 .delete-acc {
-  background-color: rgba(230, 14, 14, 0.738) !important;
+  background-color: #e60e0ebc !important;
 }
 
 .delete-acc:hover {
-  background-color: rgba(230, 14, 14, 0.938) !important;
+  background-color: #e60e0eef !important;
 }
 
 /* DARK MODE TOGGLE */
@@ -1534,109 +1535,96 @@ th {
 }
 
 /* Dropdown menu css */
-.dropdown-container {
-  position: relative;
-  max-width: 240px;
 
-  .dropdown-toggle {
-    color: #000000;
-    background-color: #ffffff;
-    font-size: 1rem;
-    padding: 10px 50px;
-    box-shadow: 0px 0px 4px -2px rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    position: relative;
-    transition: all ease-in-out 0.3s;
+.triangle-down {
+  transition: transform 0.3s ease;
+  margin:0 5px;
+}
 
-    label {
-      cursor: pointer;
-      width: 100%;
-    }
+.chosen {
+  flex: 1;
+}
 
-    &:hover,
-    &:active,
-    &:focus {
-      background-color: #79855b73;
-      color: white;
-    }
-  }
+.dropbtn {
+  display: flex;
+  flex-direction: row;
+  background-color: #dbc39a77;
+  padding: 15px 20px;
+  width: 80%;
+  font-size: 1rem;
+  border: 3px solid #6653409c;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
 
-  .dropdown-menu {
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: 0px 0px 4px -2px rgba(0, 0, 0, 0.5);
-    margin-top: 17px;
-    position: absolute;
-    left: 0;
-    top: 100%;
-    display: none;
-    background-color: #ffffff;
-    z-index: 10;
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #79855b73;
+  border: 3px solid transparent;
+  color: white;
 
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      overflow: hidden;
-      border-radius: 10px;
-      z-index: 10;
-    }
-
-    .day-option {
-      text-decoration: none;
-      display: block;
-      color: #000000;
-      font-size: 15px;
-      padding: 16px 20px;
-      font-weight: 600;
-      box-shadow: 0px 0px 4px -2px rgba(0, 0, 0, 0.5);
-      transition: all ease-in-out 0.3s;
-
-      &:hover,
-      &:active,
-      &:focus {
-        background-color: #79855b73;
-        color: #ffffff;
-      }
-    }
+  .triangle-down {
+    transform: rotate(180deg);
   }
 }
 
-.dropdown-bordered {
-  .dropdown-toggle {
-    border: 2px solid #000000;
-    border-radius: 10px;
+.dropdown-menu {
+  border-radius: 10px;
+  position: absolute;
+  z-index: 1;
+  display: block;
+  width: 200px;
+  transition: all 0.3s ease;
+  transform: translate(50%, 60%);
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-    &:hover,
-    &:active,
-    &:focus {
-      background-color: #79855b73;
-      color: #ffffff;
-      border-color: transparent;
-    }
+.color-overlay {
+  background-color: #dbc39a77;
+}
+
+.day-option {
+  padding: 10px;
+  cursor: pointer;
+  box-shadow: 0px 0px 4px -2px rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s ease;
+}
+
+.day-option:hover {
+  background-color: #79855b73;
+}
+
+.preference {
+  justify-content: end;
+
+  button {
+    margin: 0 0 0 5px;
   }
+}
 
-  .dropdown-menu{
-    border: 2px solid #000000;
-    border-radius: 10px;
-
-    &::before{
-      border-color: #000000 ;      
-    }    
-
-    .day-option{
-      box-shadow: none;
-      border-bottom: 2px solid #000000;
-    }
-
-    li{
-      &:last-child{
-        .day-option{
-          border-bottom: 0;
-        }
-      }
-    }
+.delete-popup {
+  background-color: #fffbf6;
+  /* border: 3px solid #e60e0ebc; */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  
+  
+  h2, p {
+    margin: 0 0 10px;
+    padding: 10px 5px;
+    text-align: justify;
+    border-bottom: 2px solid grey;
   }
+}
+
+.slider {
+  accent-color: #6653409c;
+  
+}
+
+.font-size-text {
+  justify-self: center;
+  text-align: center;
+  align-self: center;
+  width: 3vw;
 }
