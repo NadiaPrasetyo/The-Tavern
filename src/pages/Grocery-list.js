@@ -179,35 +179,58 @@ function GetAllGrocery() {
   
   function GetEachCategoryList(category, groceryList) {
     const categoryList = groceryList.filter(item => item.Category === category);
-    function removeItem(event) {
-      const item = event.target.textContent;
-      console.log("Removing item: " + item);
-      // Remove the item from the database
-      fetch('/api/remove-grocery-item', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          Username: localStorage.getItem('username'),
-          Name: item,
-          Category: category
-        }),
-      }).then((response) => {
-        if (response.status === 200) {
-          console.log("Item removed successfully");
+    function addToInventory(event) {
+      // Add the specified grocery item to the inventory and remove it from the grocery list
+  
+      //get the specific item that the a is clicked on
+      const item = event.target.parentNode.querySelector('.itemName').textContent;
+  
+      const addToInventory = async (e) => {
+        const response = await fetch('/api/add-to-inventory',{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            Username: localStorage.getItem('username'),
+            Name: item,
+            Category: 'Inventory'//default category
+          }),
+        });
+  
+        if (response.status === 200 || response.status === 409) {
+          console.log("Grocery item added to inventory");
+  
+          // Remove the grocery item from the list
+          const response2 = await fetch('/api/remove-grocery-item',{
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              Username: localStorage.getItem('username'),
+              Name: item,
+            }),
+          });
           // Update the grocery list
-          getGrocery().then((grocery) => {
-            console.log("Grocery list updated");
-            setGroceryList(grocery);
+  
+          if (response2.status === 200) {
+            console.log("Grocery item removed from list");
+            getGrocery().then((grocery) => {
+              console.log("Grocery list updated");
+              setGroceryList(grocery);
             return;
           });
-
+          } else {
+            console.log("Error removing grocery item from list");
+          }
+        
         } else {
-          console.log("Error removing item");
+          console.log("Error adding grocery item to inventory");
         }
       }
-      );
+      addToInventory();
+  
     }
     
     return (
@@ -220,12 +243,15 @@ function GetAllGrocery() {
               <button className="addGrocery" type='button' onClick={(event) => addGrocery(event, category)}><IoAddCircle /></button><br />
             </div>
             <ul>
-              {categoryList.map((item) => (
-                <li key={item.Name}>
-                <a className="removeFromInventory" key={item.Name} onClick={removeItem}>{item.Name}</a>
-                </li>
+              {categoryList.map((item, index) => (
+                <label key={item} className = "groceryItem">
+                  <input type="checkbox" id={item.Name} name={item.Name} value={item.Name}/>
+                  <span className = "checkmark"></span>
+                  <span className='itemName'>{item.Name}</span>
+                  <a onClick={addToInventory}> add to Inventory</a>
+                </label>
               ))}
-            </ul>
+          </ul>
           </form>
         </section>
       </div>
