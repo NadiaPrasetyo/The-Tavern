@@ -245,13 +245,15 @@ function GetAllGrocery() {
             </div>
             <ul>
               {categoryList.map((item, index) => (
+                <div>
                 <label key={item} className = "groceryItem">
                   <input type="checkbox" id={item.Name} name={item.Name} value={item.Name}/>
                   <span className = "checkmark"></span>
                   <span className='itemName'>{item.Name}</span>
-                  <AiOutlineEdit className="edit-icon" />
                   <a onClick={addToInventory}> add to Inventory</a>
                 </label>
+                  <AiOutlineEdit className="edit-icon" />
+                </div>
               ))}
           </ul>
           </form>

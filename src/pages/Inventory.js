@@ -180,6 +180,10 @@ function GetAllInventory() {
   
   function GetEachCategoryList(category, inventoryList) {
     const categoryList = inventoryList.filter(item => item.Category === category);
+
+    function handleEditClick(item) {
+    }
+
     function removeItem(event) {
       const item = event.target.textContent;
       console.log("Removing item: " + item);
@@ -223,8 +227,8 @@ function GetAllInventory() {
             <ul>
               {categoryList.map((item) => (
                 <li key={item.Name}>
-                <a className="removeFromInventory" key={item.Name} onClick={removeItem}>{item.Name}</a>
-                <AiOutlineEdit className="edit-icon" />
+                  <a className="removeFromInventory" key={item.Name} onClick={removeItem}>{item.Name}</a>
+                  <AiOutlineEdit className="edit-icon" onClick={handleEditClick(item.Name)}/>
                 </li>
               ))}
             </ul>
