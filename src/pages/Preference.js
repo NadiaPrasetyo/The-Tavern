@@ -2,6 +2,8 @@ import '../App.css';
 import Sidebar from '../components/sidebar.js';
 
 import React, { useState, useEffect } from 'react';
+import { Workbook } from 'exceljs';
+import { saveAs } from 'file-saver'; // To save the file locally
 import ProfileBar from '../components/profilebar.js';
 
 import { MdOutlineLightMode } from "react-icons/md";
@@ -30,43 +32,95 @@ function Preference() {
     });
     const data = await response.json();
     // if preference exists, set the preference
-    if (data.DarkMode) {
-      setIsDarkMode(data.DarkMode);
+    if (data.preferences.DarkMode) {
+      setIsDarkMode(data.preferences.DarkMode);
     }
-    if (data.FirstDay) {
-      setSelectedDay(data.FirstDay);
+    if (data.preferences.FirstDay) {
+      setSelectedDay(data.preferences.FirstDay);
     }
   }
 
-  const fetchData = async (method) => {
-    // not implemented yet
-    return;
+  // Convert JSON data to CSV format
+  const convertToCSV = (data) => {
+    const headers = Object.keys(data[0]).join(',');
+    const rows = data.map(row => Object.values(row).join(',')).join('\n');
+    return `${headers}\n${rows}`;
+  };
 
+  const downloadCSV = (json, name) => {
+    const csv = convertToCSV(json);
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const fileName = name ? `${name}.csv` : 'data.csv';
+    saveAs(blob, fileName);  // Use saveAs to trigger download
+  };
+
+  const downloadExcel = async (jsonArray, names) => {
+    const workbook = new Workbook();
+
+    Object.keys(jsonArray).forEach((key, index) => {
+      const sheetName = names ? names[index] : `Sheet${index + 1}`;
+      const worksheet = workbook.addWorksheet(sheetName);
+      const data = jsonArray[key];
+      const headers = Object.keys(data[0]);
+      worksheet.columns = headers.map(header => ({ header, key: header }));
+      data.forEach(item => {
+      worksheet.addRow(item);
+      });
+    });
+
+    // Generate Excel file buffer
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    // Save the Excel file
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    saveAs(blob, 'data.xlsx');
+  };
+
+  const downloadJSON = (data, name) => {
+    console.log(data);
+    const jsonString = JSON.stringify(data, null, 2); // Convert data to JSON string with pretty formatting
+    console.log(jsonString);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const fileName = name ? `${name}.json` : 'data.json';
+    saveAs(blob, fileName);
+  };
+
+  const fetchData = async (method) => {
     const username = localStorage.getItem('username');
-    const response = await fetch(`/api/get-preference?username=${encodeURIComponent(username)}`, {
+    const response = await fetch(`/api/get-data?username=${encodeURIComponent(username)}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     });
     const data = await response.json();
+
+    console.log(data);
+    const dataArray = data.data;
+
     if (method === 'excel') {
-      // download Grocery List as Excel
+      // download data as Excel
+      downloadExcel(dataArray, ['groceryList', 'inventory', 'menu', 'favorites']);
 
-      // download Inventory as Excel
-
-      // download Menu as Excel
-
-      // download Favorites as Excel
     } else if (method === 'csv') {
       // download Grocery List as CSV
-
+      downloadCSV(dataArray.grocery, 'groceryList');
       // download Inventory as CSV
-
+      downloadCSV(dataArray.inventory, 'inventory');
       // download Menu as CSV
-
+      downloadCSV(dataArray.menu, 'menu');
       // download Favorites as CSV
+      downloadCSV(dataArray.favorites, 'favorites');
 
+    } else if (method === 'json') {
+      // download Grocery List as JSON
+      downloadJSON(dataArray.grocery, 'groceryList');
+      // download Inventory as JSON
+      downloadJSON(dataArray.inventory, 'inventory');
+      // download Menu as JSON
+      downloadJSON(dataArray.menu, 'menu');
+      // download Favorites as JSON
+      downloadJSON(dataArray.favorites, 'favorites');
     }
   }
 
@@ -88,6 +142,50 @@ function Preference() {
   useEffect(() => {
     fetchPreference();
   }, []);
+
+  const updatePreference = async () => {
+    const username = localStorage.getItem('username');
+
+    const preference = {};
+    if (isDarkMode) {
+      preference.DarkMode = isDarkMode;
+    }
+    if (selectedDay !== 'Monday') {
+      preference.FirstDay = selectedDay;
+    }
+
+    const response = await fetch('/api/update-preference', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: username,
+        preferences: preference,
+      }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+  };
+
+  useEffect(() => {
+    const savePreference = () => {
+      if (isDarkMode || selectedDay !== 'Monday') {
+        updatePreference();
+        localStorage.setItem('isDarkMode', isDarkMode);
+        localStorage.setItem('firstDay', selectedDay);
+      }
+    };
+
+    window.addEventListener('beforeunload', savePreference);
+    return () => {
+      window.removeEventListener('beforeunload', savePreference);
+    }
+  }, [isDarkMode, selectedDay]);
+
+
+  // before unload, save the preference
 
   // redirect to /login
   const logout = () => {
@@ -169,8 +267,9 @@ function Preference() {
         {/* Download data as excel or comma separated list */}
         <div class="pref download-data">
           <h2>Download Data</h2>
-          <button onClick={() => fetchData('excel')}>Download as Excel</button>
-          <button onClick={() => fetchData('csv')}>Download as CSV</button>
+          <button onClick={() => fetchData('excel')}>as Excel</button>
+          <button onClick={() => fetchData('csv')}>as CSV</button>
+          <button onClick={() => fetchData('json')}>as JSON</button>
         </div>
 
         {/* Logout */}

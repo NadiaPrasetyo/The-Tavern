@@ -1106,6 +1106,110 @@ app.post('/api/remove-grocery-item', async (req, res) => {
   }
 });
 
+//  GET PREFERENCES
+app.get('/api/get-preference', async (req, res) => {
+  const { username } = req.query;
+  try {
+    const db = client.db('The-tavern'); // replace with your DB name
+    const collection = db.collection('Preferences'); // your preferences collection
+
+    // Find the preferences
+    const preferences = await collection
+      .findOne({ Username: username });
+
+    if (!preferences) {
+      return res.status(200).json({ preferences: {}, message: "Use default preference" });
+    }
+
+    // If everything is OK
+    res.status(200).json({ preferences: preferences });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// UPDATE PREFERENCES
+app.post('/api/update-preference', async (req, res) => {
+  const { username, preferences } = req.body;
+
+  try {
+    const db = client.db('The-tavern'); // replace with your DB name
+    const collection = db.collection('Preferences'); // your preferences collection
+
+    // Update the preferences in the database    
+    await collection.updateOne({ Username: username }, { $set: preferences }, { upsert: true });
+    // If everything is OK
+    res.status(200).json({ message: "Preferences updated successfully" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// GET DATA PER USER
+app.get('/api/get-data', async (req, res) => {
+  const { username } = req.query;
+  try {
+    const db = client.db('The-tavern'); // replace with your DB name
+    const GroceryList = db.collection('GroceryList'); // your grocery collection
+    const Inventory = db.collection('Inventory'); // your inventory collection
+    const Menu = db.collection('Menu'); // your menu collection
+    const Favorites = db.collection('Favourites'); // your favorite collection
+
+    // Find the data
+    const [grocery, inventory, menu, favorites] = await Promise.all([
+      GroceryList.find({ Username: username }).toArray(),
+      Inventory.find({ Username: username }).toArray(),
+      Menu.find({ Username: username }).toArray(),
+      Favorites.find({ Username: username }).toArray()
+    ]);
+
+    // filter the data (remove Username)
+    const data = {
+      grocery: grocery.map(item => ({ Name: item.Name, Category: item.Category })),
+      inventory: inventory.map(item => ({ Name: item.Name, Category: item.Category })),
+      menu: menu.map(item => ({ Day: item.Day, Name: item.Name })),
+      favorites: favorites.map(item => ({ Name: item.Name }))
+    };
+
+    // If everything is OK
+    res.status(200).json({ data: data });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// DELETE ACCOUNT
+app.delete('/api/delete-account', async (req, res) => {
+  const { username } = req.query;
+  try {
+    const db = client.db('The-tavern'); // replace with your DB name
+    const GroceryList = db.collection('GroceryList'); // your grocery collection
+    const Inventory = db.collection('Inventory'); // your inventory collection
+    const Menu = db.collection('Menu'); // your menu collection
+    const Favorites = db.collection('Favourites'); // your favorite collection
+    const Preferences = db.collection('Preferences'); // your preferences collection
+    const User = db.collection('Users'); // your user collection
+
+    // Delete the data
+    await Promise.all([
+      GroceryList.deleteMany({ Username: username }),
+      Inventory.deleteMany({ Username: username }),
+      Menu.deleteMany({ Username: username }),
+      Favorites.deleteMany({ Username: username }),
+      Preferences.deleteOne({ Username: username }),
+      User.deleteOne({ Username: username })
+    ]);
+
+    // If everything is OK
+    res.status(200).json({ message: "Account deleted successfully" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 // Start the server
 app.listen(port, () => {
