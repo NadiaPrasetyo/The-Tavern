@@ -3,6 +3,7 @@ import Sidebar from '../components/sidebar.js';
 import React from 'react';
 import ProfileBar from '../components/profilebar.js';
 import { IoAddCircle } from "react-icons/io5";
+import { AiOutlineEdit } from "react-icons/ai";
 
 
 function getInventory(){
@@ -223,6 +224,7 @@ function GetAllInventory() {
               {categoryList.map((item) => (
                 <li key={item.Name}>
                 <a className="removeFromInventory" key={item.Name} onClick={removeItem}>{item.Name}</a>
+                <AiOutlineEdit className="edit-icon" />
                 </li>
               ))}
             </ul>
