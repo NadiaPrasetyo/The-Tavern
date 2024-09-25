@@ -220,7 +220,7 @@ function Preference() {
 
 
         {/* Font size  USE SLIDER */}
-        <div className="pref font-size">
+        {/* <div className="pref font-size">
           <h2>Font Size</h2>
           <input 
             type="range" 
@@ -232,7 +232,7 @@ function Preference() {
             onChange={(e) => setFontSize(e.target.value)}
           />
           <span className='font-size-text'>{fontSize}</span>
-        </div>
+        </div> */}
 
         {/* Menu format for table */}
         <div className="pref menu-format">

@@ -540,23 +540,39 @@ function QuickIngredient(){
 }
 
 function WeekCalendar() {
-  //get the dates of the week
-  const today = new Date();
-  const day = today.getDay();
-  const weekStart = new Date(today);
-  weekStart.setDate(today.getDate() - day + 1);
+  const firstDay = localStorage.getItem('firstDay');
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const daysArranged = days.slice(days.indexOf(firstDay)).concat(days.slice(0, days.indexOf(firstDay)));
+  const daysShortArranged = daysArranged.map(day => day.slice(0, 1));
 
-  //add ONLY the date numbers to the array
+  console.log(daysArranged);
+  console.log(daysShortArranged);
+  // Get the dates of the week based on the firstDay
+  const today = new Date();
+  const day = today.getDay(); // 0 (Sunday) - 6 (Saturday)
+  const firstDayIndex = days.indexOf(firstDay);
+  const weekStart = new Date(today);
+  weekStart.setDate(today.getDate() - ((day + 6) % 7) + firstDayIndex);
+
+  // Adjust if the first day is after today (so we look at the previous week's first day)
+  if (firstDayIndex > day - 1) {
+    weekStart.setDate(today.getDate() - (day + 6 - firstDayIndex));
+  } else {
+    weekStart.setDate(today.getDate() - (day - firstDayIndex));
+  }
+
+  // Add ONLY the date numbers to the array
   const dates = [];
   for (let i = 0; i < 7; i++) {
     const date = new Date(weekStart);
     date.setDate(weekStart.getDate() + i);
     dates.push(date);
   }
-
   function trimDate(index, date) {
-    //if today, change the colour to a different colour
-    if (index === day - 1) {
+    // Calculate the correct day index based on the first day of the week
+    const todayIndex = (day + 6 - firstDayIndex) % 7;
+    // If today, change the color to a different color
+    if (index === todayIndex) {
       return <span style={{background: ' #79855b73', borderRadius: '20px', paddingLeft: '3px', paddingRight: '3px'}}>{date.toDateString().slice(8, 10)}</span>;
     }
     return date.toDateString().slice(8, 10);
@@ -566,13 +582,9 @@ function WeekCalendar() {
     <section className='weekCalendar'>
       <table>
         <tr>
-          <th>M</th>
-          <th>T</th>
-          <th>W</th>
-          <th>T</th>
-          <th>F</th>
-          <th>S</th>
-          <th>S</th>
+          {daysShortArranged.map((day, index) => (
+            <th key={index}>{day}</th>
+          ))}
         </tr>
         <tbody>
           <tr>
