@@ -86,7 +86,7 @@
 
 /*Light Mode */
 body{
-  --background-color: #ffffff;
+  --background-color: var(--color-offwhite);
   --text-color: #000000;
 }
 
@@ -109,7 +109,7 @@ body {
 * {
   font-family: "Hammersmith One", sans-serif;
   a{
-    color: black;
+    color: var(--text-color);
     text-decoration: none;
   }
 }
