@@ -473,7 +473,7 @@ const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag }) => {
   }, [isVisibleRecPopUp]);
 
   return (
-    <div className={`recipe-tab-container ${isOpen ? "open" : ""}`} ref={containerRef}>
+    <div className={`recipe-tab-container ${isOpen ? "recipe-open" : ""}`} ref={containerRef}>
       {/* Book content area */}
       <div className='book-container background' onClick={toggleBook}>
         <div className="book-container" onClick={toggleBook}>
