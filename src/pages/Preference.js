@@ -7,6 +7,7 @@ import { saveAs } from 'file-saver'; // To save the file locally
 import ProfileBar from '../components/profilebar.js';
 
 import { VscTriangleDown } from "react-icons/vsc";
+import { isDarkMode } from '../index.js';
 
 
 function Preference() {
@@ -308,3 +309,5 @@ function Preference() {
 }
 
 export default Preference;
+
+export {isDarkMode};

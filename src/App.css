@@ -1,10 +1,92 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap');
 
+:root {
+
+  /* Colour Browns */
+  --color-brown-light: #7d664f9c;
+  --color-brown-medium: #4d3c2a9c;
+  --color-brown-hover: #43372b9c;
+  --color-brown-light-transparent: #dbc39a77;
+  --color-brown-hover2: #5846329c;
+  --color-brown-medium2: #6653409c;
+  --color-brown-dark: #5e4d3a;
+  --color-brown-light2: #a6815cad; /* Tag background color */
+  --color-brown-medium3: #a6815c; /* Scroll thumb color */
+  --color-brown-dark2: #8d664a; /* Scroll thumb hover color */
+  --color-brown-medium4: #7d664f; /* Preference button background */
+  --color-brown-dark3: #665340; /* Preference button hover background */
+  --color-brown-dark-alt: #4c3b2b9c; /* Dark mode toggle background (Approx) */
+  --color-brown-hover3: #634c319c;
+  --color-button-hover: #65411eb1;
+
+  /* Green colours */
+  --color-green-light: #bec6a0;
+  --color-green-hover: #5e7d4f9c;
+  --color-green-muted: #708871;
+  --color-green-medium: #9fac7f;
+  --color-green-light2: #799f73a8; /* Ingredient background color */
+  --color-green-checkbox: #6fac6a93;
+  --color-green-verylight: #e0ecbca0;
+  --color-green-sidebar: #79855b73;
+  --color-yellow-green: #f7ffdaa8; /* Scroll track gradient color */
+  --color-green-muted: #9baa74c6; /* No items background */
+
+  /*Beige colours */
+  --color-beige-light: #98a567a0;
+  --color-beige-medium: #dab378a7; /* Tag item border */
+  --color-beige-light3: #ead9bbbe; /* Dark mode toggle ball color (Approx) */
+
+  /* Blue colours */
+  --color-blue-link: #1250c185;
+  --color-blue-light-transparent: #badce9b9;
+  --color-teal-light: #b8e2edb1; /* Include item background */
+  --color-teal-hover: #81bdc9a8; /* Include item hover background */
+  --color-teal-blue: #88b9c3a8;
+  --color-teal-bluer: #85bac59c;
+  --color-cyan-light: #bfe6f0bc; /* Included item background */
+
+  /*Purple colours  */
+  --color-purple-light: #d9b0dda4; /* Menu column background (Approx) */
+  --color-purple-hover: #cc75d797; /* Menu recipe hover background (Approx) */
+  --color-lavender-medium: #c090d2bb; /* Ingredient item border */
+  --color-lavender-light2: #e8c8f4bb; /* Ingredient item background */
+  --color-lavender-light: #e3c1efa4; /* Tags info background */
+
+
+  /*Yellow colours */
+  --color-yellow-light: #d7e1b2bd; /* Recipe info content background */
+  --color-yellow-bright: #f6f099a7; /* Tag item background */
+
+  /*red colours */
+  --color-red-light: #e60e0ebc; /* Delete account background (Approx) */
+  --color-red-light2: #e60e0eef; /* Delete account background (Approx) */
+
+  /*Grey colours */
+  --color-grey-light: #e7e0d8;
+  --color-offwhite: #fffbf6;
+  --color-transparent: #00000000;
+  --color-shadow-light: rgba(0, 0, 0, 0.1);
+  --color-shadow-med: rgba(0, 0, 0, 0.5); /* Semi-transparent black for overlay */
+  --color-popup-border: #ccc;
+  --color-popup-arrow: #f9f9f9;
+  --color-footer-bg: #c2c7b028;
+  --color-border-focus: #2f20129c;
+  --color-border-focus: #5f7a60b3; /* No items border color */
+
+  /* Pink colours */
+  --color-pink-verylight: #edc6d5c7;
+  --color-pink-lightish: #ecb9c9b1;
+  --color-pink-light2: #e5b3c7d4;
+  --color-pink-medium: #d79fde97;
+  --color-pink-dark: #d6a8bbcf;
+  --color-pink-light: #f1cbdac2; /* Excluded item background */
+  --color-pink-hover: #ecb3c9d4; /* Exclude item hover background */
+}
 * {
   font-family: "Hammersmith One", sans-serif;
   a{
-    color: #000;
+    color: black;
     text-decoration: none;
   }
 }
@@ -26,18 +108,18 @@
   }
   .menuIcon{
     border: none;
-    background-color: #7d664f9c;
+    background-color: var(--color-brown-light);
     cursor: pointer;
   }
 
   .menuIcon:hover{
-    background-color: #4d3c2a9c;
+    background-color:  var(--color-brown-medium);
   }
 }
 
 .menuBar{
   position: absolute;
-  background-color: #bec6a0;
+  background-color: var(--color-green-light);
   width: 100px;
   height: 65px;
   text-align: center;
@@ -58,7 +140,7 @@
   }
 
   a:hover{
-    background-color: #5e7d4f9c;
+    background-color: var(--color-green-hover);
   }
 }
 
@@ -81,7 +163,7 @@
   display: block;
   top: 0;
   left: 0;
-  background-color: #98a567a0;
+  background-color: var(--color-beige-light);
   margin-top: auto;
   font-size: calc(10px + 1vmin);
   /* animation: open 0.5s; */
@@ -92,8 +174,8 @@
   }
 
   .sidebar > nav h1 {
-    background: #7d664f9c;
-    color: #fff;
+    background: var(--color-brown-light);
+    color: white;
     font-size: 1.5em;
     margin: 0;
     padding: 0.85em 0;
@@ -120,7 +202,7 @@
     }
 
       .sidebar > nav ul li a.active {
-        background: #79855b73;
+        background: var(--color-green-sidebar);
       }
 
 .closed{
@@ -152,9 +234,9 @@
   left: 100%;
   width: 20px;
   height: 30px;
-  background-color: #7d664f9c;
+  background-color: var(--color-brown-light);
   border-radius: 0 10px 10px 0;
-  border: 1px solid #ffffff00;
+  border: 1px solid var(--color-transparent);
   cursor: pointer;
 }
 
@@ -240,7 +322,7 @@ footer{
   /* disable display for now: nothing in it */
   display: none ;
   bottom: 0;
-  background-color: #c2c7b028;
+  background-color: var(--color-footer-bg);
   padding: 1px;
   text-align: center;
 }
@@ -277,17 +359,17 @@ footer{
 }
 
 #SignIn-component, #SignUp-component{
-  background-color: #bec6a0;
+  background-color: var(--color-green-light);
   display: flex;
   justify-content: center;
   padding-top: 10%;
-  box-shadow: 0 0 10px 0 #0000001a;
+  box-shadow: 0 0 10px 0 --color-shadow-light;
   width: 100%;
 }
 
 .form-title{
   cursor: default;
-  border-bottom: 2px dashed #000;
+  border-bottom: 2px dashed black;
 }
 
 .login-form li p{
@@ -318,7 +400,7 @@ footer{
 .login-form input:focus, .modal input:focus {
   /* Additional highlight for focused elements */
   border-width: 2px;
-  border-color: #2f20129c;
+  border-color: var(--color-border-focus);
   outline: none;
 }
 
@@ -330,13 +412,13 @@ footer{
   width: 40vw;
   max-width: 300px;
   padding: 5px;
-  background-color: #7d664f9c;
-  border-color: #6653409c;
+  background-color:var(--color-brown-light);
+  border-color: var(--color-brown-medium2);
 }
 
 .login-form button:hover{
-  background-color: #6653409c;
-  border-color: #43372b9c;
+  background-color: var(--color-brown-medium2);
+  border-color: var(--color-brown-hover);
   cursor: pointer;
 }
 
@@ -345,7 +427,7 @@ footer{
   left: 0;
   width: 50%;
   height: 100vh;
-  background-color: #708871;
+  background-color: var(--color-green-muted);
   display: flex;
   z-index: 100;
   justify-content: center;
@@ -410,7 +492,7 @@ footer{
   max-width: 80%;
   height: 7vh;
   align-items: center;
-  background-color: #dbc39a77;
+  background-color: var(--color-brown-light-transparent);
 }
 
 .setting-input {
@@ -430,18 +512,18 @@ footer{
   margin-right: 10px;
   cursor: pointer;
   font-size: calc(1rem + 1vmin);
-  color: #7d664f9c;
+  color:var(--color-brown-light);
 }
 
 .edit-icon:hover {
-  color: #5846329c;
+  color: var(--color-brown-hover2);
 }
 
 .save-setting {
   margin-top: 10px;
   margin-right: 18vw;
   padding: 1vh 2vw;
-  background-color: #7d664f9c;
+  background-color:var(--color-brown-light);
   border: none;
   border-radius: 5px;
   color: white;
@@ -455,7 +537,7 @@ footer{
 }
 
 .save-setting:hover {
-  background-color: #6653409c;
+  background-color: var(--color-brown-medium2);
 }
 
 /* PASSWORD POP UP */
@@ -469,11 +551,11 @@ footer{
 }
 
 .modal-content {
-  background-color: #9fac7f;
+  background-color: var(--color-green-medium);
   max-width: 300px;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px var(--color-shadow-light);
   display: flex;
   flex-direction: column;
 }
@@ -488,13 +570,13 @@ footer{
   padding: 10px 20px;
   border: none;
   border-radius: 4px;
-  background-color: #7d664f;
+  background-color: var(--color-brown-medium4);
   color: white;
   cursor: pointer;
 }
 
 .modal-buttons button:hover {
-  background-color: #5e4d3a;
+  background-color: var(--color-brown-dark);
 }
 
 .message-form {
@@ -510,8 +592,8 @@ footer{
   width: 200px;
   text-align: center;
   flex-wrap: wrap;
-  border: solid 1px #e0ecbca0;
-  background: #e0ecbca0;
+  border: solid 1px var(--color-green-verylight);
+  background: var(--color-green-verylight);
   padding: 10px;
 }
 
@@ -525,7 +607,7 @@ td{
 }
 
 th {
-  border-bottom: solid 2px #000000;
+  border-bottom: solid 2px black;
 }
 
 .weekCalendar{
@@ -535,9 +617,9 @@ th {
   width: 200px;
   text-align: center;
   flex-wrap: wrap;
-  border: solid 1px #e0ecbca0;
+  border: solid 1px var(--color-green-verylight);
   font-size: calc(7px + 1vmin);
-  background: #e0ecbca0;
+  background: var(--color-green-verylight);
   padding: 10px;
 }
 
@@ -545,14 +627,14 @@ th {
   grid-row: 2/5;
   grid-column: 10;
   width: 295px;
-  border: solid 1px #e0ecbca0;
-  background: #e0ecbca0;
+  border: solid 1px var(--color-green-verylight);
+  background: var(--color-green-verylight);
   padding: 10px;
   
   h4{
     text-align: center;
     padding-bottom: 12px;
-    border-bottom: solid 2px #000000;
+    border-bottom: solid 2px black;
   }
 }
 
@@ -570,7 +652,7 @@ th {
   user-select: none;
 
   a{
-    color: #1250c185;
+    color: var(--color-blue-link);
     font-size: calc(5px + 1vmin);
     display: none;
   }
@@ -593,17 +675,17 @@ th {
   left: 5px;
   height: calc(20px + 1vmin);
   width: calc(20px + 1vmin);
-  background-color: #fffbf6;
+  background-color: var(--color-offwhite);
 }
 
 /* On mouse-over, add a grey background color */
 .groceryItem:hover input ~ .checkmark {
-  background-color: #e7e0d8;
+  background-color: var(--color-grey-light);
 }
 
 /* When the checkbox is checked, add a blue background */
 .groceryItem input:checked~ .checkmark {
-  background-color: #6fac6a93;
+  background-color: var(--color-green-checkbox);
 }
 
 /* Strikethrought the text when checkbox is checked */
@@ -646,8 +728,8 @@ th {
   position: relative;
   left: -3px;
   border: none;
-  background-color: #00000000;
-  color: #7d664f9c;
+  background-color: var(--color-transparent);
+  color: var(--color-brown-light);
   width: 33px;
 }
 
@@ -670,9 +752,9 @@ th {
 }
 
 .addGrocery:hover{
-  background-color: #00000000;
+  background-color: var(--color-transparent);
   cursor: pointer;
-  color: #5846329c;
+  color: var(--color-brown-hover2);
 }
 
 .addGroceryItem{
@@ -680,7 +762,7 @@ th {
   position: absolute;
   width: 280px;
   height: 31px;
-  border: solid 1px #00000000;
+  border: solid 1px var(--color-transparent);
   border-radius: 50px;
   text-indent: 5px;
 }
@@ -709,8 +791,8 @@ th {
   grid-column-start: 2;
   grid-column-end: 10;
   
-  border: solid 1px #e0ecbca0;
-  background: #e0ecbca0;
+  border: solid 1px var(--color-green-verylight);
+  background: var(--color-green-verylight);
   padding: 10px;
 }
 
@@ -720,7 +802,7 @@ th {
 }
 
 .iframeContainer{
-  background: #fff;
+  background: white;
   position: relative;
   height: 100%;
   width: 100%;
@@ -733,8 +815,8 @@ th {
   grid-column: 10;
   text-align: center;
   flex-wrap: wrap;
-  border: solid 1px #e0ecbca0;
-  background: #e0ecbca0;
+  border: solid 1px var(--color-green-verylight);
+  background: var(--color-green-verylight);
   padding: 10px;
 
   table{
@@ -744,7 +826,7 @@ th {
 
   /* middle line between columns */
   .first{
-  border-right: solid 2px #000000;
+  border-right: solid 2px black;
   }
 
   th{
@@ -763,13 +845,13 @@ th {
 
 .inventory{
   display: flex;
-  border: solid 1px #badce9b9;
-  background: #badce9b9;
+  border: solid 1px var(--color-blue-light-transparent);
+  background: var(--color-blue-light-transparent);
   padding-left: 10px;
   padding-bottom: 10px;
   h4{
     padding-bottom: 10px;
-    border-bottom: solid 2px #000000;
+    border-bottom: solid 2px black;
   }
   margin-bottom: 10px;
   .edit-icon{
@@ -783,13 +865,13 @@ th {
   width: 100%;
   height: 50px;
   border: none;
-  background-color: #7d664f9c;
+  background-color:var(--color-brown-light);
   color: white;
   font-size: calc(10px + 1vmin);
 }
 
 .addCategory:hover{
-  background-color: #634c319c;
+  background-color: var(--color-brown-hover3);
 }
 
 .popupAddCategory{
@@ -799,8 +881,8 @@ th {
   left: calc(50% - 150px);
   width: 300px;
   height: 100px;
-  background-color: #ffffff;
-  box-shadow: 0 0 10px 0 #0000007b;
+  background-color: white;
+  box-shadow: 0 0 10px 0 --color-shadow-light;
   border-radius: 10px;
   padding: 10px;
   z-index: 1000;
@@ -809,7 +891,7 @@ th {
 .addCategoryItem{
   width: 97%;
   height: 30px;
-  background-color: #bec6a0;
+  background-color: var(--color-green-light);
   margin-bottom: 10px;
 }
 
@@ -820,7 +902,7 @@ th {
 
 .editItem{
   color: rgba(23, 97, 167, 0.783);
-  background-color: #ffffff00;
+  background-color: var(--color-transparent);
   border: none;
   font-size: calc(10px + 1vmin);
 
@@ -834,13 +916,13 @@ th {
 /* GROCERY LIST PAGE */
 .grocery{
   display: flex;
-  border: solid 1px #ecb9c9b1;
-  background: #ecb9c9b1;
+  border: solid 1px var(--color-pink-lightish);
+  background: var(--color-pink-lightish);
   padding-left: 10px;
   padding-bottom: 10px;
   h4{
     padding-bottom: 10px;
-    border-bottom: solid 2px #000000;
+    border-bottom: solid 2px black;
   }
   margin-bottom: 10px;
   
@@ -877,7 +959,7 @@ th {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: #98a567a0;
+  background-color: var(--color-beige-light);
   box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.2);
   cursor: auto; /* Prevent the book content from being clickable */
   border-radius: 50px 0 0 50px;
@@ -918,11 +1000,11 @@ th {
 }
 
 .bookmark-active {
-  background-color: #708871;
+  background-color: var(--color-green-muted);
 }
 
 .bookmark-inactive {
-  background-color: #9fac7f;
+  background-color: var(--color-green-medium);
 }
 
 /* EACH BOOKMARK TAB */
@@ -940,7 +1022,7 @@ th {
 }
 
 .search-bar-container {
-  background-color: #f7ffdaa8;
+  background-color: var(--color-yellow-green);
   margin: 0 10% 2% 0;
   padding: 5px 10px;
   border-radius: 10px;
@@ -975,14 +1057,14 @@ th {
 .prev-btn, .next-btn {
   padding: 5px 10px;
   margin: 0 10px;
-  background-color: #65411eb1;
+  background-color: var(--color-button-hover);
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .prev-btn:disabled, .next-btn:disabled {
-  background-color: #e0ecbca0;
+  background-color: var(--color-green-verylight);
   cursor: not-allowed;
 }
 
@@ -993,7 +1075,7 @@ th {
 
 /* RECIPE LIST */
 .recipe-list {
-  background-color: #f7ffdaa8;
+  background-color: var(--color-yellow-green);
   margin: 20px 0;
   max-width: 100%; /* Set a maximum width */
   padding: 10px; /* Add padding for better spacing */
@@ -1050,9 +1132,9 @@ th {
   width: 200px; /* Adjust width as needed */
   padding: 10px;
   background-color: white; /* Background color of the popup */
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-popup-border);
   border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 8px var(--color-shadow-light);
   z-index: 11;
 }
 
@@ -1063,7 +1145,7 @@ th {
   left: 20px;
   border-width: 10px;
   border-style: solid;
-  border-color: transparent transparent #f9f9f9 transparent;
+  border-color: transparent transparent var(--color-popup-arrow transparent);
 }
 
 /* Tags styling */
@@ -1074,7 +1156,7 @@ th {
 }
 
 .r-tag {
-  background-color: #a6815cad;
+  background-color: var(--color-brown-light2);
   color: white;
   padding: 5px 10px;
   border-radius: 50px;
@@ -1087,7 +1169,7 @@ th {
 }
 
 .r-ing {
-  background-color: #799f73a8;
+  background-color: var(--color-green-light2);
   color: white;
   padding: 5px 10px;
   border-radius: 50px;
@@ -1109,7 +1191,7 @@ th {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  background-color: var(--color-shadow-med); /* Semi-transparent background */
   border-radius: inherit; /* Inherit border radius from parent */
   display: flex;
   justify-content: center;
@@ -1119,7 +1201,7 @@ th {
 
 .recipe-info-content {
   position: relative;
-  background-color: #d7e1b2bd;
+  background-color: var(--color-yellow-light);
   padding: 20px;
 }
 
@@ -1170,7 +1252,7 @@ th {
 }
 
 .recipe-tags-info {
-  background-color: #e3c1efa4;
+  background-color: var(--color-lavender-light);
   padding: 5px 10px;
   margin: 0 5px 5px 0; /* Space between tags */
   border-radius: 50px;
@@ -1201,7 +1283,7 @@ th {
 
 .custom-scroll {
   scrollbar-width: auto; 
-  scrollbar-color: #a6815c transparent; 
+  scrollbar-color: var(--color-brown-medium3 transparent); 
 }
 
 /* Webkit browsers (Chrome, Edge, Safari) */
@@ -1211,16 +1293,16 @@ th {
 }
 
 .custom-scroll::-webkit-scrollbar-thumb {
-  background-color: #a6815c; /* Custom thumb color */
+  background-color: var(--color-brown-medium3); /* Custom thumb color */
 }
 
 .custom-scroll::-webkit-scrollbar-thumb:hover {
-  background-color: #8d664a; /* Custom thumb color on hover */
+  background-color: var(--color-brown-dark2); /* Custom thumb color on hover */
 }
 
 /* Track with a gradient to create the illusion of a thinner middle */
 .custom-scroll::-webkit-scrollbar-track {
-  background: linear-gradient(to right, transparent 25%, #f7ffdaa8 50%, transparent 75%); /* Gradient background */
+  background: linear-gradient(to right, transparent 25%, var(--color-yellow-green) 50%, transparent 75%); /* Gradient background */
   border-radius: 10px;
 }
 
@@ -1248,8 +1330,8 @@ th {
 }
 
 .filter-popup {
-  background-color: #d7e1b2bd;
-  border: 1px solid #ccc;
+  background-color: var(--color-yellow-light);
+  border: 1px solid var(--color-popup-border);
   border-radius: 8px;
   padding: 20px;
   z-index: 900; /* Make sure it appears above other content */
@@ -1289,19 +1371,19 @@ th {
 }
 
 .included-item {
-  border: 2px solid #85bac59c;
-  background-color: #bfe6f0bc;
+  border: 2px solid var(--color-teal-bluer);
+  background-color: var(--color-cyan-light);
 }
 
 .excluded-item {
-  border: 2px solid #d6a8bbcf;
-  background-color: #f1cbdac2;
+  border: 2px solid var(--color-pink-dark);
+  background-color: var(--color-pink-light);
 }
 
 .no-items {
   cursor: default;
-  border: 2px solid #5f7a60b3;
-  background-color: #9baa74c6;
+  border: 2px solid var(--color-border-focus);
+  background-color:var(--color-green-muted);
 }
 
 .included-item:hover, .excluded-item:hover {
@@ -1352,13 +1434,13 @@ th {
 
 .tag-item {
   /* fit item */
-  border: 2px solid #dab378a7;
-  background-color: #f6f099a7;
+  border: 2px solid var(--color-beige-medium);
+  background-color: var(--color-yellow-bright);
 }
 
 .ingredient-item {
-  border: 2px solid #c090d2bb;
-  background-color: #e8c8f4bb;
+  border: 2px solid var(--color-lavender-medium);
+  background-color: var(--color-lavender-light2);
 }
 
 .tag-item button,
@@ -1379,21 +1461,21 @@ th {
 }
 
 .include {
-  border-color: #88b9c3a8;
-  background-color: #b8e2edb1;
+  border-color: var(--color-teal-blue);
+  background-color: var(--color-teal-light);
 }
 
 .include:hover {
-  background-color: #81bdc9a8;
+  background-color: var(--color-teal-hover);
 }
 
 .exclude {
-  border-color: #e5b3c7d4;
-  background-color: #edc6d5c7;
+  border-color: var(--color-pink-light2);
+  background-color: var(--color-pink-verylight);
 }
 
 .exclude:hover {
-  background-color: #ecb3c9d4;
+  background-color: var(--color-pink-hover);
 }
 
 /* WEEKLY MENU */
@@ -1409,16 +1491,16 @@ th {
 
 .menu-column {
   border-right: 3px solid black;
-  background-color: #d9b0dda4;
+  background-color: var(--color-purple-light);
   transition: width 0.3s ease;
 }
 
 .menu-recipe {
-  background-color: #d79fde97;
+  background-color: var(--color-pink-medium);
 }
 
 .menu-recipe:hover {
-  background-color: #cc75d797;
+  background-color: var(--color-purple-hover);
 }
 
 .day-title {
@@ -1459,7 +1541,7 @@ th {
 .pref button {
   padding: 5px 10px;
   margin: 0 0 0 10px;
-  background-color: #7d664f;
+  background-color: var(--color-brown-medium4);
   color: white;
   border: none;
   border-radius: 5px;
@@ -1469,15 +1551,15 @@ th {
 }
 
 .pref button:hover {
-  background-color: #665340;
+  background-color: var(--color-brown-dark3);
 }
 
 .delete-acc {
-  background-color: #e60e0ebc !important;
+  background-color: var(--color-red-light) !important;
 }
 
 .delete-acc:hover {
-  background-color: #e60e0eef !important;
+  background-color: var(--color-red-light2) !important;
 }
 
 /* DARK MODE TOGGLE */
@@ -1517,19 +1599,19 @@ th {
 /* ---- ---- Light Mode ---- ---- */
 
 .light .toggle {
-  background: #dbc39a77;
+  background: var(--color-brown-light-transparent);
 }
 .light .ball {
-  background-color: #4c3b2b9c;
+  background-color: var(--color-brown-dark-alt);
 }
 /* ---- ---- Dark Mode ---- ---- */
 
 .dark .toggle {
-  background: #4c3b2b9c;
+  background: var(--color-brown-dark-alt);
 }
 
 .dark .ball {
-  background-color: #ead9bbbe;
+  background-color: var(--color-beige-light3);
   transition: 0.3s;
   transform: translateX(48px);
 }
@@ -1553,19 +1635,19 @@ th {
 .dropbtn {
   display: flex;
   flex-direction: row;
-  background-color: #dbc39a77;
+  background-color: var(--color-brown-light-transparent);
   padding: 2vh 1.5vw;
   max-width: 150px;
   width: 80%;
   font-size: 1rem;
-  border: 3px solid #6653409c;
+  border: 3px solid var(--color-brown-medium2);
   cursor: pointer;
   border-radius: 5px;
   transition: all 0.3s ease;
 }
 
 .dropbtn:hover, .dropbtn:focus {
-  background-color: #79855b73;
+  background-color: var(--color-green-sidebar);
   border: 3px solid transparent;
   color: white;
 
@@ -1583,22 +1665,22 @@ th {
   transition: all 0.3s ease;
   transform: translate(50%, 60%);
   overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px var(--color-shadow-light);
 }
 
 .color-overlay {
-  background-color: #dbc39a77;
+  background-color: var(--color-brown-light-transparent);
 }
 
 .day-option {
   padding: 10px;
   cursor: pointer;
-  box-shadow: 0px 0px 4px -2px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 0px 4px -2px var(--color-shadow-med);
   transition: background-color 0.3s ease;
 }
 
 .day-option:hover {
-  background-color: #79855b73;
+  background-color: var(--color-green-sidebar);
 }
 
 .preference {
@@ -1610,9 +1692,9 @@ th {
 }
 
 .delete-popup {
-  background-color: #fffbf6;
-  /* border: 3px solid #e60e0ebc; */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  background-color: var(--color-offwhite);
+  /* border: 3px solid var(--color-red-light; */
+  box-shadow: 0 4px 8px var(--color-shadow-med);
   
   
   h2, p {
@@ -1624,7 +1706,7 @@ th {
 }
 
 .slider {
-  accent-color: #6653409c;
+  accent-color: var(--color-brown-medium2);
   
 }
 
