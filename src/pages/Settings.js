@@ -5,7 +5,7 @@ import { AiOutlineEdit } from "react-icons/ai";
 import React, { useState } from 'react';
 
 function Settings() {
-  const [isEditable, setIsEditable] = useState({ username: false, name: false, email: false, password: false });
+  const [isEditable, setIsEditable] = useState({ name: false, email: false });
   const [message, setMessage] = useState('');
   const [formValues, setFormValues] = useState({
     username: localStorage.getItem('username') || '',
@@ -127,8 +127,7 @@ function Settings() {
               type="text"
               name="username"
               value={formValues.username}
-              onChange={handleInputChange}
-              disabled={!isEditable.username}
+              disabled={true}
             />
           </div>
         </div>
@@ -170,9 +169,8 @@ function Settings() {
             <input className="setting-input"
               type="password"
               name="password"
-              placeholder="••••••••"
-              onChange={handleInputChange}
-              disabled={!isEditable.password}
+              value="••••••••"
+              disabled={true}
             />
             <AiOutlineEdit className="edit-icon" onClick={handlePasswordChange} />
           </div>

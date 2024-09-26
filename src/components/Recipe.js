@@ -11,7 +11,7 @@ const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet, max_
 
   return (
     <Draggable key={draggableId} draggableId={draggableId} index={index}>
-      {(provided, snapshot) => (
+      {(provided) => (
         <div
           className={`recipe-list ${useIdAsDraggableId ? 'menu-recipe' : ''}`}
           ref={provided.innerRef}

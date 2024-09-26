@@ -64,7 +64,6 @@
 
   /*Grey colours */
   --color-grey-light: #e7e0d8;
-  --color-grey-light2: #e7e0d8a8;
   --color-offwhite: #fffbf6;
   --color-transparent: #00000000;
   --color-shadow-light: rgba(0, 0, 0, 0.1);
@@ -90,6 +89,7 @@ body{
   --background-color: #ffffff;
   --text-color: #000000;
   --color-background: white;
+  --color-setting-input: #3f3f3fa8;
 }
 
 /*Dark Mode */
@@ -97,6 +97,8 @@ body.dark{
   --background-color: #121212;
   --text-color: #ffffff;
   --color-background: #121212;
+  --color-setting-input: #e7e0d8a8;
+
 }
 
 /*transition for dark mode */
@@ -532,7 +534,7 @@ footer{
 }
 
 .setting-input:disabled {
-  color: var(--color-grey-light2);
+  color: var(--color-setting-input);
 }
 
 .setting-input:focus {
@@ -1188,16 +1190,6 @@ th {
   box-shadow: 0px 4px 8px var(--color-shadow-light);
   cursor: default;
   z-index: 11;
-}
-
-.rec-info-popup::after {
-  content: '';
-  position: absolute;
-  top: -10px;
-  left: 20px;
-  border-width: 10px;
-  border-style: solid;
-  border-color: transparent transparent var(--color-popup-arrow transparent);
 }
 
 /* Tags styling */
