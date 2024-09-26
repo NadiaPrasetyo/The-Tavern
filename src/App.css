@@ -23,7 +23,7 @@
   /* Green colours */
   --color-green-light: #bec6a0;
   --color-green-hover: #5e7d4f9c;
-  --color-green-muted: #708871;
+  --color-green-muted-solid: #708871;
   --color-green-medium: #9fac7f;
   --color-green-light2: #799f73a8; /* Ingredient background color */
   --color-green-checkbox: #6fac6a93;
@@ -88,12 +88,19 @@
 body{
   --background-color: var(--color-offwhite);
   --text-color: #000000;
+  --color-background: white;
+  --color-setting-input: #3f3f3fa8;
+  --color-login-bg: var(--color-green-light);
 }
 
 /*Dark Mode */
 body.dark{
   --background-color: #121212;
   --text-color: #ffffff;
+  --color-background: #121212;
+  --color-setting-input: #e7e0d8a8;
+  --color-login-bg: var(--color-green-light2);
+
 }
 
 /*transition for dark mode */
@@ -382,7 +389,7 @@ footer{
 }
 
 #SignIn-component, #SignUp-component{
-  background-color: var(--color-green-light);
+  background-color: var(--color-login-bg);
   display: flex;
   justify-content: center;
   padding-top: 10%;
@@ -450,7 +457,7 @@ footer{
   left: 0;
   width: 50%;
   height: 100vh;
-  background-color: var(--color-green-muted);
+  background-color: var(--color-green-muted-solid);
   display: flex;
   z-index: 100;
   justify-content: center;
@@ -525,6 +532,11 @@ footer{
   font-size: calc(0.65rem + 1vmin);
   border: none;
   background-color: transparent;
+  color: var(--text-color);
+}
+
+.setting-input:disabled {
+  color: var(--color-setting-input);
 }
 
 .setting-input:focus {
@@ -569,12 +581,13 @@ footer{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: white;
+  background-color: var(--color-background);
+  border-radius: 8px;
   z-index: 900;
 }
 
 .modal-content {
-  background-color: var(--color-green-medium);
+  background-color: var(--color-green-light2);
   max-width: 300px;
   padding: 20px;
   border-radius: 8px;
@@ -755,6 +768,25 @@ th {
   color: var(--color-brown-light);
   width: 33px;
 }
+
+.move-right {
+  animation: moveRight 0.5s forwards;
+}
+
+.move-left {
+  animation: moveLeft 0.5s forwards;
+}
+
+.open {
+  display: block; /* Ensure it's block when open */
+  animation: openRight 0.5s forwards;
+}
+
+.close {
+  display: none; /* To be hidden after closing */
+  animation: closeLeft 0.5s forwards;
+}
+
 
 @keyframes moveRight {
   from {
@@ -974,7 +1006,7 @@ th {
   z-index: 10;
 }
 
-.recipe-tab-container.open {
+.recipe-tab-container.recipe-open {
   right: 0; /* Fully open the tab */
 }
 
@@ -990,7 +1022,7 @@ th {
 }
 
 .background {
-  background-color: white;
+  background-color: var(--color-background);
 }
 
 .book-content {
@@ -1023,7 +1055,7 @@ th {
 }
 
 .bookmark-active {
-  background-color: var(--color-green-muted);
+  background-color: var(--color-green-muted-solid);
 }
 
 .bookmark-inactive {
@@ -1154,21 +1186,12 @@ th {
   right: 0;
   width: 200px; /* Adjust width as needed */
   padding: 10px;
-  background-color: white; /* Background color of the popup */
+  background-color: var(--background-color); /* Background color of the popup */
   border: 1px solid var(--color-popup-border);
   border-radius: 8px;
   box-shadow: 0px 4px 8px var(--color-shadow-light);
+  cursor: default;
   z-index: 11;
-}
-
-.rec-info-popup::after {
-  content: '';
-  position: absolute;
-  top: -10px;
-  left: 20px;
-  border-width: 10px;
-  border-style: solid;
-  border-color: transparent transparent var(--color-popup-arrow transparent);
 }
 
 /* Tags styling */
@@ -1226,6 +1249,7 @@ th {
   position: relative;
   background-color: var(--color-yellow-light);
   padding: 20px;
+  cursor: default;
 }
 
 .recipe-info-background {
@@ -1282,12 +1306,25 @@ th {
   margin-top: 5px; /* Add spacing above tags */
 }
 
+.info-header-container {
+  display: flex; /* Flexbox for header layout */
+  align-items: center; /* Center items vertically */
+  margin-top: 10px; /* Add spacing above header */
+}
+
 .ingredients-header {
   font-size: 1.25rem;
-  margin-top: 10px; /* Add spacing above ingredients */
   /* gap between characters */
   letter-spacing: 2px;
 }
+
+.highlight-info-popup {
+  position: fixed;
+  top: 50%; /* Adjust position as needed */
+  right: inherit;
+  transform: translate(-110%, 0);
+}
+
 
 .recipe-ingredients-container {
   display: grid;
@@ -1299,7 +1336,21 @@ th {
 
 .recipe-ingredients-info {
   list-style-type: square; /* Remove default list styling */
-  padding-left: 2px; /* Add some padding for the individual list items */
+  padding: 0 5px; /* Add some padding for the individual list items */
+  border-radius: 50px; /* Add border radius to the list items */
+  cursor: default; /* Change cursor to pointer for interactivity */
+}
+
+.highlightable {
+  cursor: pointer !important; /* Change cursor to pointer for interactivity */
+}
+
+.highlightable:hover {
+  background-color: var(--color-green-muted-solid); /* Add a light background color on hover */
+}
+
+.selected-ing {
+  background-color: var(--color-green-muted-solid); /* Add a light background color for selected ingredients */
 }
 
 /* SCROLLER STYLE */
@@ -1345,7 +1396,7 @@ th {
   top: 50%;
   left: -50%; 
   transform: translate(-60%, -50%);
-  background-color: white;
+  background-color: var(--background-color);
   width: 90%;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -1531,6 +1582,7 @@ th {
   font-weight: bold;
   letter-spacing: 2px;
   border-bottom: 3px solid black;
+  cursor: default;
 }
 
 /* PREFERENCE */

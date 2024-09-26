@@ -179,9 +179,9 @@ function Preference() {
   // save the preference to localstorage
   useEffect(() => {
     const savePreference = () => {
-      if (isDarkMode || selectedDay !== 'Monday') {
+      if (isDarkModeSwitch || selectedDay !== 'Monday') {
         updatePreference();
-        localStorage.setItem('isDarkMode', isDarkMode);
+        localStorage.setItem('isDarkMode', isDarkModeSwitch);
         localStorage.setItem('firstDay', selectedDay);
       }
     };
@@ -190,7 +190,7 @@ function Preference() {
     return () => {
       window.removeEventListener('beforeunload', savePreference);
     }
-  }, [isDarkMode, selectedDay]);
+  }, [isDarkModeSwitch, selectedDay]);
 
   // before unload, save the preference
 
@@ -201,8 +201,8 @@ function Preference() {
 
   // Effect to apply dark mode when toggled
   useEffect(() => {
-    document.body.classList.toggle('dark', isDarkMode);
-  }, [isDarkMode]);
+    document.body.classList.toggle('dark', isDarkModeSwitch);
+  }, [isDarkModeSwitch]);
 
   return (
     

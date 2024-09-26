@@ -5,7 +5,6 @@ import { MdOutlineStarPurple500 } from "react-icons/md";
 import { LuFilter } from "react-icons/lu";
 import { LuBookOpenCheck } from "react-icons/lu";
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import { MdOutlineStarBorderPurple500 } from "react-icons/md";
 import { Droppable } from 'react-beautiful-dnd';
 import Recipe from './Recipe';
 
@@ -13,7 +12,7 @@ import RecipeInfo from './RecipeInfo';
 import FilterPopup from './FilterPop';
 import '../App.css';
 
-const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag }) => {
+const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag, highlighted, setHighlighted }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1); // The current page
   const [searchQuery, setSearchQuery] = useState(''); // The search input value
@@ -474,7 +473,7 @@ const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag }) => {
   }, [isVisibleRecPopUp]);
 
   return (
-    <div className={`recipe-tab-container ${isOpen ? "open" : ""}`} ref={containerRef}>
+    <div className={`recipe-tab-container ${isOpen ? "recipe-open" : ""}`} ref={containerRef}>
       {/* Book content area */}
       <div className='book-container background' onClick={toggleBook}>
         <div className="book-container" onClick={toggleBook}>
@@ -636,7 +635,7 @@ const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag }) => {
             }
             <div className='popup' onClick={(e) => e.stopPropagation()}>
               <FilterPopup isOpen={isFilterOpen} onClose={closeFilter} availableTags={availableTags} availableIngredients={availableIngredients} onFiltersChange={handleFiltersChange} />
-              <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} />
+              <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} fromRecipeTab={true}/>
             </div>
           </div>
         </div>
