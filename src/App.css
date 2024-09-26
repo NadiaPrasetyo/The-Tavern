@@ -1270,7 +1270,7 @@ th {
 
 .recipe-info-content {
   position: relative;
-  background-color: var(--color-yellow-light);
+  background-color: var(--recipe-tab-yellow-green);
   padding: 20px;
   cursor: default;
 }
