@@ -91,6 +91,17 @@ body{
   --color-background: white;
   --color-setting-input: #3f3f3fa8;
   --color-login-bg: var(--color-green-light);
+  --color-blue-link: var(--color-blue-link);
+  --checklist-bg: var(--color-offwhite);
+  --checklist-hover: var(--color-grey-light);
+  --checklist-checkbox: var(--color-green-checkbox);
+  --button-browns: var(--color-brown-light);
+  --button-browns-hover: var(--color-brown-hover2);
+  --menudropdown: var(--color-green-light);
+  --menudropdown-hover: var(--color-green-hover);
+  --recipe-tab-yellow-green: var(--color-yellow-green);
+  --bookmark-inactive: var(--color-green-light);
+  --bookmark-active: var(--color-green-muted-solid);
 }
 
 /*Dark Mode */
@@ -100,6 +111,17 @@ body.dark{
   --color-background: #121212;
   --color-setting-input: #e7e0d8a8;
   --color-login-bg: var(--color-green-light2);
+  --color-blue-link: #cef1fff5;
+  --checklist-bg: #1f1f1f;
+  --checklist-hover: #5b4a4a;
+  --checklist-checkbox: #97e19193;
+  --button-browns: #e1d0bf;
+  --button-browns-hover: #e9dccf;
+  --menudropdown: #3e5f3f;
+  --menudropdown-hover: #558156;
+  --recipe-tab-yellow-green: #394238;
+  --bookmark-inactive: #394238;
+  --bookmark-active: #5e7d4f9c;
 
 }
 
@@ -149,7 +171,7 @@ body {
 
 .menuBar{
   position: absolute;
-  background-color: var(--color-green-light);
+  background-color: var(--menudropdown);
   width: 100px;
   height: 65px;
   text-align: center;
@@ -170,7 +192,7 @@ body {
   }
 
   a:hover{
-    background-color: var(--color-green-hover);
+    background-color: var(--menudropdown-hover);
   }
 }
 
@@ -205,7 +227,7 @@ body {
 
   .sidebar > nav h1 {
     background: var(--color-brown-light);
-    color: white;
+    color: var(--color-background);
     font-size: 1.5em;
     margin: 0;
     padding: 0.85em 0;
@@ -547,11 +569,11 @@ footer{
   margin-right: 10px;
   cursor: pointer;
   font-size: calc(1rem + 1vmin);
-  color:var(--color-brown-light);
+  color: var(--button-browns);
 }
 
 .edit-icon:hover {
-  color: var(--color-brown-hover2);
+  color: var(--button-browns-hover);
 }
 
 .save-setting {
@@ -561,7 +583,7 @@ footer{
   background-color:var(--color-brown-light);
   border: none;
   border-radius: 5px;
-  color: white;
+  color: var(--color-background);
   font-size: calc(1rem + 1vmin);
   cursor: pointer;
   max-width: 200px;
@@ -607,7 +629,7 @@ footer{
   border: none;
   border-radius: 4px;
   background-color: var(--color-brown-medium4);
-  color: white;
+  color: var(--color-background);
   cursor: pointer;
 }
 
@@ -628,7 +650,7 @@ footer{
   width: 200px;
   text-align: center;
   flex-wrap: wrap;
-  border: solid 1px var(--color-green-verylight);
+  border: solid 1px var(--color-transparent);
   background: var(--color-green-verylight);
   padding: 10px;
 }
@@ -643,7 +665,7 @@ td{
 }
 
 th {
-  border-bottom: solid 2px black;
+  border-bottom: solid 2px var(--text-color);
 }
 
 .weekCalendar{
@@ -653,7 +675,7 @@ th {
   width: 200px;
   text-align: center;
   flex-wrap: wrap;
-  border: solid 1px var(--color-green-verylight);
+  border: solid 1px var(--color-transparent);
   font-size: calc(7px + 1vmin);
   background: var(--color-green-verylight);
   padding: 10px;
@@ -663,14 +685,14 @@ th {
   grid-row: 2/5;
   grid-column: 10;
   width: 295px;
-  border: solid 1px var(--color-green-verylight);
+  border: solid 1px var(--color-transparent);
   background: var(--color-green-verylight);
   padding: 10px;
   
   h4{
     text-align: center;
     padding-bottom: 12px;
-    border-bottom: solid 2px black;
+    border-bottom: solid 2px var(--text-color);
   }
 }
 
@@ -711,17 +733,17 @@ th {
   left: 5px;
   height: calc(20px + 1vmin);
   width: calc(20px + 1vmin);
-  background-color: var(--color-offwhite);
+  background-color: var(--checklist-bg);
 }
 
 /* On mouse-over, add a grey background color */
 .groceryItem:hover input ~ .checkmark {
-  background-color: var(--color-grey-light);
+  background-color: var(--checklist-hover);
 }
 
 /* When the checkbox is checked, add a blue background */
 .groceryItem input:checked~ .checkmark {
-  background-color: var(--color-green-checkbox);
+  background-color: var(--checklist-checkbox);
 }
 
 /* Strikethrought the text when checkbox is checked */
@@ -752,7 +774,7 @@ th {
   top: 5px;
   width: 5px;
   height: 10px;
-  border: solid white;
+  border: solid var(--color-background);
   border-width: 0 3px 3px 0;
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
@@ -765,7 +787,7 @@ th {
   left: -3px;
   border: none;
   background-color: var(--color-transparent);
-  color: var(--color-brown-light);
+  color: var(--button-browns);
   width: 33px;
 }
 
@@ -809,7 +831,7 @@ th {
 .addGrocery:hover{
   background-color: var(--color-transparent);
   cursor: pointer;
-  color: var(--color-brown-hover2);
+  color: var(--button-browns-hover);
 }
 
 .addGroceryItem{
@@ -846,7 +868,7 @@ th {
   grid-column-start: 2;
   grid-column-end: 10;
   
-  border: solid 1px var(--color-green-verylight);
+  border: solid 1px var(--color-transparent);
   background: var(--color-green-verylight);
   padding: 10px;
 }
@@ -857,7 +879,7 @@ th {
 }
 
 .iframeContainer{
-  background: white;
+  background: var(--color-background);
   position: relative;
   height: 100%;
   width: 100%;
@@ -870,7 +892,7 @@ th {
   grid-column: 10;
   text-align: center;
   flex-wrap: wrap;
-  border: solid 1px var(--color-green-verylight);
+  border: solid 1px var(--color-transparent);
   background: var(--color-green-verylight);
   padding: 10px;
 
@@ -881,7 +903,7 @@ th {
 
   /* middle line between columns */
   .first{
-  border-right: solid 2px black;
+  border-right: solid 2px var(--text-color);
   }
 
   th{
@@ -900,13 +922,13 @@ th {
 
 .inventory{
   display: flex;
-  border: solid 1px var(--color-blue-light-transparent);
+  border: solid 1px var(--color-transparent);
   background: var(--color-blue-light-transparent);
   padding-left: 10px;
   padding-bottom: 10px;
   h4{
     padding-bottom: 10px;
-    border-bottom: solid 2px black;
+    border-bottom: solid 2px var(--text-color);
   }
   margin-bottom: 10px;
   .edit-icon{
@@ -920,13 +942,13 @@ th {
   width: 100%;
   height: 50px;
   border: none;
-  background-color:var(--color-brown-light);
-  color: white;
+  background-color:var(--button-browns);
+  color: var(--color-background);
   font-size: calc(10px + 1vmin);
 }
 
 .addCategory:hover{
-  background-color: var(--color-brown-hover3);
+  background-color: var(--button-browns-hover);
 }
 
 .popupAddCategory{
@@ -936,7 +958,7 @@ th {
   left: calc(50% - 150px);
   width: 300px;
   height: 100px;
-  background-color: white;
+  background-color: var(--color-background);
   box-shadow: 0 0 10px 0 --color-shadow-light;
   border-radius: 10px;
   padding: 10px;
@@ -946,7 +968,8 @@ th {
 .addCategoryItem{
   width: 97%;
   height: 30px;
-  background-color: var(--color-green-light);
+  background-color: var(--menudropdown);
+  color: var(--text-color);
   margin-bottom: 10px;
 }
 
@@ -956,7 +979,7 @@ th {
 }
 
 .editItem{
-  color: rgba(23, 97, 167, 0.783);
+  color: var(--color-blue-link);
   background-color: var(--color-transparent);
   border: none;
   font-size: calc(10px + 1vmin);
@@ -971,13 +994,13 @@ th {
 /* GROCERY LIST PAGE */
 .grocery{
   display: flex;
-  border: solid 1px var(--color-pink-lightish);
+  border: solid 1px var(--color-transparent);
   background: var(--color-pink-lightish);
   padding-left: 10px;
   padding-bottom: 10px;
   h4{
     padding-bottom: 10px;
-    border-bottom: solid 2px black;
+    border-bottom: solid 2px var(--text-color);
   }
   margin-bottom: 10px;
   
@@ -1055,11 +1078,11 @@ th {
 }
 
 .bookmark-active {
-  background-color: var(--color-green-muted-solid);
+  background-color: var(--bookmark-active);
 }
 
 .bookmark-inactive {
-  background-color: var(--color-green-medium);
+  background-color: var(--bookmark-inactive);
 }
 
 /* EACH BOOKMARK TAB */
@@ -1077,7 +1100,7 @@ th {
 }
 
 .search-bar-container {
-  background-color: var(--color-yellow-green);
+  background-color: var(--recipe-tab-yellow-green);
   margin: 0 10% 2% 0;
   padding: 5px 10px;
   border-radius: 10px;
@@ -1091,6 +1114,7 @@ th {
   outline: none;
   background-color: transparent;
   border-radius: 5px;
+  color: var(--text-color);
 }
 
 .search-icon, .filter-icon {
@@ -1112,8 +1136,7 @@ th {
 .prev-btn, .next-btn {
   padding: 5px 10px;
   margin: 0 10px;
-  background-color: var(--color-button-hover);
-  border: none;
+  background-color: var(--color-brown-hover2);
   border-radius: 5px;
   cursor: pointer;
 }
@@ -1130,7 +1153,7 @@ th {
 
 /* RECIPE LIST */
 .recipe-list {
-  background-color: var(--color-yellow-green);
+  background-color: var(--recipe-tab-yellow-green);
   margin: 20px 0;
   max-width: 100%; /* Set a maximum width */
   padding: 10px; /* Add padding for better spacing */
@@ -1203,7 +1226,7 @@ th {
 
 .r-tag {
   background-color: var(--color-brown-light2);
-  color: white;
+  color: var(--color-background);
   padding: 5px 10px;
   border-radius: 50px;
   margin: 0 5px 5px 0; /* Space between tags */
@@ -1216,7 +1239,7 @@ th {
 
 .r-ing {
   background-color: var(--color-green-light2);
-  color: white;
+  color: var(--color-background);
   padding: 5px 10px;
   border-radius: 50px;
   margin: 0 5px 5px 0; /* Space between ingredients */
@@ -1404,7 +1427,7 @@ th {
 }
 
 .filter-popup {
-  background-color: var(--color-yellow-light);
+  background-color: var(--recipe-tab-yellow-green);
   border: 1px solid var(--color-popup-border);
   border-radius: 8px;
   padding: 20px;
@@ -1492,7 +1515,7 @@ th {
   bottom: 0;
   left: 50%; /* Place it in the middle */
   width: 2px;
-  background-color: black; /* Light gray color for the separator */
+  background-color: var(--text-color); /* Light gray color for the separator */
 }
 
 .tag-item,
@@ -1523,7 +1546,7 @@ th {
   margin: 0 5px;
   height: 25px;
   width: 25px;
-  color: white;
+  color: var(--color-background);
   border-radius: 50px;
   cursor: pointer;
   padding: 3px 6px;
@@ -1617,7 +1640,7 @@ th {
   padding: 5px 10px;
   margin: 0 0 0 10px;
   background-color: var(--color-brown-medium4);
-  color: white;
+  color: var(--color-background);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -1724,7 +1747,7 @@ th {
 .dropbtn:hover, .dropbtn:focus {
   background-color: var(--color-green-sidebar);
   border: 3px solid transparent;
-  color: white;
+  color: var(--color-background);
 
   .triangle-down {
     transform: rotate(180deg);
