@@ -651,6 +651,25 @@ th {
   width: 33px;
 }
 
+.move-right {
+  animation: moveRight 0.5s forwards;
+}
+
+.move-left {
+  animation: moveLeft 0.5s forwards;
+}
+
+.open {
+  display: block; /* Ensure it's block when open */
+  animation: openRight 0.5s forwards;
+}
+
+.close {
+  display: none; /* To be hidden after closing */
+  animation: closeLeft 0.5s forwards;
+}
+
+
 @keyframes moveRight {
   from {
     left: -3px;
