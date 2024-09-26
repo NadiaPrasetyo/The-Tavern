@@ -1319,7 +1319,8 @@ th {
 .highlight-info-popup {
   position: fixed;
   top: 50%; /* Adjust position as needed */
-  left: 15%; /* Center the popup */
+  right: inherit;
+  transform: translate(-110%, 0);
 }
 
 
