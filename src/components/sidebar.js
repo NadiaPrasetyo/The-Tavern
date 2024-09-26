@@ -7,13 +7,9 @@ import { MdLocalGroceryStore } from "react-icons/md";
 import { GiCrown } from "react-icons/gi";
 import { GiQuillInk } from "react-icons/gi";
 import { GiTwoHandedSword } from "react-icons/gi";
-import { getSidebarState, setSideBarState } from '../index.js';
 
 function Sidebar(props) {
-    var state = getSidebarState();
-    console.log("state 1 = " + state);
-
-    const [isClosed, setSideBar] = React.useState(state);
+    const [isClosed, setSideBar] = React.useState(false);
     var template;
 
     function toggleSidebar() {
@@ -38,9 +34,7 @@ function Sidebar(props) {
                 props.setIsOpen(false);
             }
         }
-        setSideBarState(!isClosed);
         console.log("isClosed = " + isClosed);
-        console.log("state 2= " + state);
         setSideBar(!isClosed);
         
     }
