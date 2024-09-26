@@ -183,7 +183,7 @@ function GetAllInventory() {
   
     // State to track input values and editable fields
     const [inputValues, setInputValues] = useState(categoryList.map(item => ({ ...item })));
-    const [isEditable, setIsEditable] = useState(categoryList.map(() => ({ name: false, category: false })));
+    const [isEditable, setIsEditable] = useState(categoryList.map(() => false));
   
     // Handle input change
     const handleInputChange = (e, index, field) => {
@@ -192,19 +192,40 @@ function GetAllInventory() {
         prevValues.map((item, i) => (i === index ? { ...item, [field]: value } : item))
       );
     };
-  
+
       // Toggle edit mode for both Name and Category
     const handleEditClick = (index) => {
       setIsEditable(prevEditable =>
-        prevEditable.map((editable, i) =>
-          i === index ? !editable : editable
-        )
+        prevEditable.map((editable, i) => (i === index ? !editable : editable))
       );
 
-      // Auto-save changes when toggling off the edit mode
-      if (isEditable[index]) {
-        console.log('Auto-saving changes for item at index', index, ':', inputValues[index]);
-        // Add your logic to persist the changes to the backend API
+      //when autosaving, update the database
+      if (!isEditable[index]) {
+        const item = inputValues[index];
+        console.log("Updating item: " + item.Name);
+        fetch('/api/update-inventory-item', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            Username: localStorage.getItem('username'),
+            Name: item.Name,
+            Category: item.Category
+          }),
+        }).then((response) => {
+          if (response.status === 200) {
+            console.log("Item updated successfully");
+            // Update the inventory list
+            getInventory().then((inventory) => {
+              console.log("Inventory list updated");
+              setInventoryList(inventory);
+              return;
+            });
+          } else {
+            console.log("Error updating item");
+          }
+        });
       }
     };
 
@@ -242,56 +263,58 @@ function GetAllInventory() {
       return null;
     }
     
-    return (
-      <div>
-        <section className='inventory'>
-          <form onKeyDown={(event) => event.key !== 'Enter'}>
-            <h4>{category}</h4>
-            <div className='InventoryInputContainer'>
-              <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add inventory item..." />
-              <button className="addGrocery" type='button' onClick={(event) => addInventory(event, category)}><IoAddCircle /></button><br />
-            </div>
-            <ul>
-              {inputValues.map((item, index) => (
-                <li key={index}>
-
-                  {/* Remove item */}
-                  <a className="removeFromInventory" onClick={() => removeItem(item.Name)}>
-                    {item.Name}
-                  </a>
-
-                  {/* Name input */}
-                  <input
-                    type="text"
-                    className="editItem"
-                    value={item.Name}
-                    disabled={!isEditable[index]}
-                    onChange={(e) => handleInputChange(e, index, 'Name')}
-                  />
-
-                  
-
-                  {/* Edit icon to toggle both fields */}
-                  <AiOutlineEdit
-                    className="edit-icon"
-                    onClick={() => handleEditClick(index)}
-                  />
-
-                  {/* Category input */}
-                  <input
-                    type="text"
-                    className="editItem editCategory"
-                    value={item.Category}
-                    disabled={!isEditable[index]}
-                    onChange={(e) => handleInputChange(e, index, 'Category')}
-                  />
-                </li>
-              ))}
-            </ul>
-          </form>
-        </section>
-      </div>
-    );
+      return (
+        <div>
+          <section className='inventory'>
+            <form onKeyDown={(event) => event.key !== 'Enter'}>
+              <h4>{category}</h4>
+              <div className='InventoryInputContainer'>
+                <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add inventory item..." />
+                <button className="addGrocery" type='button' onClick={(event) => addInventory(event, category)}><IoAddCircle /></button><br />
+              </div>
+              <ul>
+                {inputValues.map((item, index) => (
+                  <li key={`${category}-${index}`}>
+    
+                    {/* Display Remove item link if not in edit mode */}
+                    {!isEditable[index] && (
+                      <a className="removeFromInventory" onClick={() => removeItem(item.Name)}>
+                        {item.Name}
+                      </a>
+                    )}
+    
+                    {/* Name input: visible when in edit mode */}
+                    {isEditable[index] && (
+                      <input
+                        type="text"
+                        className="editItem"
+                        value={item.Name}
+                        onChange={(e) => handleInputChange(e, index, 'Name')}
+                      />
+                    )}
+    
+                    {/* Edit icon to toggle both fields */}
+                    <AiOutlineEdit
+                      className="edit-icon"
+                      onClick={() => handleEditClick(index)}
+                    />
+    
+                    {/* Category input: visible when in edit mode */}
+                    {isEditable[index] && (
+                      <input
+                        type="text"
+                        className="editItem editCategory"
+                        value={item.Category}
+                        onChange={(e) => handleInputChange(e, index, 'Category')}
+                      />
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </form>
+          </section>
+        </div>
+      );
   }
   
   if (inventoryList.length === 0) {

@@ -819,10 +819,11 @@ th {
 }
 
 .editItem{
-  color: black;
+  color: rgba(23, 97, 167, 0.783);
   background-color: #ffffff00;
   border: none;
   font-size: calc(10px + 1vmin);
+
 
   &:focus{
     outline: none;

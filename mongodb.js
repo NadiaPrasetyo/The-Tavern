@@ -990,6 +990,24 @@ app.post('/api/remove-inventory-item', async (req, res) => {
   }
 });
 
+app.post('/api/update-inventory-item', async (req, res) => {
+  try {
+   
+    const collection = database.collection('Inventory'); // your inventory collection
+
+    // Update the item in the inventory
+    await collection.updateOne({ Username: req.body.Username, Name: req.body.Name }, { $set: req.body });
+    // console.log(req.body);
+
+    // If everything is OK
+    res.status(200).json({ message: "Item updated in inventory" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 //GET GROCERY LIST
 app.post('/api/get-grocery', async (req, res) => {
   try {
