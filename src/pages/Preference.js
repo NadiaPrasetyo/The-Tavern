@@ -170,7 +170,7 @@ function Preference() {
     setisDarkModeSwitch((prevMode) => {
       const newMode = !prevMode;
       document.body.classList.toggle('dark', newMode);
-      localStorage.setItem('isDarkModeSwitch', newMode);
+      localStorage.setItem('isDarkMode', newMode);
   
       // Sync with backend
       updatePreference({ DarkMode: newMode });
@@ -202,7 +202,7 @@ function Preference() {
   };
   // Apply the user's dark mode preference on initial load
   useEffect(() => {
-    const storedDarkMode = localStorage.getItem('isDarkModeSwitch');
+    const storedDarkMode = localStorage.getItem('isDarkMode');
     const storedDay = localStorage.getItem('firstDay') || 'Monday';
 
     if (storedDarkMode !== null) {
@@ -220,7 +220,7 @@ function Preference() {
     const savePreference = () => {
       if (isDarkModeSwitch || selectedDay !== 'Monday') {
         updatePreference();
-        localStorage.setItem('isDarkModeSwitch', isDarkModeSwitch);
+        localStorage.setItem('isDarkMode', isDarkModeSwitch);
         localStorage.setItem('firstDay', selectedDay);
       }
     };
