@@ -11,7 +11,7 @@ import { ThemeContext } from '../components/ThemeContext.js';
 
 
 function Preference() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkModeSwitch, setisDarkModeSwitch] = useState(false);
   const [displayOption, setDisplayOptions] = useState(false);
   const [selectedDay, setSelectedDay] = useState('Monday');
   const [displayConfirm, setDisplayConfirm] = useState(false);
@@ -19,12 +19,13 @@ function Preference() {
 
   // // Function to toggle dark mode
   // const toggleDarkMode = () => {
-  //   setIsDarkMode((prevMode) => !prevMode);
+  //   setisDarkModeSwitch((prevMode) => !prevMode);
   // };
 
   const DarkModeToggle = () => {
     const { isDarkMode, toggleDarkMode } = useContext(ThemeContext);
-  
+    setisDarkModeSwitch(isDarkMode);
+
     return (
       <div className="pref dark-mode">
       <h2>Dark Mode</h2>
@@ -49,7 +50,7 @@ function Preference() {
     const data = await response.json();
     // if preference exists, set the preference
     if (data.preferences.DarkMode) {
-      setIsDarkMode(data.preferences.DarkMode);
+      setisDarkModeSwitch(data.preferences.DarkMode);
     }
     if (data.preferences.FirstDay) {
       setSelectedDay(data.preferences.FirstDay);
@@ -166,10 +167,10 @@ function Preference() {
   
   // Toggle dark mode and sync with backend
   const toggleDarkMode = () => {
-    setIsDarkMode((prevMode) => {
+    setisDarkModeSwitch((prevMode) => {
       const newMode = !prevMode;
       document.body.classList.toggle('dark', newMode);
-      localStorage.setItem('isDarkMode', newMode);
+      localStorage.setItem('isDarkModeSwitch', newMode);
   
       // Sync with backend
       updatePreference({ DarkMode: newMode });
@@ -182,7 +183,7 @@ function Preference() {
     const username = localStorage.getItem('username');
 
     const preference = {};
-    if (isDarkMode !== null) preference.DarkMode = isDarkMode;
+    if (isDarkModeSwitch !== null) preference.DarkMode = isDarkModeSwitch;
     if (selectedDay !== 'Monday') preference.FirstDay = selectedDay;
 
     const response = await fetch('/api/update-preference', {
@@ -201,12 +202,12 @@ function Preference() {
   };
   // Apply the user's dark mode preference on initial load
   useEffect(() => {
-    const storedDarkMode = localStorage.getItem('isDarkMode');
+    const storedDarkMode = localStorage.getItem('isDarkModeSwitch');
     const storedDay = localStorage.getItem('firstDay') || 'Monday';
 
     if (storedDarkMode !== null) {
       const isDark = storedDarkMode === 'true'; // Convert string to boolean
-      setIsDarkMode(isDark);
+      setisDarkModeSwitch(isDark);
       document.body.classList.toggle('dark', isDark); // Apply dark mode class if true
     }
 
@@ -217,9 +218,9 @@ function Preference() {
   // save the preference to localstorage
   useEffect(() => {
     const savePreference = () => {
-      if (isDarkMode || selectedDay !== 'Monday') {
+      if (isDarkModeSwitch || selectedDay !== 'Monday') {
         updatePreference();
-        localStorage.setItem('isDarkMode', isDarkMode);
+        localStorage.setItem('isDarkModeSwitch', isDarkModeSwitch);
         localStorage.setItem('firstDay', selectedDay);
       }
     };
@@ -228,7 +229,7 @@ function Preference() {
     return () => {
       window.removeEventListener('beforeunload', savePreference);
     }
-  }, [isDarkMode, selectedDay]);
+  }, [isDarkModeSwitch, selectedDay]);
 
   // before unload, save the preference
 
@@ -239,8 +240,8 @@ function Preference() {
 
   // Effect to apply dark mode when toggled
   useEffect(() => {
-    document.body.classList.toggle('dark', isDarkMode);
-  }, [isDarkMode]);
+    document.body.classList.toggle('dark', isDarkModeSwitch);
+  }, [isDarkModeSwitch]);
 
   return (
     

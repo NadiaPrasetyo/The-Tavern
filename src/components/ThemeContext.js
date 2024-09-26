@@ -10,6 +10,7 @@ export const ThemeProvider = ({ children }) => {
   // Load dark mode preference from localStorage when the app starts
   useEffect(() => {
     const storedDarkMode = localStorage.getItem('isDarkMode');
+    console.log('Stored dark mode:', storedDarkMode);
     if (storedDarkMode !== null) {
       const isDark = storedDarkMode === 'true'; // Convert string to boolean
       setIsDarkMode(isDark);
@@ -39,6 +40,7 @@ export const ThemeProvider = ({ children }) => {
       const newMode = !prevMode;
       document.body.classList.toggle('dark', newMode);
       localStorage.setItem('isDarkMode', newMode);
+      console.log('Dark mode:', localStorage.getItem('isDarkMode'));
   
       // Sync with backend
       updatePreference({ DarkMode: newMode });
