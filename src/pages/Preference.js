@@ -6,8 +6,6 @@ import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver'; // To save the file locally
 import ProfileBar from '../components/profilebar.js';
 
-import { MdOutlineLightMode } from "react-icons/md";
-import { MdOutlineDarkMode } from "react-icons/md";
 import { VscTriangleDown } from "react-icons/vsc";
 
 
@@ -151,10 +149,9 @@ function Preference() {
   const updatePreference = async () => {
     const username = localStorage.getItem('username');
 
-    const preference = {
-      DarkMode: isDarkMode,
-      FirstDay: selectedDay,
-    };
+    const preference = {};
+    if (isDarkMode) preference.DarkMode = isDarkMode;
+    if (selectedDay !== 'Monday') preference.FirstDay = selectedDay;
 
     const response = await fetch('/api/update-preference', {
       method: 'POST',
@@ -213,8 +210,6 @@ function Preference() {
           <input className="checkbox" type="checkbox" id="toggle"/>
           <div className={isDarkMode ? 'dark' : 'light'}>
             <label className='toggle' onClick={toggleDarkMode}>
-              <MdOutlineLightMode className='icon light-mode'/>
-              <MdOutlineDarkMode className='icon dark-mode'/>
               <span className="ball"></span>
             </label>
           </div>

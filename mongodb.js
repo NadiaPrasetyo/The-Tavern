@@ -1134,8 +1134,13 @@ app.post('/api/update-preference', async (req, res) => {
    
     const collection = database.collection('Preferences'); // your preferences collection
 
-    // Update the preferences in the database    
-    await collection.updateOne({ Username: username }, { $set: preferences }, { upsert: true });
+    if (!preferences || Object.keys(preferences).length === 0) {
+      await collection.deleteOne({ Username: username });
+    } else {
+      // Update the preferences in the database    
+      await collection.updateOne({ Username: username }, { $set: preferences }, { upsert: true });
+    }
+    
     // If everything is OK
     res.status(200).json({ message: "Preferences updated successfully" });
 
