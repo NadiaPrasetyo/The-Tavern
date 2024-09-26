@@ -92,18 +92,16 @@ function GetAllInventory() {
 
   
   const [groceryItemOpen, setGroceryItemOpen] = React.useState(false);
+  function addInventory(category) {
+    // Get the button and input field
+    const inputContainer = document.getElementById(`inventory-container-${category}`);
+    const button = inputContainer.querySelector('.addGrocery');
+    const groceryItem = inputContainer.querySelector('.addGroceryItem');
 
-  function addInventory(event, category) {
-    //get the source button
-    const buttonClick = event.target;
-    const button = buttonClick.closest('.addGrocery');
-    const groceryItem = buttonClick.closest('.InventoryInputContainer').querySelector('.addGroceryItem');
-    
-  
     if (!groceryItemOpen) {
       button.style.animation = 'moveRight 0.5s';
       button.style.left = '250px';
-      groceryItem.placeholder = 'Add inventory item...';
+      groceryItem.placeholder = 'Add grocery item...';
       groceryItem.style.animation = 'openRight 0.5s';
       groceryItem.style.display = 'block';
   
@@ -111,26 +109,26 @@ function GetAllInventory() {
       const value = groceryItem.value.trim();
       if (value === '') {
         console.log("Inventory item is empty");
-        // Do nothing if the grocery item is empty
+        // No action if the input is empty
       } else {
         // Add the grocery item to the list in the database
         addInventoryItem(value, category);
+        groceryItem.value = '';  // Clear the input field after adding the item
       }
-      
-      setTimeout(() => {
+
+      // Start the closing animation
       button.style.animation = 'moveLeft 0.5s';
       button.style.left = '-3px';
       groceryItem.style.animation = 'closeLeft 0.5s';
-  
-      // Hide the grocery item input after 0.5 seconds
+
+      // Hide the grocery item input after the closing animation finishes (0.5s)
       setTimeout(() => {
         groceryItem.style.display = 'none';
-      }
-      , 500);
-      }, 1500);
+      }, 500);
     }
-  
-     setGroceryItemOpen(!groceryItemOpen);
+
+    // Toggle the open state after handling
+    setGroceryItemOpen(!groceryItemOpen);
   }
 
   function addCategory(event, confirmedPopup) {
@@ -192,46 +190,52 @@ function GetAllInventory() {
         prevValues.map((item, i) => (i === index ? { ...item, [field]: value } : item))
       );
     };
-
-      // Toggle edit mode for both Name and Category
+  
+    // Toggle edit mode for both Name and Category
     const handleEditClick = (index) => {
-      setIsEditable(prevEditable =>
-        prevEditable.map((editable, i) => (i === index ? !editable : editable))
-      );
-
-      //when autosaving, update the database
-      if (!isEditable[index]) {
+      // If we are leaving edit mode (from true to false), update the server
+      if (isEditable[index]) {
         const item = inputValues[index];
-        console.log("Updating item: " + item.Name);
+        const originalName = categoryList[index].Name;  // Original Name from the inventoryList
+        const originalCategory = categoryList[index].Category; // Original Category
+
+        console.log("Original Name:", originalName);
+
+        console.log("Updating item:", item);
+
         fetch('/api/update-inventory-item', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            Username: localStorage.getItem('username'),
-            Name: item.Name,
-            Category: item.Category
+            Username: localStorage.getItem('username'),   // Username
+            Name: originalName,                           // Original Name (to find the document)
+            Category: originalCategory,                   // Original Category (optional for matching)
+            NewName: item.Name,                           // New Name after editing
+            NewCategory: item.Category                    // New Category after editing
           }),
-        }).then((response) => {
+        }).then(response => {
           if (response.status === 200) {
             console.log("Item updated successfully");
-            // Update the inventory list
             getInventory().then((inventory) => {
-              console.log("Inventory list updated");
-              setInventoryList(inventory);
-              return;
+              setInventoryList(inventory);  // Update the inventory list with new values
             });
           } else {
             console.log("Error updating item");
           }
-        });
+        }).catch(error => console.error('Error:', error));
       }
+  
+      // Toggle the edit mode for the specific item
+      setIsEditable(prevEditable =>
+        prevEditable.map((editable, i) => (i === index ? !editable : editable))
+      );
     };
 
-    function removeItem(event) {
-      const item = event.target.textContent;
-      console.log("Removing item: " + item);
+    function removeItem(itemName) {
+
+      console.log("Removing item: " + itemName);
       // Remove the item from the database
       fetch('/api/remove-inventory-item', {
         method: 'POST',
@@ -240,7 +244,7 @@ function GetAllInventory() {
         },
         body: JSON.stringify({
           Username: localStorage.getItem('username'),
-          Name: item,
+          Name: itemName,
           Category: category
         }),
       }).then((response) => {
@@ -268,9 +272,9 @@ function GetAllInventory() {
           <section className='inventory'>
             <form onKeyDown={(event) => event.key !== 'Enter'}>
               <h4>{category}</h4>
-              <div className='InventoryInputContainer'>
+              <div className='InventoryInputContainer' id={`inventory-container-${category}`}>
                 <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add inventory item..." />
-                <button className="addGrocery" type='button' onClick={(event) => addInventory(event, category)}><IoAddCircle /></button><br />
+                <button className="addGrocery" type='button' onClick={() => addInventory(category)}><IoAddCircle /></button><br />
               </div>
               <ul>
                 {inputValues.map((item, index) => (

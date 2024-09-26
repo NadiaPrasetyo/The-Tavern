@@ -119,7 +119,7 @@ app.post('/api/register', async (req, res) => {
     // Check if username already exists
     const user = await collection.findOne({ username });
     if (user) {
-      return res.status(400).json({ message: "Username already exist" });
+      return; //doesn't return anything, just continue
     }
     // Check if email already exists
     const emailExist = await collection.findOne({ email });
@@ -990,19 +990,35 @@ app.post('/api/remove-inventory-item', async (req, res) => {
   }
 });
 
+// UPDATE INVENTORY ITEM
 app.post('/api/update-inventory-item', async (req, res) => {
   try {
-   
+    const { Username, Name, Category, NewName, NewCategory } = req.body; // Extracting new values
+
+    console.log("Updating item with Username:", Username, "Name:", Name, "Category:", Category);
+
     const collection = database.collection('Inventory'); // your inventory collection
 
-    // Update the item in the inventory
-    await collection.updateOne({ Username: req.body.Username, Name: req.body.Name }, { $set: req.body });
-    // console.log(req.body);
+    // Update item by Username and Name (could add Category here if required)
+    const updateResult = await collection.updateOne(
+      { Username, Name, Category },  // Find the item based on Username, Name, and Category
+      {
+        $set: {
+          Name: NewName || Name,       // Update the Name field
+          Category: NewCategory || Category  // Update the Category field
+        }
+      }
+    );
 
-    // If everything is OK
-    res.status(200).json({ message: "Item updated in inventory" });
+    if (updateResult.modifiedCount === 0) {
+      console.log("No documents were updated. Check if the item exists.");
+      return res.status(404).json({ message: "Item not found or no changes made" });
+    }
+
+    res.status(200).json({ message: "Item updated successfully" });
 
   } catch (error) {
+    console.error("Error updating item:", error);
     res.status(500).json({ message: "Server error" });
   }
 });

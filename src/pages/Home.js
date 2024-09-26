@@ -152,6 +152,7 @@ function GroceryList() {
 
       if (response.status === 200) {
         console.log("Grocery item added");
+
         document.querySelector('.addGroceryItem').value = '';
         document.querySelector('.addGroceryItem').placeholder = 'Grocery item added to the list';
       } else if(response.status === 409){
@@ -185,6 +186,11 @@ function GroceryList() {
       } else {
         // Add the grocery item to the list in the database
         addGroceryItem(value);
+        // Update the grocery list
+        get5lastGroceryList().then((grocery) => {
+          setGroceryList(grocery);
+          return;
+        });
       }
       
       setTimeout(() => {
@@ -201,13 +207,6 @@ function GroceryList() {
     }
 
     setGroceryItemOpen(!groceryItemOpen);
-    if(groceryItemOpen){
-      // Update the grocery list
-      get5lastGroceryList().then((grocery) => {
-        setGroceryList(grocery);
-        return;
-      });
-    }
   }
 
   function addToInventory(event) {
