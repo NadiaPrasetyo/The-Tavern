@@ -1245,6 +1245,45 @@ app.delete('/api/delete-account', async (req, res) => {
   }
 });
 
+// ADD MANY TO GROCERY LIST
+app.post('/api/add-many-to-grocery', async (req, res) => {
+  const { username, items, category } = req.body;
+  
+  try {
+   
+    const collection = database.collection('GroceryList'); // your grocery collection
+
+    items.map(async item => {
+      // remove leading/trailing whitespace
+      let cleanedItem = item.trim();
+      // change symbols - and * to space
+      cleanedItem = cleanedItem.replace(/[-*]/g, ' ');
+      // remove trailing commas
+      cleanedItem = cleanedItem.replace(/,$/, '');
+      // Make the first letter uppercase and the rest lowercase
+      cleanedItem = cleanedItem.charAt(0).toUpperCase() + cleanedItem.slice(1).toLowerCase();
+      
+
+      //check that the collection doesn't already have the item
+      const itemExist = await collection.findOne({ Username: username, Name: cleanedItem });
+
+      if (itemExist) {
+        // skip the item if it already exists
+        console.log(itemExist.Name, "already exists in the grocery list in category:", itemExist.Category);
+      } else {
+        // Add the item to the grocery list
+        await collection.insertOne({ Username: username, Name: cleanedItem, Category: category });
+      }
+    });
+
+    // If everything is OK
+    res.status(200).json({ message: "Items added to grocery list" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

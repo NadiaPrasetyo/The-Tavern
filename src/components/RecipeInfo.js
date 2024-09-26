@@ -3,8 +3,7 @@ import { IoMdClose } from "react-icons/io";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import '../App.css'; 
 
-const RecipeInfo = ({ isOpen, onClose, recipe }) => {
-  const [selectedIngredients, setSelectedIngredients] = useState([]);
+const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, fromRecipeTab }) => {
   const [infoPopUp, setInfoPopUp] = useState(false);
   // Close the modal when the Esc key is pressed
   useEffect(() => {
@@ -49,10 +48,10 @@ const RecipeInfo = ({ isOpen, onClose, recipe }) => {
   if (!isOpen) return null; // Don't render anything if not open
 
   const toggleIngredient = (ingredient) => {
-    if (selectedIngredients.includes(ingredient)) {
-      setSelectedIngredients(selectedIngredients.filter((item) => item !== ingredient));
+    if (highlighted.includes(ingredient)) {
+      setHighlighted(highlighted.filter((item) => item !== ingredient));
     } else {
-      setSelectedIngredients([...selectedIngredients, ingredient]);
+      setHighlighted([...highlighted, ingredient]);
     }
   }
 
@@ -74,18 +73,27 @@ const RecipeInfo = ({ isOpen, onClose, recipe }) => {
               <div className='ingredients-header'>
                 INGREDIENTS
               </div>
-              <AiOutlineInfoCircle className='info-icon' onClick={() => setInfoPopUp(!infoPopUp)} />
-              {infoPopUp && (
-                  <div className="rec-info-popup highlight-info-popup">
-                    <p>Highlight the ingredients you want to add to grocery list (will be added to 'From Menu' category)</p>
-                  </div>
-                )}
+              {
+                fromRecipeTab ? (
+                  null
+                ) : (
+                  <>
+                  <AiOutlineInfoCircle className='info-icon' onClick={() => setInfoPopUp(!infoPopUp)} />
+                  {infoPopUp && (
+                      <div className="rec-info-popup highlight-info-popup">
+                        <p>Highlight the ingredients you want to add to grocery list (will be added to 'From Menu' category)</p>
+                      </div>
+                    )}
+                  </>
+                )
+              }
             </div>
             <ul className='recipe-ingredients-container'>
               {recipe.Ingredients.map((ingredient, index) => (
                 <li>
                   <a className={`recipe-ingredients-info 
-                  ${selectedIngredients.includes(ingredient) ? 'selected-ing' : ''}`} 
+                  ${!fromRecipeTab ? 'highlightable' : ''}
+                  ${highlighted.includes(ingredient) ? 'selected-ing' : ''}`} 
                   key={index} 
                   onClick={() => toggleIngredient(ingredient)}>
                     {ingredient}</a>

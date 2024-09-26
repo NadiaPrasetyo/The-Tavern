@@ -20,6 +20,7 @@ function Menu() {
   const firstDay = localStorage.getItem('firstDay');
   // arrange days based on first day of the week 
   const days = daysDefault.slice(daysDefault.indexOf(firstDay)).concat(daysDefault.slice(0, daysDefault.indexOf(firstDay)));
+  const [highlightedIngredients, setHighlightedIngredients] = useState([]);
 
   const [menu, setMenu] = useState({
     RecipeList: [],
@@ -95,6 +96,26 @@ function Menu() {
     }
   };
 
+  const postIngredientsToGroceryList = async () => {
+    try {
+      const response = await fetch('/api/add-many-to-grocery', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: localStorage.getItem('username'),
+          items: highlightedIngredients,
+          category: 'From Menu',
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   // Autosave every 5 minutes if changes were made
   useEffect(() => {
     const interval = setInterval(() => {
@@ -110,6 +131,9 @@ function Menu() {
       if (hasChanges) {
         updateMenu(); // Save changes before unloading the page
       }
+      if (highlightedIngredients.length > 0) {
+        postIngredientsToGroceryList(); // Add highlighted ingredients to grocery list
+      }
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -117,7 +141,7 @@ function Menu() {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [hasChanges]);
+  }, [hasChanges, highlightedIngredients]);
 
   const handleOnDragStart = (start) => {
     if (start.source.droppableId === 'RecipeList') {
@@ -162,6 +186,10 @@ function Menu() {
     } else if (destination.droppableId === 'RecipeList') {
       const sourceDay = menu[source.droppableId];
       sourceDay.splice(source.index, 1);
+
+      // remove any ingredients from highlightedIngredients that are in the recipe being removed
+      // const removedIngredients = sourceDay[source.index].Ingredients;
+      // setHighlightedIngredients(highlightedIngredients.filter((ingredient) => !removedIngredients.includes(ingredient)));
 
       setMenu({
         ...menu,
@@ -240,10 +268,12 @@ function Menu() {
                 setMenu={setMenu}
                 isOpenDrag={recipeTabOpen}
                 setIsOpenDrag={setRecipeTabOpen}
+                highlightedIngredients={highlightedIngredients}
+                setHighlightedIngredients={setHighlightedIngredients}
               />
             </div>
           )}
-          <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} />
+          <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} highlighted={highlightedIngredients} setHighlighted={setHighlightedIngredients}/>
         </main>
 
         <footer>

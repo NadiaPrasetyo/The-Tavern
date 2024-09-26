@@ -90,6 +90,7 @@ body{
   --text-color: #000000;
   --color-background: white;
   --color-setting-input: #3f3f3fa8;
+  --color-login-bg: var(--color-green-light);
 }
 
 /*Dark Mode */
@@ -98,6 +99,7 @@ body.dark{
   --text-color: #ffffff;
   --color-background: #121212;
   --color-setting-input: #e7e0d8a8;
+  --color-login-bg: var(--color-green-light2);
 
 }
 
@@ -387,7 +389,7 @@ footer{
 }
 
 #SignIn-component, #SignUp-component{
-  background-color: var(--color-green-light2);
+  background-color: var(--color-login-bg);
   display: flex;
   justify-content: center;
   padding-top: 10%;
@@ -1336,15 +1338,19 @@ th {
   list-style-type: square; /* Remove default list styling */
   padding: 0 5px; /* Add some padding for the individual list items */
   border-radius: 50px; /* Add border radius to the list items */
-  cursor: pointer; /* Change cursor to pointer for interactivity */
+  cursor: default; /* Change cursor to pointer for interactivity */
 }
 
-.recipe-ingredients-info:hover {
-  background-color: #708871; /* Add a light background color on hover */
+.highlightable {
+  cursor: pointer !important; /* Change cursor to pointer for interactivity */
+}
+
+.highlightable:hover {
+  background-color: var(--color-green-muted-solid); /* Add a light background color on hover */
 }
 
 .selected-ing {
-  background-color: #708871; /* Add a light background color for selected ingredients */
+  background-color: var(--color-green-muted-solid); /* Add a light background color for selected ingredients */
 }
 
 /* SCROLLER STYLE */
