@@ -83,6 +83,29 @@
   --color-pink-light: #f1cbdac2; /* Excluded item background */
   --color-pink-hover: #ecb3c9d4; /* Exclude item hover background */
 }
+
+/*Light Mode */
+body{
+  --background-color: #ffffff;
+  --text-color: #000000;
+}
+
+/*Dark Mode */
+body.dark{
+  --background-color: #121212;
+  --text-color: #ffffff;
+}
+
+/*transition for dark mode */
+body {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
 * {
   font-family: "Hammersmith One", sans-serif;
   a{

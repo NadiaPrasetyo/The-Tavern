@@ -10,7 +10,6 @@ import Login from "./pages/Login";
 import Settings from "./pages/Settings";
 import Preference from "./pages/Preference";
 import Options from './pages/Options';
-
 import Trial from './pages/Trial';
 
 
