@@ -1,40 +1,50 @@
 import React, { createContext, useState, useEffect } from 'react';
 
-// Create ThemeContext
+// Create a context
 export const ThemeContext = createContext();
 
-// ThemeProvider component that wraps your entire app
+// ThemeProvider component that will wrap your entire app
 export const ThemeProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // Load dark mode preference from localStorage
+  // Load dark mode preference from localStorage when the app starts
   useEffect(() => {
-    const storedDarkMode = localStorage.getItem('isDarkMode') === 'true';
-    setIsDarkMode(storedDarkMode);
-    document.body.classList.toggle('dark', storedDarkMode);
+    const storedDarkMode = localStorage.getItem('isDarkMode');
+    console.log('Stored dark mode:', storedDarkMode);
+    if (storedDarkMode !== null) {
+      const isDark = storedDarkMode === 'true'; // Convert string to boolean
+      setIsDarkMode(isDark);
+      document.body.classList.toggle('dark', isDark);
+    }
   }, []);
 
-  const updatePreference = async (darkMode) => {
+  const updatePreference = async (preference) => {
     const username = localStorage.getItem('username');
-    const preference = { DarkMode: darkMode };
-
     const response = await fetch('/api/update-preference', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, preferences: preference }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        preferences: preference,
+      }),
     });
-
     const data = await response.json();
-    console.log("Darkmode preferences Updated!", isDarkMode, data);
+    console.log('Preferences updated:', data);
   };
-
+  
   // Toggle dark mode and sync with backend
   const toggleDarkMode = () => {
     setIsDarkMode((prevMode) => {
       const newMode = !prevMode;
       document.body.classList.toggle('dark', newMode);
       localStorage.setItem('isDarkMode', newMode);
-      updatePreference(newMode); // Sync with backend
+      console.log('Dark mode:', localStorage.getItem('isDarkMode'));
+  
+      // Sync with backend
+      updatePreference({ DarkMode: newMode });
+  
       return newMode;
     });
   };

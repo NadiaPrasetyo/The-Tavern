@@ -1,19 +1,43 @@
 import '../App.css';
 import Sidebar from '../components/sidebar.js';
+
 import React, { useState, useEffect, useContext } from 'react';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver'; // To save the file locally
 import ProfileBar from '../components/profilebar.js';
+
 import { VscTriangleDown } from "react-icons/vsc";
 import { ThemeContext } from '../components/ThemeContext.js';
 
 
 function Preference() {
-  const { isDarkMode, toggleDarkMode } = useContext(ThemeContext);
+  const [isDarkModeSwitch, setisDarkModeSwitch] = useState(false);
   const [displayOption, setDisplayOptions] = useState(false);
   const [selectedDay, setSelectedDay] = useState('Monday');
   const [displayConfirm, setDisplayConfirm] = useState(false);
   // const [fontSize, setFontSize] = useState(16);
+
+  // // Function to toggle dark mode
+  // const toggleDarkMode = () => {
+  //   setisDarkModeSwitch((prevMode) => !prevMode);
+  // };
+
+  const DarkModeToggle = () => {
+    const { isDarkMode, toggleDarkMode } = useContext(ThemeContext);
+    setisDarkModeSwitch(isDarkMode);
+
+    return (
+      <div className="pref dark-mode">
+      <h2>Dark Mode</h2>
+      <input className="checkbox" type="checkbox" id="toggle"/>
+      <div className={isDarkMode ? 'dark' : 'light'}>
+        <label className='toggle' onClick={toggleDarkMode}>
+          <span className="ball"></span>
+        </label>
+      </div>
+      </div>
+    );
+  };
 
   const fetchPreference = async () => {
     const username = localStorage.getItem('username');
@@ -24,7 +48,10 @@ function Preference() {
       },
     });
     const data = await response.json();
-
+    // if preference exists, set the preference
+    if (data.preferences.DarkMode) {
+      setisDarkModeSwitch(data.preferences.DarkMode);
+    }
     if (data.preferences.FirstDay) {
       setSelectedDay(data.preferences.FirstDay);
     }
@@ -137,11 +164,26 @@ function Preference() {
   useEffect(() => {
     fetchPreference();
   }, []);
+  
+  // Toggle dark mode and sync with backend
+  const toggleDarkMode = () => {
+    setisDarkModeSwitch((prevMode) => {
+      const newMode = !prevMode;
+      document.body.classList.toggle('dark', newMode);
+      localStorage.setItem('isDarkMode', newMode);
+  
+      // Sync with backend
+      updatePreference({ DarkMode: newMode });
+  
+      return newMode;
+    });
+  };
 
   const updatePreference = async () => {
     const username = localStorage.getItem('username');
 
     const preference = {};
+    if (isDarkModeSwitch !== null) preference.DarkMode = isDarkModeSwitch;
     if (selectedDay !== 'Monday') preference.FirstDay = selectedDay;
 
     const response = await fetch('/api/update-preference', {
@@ -156,19 +198,16 @@ function Preference() {
     });
 
     const data = await response.json();
-    console.log("Start day preferences Updated!" +data);
+    console.log("Preferences Updated!" +data);
   };
-  
   // Apply the user's dark mode preference on initial load
   useEffect(() => {
     const storedDarkMode = localStorage.getItem('isDarkMode');
-    console.log(storedDarkMode);
-
     const storedDay = localStorage.getItem('firstDay') || 'Monday';
 
     if (storedDarkMode !== null) {
       const isDark = storedDarkMode === 'true'; // Convert string to boolean
-      // setIsDarkMode(isDark);
+      setisDarkModeSwitch(isDark);
       document.body.classList.toggle('dark', isDark); // Apply dark mode class if true
     }
 
@@ -218,15 +257,7 @@ function Preference() {
       <main className ="content setting-content">
         <h1>Preference</h1>
         {/* Dark Mode */}
-        <div className="pref dark-mode">
-        <h2>Dark Mode</h2>
-        <input className="checkbox" type="checkbox" id="toggle"/>
-        <div className={isDarkMode ? 'dark' : 'light'}>
-          <label className='toggle' onClick={toggleDarkMode}>
-            <span className="ball"></span>
-          </label>
-        </div>
-        </div>
+        <DarkModeToggle/>
 
 
         {/* Font size  USE SLIDER */}
