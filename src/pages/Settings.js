@@ -4,8 +4,6 @@ import ProfileBar from '../components/profilebar.js';
 import { AiOutlineEdit } from "react-icons/ai";
 import React, { useState } from 'react';
 
-const isDarkMode = false;//default to false
-
 function Settings() {
   const [isEditable, setIsEditable] = useState({ username: false, name: false, email: false, password: false });
   const [message, setMessage] = useState('');
@@ -107,21 +105,6 @@ function Settings() {
     }
 
   };
-
-
-  if (isDarkMode) {
-    document.body.style.backgroundColor = 'black';
-    document.body.style.color = 'white';
-    document.querySelectorAll('a').forEach(link => {
-      link.style.color = 'white';
-    });
-  } else {
-    document.body.style.backgroundColor = '#fffbf6';
-    document.body.style.color = 'black';
-    document.querySelectorAll('a').forEach(link => {
-      link.style.color = 'black';
-    });
-  }
 
   return (
 
