@@ -25,7 +25,7 @@ export const ThemeProvider = ({ children }) => {
     });
 
     const data = await response.json();
-    console.log("Preferences Updated!", data);
+    console.log("Darkmode preferences Updated!", isDarkMode, data);
   };
 
   // Toggle dark mode and sync with backend

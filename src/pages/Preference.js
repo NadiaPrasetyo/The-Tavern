@@ -24,10 +24,7 @@ function Preference() {
       },
     });
     const data = await response.json();
-    // if preference exists, set the preference
-    if (data.preferences.DarkMode) {
-      toggleDarkMode(data.preferences.DarkMode);
-    }
+
     if (data.preferences.FirstDay) {
       setSelectedDay(data.preferences.FirstDay);
     }
@@ -145,7 +142,6 @@ function Preference() {
     const username = localStorage.getItem('username');
 
     const preference = {};
-    if (isDarkMode !== null) preference.DarkMode = isDarkMode;
     if (selectedDay !== 'Monday') preference.FirstDay = selectedDay;
 
     const response = await fetch('/api/update-preference', {
@@ -160,16 +156,19 @@ function Preference() {
     });
 
     const data = await response.json();
-    console.log("Preferences Updated!" +data);
+    console.log("Start day preferences Updated!" +data);
   };
+  
   // Apply the user's dark mode preference on initial load
   useEffect(() => {
     const storedDarkMode = localStorage.getItem('isDarkMode');
+    console.log(storedDarkMode);
+
     const storedDay = localStorage.getItem('firstDay') || 'Monday';
 
     if (storedDarkMode !== null) {
       const isDark = storedDarkMode === 'true'; // Convert string to boolean
-      toggleDarkMode(isDark);
+      // setIsDarkMode(isDark);
       document.body.classList.toggle('dark', isDark); // Apply dark mode class if true
     }
 
