@@ -1040,6 +1040,7 @@ th {
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: default;
   z-index: 11;
 }
 
@@ -1108,6 +1109,7 @@ th {
   position: relative;
   background-color: #d7e1b2bd;
   padding: 20px;
+  cursor: default;
 }
 
 .recipe-info-background {
@@ -1164,12 +1166,24 @@ th {
   margin-top: 5px; /* Add spacing above tags */
 }
 
+.info-header-container {
+  display: flex; /* Flexbox for header layout */
+  align-items: center; /* Center items vertically */
+  margin-top: 10px; /* Add spacing above header */
+}
+
 .ingredients-header {
   font-size: 1.25rem;
-  margin-top: 10px; /* Add spacing above ingredients */
   /* gap between characters */
   letter-spacing: 2px;
 }
+
+.highlight-info-popup {
+  position: fixed;
+  top: 50%; /* Adjust position as needed */
+  left: 20%; /* Center the popup */
+}
+
 
 .recipe-ingredients-container {
   display: grid;
@@ -1181,7 +1195,17 @@ th {
 
 .recipe-ingredients-info {
   list-style-type: square; /* Remove default list styling */
-  padding-left: 2px; /* Add some padding for the individual list items */
+  padding: 0 5px; /* Add some padding for the individual list items */
+  border-radius: 50px; /* Add border radius to the list items */
+  cursor: pointer; /* Change cursor to pointer for interactivity */
+}
+
+.recipe-ingredients-info:hover {
+  background-color: #708871; /* Add a light background color on hover */
+}
+
+.selected-ing {
+  background-color: #708871; /* Add a light background color for selected ingredients */
 }
 
 /* SCROLLER STYLE */
@@ -1413,6 +1437,7 @@ th {
   font-weight: bold;
   letter-spacing: 2px;
   border-bottom: 3px solid black;
+  cursor: default;
 }
 
 /* PREFERENCE */

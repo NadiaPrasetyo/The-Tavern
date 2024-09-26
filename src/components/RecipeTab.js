@@ -5,7 +5,6 @@ import { MdOutlineStarPurple500 } from "react-icons/md";
 import { LuFilter } from "react-icons/lu";
 import { LuBookOpenCheck } from "react-icons/lu";
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import { MdOutlineStarBorderPurple500 } from "react-icons/md";
 import { Droppable } from 'react-beautiful-dnd';
 import Recipe from './Recipe';
 
