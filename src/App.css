@@ -83,6 +83,7 @@
   --color-pink-dark: #d6a8bbcf;
   --color-pink-light: #f1cbdac2; /* Excluded item background */
   --color-pink-hover: #ecb3c9d4; /* Exclude item hover background */
+  --color-pink-link: #c1126f85; /* Edit item color */
 }
 
 /*Light Mode */
@@ -93,6 +94,7 @@ body{
   --color-setting-input: #3f3f3fa8;
   --color-login-bg: var(--color-green-light);
   --color-blue-link: #1250c185;
+  --color-pink-link: #c1126f85;
   --checklist-bg: var(--color-offwhite);
   --checklist-hover: var(--color-grey-light);
   --checklist-checkbox: var(--color-green-checkbox);
@@ -115,6 +117,7 @@ body.dark{
   --color-setting-input: #e7e0d8a8;
   --color-login-bg: var(--color-green-light2);
   --color-blue-link: #cef1fff5;
+  --color-pink-link: #ffcedef5;
   --checklist-bg: #1f1f1f;
   --checklist-hover: #5b4a4a;
   --checklist-checkbox: #97e19193;
@@ -733,6 +736,10 @@ th {
     font-size: calc(5px + 1vmin);
     display: none;
   }
+
+  .removeItem{
+    color: var(--color-pink-link);
+  }
 }
 
 /* Hide the browser's default checkbox */
@@ -965,8 +972,27 @@ th {
   margin-bottom: 10px;
   .edit-icon{
     margin-left: 5px;
-    position: relative;
-    top: 5px;
+  }
+
+  .inventoryItem{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+  }
+
+  .inventoryActionsContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .addToGrocery{
+    color: var(--color-pink-link);
+    background-color: var(--color-transparent);
+    border: none;
+    font-size: calc(5px + 1vmin);
+    cursor: pointer;
   }
 }
 
@@ -1037,10 +1063,25 @@ th {
   margin-bottom: 10px;
   
   .edit-icon{
-    display: block;
     position: relative;
-    top: -20px;
-    left: calc(100% + 10px);
+    margin-top: 5px;
+  }
+
+  div{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .editItem{
+    display: inline-flex;
+    margin-left: 32px;
+    margin-top: 5px;
+    margin-bottom: 3px;
+    color: var(--color-pink-link);
+    background-color: var(--color-transparent);
+    border: none;
+    font-size: calc(10px + 1vmin);
   }
 
 }

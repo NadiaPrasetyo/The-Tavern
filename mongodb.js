@@ -1135,6 +1135,40 @@ app.post('/api/remove-grocery-item', async (req, res) => {
   }
 });
 
+// UPDATE GROCERY ITEM
+app.post('/api/update-grocery-item', async (req, res) => {
+  try {
+    const { Username, Name, Category, NewName, NewCategory } = req.body; // Extracting new values
+
+    console.log("Updating item with Username:", Username, "Name:", Name, "Category:", Category);
+
+    const collection = database.collection('GroceryList'); // your inventory collection
+
+    // Update item by Username and Name (could add Category here if required)
+    const updateResult = await collection.updateOne(
+      { Username, Name, Category },  // Find the item based on Username, Name, and Category
+      {
+        $set: {
+          Name: NewName || Name,       // Update the Name field
+          Category: NewCategory || Category  // Update the Category field
+        }
+      }
+    );
+
+    if (updateResult.modifiedCount === 0) {
+      console.log("No documents were updated. Check if the item exists.");
+      return res.status(404).json({ message: "Item not found or no changes made" });
+    }
+
+    res.status(200).json({ message: "Item updated successfully" });
+
+  } catch (error) {
+    console.error("Error updating item:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 //  GET PREFERENCES
 app.get('/api/get-preference', async (req, res) => {
   const { username } = req.query;
