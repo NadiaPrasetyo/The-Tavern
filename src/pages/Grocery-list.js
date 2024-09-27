@@ -218,7 +218,7 @@ function Grocery() {
 
       console.log("Updating item:", item);
 
-      fetch('/api/update-inventory-item', {
+      fetch('/api/update-grocery-item', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -272,6 +272,58 @@ function Grocery() {
     });
   };
 
+  function addToInventory(item) {
+    // Add the specified grocery item to the inventory and remove it from the grocery list
+
+    const addToInventory = async (e) => {
+      const response = await fetch('/api/add-to-inventory',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Username: localStorage.getItem('username'),
+          Name: item,
+          Category: 'Inventory',
+        }),
+      });
+
+      if (response.status === 200 || response.status === 409) {
+        console.log("Grocery item added to inventory");
+
+        // Remove the grocery item from the list
+        const response2 = await fetch('/api/remove-grocery-item',{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            Username: localStorage.getItem('username'),
+            Name: item,
+          }),
+        });
+        // Update the grocery list
+
+        if (response2.status === 200) {
+          console.log("Grocery item removed from list");
+          //update the grocery list
+          getGrocery().then((grocery) => {
+            console.log("Grocery list updated");
+            setGroceryList(grocery);
+          return;
+        });
+        } else {
+          console.log("Error removing grocery item from list");
+        }
+      
+      } else {
+        console.log("Error adding grocery item to inventory");
+      }
+    }
+    addToInventory();
+
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -285,7 +337,7 @@ function Grocery() {
       <main className="content" id="ingredient-content">
         {groceryList.length === 0 ? (
           <section className='grocery'>
-            <h4>Inventory</h4>
+            <h4>Grocery List</h4>
             <ul>
               <li>Loading...</li>
             </ul>
@@ -311,13 +363,17 @@ function Grocery() {
                   </div>
                   <ul>
                     {categoryList[category].map((item, index) => (
-                      <li key={`${category}-${index}`}>
-
+                      <div key={`${category}-${index}`}>
+                        
                         {/* Display Remove item link if not in edit mode */}
                         {!isEditable[category]?.[index] && (
-                          <a className="removeFromInventory" onClick={() => removeItem(category, item.Name)}>
-                            {item.Name}
-                          </a>
+                          <label key={index} className = "groceryItem">
+                            <input type="checkbox" id={item.Name} name={item.Name} value={item.Name}/>
+                            <span className = "checkmark"></span>
+                            <span className='itemName'>{item.Name}</span>
+                            <a onClick={()=> addToInventory(item.Name)}> add to Inventory</a>
+                            <a className="removeItem" onClick={() => removeItem(item.Category, item.Name)}> remove from Grocery</a>
+                          </label>
                         )}
 
                         {/* Name input: visible when in edit mode */}
@@ -345,7 +401,7 @@ function Grocery() {
                             onChange={(e) => handleInputChange(category, e, index, 'Category')}
                           />
                         )}
-                      </li>
+                      </div>
                     ))}
                   </ul>
                 </form>
