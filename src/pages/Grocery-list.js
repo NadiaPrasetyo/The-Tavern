@@ -1,14 +1,13 @@
 import '../App.css';
 import Sidebar from '../components/sidebar.js';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ProfileBar from '../components/profilebar.js';
 import { IoAddCircle } from "react-icons/io5";
 import { AiOutlineEdit } from "react-icons/ai";
 
-
-function getGrocery(){
+function getGrocery() {
   
-  // Get Grocery list from the server
+    // Get Grocery list from the server
   const getGrocery = async (e) => {
     const response = await fetch('/api/get-grocery',{
       method: 'POST',
@@ -31,32 +30,62 @@ function getGrocery(){
   }
 
   return getGrocery();
-
 }
 
-let counter = 0;
-function GetAllGrocery() {
-  const [groceryList, setGroceryList] = React.useState([]);
-  counter++;
+function Grocery() {
+  const [groceryItemOpen, setGroceryItemOpen] = useState({});
+  const [groceryItemValue, setGroceryItemValue] = useState('');
+  const [groceryList, setGroceryList] = useState([]);
+  const [inputValues, setInputValues] = useState({});
+  const [isEditable, setIsEditable] = useState({}); // State to track which items are editable
 
-  if(groceryList.length === 0){
-    console.log("Getting grocery list" + counter);
-    if (counter >= 10) {
-      setGroceryList([{Name: "Please add your grocery!", Category: "Grocery"}]);
-    } else {
-    getGrocery().then((grocery) => {
-      setGroceryList(grocery);
-    });
+  document.onkeydown = function (event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      const addGroceryButtons = document.querySelectorAll('.addGrocery');
+      for (let i = 0; i < addGroceryButtons.length; i++) {
+        if (addGroceryButtons[i].style.left === '250px') {
+          addGroceryButtons[i].click();
+          break;
+        }
+      }
     }
-  }
+  };
 
-  let categories;
-  if (groceryList.length > 0) {
-    //each grocery item has a category, separate the unique ones
-    categories = [...new Set(groceryList.map(item => item.Category))];
-  } else {
-    categories = [{Grocery}];//default category is grocery
-  }
+  useEffect(() => {
+    const fetchGrocery = async () => {
+      const inventory = await getGrocery();
+      setGroceryList(inventory);
+    };
+
+    if (groceryList.length === 0) {
+      console.log("Getting inventory list");
+      fetchGrocery();
+    }
+  }, [groceryList]);
+
+  // Create a dictionary for categories
+  const categoryList = {};
+  const categories = [...new Set(groceryList.map(item => item.Category))];
+  categories.forEach((category) => {
+    categoryList[category] = groceryList.filter(item => item.Category === category);
+  });
+
+  useEffect(() => {
+    if (groceryList.length > 0) {
+      const categories = [...new Set(groceryList.map(item => item.Category))];
+      const newIsEditable = {};
+      const newInputValues = {};
+
+      categories.forEach((category) => {
+        newIsEditable[category] = new Array(categoryList[category].length).fill(false);
+        newInputValues[category] = categoryList[category].map((item) => ({ ...item }));
+      });
+
+      setIsEditable(newIsEditable);
+      setInputValues(newInputValues);
+    }
+  }, [groceryList]);
 
   function addGroceryItem(item, category) {
     console.log("Adding grocery item: " + item + " to category: " + category);
@@ -77,60 +106,40 @@ function GetAllGrocery() {
         console.log("Grocery item added successfully");
         //clear the input field
         document.querySelector('.addGroceryItem').value = '';
-        // Update the grocery list
         getGrocery().then((grocery) => {
           console.log("Grocery list updated");
           setGroceryList(grocery);
-          return;
         });
-
       } else {
-        console.log("Error adding grocery item");
-      }
+        console.log("Error adding grocery item");      }
     });
   }
 
-  
-  const [groceryItemOpen, setGroceryItemOpen] = React.useState(false);
-
-  function addGrocery(event, category) {
-    //get the source button
-    const buttonClick = event.target;
-    const button = buttonClick.closest('.addGrocery');
-    const groceryItem = buttonClick.closest('.InventoryInputContainer').querySelector('.addGroceryItem');
-    
-  
-    if (!groceryItemOpen) {
-      button.style.animation = 'moveRight 0.5s';
-      button.style.left = '250px';
-      groceryItem.placeholder = 'Add grocery item...';
-      groceryItem.style.animation = 'openRight 0.5s';
-      groceryItem.style.display = 'block';
-  
-    } else{
-      const value = groceryItem.value.trim();
-      if (value === '') {
-        console.log("Grocery item is empty");
-        // Do nothing if the grocery item is empty
-      } else {
-        // Add the grocery item to the list in the database
-        addGroceryItem(value, category);
-      }
-      
-      setTimeout(() => {
-      button.style.animation = 'moveLeft 0.5s';
-      button.style.left = '-3px';
-      groceryItem.style.animation = 'closeLeft 0.5s';
-  
-      // Hide the grocery item input after 0.5 seconds
-      setTimeout(() => {
-        groceryItem.style.display = 'none';
-      }
-      , 500);
-      }, 1500);
+  function addGrocery(category) {
+    if (groceryItemOpen[category] === undefined) {
+      setGroceryItemOpen({
+        ...groceryItemOpen,
+        [category]: false
+      });
     }
-  
-     setGroceryItemOpen(!groceryItemOpen);
+    const isOpen = groceryItemOpen[category];
+
+    if (!isOpen) {
+      setGroceryItemOpen({
+        ...groceryItemOpen,
+        [category]: true
+      });
+    } else {
+      const value = groceryItemValue.trim();
+      if (value !== '') {
+        addGroceryItem(value, category);
+        setGroceryItemValue('');
+      }
+      setGroceryItemOpen({
+        ...groceryItemOpen,
+        [category]: false
+      });
+    }
   }
 
   function addCategory(event, confirmedPopup) {
@@ -144,205 +153,214 @@ function GetAllGrocery() {
         popup.style.display = 'none';
         return;
       }
+      
       popup.style.display = 'block';
 
     } else {
+      const categoryElement = buttonClick.closest('.popupAddCategory').querySelector('.addCategoryItem');
+      const category = categoryElement.value.trim();
 
-    const categoryElement = buttonClick.closest('.popupAddCategory').querySelector('.addCategoryItem');
-    const category = categoryElement.value.trim();//get the category name
-    
-    if (category === null || category === '') {
-      //close the popup
-      document.querySelector('.popupAddCategory').style.display = 'none';
-      //clear the popup input field
+      if (category === ''){
+          //close the popup
+        document.querySelector('.popupAddCategory').style.display = 'none';
+        //clear the popup input field
+        categoryElement.value = '';
+        return;
+      }
+
+      fetch('/api/add-grocery-category', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Username: localStorage.getItem('username'),
+          Category: category,
+          Name: ''
+        }),
+      }).then((response) => {
+        if (response.status === 200) {
+          console.log("Category added successfully");
+          setGroceryItemOpen({
+            ...groceryItemOpen,
+            [category]: false
+          });
+
+          getGrocery().then((grocery) => {
+            console.log("Grocery list updated");
+            setGroceryList(grocery);
+          });
+        } else {
+          console.log("Error adding category");
+        }
+      });
       categoryElement.value = '';
-      return;
+      document.querySelector('.popupAddCategory').style.display = 'none';
     }
-    // Add the category to the database
-    fetch('/api/add-grocery-category', {
+  }
+
+  const handleInputChange = (category, e, index, field) => {
+    const { value } = e.target;
+    setInputValues(prevValues => ({
+      ...prevValues,
+      [category]: prevValues[category].map((item, i) => (i === index ? { ...item, [field]: value } : item))
+    }));
+  };
+
+  const handleEditClick = (category, index) => {
+
+    if (isEditable[category][index]) {
+      const item = inputValues[category][index];
+      const originalName = categoryList[category][index].Name;
+      const originalCategory = categoryList[category][index].Category;
+
+      console.log("Original Name:", originalName);
+
+      console.log("Updating item:", item);
+
+      fetch('/api/update-inventory-item', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Username: localStorage.getItem('username'),   // Username
+          Name: originalName,                           // Original Name (to find the document)
+          Category: originalCategory,                   // Original Category (optional for matching)
+          NewName: item.Name,                           // New Name after editing
+          NewCategory: item.Category                    // New Category after editing
+        }),
+      }).then(response => {
+        if (response.status === 200) {
+          console.log("Item updated successfully");
+          getGrocery().then((inventory) => {
+            setGroceryList(inventory);
+          });
+        } else {
+          console.log("Error updating item");
+        }
+      }).catch(error => console.error('Error:', error));
+    }
+    setIsEditable({
+      ...isEditable,
+      [category]: isEditable[category].map((item, i) => (i === index ? !item : item))
+    });
+
+  };
+
+  const removeItem = (category, itemName) => {
+    console.log("Removing item: " + itemName);
+    fetch('/api/remove-grocery-item', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         Username: localStorage.getItem('username'),
-        Category: category,
-        Name: ''
+        Name: itemName,
+        Category: category
       }),
     }).then((response) => {
       if (response.status === 200) {
-        console.log("Category added successfully");
-        // Update the grocery list
+        console.log("Item removed successfully");
         getGrocery().then((grocery) => {
-          console.log("Grocery list updated");
           setGroceryList(grocery);
-          return;
         });
-
       } else {
-        console.log("Error adding category");
+        console.log("Error removing item");
       }
     });
-    categoryElement.value = '';//clear the input field
-    document.querySelector('.popupAddCategory').style.display = 'none';//hide the popup
-    }
-  }
-  
-  function GetEachCategoryList(category, groceryList) {
-    const categoryList = groceryList.filter(item => item.Category === category);
-    function addToInventory(event) {
-      // Add the specified grocery item to the inventory and remove it from the grocery list
-  
-      //get the specific item that the a is clicked on
-      const item = event.target.parentNode.querySelector('.itemName').textContent;
-  
-      const addToInventory = async (e) => {
-        const response = await fetch('/api/add-to-inventory',{
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            Username: localStorage.getItem('username'),
-            Name: item,
-            Category: 'Inventory'//default category
-          }),
-        });
-  
-        if (response.status === 200 || response.status === 409) {
-          console.log("Grocery item added to inventory");
-  
-          // Remove the grocery item from the list
-          const response2 = await fetch('/api/remove-grocery-item',{
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              Username: localStorage.getItem('username'),
-              Name: item,
-            }),
-          });
-          // Update the grocery list
-  
-          if (response2.status === 200) {
-            console.log("Grocery item removed from list");
-            getGrocery().then((grocery) => {
-              console.log("Grocery list updated");
-              setGroceryList(grocery);
-            return;
-          });
-          } else {
-            console.log("Error removing grocery item from list");
-          }
-        
-        } else {
-          console.log("Error adding grocery item to inventory");
-        }
-      }
-      addToInventory();
-  
-    }
-    
-    return (
-      <div>
-        <section className='grocery'>
-          <form onKeyDown={(event) => event.key !== 'Enter'}>
-            <h4>{category}</h4>
-            <div className='InventoryInputContainer'>
-              <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add grocery item..." />
-              <button className="addGrocery" type='button' onClick={(event) => addGrocery(event, category)}><IoAddCircle /></button><br />
-            </div>
-            <ul>
-              {categoryList.map((item, index) => (
-                <div>
-                <label key={item} className = "groceryItem">
-                  <input type="checkbox" id={item.Name} name={item.Name} value={item.Name}/>
-                  <span className = "checkmark"></span>
-                  <span className='itemName'>{item.Name}</span>
-                  <a onClick={addToInventory}> add to Inventory</a>
-                </label>
-                  <AiOutlineEdit className="edit-icon" />
-                </div>
-              ))}
-          </ul>
-          </form>
-        </section>
-      </div>
-    );
-  }
-  
-  if (groceryList.length === 0) {
-    return (
-    <section className='grocery'>
-      <h4>Grocery</h4>
-      <ul>
-        <li>Loading...</li>
-      </ul>
-    </section>
-    );
-  } else{
-
-  return (
-        //for each category, display the category name and the items in that category
-
-    <div>
-      {categories.map((category) => (
-        GetEachCategoryList(category, groceryList)
-      ))}
-      <button className='addCategory' type='button' onClick={(event)=> addCategory(event, false)}>Add Category</button>  
-      <div className = "popupAddCategory">
-        <input type="text" className="addCategoryItem" name="categoryItem" placeholder="Add category..." />
-        <button className="addCategory" type='button' onClick={(event) => addCategory(event, true)}><IoAddCircle /></button><br />
-      </div>
-    </div>
-  );
-  }
-
-}
-
-function Grocery() {
-  document.onkeydown = function(event) {
-    if (event.keyCode === 13) {  // 13 is the keyCode for the 'Enter' key
-      event.preventDefault();  // Prevent the default form submission
-        //submit the specific grocery item that is being added i.e the input field is not empty
-        //get all the add grocery buttons
-        const addGroceryButtons = document.querySelectorAll('.addGrocery');
-        for (let i = 0; i < addGroceryButtons.length; i++) {
-          //find the button that is currently open and has the input field filled
-          if (addGroceryButtons[i].style.left === '250px') {
-            addGroceryButtons[i].click();
-            break;
-          }
-        }
-    }
   };
 
   return (
-    
     <div className="App">
-      <header className = "App-header">
-        <ProfileBar/>
+      <header className="App-header">
+        <ProfileBar />
       </header>
 
       <aside>
-        <Sidebar source = "Grocery"/>
+        <Sidebar source="Grocery" />
       </aside>
 
-      <main className ="content" id = "ingredient-content">
-        <GetAllGrocery/>
+      <main className="content" id="ingredient-content">
+        {groceryList.length === 0 ? (
+          <section className='grocery'>
+            <h4>Inventory</h4>
+            <ul>
+              <li>Loading...</li>
+            </ul>
+          </section>
+        ) : (
+          <div>
+            {categories.map((category) => (
+              <section key={category} className='grocery'>
+                <form onKeyDown={(event) => event.key !== 'Enter'}>
+                  <h4>{category}</h4>
+                  <div className='InventoryInputContainer'>
+                    <input
+                      type="text"
+                      className={`addGroceryItem ${groceryItemOpen[category] ? 'open' : 'closed'}`}
+                      value={groceryItemValue}
+                      placeholder="Add grocery item..."
+                      onChange={(e) => setGroceryItemValue(e.target.value)}
+                      style={{ display: groceryItemOpen[category] ? 'block' : 'none' }}
+                    />
+                    <button className={`addGrocery ${groceryItemOpen[category] ===undefined ? (''):(groceryItemOpen[category]? 'move-right' : 'move-left')}`} type='button' onClick={() => addGrocery(category)}>
+                      <IoAddCircle />
+                    </button>
+                  </div>
+                  <ul>
+                    {categoryList[category].map((item, index) => (
+                      <li key={`${category}-${index}`}>
+
+                        {/* Display Remove item link if not in edit mode */}
+                        {!isEditable[category]?.[index] && (
+                          <a className="removeFromInventory" onClick={() => removeItem(category, item.Name)}>
+                            {item.Name}
+                          </a>
+                        )}
+
+                        {/* Name input: visible when in edit mode */}
+                        {isEditable[category]?.[index] && (
+                          <input
+                            type="text"
+                            className="editItem"
+                            value={inputValues[category]?.[index]?.Name}
+                            onChange={(e) => handleInputChange(category, e, index, 'Name')}
+                          />
+                        )}
+
+                        {/* Edit icon to toggle both fields */}
+                        <AiOutlineEdit
+                          className="edit-icon"
+                          onClick={() => handleEditClick(category, index)}
+                        />
+
+                        {/* Category input: visible when in edit mode */}
+                        {isEditable[category]?.[index] && (
+                          <input
+                            type="text"
+                            className="editItem editCategory"
+                            value={inputValues[category]?.[index]?.Category}
+                            onChange={(e) => handleInputChange(category, e, index, 'Category')}
+                          />
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </form>
+              </section>
+            ))}
+            <button className='addCategory' type='button' onClick={(event) => addCategory(event, false)}>Add Category</button>
+            <div className="popupAddCategory">
+              <input type="text" className="addCategoryItem" name="categoryItem" placeholder="Add category..." />
+              <button className="addCategory" type='button' onClick={(event) => addCategory(event, true)}><IoAddCircle /></button><br />
+            </div>
+          </div>
+        )}
       </main>
-
-
-      <footer>
-        <p>Footer</p>
-      </footer>
-
     </div>
   );
 }
-
-
-
 
 export default Grocery;
