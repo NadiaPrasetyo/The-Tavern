@@ -17,22 +17,6 @@ export const ThemeProvider = ({ children }) => {
       document.body.classList.toggle('dark', isDark);
     }
   }, []);
-
-  const updatePreference = async (preference) => {
-    const username = localStorage.getItem('username');
-    const response = await fetch('/api/update-preference', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username,
-        preferences: preference,
-      }),
-    });
-    const data = await response.json();
-    console.log('Preferences updated:', data);
-  };
   
   // Toggle dark mode and sync with backend
   const toggleDarkMode = () => {
@@ -41,9 +25,6 @@ export const ThemeProvider = ({ children }) => {
       document.body.classList.toggle('dark', newMode);
       localStorage.setItem('isDarkMode', newMode);
       console.log('Dark mode:', localStorage.getItem('isDarkMode'));
-  
-      // Sync with backend
-      updatePreference({ DarkMode: newMode });
   
       return newMode;
     });
