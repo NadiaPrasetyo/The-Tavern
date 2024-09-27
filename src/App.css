@@ -99,9 +99,11 @@ body{
   --button-browns-hover: var(--color-brown-hover2);
   --menudropdown: var(--color-green-light);
   --menudropdown-hover: var(--color-green-hover);
+  --recipe-info-bg: var(--color-yellow-light);
   --recipe-tab-yellow-green: var(--color-yellow-green);
   --bookmark-inactive: var(--color-green-light);
   --bookmark-active: var(--color-green-muted-solid);
+  --delete-popup: var(--color-offwhite);
 }
 
 /*Dark Mode */
@@ -119,9 +121,11 @@ body.dark{
   --button-browns-hover: #e9dccf;
   --menudropdown: #3e5f3f;
   --menudropdown-hover: #558156;
+  --recipe-info-bg: #394238;
   --recipe-tab-yellow-green: #394238;
   --bookmark-inactive: #394238;
-  --bookmark-active: #5e7d4f9c;
+  --bookmark-active: #5c754f;
+  --delete-popup: rgb(31, 31, 31);
 
 }
 
@@ -583,7 +587,7 @@ footer{
   background-color:var(--color-brown-light);
   border: none;
   border-radius: 5px;
-  color: var(--color-background);
+  color: var(--color-offwhite);
   font-size: calc(1rem + 1vmin);
   cursor: pointer;
   max-width: 200px;
@@ -1270,7 +1274,7 @@ th {
 
 .recipe-info-content {
   position: relative;
-  background-color: var(--recipe-tab-yellow-green);
+  background-color: var(--recipe-info-bg);
   padding: 20px;
   cursor: default;
 }
@@ -1427,7 +1431,7 @@ th {
 }
 
 .filter-popup {
-  background-color: var(--recipe-tab-yellow-green);
+  background-color: var(--recipe-info-bg);
   border: 1px solid var(--color-popup-border);
   border-radius: 8px;
   padding: 20px;
@@ -1790,7 +1794,7 @@ th {
 }
 
 .delete-popup {
-  background-color: var(--color-offwhite);
+  background-color: var(--delete-popup);
   /* border: 3px solid var(--color-red-light; */
   box-shadow: 0 4px 8px var(--color-shadow-med);
   

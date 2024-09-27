@@ -48,6 +48,9 @@ const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, from
   if (!isOpen) return null; // Don't render anything if not open
 
   const toggleIngredient = (ingredient) => {
+    if (fromRecipeTab) {
+      return;
+    }
     if (highlighted.includes(ingredient)) {
       setHighlighted(highlighted.filter((item) => item !== ingredient));
     } else {
@@ -93,7 +96,7 @@ const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, from
                 <li>
                   <a className={`recipe-ingredients-info 
                   ${!fromRecipeTab ? 'highlightable' : ''}
-                  ${highlighted.includes(ingredient) ? 'selected-ing' : ''}`} 
+                  ${highlighted?.includes(ingredient) ? 'selected-ing' : ''}`} 
                   key={index} 
                   onClick={() => toggleIngredient(ingredient)}>
                     {ingredient}</a>
