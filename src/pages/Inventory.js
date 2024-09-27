@@ -6,6 +6,8 @@ import { IoAddCircle } from "react-icons/io5";
 import { AiOutlineEdit } from "react-icons/ai";
 
 function getInventory() {
+  
+  // Get the inventory from the server
   const getInventory = async () => {
     const response = await fetch('/api/get-inventory', {
       method: 'POST',
