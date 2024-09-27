@@ -1,13 +1,11 @@
 import '../App.css';
 import Sidebar from '../components/sidebar.js';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import ProfileBar from '../components/profilebar.js';
 import { IoAddCircle } from "react-icons/io5";
-import { prettyDOM } from '@testing-library/react';
 import { GiFruitBowl } from "react-icons/gi";
 import { LuSalad } from "react-icons/lu";
 import { LiaGrinBeamSweat } from "react-icons/lia";
-
 
 
 function getTodayMenu() {
@@ -39,58 +37,51 @@ function getTodayMenu() {
   return getTodayMenu();
 }
 
-let counter = 0;
-
-function TodayMenu() {
-  const [today, setToday] = React.useState([]);
-  counter ++;
-  
+// TodayMenu component where each menu item is clickable
+function TodayMenu({ today, onRecipeClick, highlightedRecipe }) {
   if (today.length === 0) {
-    getTodayMenu().then((menu) => {
-      if (counter > 10){
-        setToday([{Name: "No Menu Today"}]);
-        return;
-      }
-      setToday(menu);
-      return;
-    });
+    return (
+      <section className='todayMenu'>
+        <table>
+          <thead>
+            <tr>
+              <th>Today</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Loading...</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    );
   }
 
-  if (today.length === 0) {
   return (
     <section className='todayMenu'>
       <table>
-        <tr>
-          <th>Today</th>
-        </tr>
-        <tbody>
+        <thead>
           <tr>
-            <td>Loading...</td>
+            <th>Today</th>
           </tr>
+        </thead>
+        <tbody>
+          {today.map((item, index) => (
+            <tr key={index}>
+              <td
+                onClick={() => onRecipeClick(item.Name)}  // Handle recipe click
+                style={{ cursor: 'pointer' }}
+                className={highlightedRecipe === item.Name ? 'highlighted' : ''}  // Add class if selected
+              >
+                {item.Name}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </section>
   );
-  } else {
-    
-    return(
-    <section className='todayMenu'>
-      <table>
-        <tr>
-          <th>Today</th>
-        </tr>
-        <tbody>
-           {today.map((item, index) => (
-            <tr key={index}>
-              <td>{item.Name}</td>
-            </tr>
-          ))} 
-        </tbody>
-      </table>
-    </section>
-    );
-  }
-
 }
 
 function get5lastGroceryList() {
@@ -351,72 +342,41 @@ function findRecipe(RecipeName) {
   return findRecipe();
 }
 
-let counter3 = 0;
-function QuickRecipe(){
-  const [source, setSource] = React.useState("");
 
-  if(source === "") {
-    counter3 ++;
-    if (counter3 > 10){
-      console.log("Something went wrong with the recipe");
-      return;
-    }
-
-    getTodayMenu().then((menu) => {
-      //if no menu today, get random recipe
-      if (menu.length === 0){
-        console.log("No menu today");
-        //get random recipe
-        getRandomRecipe().then((recipe) => {
-          setSource(recipe[0].Link);
-        });
-        return;
-      }
-      //find recipe source
-      findRecipe(menu[0].Name).then((recipe) => {
-        console.log("Recipe found: " + recipe);
-        if (recipe.length === 0){
-          console.log("No recipe found");
-          return;
-        }
-        setSource(recipe[0].Link);
-      });
-
-    });
-  }
-
+// QuickRecipe component to display the iframe
+function QuickRecipe({ source }) {
+  // If the source is empty, display a loading message
   if (source === "") {
-    return (
-      <section className='quickRecipe'>
-        <div className='iframeContainer'>
-          <p>Loading...</p>
-        </div>
-      </section>
-    );
-  }
-
-  //check if source includes preppykitchen.com
-  if (source.includes("preppykitchen.com")){
-    return(
-      <section className='quickRecipe'>
-        <div className= 'iframeCannot'>
-          <h4>Sorry</h4>
-          
-          <p>We cannot show this recipe here <LiaGrinBeamSweat /></p>
-          <a href={source} target="_blank">Click here to open the recipe!</a>
-        </div>
-      </section>
-    );
-  }
-
-  return(
-    <section className='quickRecipe'>
-      <div className='iframeContainer'>
-      <iframe  className='recipeiFrame' src={source} title="QuickRecipe" ></iframe>
-      </div>
-    </section>
-  );
-  
+        return (
+          <section className='quickRecipe'>
+            <div className='iframeContainer'>
+              <p>Loading...</p>
+            </div>
+          </section>
+        );
+      }
+    
+      //check if source includes preppykitchen.com
+      if (source.includes("preppykitchen.com")){
+        return(
+          <section className='quickRecipe'>
+            <div className= 'iframeCannot'>
+              <h4>Sorry</h4>
+              
+              <p>We cannot show this recipe here <LiaGrinBeamSweat /></p>
+              <a href={source} target="_blank">Click here to open the recipe!</a>
+            </div>
+          </section>
+        );
+      }
+    
+      return(
+        <section className='quickRecipe'>
+          <div className='iframeContainer'>
+          <iframe  className='recipeiFrame' src={source} title="QuickRecipe" ></iframe>
+          </div>
+        </section>
+      );
 }
 
 function getQuickFruits() {
@@ -622,6 +582,66 @@ function Home() {
     }
   };
 
+  const [source, setSource] = useState("");  // State for iframe source
+  const [today, setToday] = useState([]);    // State for today's menu
+  const [highlightedRecipe, setHighlightedRecipe] = useState(""); // Track highlighted recipe
+
+  let counter = 0;
+  // Fetch the menu data (this would typically come from an API)
+  // Fetch today's menu and set the first menu item as the default highlighted recipe
+  useEffect(() => {
+    counter++;
+    
+    getTodayMenu().then((menu) => {
+      if (today.length === 0 && counter > 10){
+        setToday([{Name: "No Menu Today"}]);
+        return;
+      }
+
+      setToday(menu);
+
+      // Check if the menu has at least one item and highlight the first one by default
+      if (menu.length > 0) {
+        setHighlightedRecipe(menu[0].Name);  // Highlight first item by default
+        findRecipe(menu[0].Name).then((recipe) => {
+          if (recipe.length > 0) {
+            setSource(recipe[0].Link);  // Set the iframe source to the first recipe
+          }
+        });
+      }
+    });
+
+    // Handle case where there is no menu, fetch a random recipe instead
+    getTodayMenu().then((menu) => {
+      if (menu.length === 0) {
+        getRandomRecipe().then((recipe) => {
+          setSource(recipe[0].Link);
+          setHighlightedRecipe(recipe[0].Name);  // Highlight random recipe
+        });
+        return;
+      }
+
+      // Find the recipe for the first menu item
+      findRecipe(menu[0].Name).then((recipe) => {
+        if (recipe.length > 0) {
+          setSource(recipe[0].Link);
+          setHighlightedRecipe(menu[0].Name);  // Highlight first recipe
+        }
+      });
+    });
+
+  }, []);
+
+  // This function will update the iframe source when a menu item is clicked
+  const handleMenuClick = (recipeName) => {
+    findRecipe(recipeName).then((recipe) => {
+      if (recipe.length > 0) {
+        setSource(recipe[0].Link);   // Update the iframe source
+        setHighlightedRecipe(recipeName);  // Highlight clicked recipe
+      }
+    });
+  };
+
   return (
     
     <div className="App">
@@ -634,10 +654,10 @@ function Home() {
       </aside>
 
       <main className ="content">
-        <TodayMenu />
+        <TodayMenu today={today} onRecipeClick={handleMenuClick} highlightedRecipe={highlightedRecipe}/>
         <WeekCalendar />
         <GroceryList />
-        <QuickRecipe />
+        <QuickRecipe source ={source}/>
         <QuickIngredient />        
       </main>     
 
