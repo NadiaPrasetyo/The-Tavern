@@ -1385,19 +1385,19 @@ th {
   cursor: pointer !important; /* Change cursor to pointer for interactivity */
 }
 
-.highlightable:hover {
-  background-color: var(--color-green-muted-solid); /* Add a light background color on hover */
+.highlightable:hover, .selected-ing, .in-grocery-list {
+  background-color: var(--color-pink-light2) !important; /* Add a light background color for selected ingredients */
 }
 
-.selected-ing {
-  background-color: var(--color-green-muted-solid); /* Add a light background color for selected ingredients */
+.in-inventory {
+  background-color: var(--color-teal-blue); /* Add a light background color for ingredients in inventory */
 }
 
 /* SCROLLER STYLE */
 
 .custom-scroll {
   scrollbar-width: auto; 
-  scrollbar-color: var(--color-brown-medium3 transparent); 
+  scrollbar-color: var(--color-brown-medium3) transparent; 
 }
 
 /* Webkit browsers (Chrome, Edge, Safari) */

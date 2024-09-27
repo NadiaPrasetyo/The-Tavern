@@ -1254,30 +1254,66 @@ app.post('/api/add-many-to-grocery', async (req, res) => {
     const collection = database.collection('GroceryList'); // your grocery collection
 
     items.map(async item => {
-      // remove leading/trailing whitespace
-      let cleanedItem = item.trim();
-      // change symbols - and * to space
-      cleanedItem = cleanedItem.replace(/[-*]/g, ' ');
-      // remove trailing commas
-      cleanedItem = cleanedItem.replace(/,$/, '');
-      // Make the first letter uppercase and the rest lowercase
-      cleanedItem = cleanedItem.charAt(0).toUpperCase() + cleanedItem.slice(1).toLowerCase();
       
 
       //check that the collection doesn't already have the item
-      const itemExist = await collection.findOne({ Username: username, Name: cleanedItem });
+      const itemExist = await collection.findOne({ Username: username, Name: item });
 
       if (itemExist) {
         // skip the item if it already exists
-        console.log(itemExist.Name, "already exists in the grocery list in category:", itemExist.Category);
+        // console.log(itemExist.Name, "already exists in the grocery list in category:", itemExist.Category);
       } else {
         // Add the item to the grocery list
-        await collection.insertOne({ Username: username, Name: cleanedItem, Category: category });
+        await collection.insertOne({ Username: username, Name: item, Category: category });
       }
     });
 
     // If everything is OK
     res.status(200).json({ message: "Items added to grocery list" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// GET ALL INVENTORY ITEMS 
+app.get('/api/get-all-inventory', async (req, res) => {
+  const { username } = req.query;
+  try {
+   
+    const collection = database.collection('Inventory'); // your inventory collection
+
+    // Find all inventory names of user
+    const inventory = await collection
+      .find({ Username: username }, { Name: 1, _id: 0 })
+      .toArray().then((data) => {
+        return data.map((item) => item.Name);
+      });
+
+    // If everything is OK
+    res.status(200).json({ inventory: inventory });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// GET ALL GROCERY ITEMS
+app.get('/api/get-all-grocery', async (req, res) => {
+  const { username } = req.query;
+  try {
+   
+    const collection = database.collection('GroceryList'); // your grocery collection
+
+    // Find all grocery names of user
+    const grocery = await collection
+      .find({ Username: username }, { Name: 1, _id: 0 })
+      .toArray().then((data) => {
+        return data.map((item) => item.Name);
+      });
+
+    // If everything is OK
+    res.status(200).json({ grocery: grocery });
 
   } catch (error) {
     res.status(500).json({ message: "Server error" });

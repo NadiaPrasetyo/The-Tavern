@@ -21,6 +21,8 @@ function Menu() {
   // arrange days based on first day of the week 
   const days = daysDefault.slice(daysDefault.indexOf(firstDay)).concat(daysDefault.slice(0, daysDefault.indexOf(firstDay)));
   const [highlightedIngredients, setHighlightedIngredients] = useState([]);
+  const [inInventory, setInInventory] = useState([]);
+  const [inGroceryList, setInGroceryList] = useState([]);
 
   const [menu, setMenu] = useState({
     RecipeList: [],
@@ -71,8 +73,42 @@ function Menu() {
     }
   };
 
+  const fetchInventory = async () => {
+    try {
+      const username = localStorage.getItem('username');
+      const response = await fetch(`/api/get-all-inventory?username=${encodeURIComponent(username)}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      setInInventory(data.inventory);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const fetchGroceryList = async () => {
+    try {
+      const username = localStorage.getItem('username');
+      const response = await fetch(`/api/get-all-grocery?username=${encodeURIComponent(username)}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      setInGroceryList(data.grocery);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };   
+
   useEffect(() => {
     fetchMenu();
+    fetchInventory();
+    fetchGroceryList();
   }, []);
 
   const updateMenu = async () => {
@@ -273,7 +309,15 @@ function Menu() {
               />
             </div>
           )}
-          <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} highlighted={highlightedIngredients} setHighlighted={setHighlightedIngredients}/>
+          <RecipeInfo 
+          isOpen={isInfoOpen} 
+          onClose={closeInfo} 
+          recipe={selectedRecipe} 
+          highlighted={highlightedIngredients} 
+          setHighlighted={setHighlightedIngredients}
+          inInventory={inInventory}
+          inGroceryList={inGroceryList}
+          />
         </main>
 
         <footer>

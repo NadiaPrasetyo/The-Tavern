@@ -3,7 +3,7 @@ import { IoMdClose } from "react-icons/io";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import '../App.css'; 
 
-const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, fromRecipeTab }) => {
+const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, inInventory, inGroceryList, fromRecipeTab }) => {
   const [infoPopUp, setInfoPopUp] = useState(false);
   // Close the modal when the Esc key is pressed
   useEffect(() => {
@@ -51,6 +51,9 @@ const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, from
     if (fromRecipeTab) {
       return;
     }
+    if (inGroceryList.includes(ingredient)) {
+      return;
+    }
     if (highlighted.includes(ingredient)) {
       setHighlighted(highlighted.filter((item) => item !== ingredient));
     } else {
@@ -96,6 +99,8 @@ const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, from
                 <li>
                   <a className={`recipe-ingredients-info 
                   ${!fromRecipeTab ? 'highlightable' : ''}
+                  ${inInventory?.includes(ingredient) ? 'in-inventory' : ''}
+                  ${inGroceryList?.includes(ingredient) ? 'in-grocery-list' : ''}
                   ${highlighted?.includes(ingredient) ? 'selected-ing' : ''}`} 
                   key={index} 
                   onClick={() => toggleIngredient(ingredient)}>
