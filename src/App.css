@@ -889,6 +889,19 @@ th {
   width: 100%;
 }
 
+.iframeCannot{
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 20%;
+  font-size: calc(10px + 1vmin);
+
+  a:hover{
+    color: var(--color-blue-link);
+    text-decoration: underline;
+  }
+}
+
 /* QUICK INGREDIENT AT HOME*/
 .quickIngredient{
   display: flex;

@@ -6,6 +6,7 @@ import { IoAddCircle } from "react-icons/io5";
 import { prettyDOM } from '@testing-library/react';
 import { GiFruitBowl } from "react-icons/gi";
 import { LuSalad } from "react-icons/lu";
+import { LiaGrinBeamSweat } from "react-icons/lia";
 
 
 
@@ -389,6 +390,20 @@ function QuickRecipe(){
       <section className='quickRecipe'>
         <div className='iframeContainer'>
           <p>Loading...</p>
+        </div>
+      </section>
+    );
+  }
+
+  //check if source includes preppykitchen.com
+  if (source.includes("preppykitchen.com")){
+    return(
+      <section className='quickRecipe'>
+        <div className= 'iframeCannot'>
+          <h4>Sorry</h4>
+          
+          <p>We cannot show this recipe here <LiaGrinBeamSweat /></p>
+          <a href={source} target="_blank">Click here to open the recipe!</a>
         </div>
       </section>
     );
