@@ -349,7 +349,7 @@ function QuickRecipe({ source }) {
   if (source === "") {
         return (
           <section className='quickRecipe'>
-            <div className='iframeContainer'>
+            <div className='iframeCannot'>
               <p>Loading...</p>
             </div>
           </section>
