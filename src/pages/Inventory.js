@@ -142,13 +142,27 @@ function Inventory() {
     const buttonClick = event.target;
 
     if (!confirmedPopup) {
+      //get the source button
       const popup = document.querySelector('.popupAddCategory');
+      //check if popup is already open
+      if (popup.style.display === 'block') {
+        popup.style.display = 'none';
+        return;
+      }
+      
       popup.style.display = 'block';
+
     } else {
       const categoryElement = buttonClick.closest('.popupAddCategory').querySelector('.addCategoryItem');
       const category = categoryElement.value.trim();
 
-      if (category === '') return;
+      if (category === ''){
+          //close the popup
+        document.querySelector('.popupAddCategory').style.display = 'none';
+        //clear the popup input field
+        categoryElement.value = '';
+        return;
+      }
 
       fetch('/api/add-category', {
         method: 'POST',
