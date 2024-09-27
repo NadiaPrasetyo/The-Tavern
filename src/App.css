@@ -972,8 +972,27 @@ th {
   margin-bottom: 10px;
   .edit-icon{
     margin-left: 5px;
-    position: relative;
-    top: 5px;
+  }
+
+  .inventoryItem{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+  }
+
+  .inventoryActionsContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .addToGrocery{
+    color: var(--color-pink-link);
+    background-color: var(--color-transparent);
+    border: none;
+    font-size: calc(5px + 1vmin);
+    cursor: pointer;
   }
 }
 

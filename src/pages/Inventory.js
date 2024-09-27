@@ -38,6 +38,7 @@ function Inventory() {
   const [inventoryList, setInventoryList] = useState([]);
   const [inputValues, setInputValues] = useState({});
   const [isEditable, setIsEditable] = useState({}); // State to track which items are editable
+  const [popupVisible, setPopupVisible] = useState({});
 
   document.onkeydown = function (event) {
     if (event.keyCode === 13) {
@@ -270,6 +271,45 @@ function Inventory() {
     });
   };
 
+  const togglePopup = (category, index) => {
+    return () => {
+      setPopupVisible({
+        ...popupVisible,
+        [category]: {
+          ...popupVisible[category],
+          [index]: !popupVisible[category]?.[index]
+        }
+      });
+    };
+  }
+  
+  const addToGrocery = (category, itemName) => {
+    return () => {
+      console.log("Adding item to grocery list: " + itemName);
+      fetch('/api/add-grocery-item', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Username: localStorage.getItem('username'),
+          Name: itemName,
+          Category: 'Grocery'
+        }),
+      }).then((response) => {
+        if (response.status === 200) {
+          console.log("Item added to grocery list successfully");
+          //remove the item from the inventory list
+          //call the removeItem function
+          removeItem(category, itemName);
+
+        } else {
+          console.log("Error adding item to grocery list");
+        }
+      });
+    };
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -310,12 +350,18 @@ function Inventory() {
                   <ul>
                     {categoryList[category].map((item, index) => (
                       <li key={`${category}-${index}`}>
+                        <div className="inventoryItem">
 
                         {/* Display Remove item link if not in edit mode */}
                         {!isEditable[category]?.[index] && (
+                          <span className="inventoryActionsContainer" onMouseEnter={togglePopup(category, index)} onMouseLeave={togglePopup(category, index)}>
                           <a className="removeFromInventory" onClick={() => removeItem(category, item.Name)}>
                             {item.Name}
                           </a>
+                          {popupVisible[category]?.[index] &&
+                            <a className="addToGrocery" onClick={addToGrocery(category, item.Name)}>add to Grocery</a>
+                          }
+                          </span>
                         )}
 
                         {/* Name input: visible when in edit mode */}
@@ -343,6 +389,7 @@ function Inventory() {
                             onChange={(e) => handleInputChange(category, e, index, 'Category')}
                           />
                         )}
+                        </div>
                       </li>
                     ))}
                   </ul>
