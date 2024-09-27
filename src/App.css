@@ -50,8 +50,9 @@
   --color-purple-light: #d9b0dda4; /* Menu column background (Approx) */
   --color-purple-hover: #cc75d797; /* Menu recipe hover background (Approx) */
   --color-lavender-medium: #c090d2bb; /* Ingredient item border */
+  --color-dark-purple: #d7a2db; /* Highlighted Today's Menu */
   --color-lavender-light2: #e8c8f4bb; /* Ingredient item background */
-  --color-lavender-light: #e3c1efa4; /* Tags info background */
+  --color-lavender-light: #a149c1a4; /* Tags info background */
 
 
   /*Yellow colours */
@@ -657,6 +658,20 @@ footer{
   border: solid 1px var(--color-transparent);
   background: var(--color-green-verylight);
   padding: 10px;
+  th{
+    padding: 10px;
+  }
+  td:hover{
+    text-decoration: underline;
+  }
+}
+
+
+
+.highlighted {
+  color: var(--color-dark-purple);
+  /* make font italic */
+  font-style: italic;
 }
 
 table {
