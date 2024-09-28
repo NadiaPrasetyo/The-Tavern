@@ -890,7 +890,7 @@ app.post('/api/get-inventory', async (req, res) => {
 // UPDATE MENU
 app.post('/api/update-menu', async (req, res) => {
   const { username, menu } = req.body;
-  console.log("Updating menu for user:", username);
+  // console.log("Updating menu for user:", username);
   try {
    
     const collection = database.collection('Menu'); // your menu collection
@@ -938,7 +938,7 @@ app.post('/api/update-menu', async (req, res) => {
         }
       })
     ]);
-    console.log("Menu updated successfully");
+    // console.log("Menu updated successfully");
 
     // If everything is OK
     res.status(200).json({ message: "Menu updated successfully" });
