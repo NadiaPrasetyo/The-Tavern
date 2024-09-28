@@ -50,6 +50,14 @@ const RecipeTab = ({ recipeList, setRecipeList, isOpenDrag, setIsOpenDrag, highl
   // if there's changes in isOpenDrag, set isOpen to it 
   useEffect(() => {
     setIsOpen(isOpenDrag);
+    // close the recipe info modal when the book tab is closed
+    if (!isOpenDrag) {
+      setInfoOpen(false);
+      setSelectedRecipe(null);
+    }
+    // close the filter popup when the book tab is closed
+    setIsFilterOpen(false);
+
   }, [isOpenDrag]);
 
   // Toggle the book tab when clicking the container
