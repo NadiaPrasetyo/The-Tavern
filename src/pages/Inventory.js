@@ -98,7 +98,9 @@ function Inventory() {
       if (response.status === 200) {
         console.log("Inventory item added successfully");
         document.querySelector('.addGroceryItem').value = '';
-        getInventory();
+        setInventoryList(
+          [...inventoryList, 
+          { Name: item, Category: category }]);
       } else {
         console.log("Error adding inventory item");
       }
@@ -176,7 +178,10 @@ function Inventory() {
             [category]: false
           });
 
-          getInventory();
+          setInventoryList(
+            [...inventoryList, 
+            { Name: '', Category: category }]);
+            
         } else {
           console.log("Error adding category");
         }
@@ -220,7 +225,16 @@ function Inventory() {
       }).then(response => {
         if (response.status === 200) {
           console.log("Item updated successfully");
-          getInventory();
+          // Update the inventory list
+          setInventoryList(
+            inventoryList.map((element) => {
+              if (element.Name === originalName) {
+                return { Name: item.Name, Category: item.Category };
+              }
+              return element;
+            }
+          ));
+
         } else {
           console.log("Error updating item");
         }
@@ -248,22 +262,37 @@ function Inventory() {
     }).then((response) => {
       if (response.status === 200) {
         console.log("Item removed successfully");
-        getInventory();
+        // Update the inventory list
+        setInventoryList(
+          inventoryList.filter(item => item.Name !== itemName)
+        );
       } else {
         console.log("Error removing item");
       }
     });
   };
 
-  const togglePopup = (category, index) => {
+  const togglePopup = (category, index, type) => {
     return () => {
-      setPopupVisible({
-        ...popupVisible,
-        [category]: {
-          ...popupVisible[category],
-          [index]: !popupVisible[category]?.[index]
-        }
-      });
+      if (type === 'enter') {
+        setPopupVisible({
+          ...popupVisible,
+          [category]: {
+            ...popupVisible[category],
+            [index]: true
+          }
+        });
+        return;
+      }else if (type === 'leave') {
+        setPopupVisible({
+          ...popupVisible,
+          [category]: {
+            ...popupVisible[category],
+            [index]: false
+          }
+        });
+        return;
+      }
     };
   }
 
@@ -345,7 +374,7 @@ function Inventory() {
 
                           {/* Display Remove item link if not in edit mode */}
                           {!isEditable[category]?.[index] && (
-                            <span className="inventoryActionsContainer" onMouseEnter={togglePopup(category, index)} onMouseLeave={togglePopup(category, index)}>
+                            <span className="inventoryActionsContainer" onMouseEnter={togglePopup(category, index, "enter")} onMouseLeave={togglePopup(category, index, "leave")}>
                               <a className="removeFromInventory" onClick={() => removeItem(category, item.Name)}>
                                 {item.Name}
                               </a>

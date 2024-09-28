@@ -99,7 +99,8 @@ function Grocery() {
         console.log("Grocery item added successfully");
         //clear the input field
         document.querySelector('.addGroceryItem').value = '';
-        getGrocery();
+        //update the grocery list
+        setGroceryList([...groceryList, { Name: item, Category: category }]);
       } else {
         console.log("Error adding grocery item");
       }
@@ -177,7 +178,8 @@ function Grocery() {
             [category]: false
           });
 
-          getGrocery();
+          setGroceryList([...groceryList, 
+            { Name: '', Category: category }]);
         } else {
           console.log("Error adding category");
         }
@@ -220,8 +222,14 @@ function Grocery() {
         }),
       }).then(response => {
         if (response.status === 200) {
-          console.log("Item updated successfully");
-          getGrocery();
+          setGroceryList(
+            groceryList.map((element) => {
+              if (element.Name === originalName) {
+                return { Name: item.Name, Category: item.Category };
+              }
+              return element;
+            }
+          ));
         } else {
           console.log("Error updating item");
         }
@@ -249,7 +257,7 @@ function Grocery() {
     }).then((response) => {
       if (response.status === 200) {
         console.log("Item removed successfully");
-        getGrocery();
+        setGroceryList(groceryList.filter(item => item.Name !== itemName));
       } else {
         console.log("Error removing item");
       }
@@ -291,7 +299,8 @@ function Grocery() {
         if (response2.status === 200) {
           console.log("Grocery item removed from list");
           //update the grocery list
-          getGrocery()
+          setGroceryList(groceryList.filter(groceryItem => groceryItem.Name !== item));
+
         } else {
           console.log("Error removing grocery item from list");
         }
