@@ -37,7 +37,7 @@ const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, inIn
       if (infoPopUp) {
         setInfoPopUp(false);
       }
-    }, 5000); 
+    }, 15000); 
 
     return () => {
       document.removeEventListener('click', handleClickOutside);
@@ -87,7 +87,11 @@ const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, inIn
                   <AiOutlineInfoCircle className='info-icon' onClick={() => setInfoPopUp(!infoPopUp)} />
                   {infoPopUp && (
                       <div className="rec-info-popup highlight-info-popup">
-                        <p>Highlight the ingredients you want to add to grocery list (will be added to 'From Menu' category)</p>
+                        <p>Highlight the ingredients you want to add to grocery list with <span className='pink-highlight'>pink highlight</span> (will be added to 'From Menu' category). <br /> <br />
+                          <span className='blue-highlight'>Blue highlight</span> indicates that the ingredient is already in your <span className='blue-highlight'>inventory</span>. <br /> <br />
+                          Existing <span className='pink-highlight'>pink highlight</span> indicates that the ingredient is already in your <span className='pink-highlight'>grocery list</span>. <br /> <br />
+                          Click on the ingredient to toggle the highlight.
+                        </p>
                       </div>
                     )}
                   </>

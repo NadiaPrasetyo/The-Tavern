@@ -5,33 +5,6 @@ import ProfileBar from '../components/profilebar.js';
 import { IoAddCircle } from "react-icons/io5";
 import { AiOutlineEdit } from "react-icons/ai";
 
-function getInventory() {
-  
-  // Get the inventory from the server
-  const getInventory = async () => {
-    const response = await fetch('/api/get-inventory', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        Username: localStorage.getItem('username')
-      }),
-    });
-
-    const inventory = await response.json();
-
-    if (response.status === 200) {
-      return inventory.inventory;  // Return the inventory
-    } else {
-      console.log("Error getting inventory");
-      return [];
-    }
-  }
-
-  return getInventory();
-}
-
 function Inventory() {
   const [groceryItemOpen, setGroceryItemOpen] = useState({});
   const [groceryItemValue, setGroceryItemValue] = useState('');
@@ -39,6 +12,39 @@ function Inventory() {
   const [inputValues, setInputValues] = useState({});
   const [isEditable, setIsEditable] = useState({}); // State to track which items are editable
   const [popupVisible, setPopupVisible] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Get the inventory from the server
+  const getInventory = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/get-inventory', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Username: localStorage.getItem('username')
+        }),
+      });
+
+      const inventory = await response.json();
+
+      if (response.status === 200) {
+        setInventoryList(inventory.inventory);
+      } else {
+        console.log("Error getting inventory");
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    getInventory();
+  }, []);
+
 
   document.onkeydown = function (event) {
     if (event.keyCode === 13) {
@@ -52,18 +58,6 @@ function Inventory() {
       }
     }
   };
-
-  useEffect(() => {
-    const fetchInventory = async () => {
-      const inventory = await getInventory();
-      setInventoryList(inventory);
-    };
-
-    if (inventoryList.length === 0) {
-      console.log("Getting inventory list");
-      fetchInventory();
-    }
-  }, [inventoryList]);
 
   // Create a dictionary for categories
   const categoryList = {};
@@ -104,10 +98,7 @@ function Inventory() {
       if (response.status === 200) {
         console.log("Inventory item added successfully");
         document.querySelector('.addGroceryItem').value = '';
-        getInventory().then((inventory) => {
-          console.log("Inventory list updated");
-          setInventoryList(inventory);
-        });
+        getInventory();
       } else {
         console.log("Error adding inventory item");
       }
@@ -152,15 +143,15 @@ function Inventory() {
         popup.style.display = 'none';
         return;
       }
-      
+
       popup.style.display = 'block';
 
     } else {
       const categoryElement = buttonClick.closest('.popupAddCategory').querySelector('.addCategoryItem');
       const category = categoryElement.value.trim();
 
-      if (category === ''){
-          //close the popup
+      if (category === '') {
+        //close the popup
         document.querySelector('.popupAddCategory').style.display = 'none';
         //clear the popup input field
         categoryElement.value = '';
@@ -185,10 +176,7 @@ function Inventory() {
             [category]: false
           });
 
-          getInventory().then((inventory) => {
-            console.log("Inventory list updated");
-            setInventoryList(inventory);
-          });
+          getInventory();
         } else {
           console.log("Error adding category");
         }
@@ -232,9 +220,7 @@ function Inventory() {
       }).then(response => {
         if (response.status === 200) {
           console.log("Item updated successfully");
-          getInventory().then((inventory) => {
-            setInventoryList(inventory);
-          });
+          getInventory();
         } else {
           console.log("Error updating item");
         }
@@ -262,9 +248,7 @@ function Inventory() {
     }).then((response) => {
       if (response.status === 200) {
         console.log("Item removed successfully");
-        getInventory().then((inventory) => {
-          setInventoryList(inventory);
-        });
+        getInventory();
       } else {
         console.log("Error removing item");
       }
@@ -282,7 +266,7 @@ function Inventory() {
       });
     };
   }
-  
+
   const addToGrocery = (category, itemName) => {
     return () => {
       console.log("Adding item to grocery list: " + itemName);
@@ -321,11 +305,18 @@ function Inventory() {
       </aside>
 
       <main className="content" id="ingredient-content">
-        {inventoryList.length === 0 ? (
+        {isLoading ? (
           <section className='inventory'>
             <h4>Inventory</h4>
             <ul>
               <li>Loading...</li>
+            </ul>
+          </section>
+        ) : inventoryList.length === 0 ? (
+          <section className='inventory'>
+            <h4>Inventory</h4>
+            <ul>
+              <li>No items in inventory</li>
             </ul>
           </section>
         ) : (
@@ -343,7 +334,7 @@ function Inventory() {
                       onChange={(e) => setGroceryItemValue(e.target.value)}
                       style={{ display: groceryItemOpen[category] ? 'block' : 'none' }}
                     />
-                    <button className={`addGrocery ${groceryItemOpen[category] ===undefined ? (''):(groceryItemOpen[category]? 'move-right' : 'move-left')}`} type='button' onClick={() => addInventory(category)}>
+                    <button className={`addGrocery ${groceryItemOpen[category] === undefined ? ('') : (groceryItemOpen[category] ? 'move-right' : 'move-left')}`} type='button' onClick={() => addInventory(category)}>
                       <IoAddCircle />
                     </button>
                   </div>
@@ -352,43 +343,43 @@ function Inventory() {
                       <li key={`${category}-${index}`}>
                         <div className="inventoryItem">
 
-                        {/* Display Remove item link if not in edit mode */}
-                        {!isEditable[category]?.[index] && (
-                          <span className="inventoryActionsContainer" onMouseEnter={togglePopup(category, index)} onMouseLeave={togglePopup(category, index)}>
-                          <a className="removeFromInventory" onClick={() => removeItem(category, item.Name)}>
-                            {item.Name}
-                          </a>
-                          {popupVisible[category]?.[index] &&
-                            <a className="addToGrocery" onClick={addToGrocery(category, item.Name)}>add to Grocery</a>
-                          }
-                          </span>
-                        )}
+                          {/* Display Remove item link if not in edit mode */}
+                          {!isEditable[category]?.[index] && (
+                            <span className="inventoryActionsContainer" onMouseEnter={togglePopup(category, index)} onMouseLeave={togglePopup(category, index)}>
+                              <a className="removeFromInventory" onClick={() => removeItem(category, item.Name)}>
+                                {item.Name}
+                              </a>
+                              {popupVisible[category]?.[index] &&
+                                <a className="addToGrocery" onClick={addToGrocery(category, item.Name)}>add to Grocery</a>
+                              }
+                            </span>
+                          )}
 
-                        {/* Name input: visible when in edit mode */}
-                        {isEditable[category]?.[index] && (
-                          <input
-                            type="text"
-                            className="editItem"
-                            value={inputValues[category]?.[index]?.Name}
-                            onChange={(e) => handleInputChange(category, e, index, 'Name')}
+                          {/* Name input: visible when in edit mode */}
+                          {isEditable[category]?.[index] && (
+                            <input
+                              type="text"
+                              className="editItem"
+                              value={inputValues[category]?.[index]?.Name}
+                              onChange={(e) => handleInputChange(category, e, index, 'Name')}
+                            />
+                          )}
+
+                          {/* Edit icon to toggle both fields */}
+                          <AiOutlineEdit
+                            className="edit-icon"
+                            onClick={() => handleEditClick(category, index)}
                           />
-                        )}
 
-                        {/* Edit icon to toggle both fields */}
-                        <AiOutlineEdit
-                          className="edit-icon"
-                          onClick={() => handleEditClick(category, index)}
-                        />
-
-                        {/* Category input: visible when in edit mode */}
-                        {isEditable[category]?.[index] && (
-                          <input
-                            type="text"
-                            className="editItem editCategory"
-                            value={inputValues[category]?.[index]?.Category}
-                            onChange={(e) => handleInputChange(category, e, index, 'Category')}
-                          />
-                        )}
+                          {/* Category input: visible when in edit mode */}
+                          {isEditable[category]?.[index] && (
+                            <input
+                              type="text"
+                              className="editItem editCategory"
+                              value={inputValues[category]?.[index]?.Category}
+                              onChange={(e) => handleInputChange(category, e, index, 'Category')}
+                            />
+                          )}
                         </div>
                       </li>
                     ))}
@@ -396,13 +387,13 @@ function Inventory() {
                 </form>
               </section>
             ))}
-            <button className='addCategory' type='button' onClick={(event) => addCategory(event, false)}>Add Category</button>
-            <div className="popupAddCategory">
-              <input type="text" className="addCategoryItem" name="categoryItem" placeholder="Add category..." />
-              <button className="addCategory" type='button' onClick={(event) => addCategory(event, true)}><IoAddCircle /></button><br />
-            </div>
           </div>
         )}
+        <button className='addCategory' type='button' onClick={(event) => addCategory(event, false)}>Add Category</button>
+        <div className="popupAddCategory">
+          <input type="text" className="addCategoryItem" name="categoryItem" placeholder="Add category..." />
+          <button className="addCategory" type='button' onClick={(event) => addCategory(event, true)}><IoAddCircle /></button><br />
+        </div>
       </main>
     </div>
   );
