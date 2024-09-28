@@ -7,6 +7,7 @@ import { MdLocalGroceryStore } from "react-icons/md";
 import { GiCrown } from "react-icons/gi";
 import { GiQuillInk } from "react-icons/gi";
 import { GiTwoHandedSword } from "react-icons/gi";
+import { GiScrollQuill } from "react-icons/gi";
 
 function Sidebar(props) {
     const [isClosed, setSideBar] = React.useState(false);
@@ -90,6 +91,7 @@ function Sidebar(props) {
                     <li><a href="/Settings" className = "active"><GiCrown /></a></li>
                     <li><a href="/Preference"><GiQuillInk /></a></li>
                     <li><a href="/Options"><GiTwoHandedSword /></a></li>
+                    <li><a href="/Feedback"><GiScrollQuill /></a></li>
                     </div>
                 );
             case "Preference":
@@ -98,6 +100,7 @@ function Sidebar(props) {
                     <li><a href="/Settings"><GiCrown /></a></li>
                     <li><a href="/Preference" className = "active"><GiQuillInk /></a></li>
                     <li><a href="/Options"><GiTwoHandedSword /></a></li>
+                    <li><a href="/Feedback"><GiScrollQuill /></a></li>
                     </div>
                 );
             case "Options":
@@ -106,6 +109,16 @@ function Sidebar(props) {
                     <li><a href="/Settings"><GiCrown /></a></li>
                     <li><a href="/Preference"><GiQuillInk /></a></li>
                     <li><a href="/Options" className = "active"><GiTwoHandedSword /></a></li>
+                    <li><a href="/Feedback"><GiScrollQuill /></a></li>
+                    </div>
+                );
+            case "Feedback":
+                return(
+                    <div>
+                    <li><a href="/Settings"><GiCrown /></a></li>
+                    <li><a href="/Preference"><GiQuillInk /></a></li>
+                    <li><a href="/Options"><GiTwoHandedSword /></a></li>
+                    <li><a href="/Feedback" className = "active"><GiScrollQuill /></a></li>
                     </div>
                 );
             default:
@@ -163,6 +176,7 @@ function Sidebar(props) {
                     <li><a href="/Settings" className = "active">Settings</a></li>
                     <li><a href="/Preference">Preference</a></li>
                     <li><a href="/Options">Options</a></li>
+                    <li><a href="/Feedback">Feedback</a></li>
                     </div>
                 );
             case "Preference":
@@ -171,6 +185,7 @@ function Sidebar(props) {
                     <li><a href="/Settings">Settings</a></li>
                     <li><a href="/Preference" className = "active">Preference</a></li>
                     <li><a href="/Options">Options</a></li>
+                    <li><a href="/Feedback">Feedback</a></li>
                     </div>
                 );
             case "Options":
@@ -179,6 +194,16 @@ function Sidebar(props) {
                     <li><a href="/Settings">Settings</a></li>
                     <li><a href="/Preference">Preference</a></li>
                     <li><a href="/Options" className = "active">Options</a></li>
+                    <li><a href="/Feedback">Feedback</a></li>
+                    </div>
+                );
+            case "Feedback":
+                return(
+                    <div>
+                    <li><a href="/Settings">Settings</a></li>
+                    <li><a href="/Preference">Preference</a></li>
+                    <li><a href="/Options">Options</a></li>
+                    <li><a href="/Feedback" className = "active">Feedback</a></li>
                     </div>
                 );
             default:

@@ -1395,7 +1395,7 @@ th {
 }
 
 .recipe-tags-info {
-  background-color: var(--color-lavender-light);
+  background-color: var(--color-purple-light);
   padding: 5px 10px;
   margin: 0 5px 5px 0; /* Space between tags */
   border-radius: 50px;

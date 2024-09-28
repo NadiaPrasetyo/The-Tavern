@@ -11,6 +11,7 @@ import Settings from "./pages/Settings";
 import Preference from "./pages/Preference";
 import Options from './pages/Options';
 import Trial from './pages/Trial';
+import Feedback from './pages/Feedback';
 
 
 const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -42,6 +43,7 @@ function App() {
           <Route path="settings" element={<PrivateRoute element={<Settings />} />} />
           <Route path="preference" element={<PrivateRoute element={<Preference />} />} />
           <Route path="options" element={<PrivateRoute element={<Options />} />} />
+          <Route path="feedback" element={<PrivateRoute element={<Feedback />} />} />
           <Route path="trial" element={<Trial />} />
           <Route path="login" element={<Login />} />
           <Route path="*" element={<NoPage />} />
