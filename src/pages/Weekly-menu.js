@@ -165,11 +165,11 @@ function Menu() {
   useEffect(() => {
 
     const handleBeforeUnload = () => {
-      if (!hasChanges) return;
-      updateMenu(); // Update menu in database
       if (highlightedIngredients.length > 0) {
         postIngredientsToGroceryList(); // Add highlighted ingredients to grocery list
       }
+      if (!hasChanges) return;
+      updateMenu(); // Update menu in database
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
