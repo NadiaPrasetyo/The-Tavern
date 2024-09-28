@@ -1416,11 +1416,11 @@ th {
 
 .highlight-info-popup {
   position: fixed;
-  top: 50%; /* Adjust position as needed */
+  top: 30%; /* Adjust position as needed */
   right: inherit;
   transform: translate(-110%, 0);
+  width: 300px; 
 }
-
 
 .recipe-ingredients-container {
   display: grid;
@@ -1441,11 +1441,11 @@ th {
   cursor: pointer !important; /* Change cursor to pointer for interactivity */
 }
 
-.highlightable:hover, .selected-ing, .in-grocery-list {
+.highlightable:hover, .selected-ing, .in-grocery-list, .pink-highlight {
   background-color: var(--color-pink-light2) !important; /* Add a light background color for selected ingredients */
 }
 
-.in-inventory {
+.in-inventory, .blue-highlight {
   background-color: var(--color-teal-blue); /* Add a light background color for ingredients in inventory */
 }
 
