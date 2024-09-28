@@ -306,7 +306,6 @@ function getRandomRecipe() {
     const recipe = await response.json();
 
     if (response.status === 200) {
-      console.log("Random recipe: " +  recipe.recipe);
       return recipe.recipe;  // Update the state with the fetched recipe
     } else {
       console.log("Error getting recipe");
@@ -586,50 +585,41 @@ function Home() {
   const [today, setToday] = useState([]);    // State for today's menu
   const [highlightedRecipe, setHighlightedRecipe] = useState(""); // Track highlighted recipe
 
-  let counter = 0;
   // Fetch the menu data (this would typically come from an API)
   // Fetch today's menu and set the first menu item as the default highlighted recipe
   useEffect(() => {
-    counter++;
+    let counter = 0;
+    const MAX_RETRIES = 10;
     
-    getTodayMenu().then((menu) => {
-      if (today.length === 0 && counter > 10){
-        setToday([{Name: "No Menu Today"}]);
-        return;
-      }
-
-      setToday(menu);
-
-      // Check if the menu has at least one item and highlight the first one by default
-      if (menu.length > 0) {
-        setHighlightedRecipe(menu[0].Name);  // Highlight first item by default
-        findRecipe(menu[0].Name).then((recipe) => {
-          if (recipe.length > 0) {
-            setSource(recipe[0].Link);  // Set the iframe source to the first recipe
-          }
-        });
-      }
-    });
-
-    // Handle case where there is no menu, fetch a random recipe instead
-    getTodayMenu().then((menu) => {
-      if (menu.length === 0) {
-        getRandomRecipe().then((recipe) => {
-          setSource(recipe[0].Link);
-          setHighlightedRecipe(recipe[0].Name);  // Highlight random recipe
-        });
-        return;
-      }
-
-      // Find the recipe for the first menu item
-      findRecipe(menu[0].Name).then((recipe) => {
-        if (recipe.length > 0) {
-          setSource(recipe[0].Link);
-          setHighlightedRecipe(menu[0].Name);  // Highlight first recipe
+    const fetchMenu = () => {
+      getTodayMenu().then((menu) => {
+        if (menu.length > 0) {
+          // If a menu is found, highlight the first item and set the source
+          setToday(menu);
+          setHighlightedRecipe(menu[0].Name); // Highlight the first item
+          findRecipe(menu[0].Name).then((recipe) => {
+            if (recipe.length > 0) {
+              setSource(recipe[0].Link);  // Set iframe source to the first recipe
+            }
+          });
+        } else if (counter < MAX_RETRIES) {
+          // Retry fetching menu if counter is less than max retries
+          counter++;
+          fetchMenu();
+        } else {
+          // If no menu is found after retries, fetch a random recipe
+          getRandomRecipe().then((recipe) => {
+            setToday([{ Name: "No Menu Today" }]);
+            setSource(recipe[0].Link);  // Set iframe source to the random recipe
+          });
         }
+      }).catch((error) => {
+        console.log('Error fetching menu:', error);
       });
-    });
+    };
 
+    // Initial fetch
+    fetchMenu();
   }, []);
 
   // This function will update the iframe source when a menu item is clicked
