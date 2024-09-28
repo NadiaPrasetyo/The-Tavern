@@ -394,13 +394,13 @@ function Grocery() {
                 </form>
               </section>
             ))}
-            <button className='addCategory' type='button' onClick={(event) => addCategory(event, false)}>Add Category</button>
-            <div className="popupAddCategory">
-              <input type="text" className="addCategoryItem" name="categoryItem" placeholder="Add category..." />
-              <button className="addCategory" type='button' onClick={(event) => addCategory(event, true)}><IoAddCircle /></button><br />
-            </div>
           </div>
         )}
+        <button className='addCategory' type='button' onClick={(event) => addCategory(event, false)}>Add Category</button>
+        <div className="popupAddCategory">
+          <input type="text" className="addCategoryItem" name="categoryItem" placeholder="Add category..." />
+          <button className="addCategory" type='button' onClick={(event) => addCategory(event, true)}><IoAddCircle /></button><br />
+        </div>
       </main>
     </div>
   );
