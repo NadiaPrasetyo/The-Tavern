@@ -12,7 +12,7 @@ import RecipeInfo from './RecipeInfo';
 import FilterPopup from './FilterPop';
 import '../App.css';
 
-const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag, highlighted, setHighlighted }) => {
+const RecipeTab = ({ recipeList, setRecipeList, isOpenDrag, setIsOpenDrag, highlighted, setHighlighted }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1); // The current page
   const [searchQuery, setSearchQuery] = useState(''); // The search input value
@@ -186,10 +186,7 @@ const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag, highlighted, setH
       }
 
       setRecipes(data.recipes); // Set the recipes returned from the backend
-      setMenu({
-        ...menu,
-        ['RecipeList']: data.recipes,
-      })
+      setRecipeList(data.recipes); // Set the recipes returned from the backend
 
       // if total pages is undefined or less than 1, set it to 1
       if (!data.totalPages || data.totalPages < 1) {
@@ -363,10 +360,7 @@ const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag, highlighted, setH
       const favSet = new Set(data.favourites.map((recipe) => recipe.Name));
       setFavouriteSet(favSet);
 
-      setMenu({
-        ...menu,
-        ['RecipeList']: data.favourites,
-      });
+      setRecipeList(data.favourites);
 
     } catch (error) {
       console.error("Error getting favourites:", error);
@@ -414,10 +408,7 @@ const RecipeTab = ({ menu, setMenu, isOpenDrag, setIsOpenDrag, highlighted, setH
       setAvailableIngredients(data.ingredients.sort()); // Set the available ingredients for filtering
       setAvailableTags(data.tags.sort()); // Set the available tags for filtering
 
-      setMenu({
-        ...menu,
-        ['RecipeList']: data.recipes,
-      });
+      setRecipeList(data.recipes);
 
     } catch (error) {
       console.error("Error getting recommendations:", error);

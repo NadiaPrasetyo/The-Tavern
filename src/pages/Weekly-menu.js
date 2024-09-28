@@ -1,6 +1,6 @@
 import '../App.css';
 import Sidebar from '../components/sidebar.js';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import ProfileBar from '../components/profilebar.js';
 import RecipeTab from '../components/RecipeTab.js';
@@ -23,9 +23,9 @@ function Menu() {
   const [highlightedIngredients, setHighlightedIngredients] = useState([]);
   const [inInventory, setInInventory] = useState([]);
   const [inGroceryList, setInGroceryList] = useState([]);
+  const [recipeList, setRecipeList] = useState([]);
 
   const [menu, setMenu] = useState({
-    RecipeList: [],
     Monday: [],
     Tuesday: [],
     Wednesday: [],
@@ -112,7 +112,7 @@ function Menu() {
   }, []);
 
   const updateMenu = async () => {
-    if (!hasChanges) return; // Only update if there are changes
+    if (!hasChanges) return;
     try {
       const response = await fetch('/api/update-menu', {
         method: 'POST',
@@ -126,7 +126,7 @@ function Menu() {
       });
       const data = await response.json();
       console.log(data);
-      setHasChanges(false); // Reset the flag after successful update
+      setHasChanges(false);
     } catch (error) {
       console.error('Error:', error);
     }
@@ -152,21 +152,21 @@ function Menu() {
     }
   };
 
-  // Autosave every 5 minutes if changes were made
+  // Autosave every 30 seconds if changes were made
   useEffect(() => {
     const interval = setInterval(() => {
       updateMenu(); // This will only update if hasChanges is true
-    }, 30000); // 5 minutes
+    }, 30000); // 30 seconds
 
     return () => clearInterval(interval); // Cleanup the interval on unmount
   }, [hasChanges, menu]);
 
   // Add event listener for page unload (refresh, navigate away, or close tab)
   useEffect(() => {
+
     const handleBeforeUnload = () => {
-      if (hasChanges) {
-        updateMenu(); // Save changes before unloading the page
-      }
+      if (!hasChanges) return;
+      updateMenu(); // Update menu in database
       if (highlightedIngredients.length > 0) {
         postIngredientsToGroceryList(); // Add highlighted ingredients to grocery list
       }
@@ -177,7 +177,7 @@ function Menu() {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [hasChanges, highlightedIngredients]);
+  }, [highlightedIngredients, menu, hasChanges]);
 
   const handleOnDragStart = (start) => {
     if (start.source.droppableId === 'RecipeList') {
@@ -194,7 +194,7 @@ function Menu() {
 
     if (!destination) return;
 
-    if (!menu[source.droppableId] || !menu[destination.droppableId]) {
+    if ((source.droppableId !== 'RecipeList' && destination.droppableId !== 'RecipeList') && (!menu[source.droppableId] || !menu[destination.droppableId])) {
       alert('Invalid source or destination');
       return;
     }
@@ -207,9 +207,8 @@ function Menu() {
         return;
       }
 
-      const clonedRecipe = {
-        ...menu.RecipeList[source.index],
-        id: `${menu.RecipeList[source.index].Name}-${Date.now()}`,
+      const clonedRecipe = { ...recipeList[source.index],
+        id: recipeList[source.index].Name + Date.now(),
       };
 
       const destinationDay = menu[destination.droppableId];
@@ -300,8 +299,8 @@ function Menu() {
                 ))}
               </div>
               <RecipeTab
-                menu={menu}
-                setMenu={setMenu}
+                recipeList={recipeList}
+                setRecipeList={setRecipeList}
                 isOpenDrag={recipeTabOpen}
                 setIsOpenDrag={setRecipeTabOpen}
                 highlightedIngredients={highlightedIngredients}

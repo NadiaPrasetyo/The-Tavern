@@ -3,6 +3,9 @@
 const fs = require('fs');
 const path = require('path');
 
+function escapeRegex(string) {
+  return string.replace(/[-\/\\^$.*+?()[\]{}|]/g, '\\$&'); // Escape special characters
+}
 
 // Load the .env file 
 const envFilePath = path.resolve(__dirname, '.env');
@@ -416,7 +419,7 @@ app.post('/api/recipes', async (req, res) => {
 
   try {
     // Create a case-insensitive regex to search by recipe name
-    const searchRegex = new RegExp(search, 'i'); // 'i' for case-insensitive
+    const searchRegex = new RegExp(escapeRegex(search), 'i'); // 'i' for case-insensitive
 
     // Build the query object with search and filters
     let query = {
@@ -624,7 +627,7 @@ app.post('/api/recommendation', async (req, res) => {
     }
 
     // Create a case-insensitive regex to search by recipe name
-    const searchRegex = new RegExp(search, 'i'); // 'i' for case-insensitive
+    const searchRegex = new RegExp(escapeRegex(search), 'i'); // 'i' for case-insensitive
 
     // Build the query object with search and filters
     const query = {
@@ -771,7 +774,7 @@ app.get('/api/get-menu', async (req, res) => {
     const mondayRecipes = [];
     for (const recipe of monday) {
       // use regex to search for the recipe name for case insensitivity
-      const searchRegex = new RegExp(recipe.Name, 'i');
+      const searchRegex = new RegExp(escapeRegex(recipe.Name), 'i');
       const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
       if (!recipeDetails) {
         continue;
@@ -783,7 +786,7 @@ app.get('/api/get-menu', async (req, res) => {
 
     const tuesdayRecipes = [];
     for (const recipe of tuesday) {
-      const searchRegex = new RegExp(recipe.Name, 'i');
+      const searchRegex = new RegExp(escapeRegex(recipe.Name), 'i');
       const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
       if (!recipeDetails) {
         continue;
@@ -794,7 +797,7 @@ app.get('/api/get-menu', async (req, res) => {
 
     const wednesdayRecipes = [];
     for (const recipe of wednesday) {
-      const searchRegex = new RegExp(recipe.Name, 'i');
+      const searchRegex = new RegExp(escapeRegex(recipe.Name), 'i');
       const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
       if (!recipeDetails) {
         continue;
@@ -805,7 +808,7 @@ app.get('/api/get-menu', async (req, res) => {
 
     const thursdayRecipes = [];
     for (const recipe of thursday) {
-      const searchRegex = new RegExp(recipe.Name, 'i');
+      const searchRegex = new RegExp(escapeRegex(recipe.Name), 'i');
       const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
       if (!recipeDetails) {
         continue;
@@ -816,7 +819,7 @@ app.get('/api/get-menu', async (req, res) => {
 
     const fridayRecipes = [];
     for (const recipe of friday) {
-      const searchRegex = new RegExp(recipe.Name, 'i');
+      const searchRegex = new RegExp(escapeRegex(recipe.Name), 'i');
       const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
       if (!recipeDetails) {
         continue;
@@ -827,7 +830,7 @@ app.get('/api/get-menu', async (req, res) => {
 
     const saturdayRecipes = [];
     for (const recipe of saturday) {
-      const searchRegex = new RegExp(recipe.Name, 'i');
+      const searchRegex = new RegExp(escapeRegex(recipe.Name), 'i');
       const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
       if (!recipeDetails) {
         continue;
@@ -838,7 +841,7 @@ app.get('/api/get-menu', async (req, res) => {
 
     const sundayRecipes = [];
     for (const recipe of sunday) {
-      const searchRegex = new RegExp(recipe.Name, 'i');
+      const searchRegex = new RegExp(escapeRegex(recipe.Name), 'i');
       const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
       if (!recipeDetails) {
         continue;
@@ -887,7 +890,7 @@ app.post('/api/get-inventory', async (req, res) => {
 // UPDATE MENU
 app.post('/api/update-menu', async (req, res) => {
   const { username, menu } = req.body;
-
+  console.log("Updating menu for user:", username);
   try {
    
     const collection = database.collection('Menu'); // your menu collection
@@ -898,37 +901,92 @@ app.post('/api/update-menu', async (req, res) => {
     const [monday, tuesday, wednesday, thursday, friday, saturday, sunday] = days.map(day => {
       return menu[day].map(recipe => recipe.Name);
     });
-
     await Promise.all([
-      collection.deleteMany({ Username: username, Day: "Monday" }).then(() => 
-      collection.insertMany(monday.map(recipe => ({ Username: username, Day: "Monday", Name: recipe })))
-      ),
-      collection.deleteMany({ Username: username, Day: "Tuesday" }).then(() => 
-      collection.insertMany(tuesday.map(recipe => ({ Username: username, Day: "Tuesday", Name: recipe })))
-      ),
-      collection.deleteMany({ Username: username, Day: "Wednesday" }).then(() => 
-      collection.insertMany(wednesday.map(recipe => ({ Username: username, Day: "Wednesday", Name: recipe })))
-      ),
-      collection.deleteMany({ Username: username, Day: "Thursday" }).then(() => 
-      collection.insertMany(thursday.map(recipe => ({ Username: username, Day: "Thursday", Name: recipe })))
-      ),
-      collection.deleteMany({ Username: username, Day: "Friday" }).then(() => 
-      collection.insertMany(friday.map(recipe => ({ Username: username, Day: "Friday", Name: recipe })))
-      ),
-      collection.deleteMany({ Username: username, Day: "Saturday" }).then(() => 
-      collection.insertMany(saturday.map(recipe => ({ Username: username, Day: "Saturday", Name: recipe })))
-      ),
-      collection.deleteMany({ Username: username, Day: "Sunday" }).then(() => 
-      collection.insertMany(sunday.map(recipe => ({ Username: username, Day: "Sunday", Name: recipe })))
-      )
+      collection.deleteMany({ Username: username, Day: "Monday" }).then(() => {
+        if (monday.length > 0) {
+          return collection.insertMany(monday.map(recipe => ({ Username: username, Day: "Monday", Name: recipe })));
+        }
+      }),
+      collection.deleteMany({ Username: username, Day: "Tuesday" }).then(() => {
+        if (tuesday.length > 0) {
+          return collection.insertMany(tuesday.map(recipe => ({ Username: username, Day: "Tuesday", Name: recipe })));
+        }
+      }),
+      collection.deleteMany({ Username: username, Day: "Wednesday" }).then(() => {
+        if (wednesday.length > 0) {
+          return collection.insertMany(wednesday.map(recipe => ({ Username: username, Day: "Wednesday", Name: recipe })));
+        }
+      }),
+      collection.deleteMany({ Username: username, Day: "Thursday" }).then(() => {
+        if (thursday.length > 0) {
+          return collection.insertMany(thursday.map(recipe => ({ Username: username, Day: "Thursday", Name: recipe })));
+        }
+      }),
+      collection.deleteMany({ Username: username, Day: "Friday" }).then(() => {
+        if (friday.length > 0) {
+          return collection.insertMany(friday.map(recipe => ({ Username: username, Day: "Friday", Name: recipe })));
+        }
+      }),
+      collection.deleteMany({ Username: username, Day: "Saturday" }).then(() => {
+        if (saturday.length > 0) {
+          return collection.insertMany(saturday.map(recipe => ({ Username: username, Day: "Saturday", Name: recipe })));
+        }
+      }),
+      collection.deleteMany({ Username: username, Day: "Sunday" }).then(() => {
+        if (sunday.length > 0) {
+          return collection.insertMany(sunday.map(recipe => ({ Username: username, Day: "Sunday", Name: recipe })));
+        }
+      })
     ]);
+    console.log("Menu updated successfully");
 
     // If everything is OK
     res.status(200).json({ message: "Menu updated successfully" });
   } catch (error) {
+    console.error("Error updating menu:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
+
+// ADD MENU
+app.post('/api/add-to-menu', async (req, res) => {
+  const { username, day, recipe } = req.body;
+  console.log(req.body);
+  try {
+   
+    const collection = database.collection('Menu'); // your menu collection
+
+    // Add the item to the menu
+    await collection.insertOne({ Username: username, Day: day, Name: recipe });
+    // console.log(req.body);
+
+    // If everything is OK
+    res.status(200).json({ message: "Menu added" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// REMOVE MENU
+app.post('/api/delete-from-menu', async (req, res) => {
+  const { username, day, recipe } = req.body;
+  try {
+   
+    const collection = database.collection('Menu'); // your menu collection
+
+    // Remove the item from the menu
+    await collection.deleteOne({ Username: username, Day: day, Name: recipe });
+    // console.log(req.body);
+
+    // If everything is OK
+    res.status(200).json({ message: "Menu removed" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 // ADD INVENTORY ITEM
 app.post('/api/add-inventory-item', async (req, res) => {
