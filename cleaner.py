@@ -52,7 +52,7 @@ def clean(ing):
         ing = ing[3:]
         
     # if start with Bakers conrner remove it
-    if ing.startswith("Bakers conrner "):
+    if ing.startswith("Bakers corner "):
         ing = ing[15:]
         
     # remove any plural s
@@ -71,7 +71,7 @@ def clean(ing):
     if ing.startswith("Garlic "):
         ing = "Garlic"
         
-    if ing.startswith("All spice") or ing.startswith("All sprice"):
+    if ing.startswith("All spice") or ing.startswith("Allsprice"):
         ing = "Allspice"
         
     if ing.startswith("Fresh ") or ing.startswith("Freshly "):
@@ -170,7 +170,7 @@ def fixRecipe(recipe):
     # get the ingredients from the recipe
     ingredients = recipe['Ingredients']
     # create a list to store the new ingredients
-    new_ingredients = []
+    new_ingredients = set()
     # loop through the ingredients
     for ingredient in ingredients:
         cleaned = clean(ingredient)
@@ -185,7 +185,7 @@ def fixRecipe(recipe):
                 if not new_ingredient:
                     continue
                 # add the new ingredient to the list
-                new_ingredients.append(new_ingredient)
+                new_ingredients.add(new_ingredient)
                 continue
             
             # play a sound to notify the user
@@ -199,14 +199,15 @@ def fixRecipe(recipe):
                 # clean the new ingredient
                 new_ingredient = clean(new_ingredient)
                 # add the new ingredient to the list
-                new_ingredients.append(new_ingredient)
+                new_ingredients.add(new_ingredient)
                 # add the new ingredient to the memoised dictionary
                 memoised[cleaned] = new_ingredient
         else:
             # add the cleaned ingredient to the list
-            new_ingredients.append(cleaned)
+            new_ingredients.add(cleaned)
     # update the recipe with the new ingredients
-    collection.update_one({"_id": recipe["_id"]}, {"$set": {"Ingredients": new_ingredients}})
+    listed = list(new_ingredients)
+    collection.update_one({"_id": recipe["_id"]}, {"$set": {"Ingredients": listed}})
 
 def similar(a, list_b):
     # remove a from list_b
@@ -236,3 +237,6 @@ main()
 
 # for ing in distinctIngredients:
 #     similar(ing, distinctIngredients)
+
+client.close()
+winsound.PlaySound("public/tada-fanfare-a-6313.wav", winsound.SND_FILENAME)
