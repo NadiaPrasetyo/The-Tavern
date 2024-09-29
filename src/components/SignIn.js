@@ -24,17 +24,14 @@ function SignIn() {
 
     if (response.status === 200) {
       setMessage('Login successful');
-      localStorage.setItem("isLoggedIn", true);
-      // Save the username, name, and email to localStorage
-      localStorage.setItem("username", data.username);
-      localStorage.setItem("name", data.name);
-      localStorage.setItem("email", data.email);
+      sessionStorage.setItem('token', data.token);
     } else {
       setMessage(data.message || 'Error logging in');
+      return;
     }
 
     // get preferences and add to local storage
-    const response2 = await fetch(`/api/get-preference?username=${encodeURIComponent(data.username)}`, {
+    const response2 = await fetch(`/api/get-preference?username=${encodeURIComponent(username)}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

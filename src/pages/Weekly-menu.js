@@ -7,7 +7,7 @@ import RecipeTab from '../components/RecipeTab.js';
 import MenuColumn from '../components/MenuColumn.js';
 import RecipeInfo from '../components/RecipeInfo.js';
 
-function Menu() {
+function Menu({userdata}) {
   const max_recipes_per_day = 6;
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,7 +48,7 @@ function Menu() {
   const fetchMenu = async () => {
     setIsLoading(true);
     try {
-      const username = localStorage.getItem('username');
+      const username = userdata.username;
       const response = await fetch(`/api/get-menu?username=${encodeURIComponent(username)}`, {
         method: 'GET',
         headers: {
@@ -75,7 +75,7 @@ function Menu() {
 
   const fetchInventory = async () => {
     try {
-      const username = localStorage.getItem('username');
+      const username = userdata.username;
       const response = await fetch(`/api/get-all-inventory?username=${encodeURIComponent(username)}`, {
         method: 'GET',
         headers: {
@@ -91,7 +91,7 @@ function Menu() {
 
   const fetchGroceryList = async () => {
     try {
-      const username = localStorage.getItem('username');
+      const username = userdata.username;
       const response = await fetch(`/api/get-all-grocery?username=${encodeURIComponent(username)}`, {
         method: 'GET',
         headers: {
@@ -120,7 +120,7 @@ function Menu() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: localStorage.getItem('username'),
+          username: userdata.username,
           menu: menu,
         }),
       });
@@ -140,7 +140,7 @@ function Menu() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: localStorage.getItem('username'),
+          username: userdata.username,
           items: highlightedIngredients,
           category: 'From Menu',
         }),
@@ -274,7 +274,7 @@ function Menu() {
     <DragDropContext onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd}>
       <div className="App">
         <header className="App-header">
-          <ProfileBar />
+          <ProfileBar userdata={userdata} />
         </header>
 
         <aside>
@@ -299,6 +299,7 @@ function Menu() {
                 ))}
               </div>
               <RecipeTab
+                userdata={userdata}
                 recipeList={recipeList}
                 setRecipeList={setRecipeList}
                 isOpenDrag={recipeTabOpen}

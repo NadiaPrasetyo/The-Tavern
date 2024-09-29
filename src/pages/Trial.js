@@ -1,7 +1,7 @@
 /* 404 NO PAGE FOUND */import '../App.css';
 import Sidebar from '../components/sidebar.js';
-import RecipeTab from '../components/RecipeTab.js';
 import ProfileBar from '../components/profilebar.js';
+import Loading from '../components/Loading.js';
 
 import React from 'react';
 
@@ -19,7 +19,8 @@ function Trial() {
       </aside>
 
       <main className ="content">
-        <RecipeTab />
+        <h1>Trial</h1>
+        <Loading />
       </main>
 
 

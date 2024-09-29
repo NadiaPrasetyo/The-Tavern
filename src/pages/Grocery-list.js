@@ -5,7 +5,7 @@ import ProfileBar from '../components/profilebar.js';
 import { IoAddCircle } from "react-icons/io5";
 import { AiOutlineEdit } from "react-icons/ai";
 
-function Grocery() {
+function Grocery({userdata}) {
   const [groceryItemOpen, setGroceryItemOpen] = useState({});
   const [groceryItemValue, setGroceryItemValue] = useState('');
   const [groceryList, setGroceryList] = useState([]);
@@ -22,7 +22,7 @@ function Grocery() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Username: localStorage.getItem('username')
+          Username: userdata.username
         }),
       });
 
@@ -90,7 +90,7 @@ function Grocery() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        Username: localStorage.getItem('username'),
+        Username: userdata.username,
         Name: item,
         Category: category
       }),
@@ -166,7 +166,7 @@ function Grocery() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Username: localStorage.getItem('username'),
+          Username: userdata.username,
           Category: category,
           Name: ''
         }),
@@ -214,7 +214,7 @@ function Grocery() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Username: localStorage.getItem('username'),   // Username
+          Username: userdata.username,   // Username
           Name: originalName,                           // Original Name (to find the document)
           Category: originalCategory,                   // Original Category (optional for matching)
           NewName: item.Name,                           // New Name after editing
@@ -250,7 +250,7 @@ function Grocery() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        Username: localStorage.getItem('username'),
+        Username: userdata.username,
         Name: itemName,
         Category: category
       }),
@@ -274,7 +274,7 @@ function Grocery() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Username: localStorage.getItem('username'),
+          Username: userdata.username,
           Name: item,
           Category: 'Inventory',
         }),
@@ -290,7 +290,7 @@ function Grocery() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            Username: localStorage.getItem('username'),
+            Username: userdata.username,
             Name: item,
           }),
         });
@@ -316,7 +316,7 @@ function Grocery() {
   return (
     <div className="App">
       <header className="App-header">
-        <ProfileBar />
+        <ProfileBar userdata={userdata}/>
       </header>
 
       <aside>

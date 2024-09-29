@@ -5,7 +5,7 @@ import ProfileBar from '../components/profilebar.js';
 import { IoAddCircle } from "react-icons/io5";
 import { AiOutlineEdit } from "react-icons/ai";
 
-function Inventory() {
+function Inventory({userdata}) {
   const [groceryItemOpen, setGroceryItemOpen] = useState({});
   const [groceryItemValue, setGroceryItemValue] = useState('');
   const [inventoryList, setInventoryList] = useState([]);
@@ -24,7 +24,7 @@ function Inventory() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Username: localStorage.getItem('username')
+          Username: userdata.username
         }),
       });
 
@@ -90,7 +90,7 @@ function Inventory() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        Username: localStorage.getItem('username'),
+        Username: userdata.username,
         Name: item,
         Category: category
       }),
@@ -166,7 +166,7 @@ function Inventory() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Username: localStorage.getItem('username'),
+          Username: userdata.username,
           Category: category,
           Name: ''
         }),
@@ -216,7 +216,7 @@ function Inventory() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Username: localStorage.getItem('username'),   // Username
+          Username: userdata.username,   // Username
           Name: originalName,                           // Original Name (to find the document)
           Category: originalCategory,                   // Original Category (optional for matching)
           NewName: item.Name,                           // New Name after editing
@@ -255,7 +255,7 @@ function Inventory() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        Username: localStorage.getItem('username'),
+        Username: userdata.username,
         Name: itemName,
         Category: category
       }),
@@ -305,7 +305,7 @@ function Inventory() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Username: localStorage.getItem('username'),
+          Username: userdata.username,
           Name: itemName,
           Category: 'Grocery'
         }),
@@ -326,7 +326,7 @@ function Inventory() {
   return (
     <div className="App">
       <header className="App-header">
-        <ProfileBar />
+        <ProfileBar userdata={userdata}/>
       </header>
 
       <aside>

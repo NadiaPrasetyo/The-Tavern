@@ -10,7 +10,7 @@ import { VscTriangleDown } from "react-icons/vsc";
 import { ThemeContext } from '../components/ThemeContext.js';
 
 
-function Preference() {
+function Preference({userdata}) {
   const [isDarkModeSwitch, setisDarkModeSwitch] = useState(false);
   const [displayOption, setDisplayOptions] = useState(false);
   const [selectedDay, setSelectedDay] = useState('Monday');
@@ -40,7 +40,7 @@ function Preference() {
   };
 
   const fetchPreference = async () => {
-    const username = localStorage.getItem('username');
+    const username = userdata.username;
     const response = await fetch(`/api/get-preference?username=${encodeURIComponent(username)}`, {
       method: 'GET',
       headers: {
@@ -105,7 +105,7 @@ function Preference() {
   };
 
   const fetchData = async (method) => {
-    const username = localStorage.getItem('username');
+    const username = userdata.username;
     const response = await fetch(`/api/get-data?username=${encodeURIComponent(username)}`, {
       method: 'GET',
       headers: {
@@ -150,7 +150,7 @@ function Preference() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: localStorage.getItem('username'),
+        username: userdata.username,
       }),
     });
     const data = await response.json();
@@ -180,7 +180,7 @@ function Preference() {
   };
 
   const updatePreference = async () => {
-    const username = localStorage.getItem('username');
+    const username = userdata.username;
 
     const preference = {};
     if (isDarkModeSwitch !== null) preference.DarkMode = isDarkModeSwitch;
@@ -247,7 +247,7 @@ function Preference() {
     
     <div className="App">
       <header className = "App-header">
-        <ProfileBar/>
+        <ProfileBar userdata={userdata}/>
       </header>
 
       <aside>

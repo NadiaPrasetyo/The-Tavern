@@ -3,13 +3,13 @@ import Sidebar from '../components/sidebar.js';
 import React from 'react';
 import ProfileBar from '../components/profilebar.js';
 
-function Options() {
+function Options({userdata}) {
 
   return (
     
     <div className="App">
       <header class = "App-header">
-        <ProfileBar/>
+        <ProfileBar userdata={userdata}/>
       </header>
 
       <aside>

@@ -12,7 +12,7 @@ import RecipeInfo from './RecipeInfo';
 import FilterPopup from './FilterPop';
 import '../App.css';
 
-const RecipeTab = ({ recipeList, setRecipeList, isOpenDrag, setIsOpenDrag, highlighted, setHighlighted }) => {
+const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenDrag, highlighted, setHighlighted }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1); // The current page
   const [searchQuery, setSearchQuery] = useState(''); // The search input value
@@ -281,7 +281,7 @@ const RecipeTab = ({ recipeList, setRecipeList, isOpenDrag, setIsOpenDrag, highl
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: localStorage.getItem('username'),
+          username: userdata.username,
           recipe: recipe.Name,
           max_favourites: favouriteMax,
         }),
@@ -311,7 +311,7 @@ const RecipeTab = ({ recipeList, setRecipeList, isOpenDrag, setIsOpenDrag, highl
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: localStorage.getItem('username'),
+          username: userdata.username,
           recipe: recipe.Name,
         }),
       });
@@ -355,7 +355,7 @@ const RecipeTab = ({ recipeList, setRecipeList, isOpenDrag, setIsOpenDrag, highl
   const getFavourites = async () => {
     setIsLoadingFavourites(true);
     try {
-      const username = localStorage.getItem('username');
+      const username = userdata.username;
       const response = await fetch(`/api/get-favorite-recipes?username=${encodeURIComponent(username)}`, {
         method: 'GET',
         headers: {
@@ -388,7 +388,7 @@ const RecipeTab = ({ recipeList, setRecipeList, isOpenDrag, setIsOpenDrag, highl
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: localStorage.getItem('username'),
+          username: userdata.username,
           page: page,
           limit: recipesPerPage,
           search: query,

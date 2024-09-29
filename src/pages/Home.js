@@ -7,6 +7,10 @@ import { GiFruitBowl } from "react-icons/gi";
 import { LuSalad } from "react-icons/lu";
 import { LiaGrinBeamSweat } from "react-icons/lia";
 
+const user = {
+  username: 'User',
+};
+
 
 function getTodayMenu() {
   const getTodayMenu = async (e) => {
@@ -18,7 +22,7 @@ function getTodayMenu() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: localStorage.getItem('username')
+        username: user.username
       }),
     });
 
@@ -93,7 +97,7 @@ function get5lastGroceryList() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: localStorage.getItem('username')
+        username: user.username
       }),
     });
 
@@ -135,7 +139,7 @@ function GroceryList() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Username: localStorage.getItem('username'),
+          Username: user.username,
           Name: value,
           Category: 'Grocery'//default category
           
@@ -214,7 +218,7 @@ function GroceryList() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Username: localStorage.getItem('username'),
+          Username: user.username,
           Name: item,
           Category: 'Inventory'//default category
         }),
@@ -230,7 +234,7 @@ function GroceryList() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            Username: localStorage.getItem('username'),
+            Username: user.username,
             Name: item,
           }),
         });
@@ -323,7 +327,7 @@ function findRecipe(RecipeName) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        Username: localStorage.getItem('username'),
+        Username: user.username,
         Name: RecipeName
       }),
     });
@@ -388,7 +392,7 @@ function getQuickFruits() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        Username: localStorage.getItem('username')
+        Username: user.username
       }),
     });
 
@@ -415,7 +419,7 @@ function getQuickVegetables() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        Username: localStorage.getItem('username')
+        Username: user.username
       }),
     });
 
@@ -573,7 +577,8 @@ function WeekCalendar() {
         
 
 
-function Home() {
+function Home({userdata}) {
+  user.username = userdata.username;
   document.onkeydown = function(event) {
     if (event.keyCode === 13) {  // 13 is the keyCode for the 'Enter' key
       event.preventDefault();  // Prevent the default form submission
@@ -636,7 +641,7 @@ function Home() {
     
     <div className="App">
       <header className = "App-header">
-        <ProfileBar/>
+        <ProfileBar userdata={userdata}/>
       </header>
 
       <aside>

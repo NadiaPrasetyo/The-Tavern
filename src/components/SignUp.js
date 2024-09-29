@@ -30,10 +30,7 @@ function SignUp() {
 
     if (response.status === 200) {
       setMessage('Register successful');
-      localStorage.setItem("isLoggedIn", true);
-      localStorage.setItem("username", username);
-      localStorage.setItem("name", name);
-      localStorage.setItem("email", email);
+      sessionStorage.setItem('token', data.token);
 
       localStorage.setItem('firstDay', 'Monday');
       localStorage.setItem('isDarkMode', false);

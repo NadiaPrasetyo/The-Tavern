@@ -4,13 +4,13 @@ import ProfileBar from '../components/profilebar.js';
 import { AiOutlineEdit } from "react-icons/ai";
 import React, { useState } from 'react';
 
-function Settings() {
+function Settings({userdata}) {
   const [isEditable, setIsEditable] = useState({ name: false, email: false });
   const [message, setMessage] = useState('');
   const [formValues, setFormValues] = useState({
-    username: localStorage.getItem('username') || '',
-    name: localStorage.getItem('name') || '',
-    email: localStorage.getItem('email') || '',
+    username: userdata.username || '',
+    name: userdata.name || '',
+    email: userdata.email || '',
     password: ''  // Password fields should not show the actual password
   });
 
@@ -30,15 +30,6 @@ function Settings() {
     }
 
     e.preventDefault();
-    // Change the values in local storage if they were edited
-    if (isEditable.name) {
-      localStorage.setItem('name', formValues.name);
-      // reload the page to update the name in the profile bar
-      window.location.reload();
-    }
-    if (isEditable.email) {
-      localStorage.setItem('email', formValues.email);
-    }
     // connect to the server to update the user's information
     const response = await fetch('/api/update-user', {
       method: 'POST',
@@ -46,11 +37,18 @@ function Settings() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: localStorage.getItem('username'),
+        username: userdata.username,
         name: formValues.name,
         email: formValues.email,
       }),
     });
+    if (response.status === 200) {
+      setMessage('User information updated successfully');
+      userdata.name = formValues.name;
+      userdata.email = formValues.email;
+    } else {
+      setMessage('Error updating user information');
+    }
 
     // Reset all fields to uneditable
     setIsEditable({ username: false, name: false, email: false, password: false });
@@ -111,7 +109,7 @@ function Settings() {
     
     <div className="App">
       <header className="App-header">
-        <ProfileBar />
+        <ProfileBar userdata={userdata}/>
       </header>
 
       <aside>

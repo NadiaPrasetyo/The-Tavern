@@ -12,16 +12,82 @@ import Preference from "./pages/Preference";
 import Options from './pages/Options';
 import Trial from './pages/Trial';
 import Feedback from './pages/Feedback';
+import Loading from './components/Loading';
+import React, { useState, useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';
 
 
-const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+const fetchUserProfile = async () => {
+  const token = sessionStorage.getItem("token");
+
+  if (!token) {
+    console.error("No token found, please log in.");
+    return null;
+  }
+
+  const response = await fetch("/api/user-profile", {
+    method: "GET",
+    headers: {
+      "Authorization": token // Send JWT in the headers
+    }
+  });
+
+  if (response.status === 200) {
+    const data = await response.json();
+    return data;
+    // You can now use `data.username`, `data.email`, etc.
+  } else {
+    console.error("Failed to fetch user profile.");
+    return null;
+  }
+};
+
+// Function to check token expiration
+const checkTokenExpiration = (token) => {
+  if (!token) return;
+  
+  const decoded = jwtDecode(token); // Decode the token
+  console.log("DECODED JWT", decoded);
+  const currentTime = Date.now() / 1000; // Get current time in seconds
+
+  if (decoded.exp < currentTime) {
+    console.log("Session expired, please log in again.");
+    alert("Session expired, please log in again.");
+    sessionStorage.removeItem("token"); // Clear the token
+    window.location.href = "/login"; // Redirect to login page
+  }
+};
+
 
 function PrivateRoute({ element }) {
-  if (isLoggedIn) {
-    return element;
+  const [userdata, setUserdata] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    checkTokenExpiration(sessionStorage.getItem("token"));
+    const fetchData = async () => {
+      const data = await fetchUserProfile();
+      if (data) {
+        setUserdata(data);
+      } else {
+        window.location.href = '/login';
+      }
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+    <div className='loading-page'>
+      <Loading />
+    </div>
+    );
+  }
+  if (userdata){
+    return React.cloneElement(element, { userdata });
   } else {
-    // redirect to login page
-    window.location.href = '/login';
     return null;
   }
 }

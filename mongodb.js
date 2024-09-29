@@ -2,10 +2,13 @@
 
 const fs = require('fs');
 const path = require('path');
+const express = require('express');
+const argon2 = require('argon2');
+const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
-function escapeRegex(string) {
-  return string.replace(/[-\/\\^$.*+?()[\]{}|]/g, '\\$&'); // Escape special characters
-}
+const { MongoClient, ServerApiVersion, ObjectId, Collection } = require('mongodb');
+const bodyParser = require('body-parser');
 
 // Load the .env file 
 const envFilePath = path.resolve(__dirname, '.env');
@@ -19,17 +22,14 @@ if (fs.existsSync(envFilePath)) {
   });
 }
 
-const express = require('express');
-const argon2 = require('argon2');
-const { MongoClient, ServerApiVersion, Collection } = require('mongodb');
-const bodyParser = require('body-parser');
-
 const app = express();
 const port = 5000;
 const uri = process.env.MONGODB_URI;
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 // Use bodyParser to parse incoming requests
 app.use(bodyParser.json());
+app.use(cors());
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -42,6 +42,10 @@ const client = new MongoClient(uri, {
     ssl: true // Explicitly enable SSL
   }
 });
+
+function escapeRegex(string) {
+  return string.replace(/[-\/\\^$.*+?()[\]{}|]/g, '\\$&'); // Escape special characters
+}
 
 async function connectToDb() {
   try {
@@ -85,8 +89,13 @@ app.post('/api/login', async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
+    // Generate JWT
+    const token = jwt.sign({ id: user._id }, SECRET_KEY, {
+      expiresIn: "1h" // Token expires in 1 hour
+    });
+
     // If everything is OK, return username, name, and email
-    res.status(200).json({ message: "Login successful", username: user.username, name: user.name, email: user.email });
+    res.status(200).json({ message: "Login successful", token:token });
 
   } catch (error) {
     res.status(500).json({ message: "Server error" });
@@ -131,17 +140,59 @@ app.post('/api/register', async (req, res) => {
     }
 
     // Insert the user into the database
-    await collection.insertOne({ name: name, username: username, email: email, password: hashedPassword });
+    const new_user = await collection.insertOne({ name: name, username: username, email: email, password: hashedPassword });
+
+    // Generate JWT
+    const token = jwt.sign({ id: new_user._id }, SECRET_KEY, {
+      expiresIn: "1h" // Token expires in 1 hour
+    });
 
     // If everything is OK
-    res.status(200).json({ message: "Register successful" });
+    res.status(200).json({ message: "Register successful", token:token });
 
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// C`HAN`GE PASSWORD
+app.get("/api/user-profile", async (req, res) => {
+  const token = req.headers["authorization"];
+
+  if (!token) {
+    return res.status(403).json({ message: "No token provided" });
+  }
+
+  // jwt.verify is now wrapped in a promise so you can use await
+  jwt.verify(token, SECRET_KEY, async (err, decoded) => {
+    if (err) {
+      return res.status(500).json({ message: "Failed to authenticate token" });
+    }
+
+    try {
+      const collection = database.collection('User'); // your users collection
+      // Make sure to await the findOne operation to get the user
+
+      const user = await collection.findOne({ _id: new ObjectId(decoded.id) });
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Send user profile back to the client
+      res.status(200).json({
+        username: user.username,
+        email: user.email,
+        name: user.name
+      });
+
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "An error occurred while fetching user data" });
+    }
+  });
+});
+
+// CHANGE PASSWORD
 
 app.post('/api/change-password', async (req, res) => {
   const { username, currentPassword, newPassword } = req.body;

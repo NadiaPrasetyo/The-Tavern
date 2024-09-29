@@ -1,9 +1,8 @@
 import '../App.css'
 import { IoMdMenu } from "react-icons/io";
 
-const name = localStorage.getItem('name');
-
-function ProfileBar() {
+function ProfileBar({userdata}) {
+  const name = userdata ? userdata.name : 'User';
 
   function toggleMenu(){
     if (document.querySelector('.menuBar').style.display === 'block')
