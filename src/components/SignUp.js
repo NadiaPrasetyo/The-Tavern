@@ -28,7 +28,7 @@ function SignUp() {
 
     const data = await response.json();
 
-    if (response.status === 200) {
+    if (response.statusCode === 200) {
       setMessage('Register successful');
       sessionStorage.setItem('token', data.token);
 

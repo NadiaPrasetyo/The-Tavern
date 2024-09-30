@@ -22,7 +22,7 @@ function SignIn() {
 
     const data = await response.json();
 
-    if (response.status === 200) {
+    if (response.statusCodeCode === 200) {
       setMessage('Login successful');
       sessionStorage.setItem('token', data.token);
     } else {

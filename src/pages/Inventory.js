@@ -30,7 +30,7 @@ function Inventory({userdata}) {
 
       const inventory = await response.json();
 
-      if (response.status === 200) {
+      if (response.statusCode === 200) {
         setInventoryList(inventory.inventory);
       } else {
         console.log("Error getting inventory");
@@ -95,7 +95,7 @@ function Inventory({userdata}) {
         Category: category
       }),
     }).then((response) => {
-      if (response.status === 200) {
+      if (response.statusCode === 200) {
         console.log("Inventory item added successfully");
         document.querySelector('.addGroceryItem').value = '';
         setInventoryList(
@@ -171,7 +171,7 @@ function Inventory({userdata}) {
           Name: ''
         }),
       }).then((response) => {
-        if (response.status === 200) {
+        if (response.statusCode === 200) {
           console.log("Category added successfully");
           setGroceryItemOpen({
             ...groceryItemOpen,
@@ -223,7 +223,7 @@ function Inventory({userdata}) {
           NewCategory: item.Category                    // New Category after editing
         }),
       }).then(response => {
-        if (response.status === 200) {
+        if (response.statusCode === 200) {
           console.log("Item updated successfully");
           // Update the inventory list
           setInventoryList(
@@ -260,7 +260,7 @@ function Inventory({userdata}) {
         Category: category
       }),
     }).then((response) => {
-      if (response.status === 200) {
+      if (response.statusCode === 200) {
         console.log("Item removed successfully");
         // Update the inventory list
         setInventoryList(
@@ -310,7 +310,7 @@ function Inventory({userdata}) {
           Category: 'Grocery'
         }),
       }).then((response) => {
-        if (response.status === 200) {
+        if (response.statusCode === 200) {
           console.log("Item added to grocery list successfully");
           //remove the item from the inventory list
           //call the removeItem function

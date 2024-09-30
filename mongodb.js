@@ -999,46 +999,6 @@ app.post('/api/update-menu', async (req, res) => {
   }
 });
 
-// ADD MENU
-app.post('/api/add-to-menu', async (req, res) => {
-  const { username, day, recipe } = req.body;
-  console.log(req.body);
-  try {
-   
-    const collection = database.collection('Menu'); // your menu collection
-
-    // Add the item to the menu
-    await collection.insertOne({ Username: username, Day: day, Name: recipe });
-    // console.log(req.body);
-
-    // If everything is OK
-    res.status(200).json({ message: "Menu added" });
-
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-// REMOVE MENU
-app.post('/api/delete-from-menu', async (req, res) => {
-  const { username, day, recipe } = req.body;
-  try {
-   
-    const collection = database.collection('Menu'); // your menu collection
-
-    // Remove the item from the menu
-    await collection.deleteOne({ Username: username, Day: day, Name: recipe });
-    // console.log(req.body);
-
-    // If everything is OK
-    res.status(200).json({ message: "Menu removed" });
-
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-
 // ADD INVENTORY ITEM
 app.post('/api/add-inventory-item', async (req, res) => {
   try {
@@ -1162,40 +1122,6 @@ app.post('/api/get-grocery', async (req, res) => {
 
     // If everything is OK
     res.status(200).json({ grocery: grocery });
-
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-// ADD GROCERY ITEM
-app.post('/api/add-grocery-item-list', async (req, res) => {
-  try {
-   
-    const collection = database.collection('GroceryList'); // your inventory collection
-
-    //check that the collection doesn't already have the item
-    const item = await collection.findOne({ Username: req.body.Username, Name: req.body.Name });
-
-     if (item!=null) {
-        // throw an error if the item already exists in the user's inventory
-       return res.status(409).json({ message: "Item already exist" });
-     }
-
-    //check that that the collection doesn't have an empty name item
-    const item2 = await collection.findOne({ Username: req.body.Username, Category: req.body.Category ,Name: "" });
-    if (item2!=null) {
-      //replace the empty name item with the new item
-      await collection.updateOne({ Username: req.body.Username, Category: req.body.Category ,Name: "" }, { $set: req.body });
-      return res.status(200).json({ message: "Item added to grocery" });
-    }
-
-    // Add the item to the inventory
-    await collection.insertOne(req.body);
-    // console.log(req.body);
-
-    // If everything is OK
-    res.status(200).json({ message: "Item added to grocery" });
 
   } catch (error) {
     res.status(500).json({ message: "Server error" });

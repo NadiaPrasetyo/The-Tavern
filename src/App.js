@@ -32,7 +32,7 @@ const fetchUserProfile = async () => {
     }
   });
 
-  if (response.status === 200) {
+  if (response.statusCode === 200) {
     const data = await response.json();
     return data;
     // You can now use `data.username`, `data.email`, etc.

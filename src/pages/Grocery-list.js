@@ -28,7 +28,7 @@ function Grocery({userdata}) {
 
       const grocery = await response.json();
 
-      if (response.status === 200) {
+      if (response.statusCode === 200) {
         setGroceryList(grocery.grocery);
       } else {
         console.log("Error getting grocery");
@@ -84,7 +84,7 @@ function Grocery({userdata}) {
     console.log("Adding grocery item: " + item + " to category: " + category);
     // Add the grocery item to the database
 
-    fetch('/api/add-grocery-item-list', {
+    fetch('/api/add-grocery-item', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ function Grocery({userdata}) {
         Category: category
       }),
     }).then((response) => {
-      if (response.status === 200) {
+      if (response.statusCode === 200) {
         console.log("Grocery item added successfully");
         //clear the input field
         document.querySelector('.addGroceryItem').value = '';
@@ -171,7 +171,7 @@ function Grocery({userdata}) {
           Name: ''
         }),
       }).then((response) => {
-        if (response.status === 200) {
+        if (response.statusCode === 200) {
           console.log("Category added successfully");
           setGroceryItemOpen({
             ...groceryItemOpen,
@@ -221,7 +221,7 @@ function Grocery({userdata}) {
           NewCategory: item.Category                    // New Category after editing
         }),
       }).then(response => {
-        if (response.status === 200) {
+        if (response.statusCode === 200) {
           setGroceryList(
             groceryList.map((element) => {
               if (element.Name === originalName) {
@@ -255,7 +255,7 @@ function Grocery({userdata}) {
         Category: category
       }),
     }).then((response) => {
-      if (response.status === 200) {
+      if (response.statusCode === 200) {
         console.log("Item removed successfully");
         setGroceryList(groceryList.filter(item => item.Name !== itemName));
       } else {
@@ -280,7 +280,7 @@ function Grocery({userdata}) {
         }),
       });
 
-      if (response.status === 200 || response.status === 409) {
+      if (response.statusCode === 200 || response.statusCode === 409) {
         console.log("Grocery item added to inventory");
 
         // Remove the grocery item from the list
@@ -296,7 +296,7 @@ function Grocery({userdata}) {
         });
         // Update the grocery list
 
-        if (response2.status === 200) {
+        if (response2.statusCode === 200) {
           console.log("Grocery item removed from list");
           //update the grocery list
           setGroceryList(groceryList.filter(groceryItem => groceryItem.Name !== item));
