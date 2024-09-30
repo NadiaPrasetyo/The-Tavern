@@ -1,5 +1,9 @@
 const {database} = require('./db');
 
+function escapeRegex(string) {
+  return string.replace(/[-\/\\^$.*+?()[\]{}|]/g, '\\$&'); // Escape special characters
+}
+
 // POST RECIPES BY NAME AND FILTER
 const handler = async (req) => {
     const { page = 1, limit = 10, search = '', includeT = [], excludeT = [], includeI = [], excludeI = [] } = JSON.parse(req.body);
