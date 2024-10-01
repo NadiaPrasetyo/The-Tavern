@@ -3,12 +3,13 @@ const {database} = require('./db');
 
 // GET GROCERY LIST
 const handler = async (req) => {
+    const { Username } = JSON.parse(req.body); // Extract username from query params
     try {
         const collection = database.collection('GroceryList'); // your grocery collection
 
         // Find the grocery list
         const grocery = await collection
-            .find({ Username: req.body.Username })
+            .find({ Username: Username })
             .toArray();
 
         // If everything is OK
