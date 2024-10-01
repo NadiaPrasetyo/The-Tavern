@@ -8,6 +8,7 @@ import winsound
 from dotenv import load_dotenv
 import os
 
+import re
 
 # connect to MongoDB from the .env file MONGODB_URI
 load_dotenv()
@@ -16,15 +17,18 @@ MONGODB_URI = os.getenv('MONGODB_URI')
 
 client = MongoClient(MONGODB_URI)
 
-collection = client['The-tavern']['RecipeList']
+collection = client['The-tavern']['Maangchi']
 
 memoised = {}
 
 def clean(ing):
     # remove any leading or trailing spaces
     ing = ing.strip()
-    # remove any leading or trailing spaces
-    ing = ing.strip()
+    # remove any leading or trailing parentheses
+    ing = ing.strip("()")
+    # remove any korean characters using character ranges
+    ing = re.sub(r'[\u3131-\ucb4c]', '', ing)
+    
     # remove any symbols like * 
     ing = ing.replace("*", "")
     # replace - with a space
@@ -33,6 +37,14 @@ def clean(ing):
     ing = ing.replace(".", "")
     # replace ' with nothing
     ing = ing.replace("'", "")
+    
+    ing = ing.replace("á", " ")
+    
+    ing = ing.replace("cm/″", "")
+    
+    if ing.startswith("Egg") or "egg" in ing:
+        ing = "Egg"
+    
     # if start with Small, Medium, Large, Jumbo, or Extra-Large remove it as long as the next word isn't size, piece, slice, to, bunch, hand, whole
     if ing.startswith("Small ") and not ing.startswith("Small size") and not ing.startswith("Small piece") and not ing.startswith("Small slice") and not ing.startswith("Small to ") and not ing.startswith("Small bunch") and not ing.startswith("Small hand") and not ing.startswith("Small whole"):
         ing = ing[6:]
@@ -103,6 +115,119 @@ def clean(ing):
         
     if ing.endswith("sweetener"):
         ing = "sweetener"
+        
+    if ing.startswith("¬ω"):
+        ing = ing[2:]
+        
+    ing = ing.replace("  ", " ")
+    ing = ing.replace("  ", " ")
+    
+    if ing.startswith("Ts"):
+        if ing.startswith("Ts of "):
+            ing = ing[6:]
+        else:
+            ing = ing[2:]
+    
+    if ing.startswith("Tbs"):
+        if ing.startswith("Tbs of "):
+            ing = ing[7:]
+        else:
+            ing = ing[3:]
+            
+    if ing.startswith("Tablespoon"):
+        if ing.startswith("Tablespoon of "):
+            ing = ing[14:]
+        else:
+            ing = "Tablespoon"
+            
+    if ing.startswith("Table spoon"):
+        if ing.startswith("Table spoon of "):
+            ing = ing[14:]
+        else:
+            ing = "Table spoon"
+            
+    if ing.startswith("Plus "):
+        ing = ing[5:]
+        
+    if ing.startswith("Peeled "):
+        ing = ing[7:]
+        
+    if ing.startswith("Package "):
+        if ing.startswith("Package of "):
+            ing = ing[10:]
+        else:
+            ing = ing[8:]
+    
+    if ing.startswith("Or "):
+        ing = ing[3:]
+    
+    if ing.startswith("Onion"):
+        ing = "Onion"
+        
+    if ing.startswith("Napa cabbage"):
+        ing = "Napa cabbage"
+        
+    if ing.startswith("Gochujang"):
+        ing = "Gochujang"
+    if ing.startswith("Gochugaru"):
+        ing = "Gochugaru"
+    if ing.startswith("Gochu garu"):
+        ing = "Gochugaru"
+    
+    if ing.startswith("Cubed "):
+        ing = ing[6:]
+
+    if ing.startswith("Crushed "):
+        ing = ing[8:]
+        
+    if ing.startswith("Cooking oil"):
+        ing = "oil"
+        
+    if ing.startswith("Jalapeo") or ing.startswith("Jalapeno"):
+        ing = "Jalapeno"
+        
+#daikon radish == daikon == korean radish
+#gim == nori == seaweed
+#red pepper == gochugaru
+#green onion == scallion*** == spring onion
+#watercress error in ingredient
+#korean pear == nashi pear
+#asian chives == chive
+#anchovy kelp stock == dashi
+#toasted sesame seed == sesame seed
+
+    if ing.startswith("Daikon") or ing.startswith("Korean radish"):
+        ing = "daikon radish"
+    
+    if ing.startswith("Gim") or ing.startswith("Seaweed") or "seaweed" in ing or "nori" in ing or "gim" in ing:
+        ing = "nori"
+    
+    if ing.startswith("Red pepper"):
+        ing = "gochugaru"
+        
+    if ing.startswith("Green onion") or ing.startswith("Spring onion") or "green onion" in ing or "spring onion" in ing:
+        ing = "scallion"
+    
+    if ing.startswith("Watercre"):
+        ing = "watercress"
+    
+    if ing.startswith("Korean pear"):
+        ing = "nashi pear"
+        
+    if ing.startswith("Asian chive"):
+        ing = "chive"
+    
+    if ing.startswith("Anchovy kelp stock") or "anchovy kelp stock" in ing:
+        ing = "dashi"
+    
+    if ing.startswith("Toasted sesame seed") or "toasted sesame seed" in ing:
+        ing = "sesame seed"
+    
+    if ing.startswith("Cabbage"):
+        ing = "cabbage"
+    
+    if ing.startswith("Toasted sesame oil"):
+        ing = "sesame oil"
     
     # capitalize the first letter of the ingredient
     ing = ing.capitalize()
@@ -134,17 +259,21 @@ def printDistinctIngredients():
 def flagSus(ingredient):
     # condition to check if the ingredient is suspicious
     sus_start = [
-        # "A ", "An ", "The ", "a ", "an ", "the ", "Of", "Some", "(", "Jumbo", "Large", "Inch", "Or", "For", " To ", "Chop", "Small", "Medium", "Juiced", "Optional", "One", "Very", "Your", "Garnish", "Sprig", "Choice", "Kepp", "Ap"
-        # "Eggs", "Grated", "Melted", "Shredded", "Thin", "Warm", "Water", "Wide"
-        # "Boneeless", "Cup", "Egg", "Firm", "Flakey", "Thawed"
-    ]
+        # "A ", "An ", "The ", "a ", "an ", "the ", "Of", "Some", "(", "Jumbo", "Large", "Inch", "Or", "For", " To ", "Chop", "Small", "Medium", "Juiced", "Optional", "One", "Very", "Your", "Garnish", "Sprig", "Choice", "Kepp", "Ap",
+        # "Eggs", "Grated", "Melted", "Shredded", "Thin", "Warm", "Water", "Wide", "Garnish", "Cook ", "Clove ", "Cloves ", "Cleaned ", "Clean ", "Can of ", "Bunch ", "Bowl", "Boil", "Be ", "Ball ", "And ", "Any "
+        # "Boneeless", "Cup", "Egg", "Firm", "Flakey", "Thawed", "Worth", "X ", "While", "Table", "Sheet", "Sliced", "Slices", "S ", "Quarts", "Put ", "Pkg", "Piece", "Package", "Mince", "Made ", "Little", "Lb", "Long ", "Kale", "Hi ", "Half"
+        # "When", "Well", "Dropwort", "Trimmed", "Tofu", "To ", "Stir", "Steam", "Squeeze", "Soy ", "Soft", "Neoguri", "Mozzarella cheese", "Korean hot pepper ", "Kimchi juice", "Kilogram", "Jjapagetti", "Jalapeo", "Jjajangmyeon", "If ", "Hot pepper", "Homemade", "Head ",
+        # "Garatteok", "Extra ", "Electric", "Emergency", "English", "Dae ", "Cotton", "Cook", "Chili", "Bunches", "Artificial", "Anchovy stock", "About"
+        # "Any", "Peeled"
+        ]
     sus_has_word = [
-        # ",", "large", "inch", " or ", "for", " to ", "chop", "small", "medium", "juiced", "optional", " one ", "very", "your", "garnish", ":", "(", " a ", "sprig", "choice", "homemade", "kepp", " of "
-        # "crme"
+        # ",", "large", "inch", " or ", "for", " to ", "chop", "small", "medium", "juiced", "optional", " one ", "very", "your", "garnish", ":", "(", " a ", "sprig", "choice", "homemade", "kepp", " of ", "water"
+        # "crme", "such as", "cleaned", "powder", " or ", "tbs", "pancake"
         # "nice quality", " ros ", "room temperature"
+        # "stick", "skewer", "fluffy", "rice cake", "toasted", "bought", "buy", "radishe", "cooking wine", "cut", "shucked", "mandu", "with", "about", "meat", "washed", "that", "from", "ground", "/"
     ]
     sus_end = [
-        # "oe", "leave", "rie", "heaping"
+        # "oe", "leave", "ie", "heaping", "to taste"
         # "crump"
         # "Bonele", "kisse", "i use rao"
     ]
@@ -155,6 +284,9 @@ def flagSus(ingredient):
     for word in sus_has_word:
         if word in ingredient:
             return True
+    # if the ingredient is longer tha 50 characters
+    if len(ingredient) > 50:
+        return True
     return False
 
 def askUserToFix(ingredient, recipe_name):
@@ -240,3 +372,13 @@ main()
 
 client.close()
 winsound.PlaySound("public/tada-fanfare-a-6313.wav", winsound.SND_FILENAME)
+
+#daikon radish == daikon == korean radish
+#gim == nori == seaweed
+#red pepper == gochugaru
+#green onion == scallion*** == spring onion
+#watercress error in ingredient
+#korean pear == nashi pear
+#asian chives == chive
+#anchovy kelp stock == dashi
+#toasted sesame seed == sesame seed
