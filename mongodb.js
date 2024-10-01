@@ -1152,24 +1152,6 @@ app.post('/api/add-grocery-category', async (req, res) => {
   }
 });
 
-// REMOVE GROCERY ITEM
-app.post('/api/remove-grocery-item', async (req, res) => {
-  try {
-   
-    const collection = database.collection('GroceryList'); // your inventory collection
-
-    // Remove the item from the inventory
-    await collection.deleteOne(req.body);
-    // console.log(req.body);
-
-    // If everything is OK
-    res.status(200).json({ message: "Item removed from grocery" });
-
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
 // UPDATE GROCERY ITEM
 app.post('/api/update-grocery-item', async (req, res) => {
   try {

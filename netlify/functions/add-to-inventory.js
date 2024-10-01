@@ -14,7 +14,7 @@ const handler = async (req) => {
     }
 
     // Add the item to the inventory
-    await collection.insertOne(req.body);
+    await collection.insertOne(JSON.parse(req.body));
     // console.log(req.body);
 
     // If everything is OK

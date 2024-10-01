@@ -15,8 +15,8 @@ const handler = async (req) => {
     }
 
     // Add the item to the grocery list
-    await collection.insertOne(req.body);
-    // console.log(req.body);
+    await collection.insertOne(JSON.parse(req.body));
+    // console.log(JSON.parse(req.body));
 
     // If everything is OK
     return { statusCode: 200, body: JSON.stringify({ message: "Item added to grocery list" }) };
