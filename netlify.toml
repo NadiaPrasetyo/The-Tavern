@@ -1,5 +1,5 @@
 [build]
-  command = "react-scripts build"
+  command = "CI=false && react-scripts build"
   commandOrigin = "config"
   functions = "netlify/functions"
   publish = "build"  # React apps typically output to the 'build' folder
