@@ -249,6 +249,7 @@ function Inventory({userdata}) {
 
   const removeItem = (category, itemName) => {
     console.log("Removing item: " + itemName);
+    console.log("Removing item: " + itemName);
     fetch('/api/remove-inventory-item', {
       method: 'POST',
       headers: {

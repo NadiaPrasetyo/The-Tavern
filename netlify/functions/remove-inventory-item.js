@@ -6,7 +6,7 @@ const handler = async (req) => {
         const collection = database.collection('Inventory'); // your inventory collection
 
         // Remove the item from the inventory
-        await collection.deleteOne(req.body);
+        await collection.deleteOne(JSON.parse(req.body));
         // console.log(req.body);
 
         // If everything is OK

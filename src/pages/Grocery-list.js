@@ -296,12 +296,12 @@ function Grocery({userdata}) {
         });
         // Update the grocery list
 
-        if (response2.statusCode === 200) {
+        if (response2.status === 200) {
           console.log("Grocery item removed from list");
           //update the grocery list
           setGroceryList(groceryList.filter(groceryItem => groceryItem.Name !== item));
-
         } else {
+          console.log("response status: ", response2.status);
           console.log("Error removing grocery item from list");
         }
 

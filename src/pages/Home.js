@@ -240,7 +240,7 @@ function GroceryList() {
         });
         // Update the grocery list
 
-        if (response2.statusCode === 200) {
+        if (response2.status === 200) {
           get5lastGroceryList().then((grocery) => {
           setGroceryList(grocery);
           return;

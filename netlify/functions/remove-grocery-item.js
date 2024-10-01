@@ -8,8 +8,11 @@ const handler = async (req) => {
     const collection = database.collection('GroceryList'); // your grocery collection
 
     // Remove the item from the grocery list
-    await collection.deleteOne({ Username: Username, Name: Name, Category: Category });
-
+    if (!Category) {
+      await collection.deleteOne({ Username: Username, Name: Name });
+    }else{
+      await collection.deleteOne({ Username: Username, Name: Name, Category: Category });
+    }
     // If everything is OK
     return { statusCode: 200, body: JSON.stringify({ message: "Item removed from grocery list" }) };
 
