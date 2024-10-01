@@ -1,7 +1,7 @@
 import '../App.css'
 import { IoMdMenu } from "react-icons/io";
 
-function ProfileBar({userdata}) {
+function ProfileBar({userdata, source}) {
   const name = userdata ? userdata.name : 'User';
 
   function toggleMenu(){
@@ -11,13 +11,18 @@ function ProfileBar({userdata}) {
       document.querySelector('.menuBar').style.display = 'block';
     }
   }
+  
 
     return (
       <div className="profilebar">
         <p>{name}</p>
         <button className='menuIcon' onClick={toggleMenu}><IoMdMenu /></button>
         <div className="menuBar">
+          {source === 'BasePage' ? (
           <a href="/Settings">Settings</a>
+          ) : (
+          <a href="/Home">Home</a>
+          )}
           <a href="/Login">Logout</a>
         </div>
         

@@ -9,7 +9,7 @@ function Options({userdata}) {
     
     <div className="App">
       <header class = "App-header">
-        <ProfileBar userdata={userdata}/>
+        <ProfileBar userdata={userdata} source={"Options"}/>
       </header>
 
       <aside>

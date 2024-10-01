@@ -247,7 +247,7 @@ function Preference({userdata}) {
     
     <div className="App">
       <header className = "App-header">
-        <ProfileBar userdata={userdata}/>
+        <ProfileBar userdata={userdata} source={"Preference"}/>
       </header>
 
       <aside>

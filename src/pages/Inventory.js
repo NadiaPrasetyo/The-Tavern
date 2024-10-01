@@ -327,7 +327,7 @@ function Inventory({userdata}) {
   return (
     <div className="App">
       <header className="App-header">
-        <ProfileBar userdata={userdata}/>
+        <ProfileBar userdata={userdata} source={"BasePage"}/>
       </header>
 
       <aside>
