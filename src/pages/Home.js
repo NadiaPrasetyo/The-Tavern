@@ -97,7 +97,7 @@ function get5lastGroceryList() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: user.username
+        Username: user.username
       }),
     });
 
@@ -113,27 +113,58 @@ function get5lastGroceryList() {
 
   return get5lastGroceryList();
 }
-
-let counter2 = 0;
 function GroceryList() {
   const [groceryList, setGroceryList] = React.useState([]);
-  counter2 ++;
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [groceryItemOpen, setGroceryItemOpen] = React.useState(false); // Must be at top level
 
-  if (groceryList.length === 0) {
-    get5lastGroceryList().then((grocery) => {
-       if (counter2 > 10){
-         setGroceryList([{name: "No grocery list"}]);
-         return;
-       }
-      setGroceryList(grocery);
-      return;
-    });
+  // Fetch grocery list when the component mounts
+  React.useEffect(() => {
+    const fetchGroceryList = async () => {
+      try {
+        const grocery = await get5lastGroceryList();
+        setGroceryList(grocery);
+      } catch (error) {
+        console.error("Error fetching grocery list:", error);
+        setGroceryList([{ name: "No grocery list" }]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchGroceryList();
+  }, []);
+
+  // Conditionally render based on loading state and data
+  if (isLoading) {
+    return (
+      <section className="groceryList">
+        <h4>Loading grocery list...</h4>
+      </section>
+    );
   }
 
-  const [groceryItemOpen, setGroceryItemOpen] = React.useState(false);
+  if (groceryList.length === 0) {
+    return (
+      <section className="groceryList">
+        <form onKeyDown={(e) => e.key !== 'Enter'}>
+          <h4>Grocery List</h4>
+          <div>
+            <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add grocery item..." />
+            <button className="addGrocery" type="button" onClick={addGrocery}>
+              <IoAddCircle />
+            </button>
+            <br />
+          </div>
+          <p>No grocery items found</p>
+        </form>
+      </section>
+    );
+  }
+
   function addGroceryItem(value) {
-      const addGroceryItem = async (e) => {
-      const response = await fetch('/api/add-grocery-item',{
+    const addGroceryItem = async () => {
+      const response = await fetch('/api/add-grocery-item', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -141,24 +172,26 @@ function GroceryList() {
         body: JSON.stringify({
           Username: user.username,
           Name: value,
-          Category: 'Grocery'//default category
-          
+          Category: 'Grocery', // default category
         }),
       });
 
       if (response.status === 200) {
+        // Update the grocery list
+        get5lastGroceryList().then((grocery) => {
+          setGroceryList(grocery);
+        });
         console.log("Grocery item added");
-
         document.querySelector('.addGroceryItem').value = '';
         document.querySelector('.addGroceryItem').placeholder = 'Grocery item added to the list';
-      } else if(response.status === 409){
+      } else if (response.status === 409) {
         console.log("Grocery item already exists");
         document.querySelector('.addGroceryItem').value = '';
         document.querySelector('.addGroceryItem').placeholder = 'Grocery item already exists in the list';
-      }else {
+      } else {
         console.log("Error adding grocery item");
       }
-    }
+    };
 
     return addGroceryItem();
   }
@@ -173,32 +206,22 @@ function GroceryList() {
       groceryItem.placeholder = 'Add grocery item...';
       groceryItem.style.animation = 'openRight 0.5s';
       groceryItem.style.display = 'block';
-
-    } else{
+    } else {
       const value = groceryItem.value;
       if (value === '') {
         console.log("Grocery item is empty");
-      // Do nothing if the grocery item is empty
       } else {
         // Add the grocery item to the list in the database
         addGroceryItem(value);
-        // Update the grocery list
-        get5lastGroceryList().then((grocery) => {
-          setGroceryList(grocery);
-          return;
-        });
       }
-      
-      setTimeout(() => {
-      button.style.animation = 'moveLeft 0.5s';
-      button.style.left = '-3px';
-      groceryItem.style.animation = 'closeLeft 0.5s';
 
-      // Hide the grocery item input after 0.5 seconds
       setTimeout(() => {
-        groceryItem.style.display = 'none';
-      }
-      , 500);
+        button.style.animation = 'moveLeft 0.5s';
+        button.style.left = '-3px';
+        groceryItem.style.animation = 'closeLeft 0.5s';
+        setTimeout(() => {
+          groceryItem.style.display = 'none';
+        }, 500);
       }, 1500);
     }
 
@@ -206,13 +229,10 @@ function GroceryList() {
   }
 
   function addToInventory(event) {
-    // Add the specified grocery item to the inventory and remove it from the grocery list
-
-    //get the specific item that the a is clicked on
     const item = event.target.parentNode.querySelector('.itemName').textContent;
 
-    const addToInventory = async (e) => {
-      const response = await fetch('/api/add-to-inventory',{
+    const addToInventory = async () => {
+      const response = await fetch('/api/add-to-inventory', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -220,15 +240,14 @@ function GroceryList() {
         body: JSON.stringify({
           Username: user.username,
           Name: item,
-          Category: 'Inventory'//default category
+          Category: 'Inventory', // default category
         }),
       });
 
       if (response.status === 200 || response.status === 409) {
         console.log("Grocery item added to inventory");
 
-        // Remove the grocery item from the list
-        const response2 = await fetch('/api/remove-grocery-item',{
+        const response2 = await fetch('/api/remove-grocery-item', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -238,64 +257,44 @@ function GroceryList() {
             Name: item,
           }),
         });
-        // Update the grocery list
 
         if (response2.status === 200) {
           get5lastGroceryList().then((grocery) => {
-          setGroceryList(grocery);
-          return;
-        });
+            setGroceryList(grocery);
+          });
         } else {
           console.log("Error removing grocery item from list");
         }
-      
       } else {
         console.log("Error adding grocery item to inventory");
       }
-    }
+    };
+
     addToInventory();
-
   }
 
-  if (groceryList.length === 0) {
-    return (
-      <section className='groceryList'>
-        <form onkeydown="return event.key != 'Enter';">
-          <h4>Grocery List</h4>
-          <div>
-          <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add grocery item..."/>
-          <button className = "addGrocery" type='button' onClick={addGrocery}><IoAddCircle /></button><br/>
-          </div>
-          <label className = "groceryItem">
-            <input type="checkbox" id="item1" name="item1" value="item1"/>
-            <span className = "checkmark"></span>
-            <span className='itemName'>Loading...</span>
-            <a href="#"> add to Inventory</a>
+  return (
+    <section className="groceryList">
+      <form onKeyDown={(e) => e.key !== 'Enter'}>
+        <h4>Grocery List</h4>
+        <div>
+          <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add grocery item..." />
+          <button className="addGrocery" type="button" onClick={addGrocery}>
+            <IoAddCircle />
+          </button>
+          <br />
+        </div>
+        {groceryList.map((item, index) => (
+          <label key={index} className="groceryItem">
+            <input type="checkbox" id={item.Name} name={item.Name} value={item.Name} />
+            <span className="checkmark"></span>
+            <span className="itemName">{item.Name}</span>
+            <a onClick={addToInventory}> add to Inventory</a>
           </label>
-        </form>
-      </section>
-    );
-  } else {
-    return (
-      <section className='groceryList'>
-        <form onkeydown="return event.key != 'Enter';">
-          <h4>Grocery List</h4>
-          <div>
-          <input type="text" className="addGroceryItem" name="groceryItem" placeholder="Add grocery item..."/>
-          <button className = "addGrocery" type='button' onClick={addGrocery}><IoAddCircle /></button><br/>
-          </div>
-          {groceryList.map((item, index) => (
-            <label key={index} className = "groceryItem">
-              <input type="checkbox" id={item.Name} name={item.Name} value={item.Name}/>
-              <span className = "checkmark"></span>
-              <span className='itemName'>{item.Name}</span>
-              <a onClick={addToInventory}> add to Inventory</a>
-            </label>
-          ))}
-        </form>
-      </section>
-    );
-  }
+        ))}
+      </form>
+    </section>
+  );
 }
 
 function getRandomRecipe() {
@@ -310,6 +309,8 @@ function getRandomRecipe() {
     const recipe = await response.json();
 
     if (response.status === 200) {
+      //filter the recipe so its not preppykitchen
+      recipe.recipe = recipe.recipe.filter(recipe => !recipe.Link.includes("preppykitchen.com"));
       return recipe.recipe;  // Update the state with the fetched recipe
     } else {
       console.log("Error getting recipe");
@@ -594,7 +595,7 @@ function Home({userdata}) {
   // Fetch today's menu and set the first menu item as the default highlighted recipe
   useEffect(() => {
     let counter = 0;
-    const MAX_RETRIES = 10;
+    const MAX_RETRIES = 1;
     
     const fetchMenu = () => {
       getTodayMenu().then((menu) => {

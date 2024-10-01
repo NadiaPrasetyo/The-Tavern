@@ -2,14 +2,14 @@ const {database} = require('./db');
 
 // GET 5 LATEST GROCERY LIST
 const handler = async (req) => {
-    const {username} = JSON.parse(req.body);
+    const {Username} = JSON.parse(req.body);
   try {
    
     const collection = database.collection('GroceryList'); // your grocery collection
 
     // Find the 5 latest grocery list
     const grocery = await collection
-      .find({ Username: username })
+      .find({ Username: Username })
       .sort({ _id: -1 })
       .limit(5)
       .toArray();
