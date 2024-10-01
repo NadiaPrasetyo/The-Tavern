@@ -17,8 +17,7 @@ function Feedback({userdata}) {
       </aside>
 
       <main className ="content setting-content">
-        <h1>Feedback</h1>
-
+        <iframe src="https://forms.gle/f3iArU8CkjBGCmD9A"  height="1000" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
       </main>
 
 
