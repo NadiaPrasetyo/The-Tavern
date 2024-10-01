@@ -47,7 +47,6 @@ const checkTokenExpiration = (token) => {
   if (!token) return;
   
   const decoded = jwtDecode(token); // Decode the token
-  console.log("DECODED JWT", decoded);
   const currentTime = Date.now() / 1000; // Get current time in seconds
 
   if (decoded.exp < currentTime) {

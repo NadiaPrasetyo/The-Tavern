@@ -70,6 +70,7 @@ const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, inIn
             {/* add image depending on origin tag (Wok Of Life, or Preppy Kitchen) */}
             {recipe.Tag.includes('Wok Of Life') ? <img className='origin-image' src='WokOfLife.jpeg' alt='Wok Of Life logo' /> : null}
             {recipe.Tag.includes('Preppy Kitchen') ? <img className='origin-image' src='PreppyKitchen.jpeg' alt='Preppy Kitchen logo' /> : null}
+            {recipe.Tag.includes('Maangchi') ? <img className='origin-image' src='Maangchi.png' alt='Maangchi logo' /> : null}
             <div className='recipe-tags-container'>
               {recipe.Tag.map((tag, index) => (
                 <div className='recipe-tags-info' key={index}>{tag}</div>

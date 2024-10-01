@@ -6,6 +6,7 @@ import ProfileBar from '../components/profilebar.js';
 import RecipeTab from '../components/RecipeTab.js';
 import MenuColumn from '../components/MenuColumn.js';
 import RecipeInfo from '../components/RecipeInfo.js';
+import Loading from '../components/Loading.js';
 
 function Menu({userdata}) {
   const max_recipes_per_day = 6;
@@ -140,9 +141,9 @@ function Menu({userdata}) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: userdata.username,
-          items: highlightedIngredients,
-          category: 'From Menu',
+          Username: userdata.username,
+          Items: highlightedIngredients,
+          Category: 'From Menu',
         }),
       });
       const data = await response.json();
@@ -283,7 +284,9 @@ function Menu({userdata}) {
 
         <main className="content">
           {isLoading ? (
-            <p>Loading...</p>
+            <div className='loading-menu' style = {sidebarOpen? {transform: "translate(-115px, 0)"} : {transform: "translate(0,0)"}}>
+              <Loading />
+            </div>
           ) : (
             <div>
               <div className="menu-table custom-scroll">
@@ -304,8 +307,6 @@ function Menu({userdata}) {
                 setRecipeList={setRecipeList}
                 isOpenDrag={recipeTabOpen}
                 setIsOpenDrag={setRecipeTabOpen}
-                highlightedIngredients={highlightedIngredients}
-                setHighlightedIngredients={setHighlightedIngredients}
               />
             </div>
           )}

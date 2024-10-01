@@ -6,6 +6,7 @@ const handler = async (req) => {
   try {
    
     const collection = database.collection('Favourites'); // your favorite recipe collection
+    const Recipe = database.collection('RecipeList'); // your recipe collection
 
     // Find the favorite recipes
     const recipes = await collection

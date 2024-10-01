@@ -10,9 +10,10 @@ import Recipe from './Recipe';
 
 import RecipeInfo from './RecipeInfo';
 import FilterPopup from './FilterPop';
+import Loading from './Loading';
 import '../App.css';
 
-const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenDrag, highlighted, setHighlighted }) => {
+const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1); // The current page
   const [searchQuery, setSearchQuery] = useState(''); // The search input value
@@ -364,6 +365,9 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
       });
 
       const data = await response.json();
+      if (!data.favourites) {
+        data.favourites = [];
+      }
       setFavouriteRecipes(data.favourites);
       const favSet = new Set(data.favourites.map((recipe) => recipe.Name));
       setFavouriteSet(favSet);
@@ -495,7 +499,9 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
                 {/* Recipe container with pagination */}
                 <div className='recipe-containers custom-scroll' style={{ maxHeight: containerMaxHeight }} onClick={(e) => e.stopPropagation()}>
                   {isLoading ? (
-                    <div>Loading...</div>
+                    <div className='loading-cont'>
+                      <Loading />
+                    </div>
                   ) : recipes.length > 0 ? (
                     <Droppable droppableId="RecipeList">
                       {(provided) => (
@@ -554,7 +560,9 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
 
                 <div className='recipe-containers custom-scroll' style={{ maxHeight: containerMaxHeight }} onClick={(e) => e.stopPropagation()}>
                   {isLoading ? (
-                    <div>Loading recommendations...</div>
+                    <div className='loading-cont'>
+                      <Loading />
+                    </div>
                   ) : recommendationRecipes.length > 0 ? (
                     <Droppable droppableId="RecipeList">
                       {(provided) => (
@@ -607,7 +615,9 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
                 <div className='tab-title'>FAVOURITES</div>
                 <div className='recipe-containers custom-scroll' style={{ maxHeight: containerMaxHeight }} onClick={(e) => e.stopPropagation()}>
                   {isLoadingFavourites ? (
-                    <div>Loading favourites...</div>
+                    <div className='loading-cont'>
+                      <Loading />
+                    </div>
                   ) : favouriteRecipes.length > 0 ? (
                     <Droppable droppableId="RecipeList">
                       {(provided) => (

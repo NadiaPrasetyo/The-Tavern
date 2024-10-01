@@ -12,6 +12,8 @@ const handler = async (req) => {
   try {
     const userInventories = await database.collection('Inventory').find({ Username: username }).toArray();
     const userInventory = userInventories.map(inventory => inventory.Name);
+    
+    const Recipe = database.collection('RecipeList');
 
     // if user has no inventory, return empty array
     if (userInventory.length === 0) {
@@ -137,11 +139,13 @@ const handler = async (req) => {
 
     return {
         statusCode: 200,
-        recipes: recipes_all, // Recipes for the current page
-        currentPage: page,
-        totalPages: Math.ceil(total / limit), // Total pages based on matching result count
-        tags: formatted_tags, // All tags matching the filtered query
-        ingredients: formatted_ingredients, // All ingredients matching the filtered query
+        body: JSON.stringify({
+            recipes: recipes_all, // Recipes for the current page
+            currentPage: page,
+            totalPages: Math.ceil(total / limit), // Total pages based on matching result count
+            tags: formatted_tags, // All tags matching the filtered query
+            ingredients: formatted_ingredients, // All ingredients matching the filtered query
+        })
     };
     } catch (err) {
         return { statusCode: 500, message: 'Error fetching recipes', error: err };

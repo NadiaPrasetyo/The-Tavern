@@ -13,6 +13,13 @@ function Sidebar(props) {
     const [isClosed, setSideBar] = React.useState(false);
     var template;
 
+    React.useEffect(() => {
+        const isClosedFromStorage = sessionStorage.getItem('isClosed') === 'true';
+        if (isClosedFromStorage) {
+            toggleSidebar();
+        }
+    }, []);
+
     function toggleSidebar() {
         if (isClosed) {
             document.querySelector('.sidebar').style.animation = 'open 0.5s';
@@ -37,6 +44,7 @@ function Sidebar(props) {
         }
         console.log("isClosed = " + isClosed);
         setSideBar(!isClosed);
+        sessionStorage.setItem('isClosed', !isClosed);
         
     }
 
