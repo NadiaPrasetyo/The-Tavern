@@ -2,7 +2,7 @@ const {database} = require('./db');
 
 // GET ALL INVENTORY ITEMS
 const handler = async (req) => {
-    const { username } = req.query;
+    const { username } = req.queryStringParameters;
     try {
         const collection = database.collection('Inventory'); // your inventory collection
 

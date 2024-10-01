@@ -2,12 +2,15 @@ const {database} = require('./db');
 
 // GET PREFERENCE
 const handler = async (req) => {
+    const { Username } = req.queryStringParameters;
+    console.log(Username);
+    
     try {
         const collection = database.collection('Preferences'); // your preferences collection
 
         // Find the preferences
         const preferences = await collection
-            .findOne({ Username: req.body.Username });
+            .findOne({ Username: Username });
 
         if (!preferences) {
             return {statusCode: 200, body: JSON.stringify({ preferences: {}, message: "Use default preference" })};

@@ -2,7 +2,7 @@ const {database} = require('./db');
 
 // GET FAVORITE RECIPES
 const handler = async (req) => {
-  const { username } = JSON.parse(req.body);
+  const { username } = req.queryStringParameters;
   try {
    
     const collection = database.collection('Favourites'); // your favorite recipe collection

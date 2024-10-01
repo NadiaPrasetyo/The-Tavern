@@ -29,7 +29,7 @@ function getTodayMenu() {
 
      const menu = await response.json();
 
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       return menu.menu;  // Update the state with the fetched menu
     } else {
       console.log("Error getting today's menu");
@@ -103,7 +103,7 @@ function get5lastGroceryList() {
 
     const grocery = await response.json();
 
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       return grocery.grocery;  // Update the state with the fetched grocery list
     } else {
       console.log("Error getting grocery list");
@@ -146,12 +146,12 @@ function GroceryList() {
         }),
       });
 
-      if (response.statusCode === 200) {
+      if (response.status === 200) {
         console.log("Grocery item added");
 
         document.querySelector('.addGroceryItem').value = '';
         document.querySelector('.addGroceryItem').placeholder = 'Grocery item added to the list';
-      } else if(response.statusCode === 409){
+      } else if(response.status === 409){
         console.log("Grocery item already exists");
         document.querySelector('.addGroceryItem').value = '';
         document.querySelector('.addGroceryItem').placeholder = 'Grocery item already exists in the list';
@@ -224,7 +224,7 @@ function GroceryList() {
         }),
       });
 
-      if (response.statusCode === 200 || response.statusCode === 409) {
+      if (response.status === 200 || response.status === 409) {
         console.log("Grocery item added to inventory");
 
         // Remove the grocery item from the list
@@ -309,7 +309,7 @@ function getRandomRecipe() {
 
     const recipe = await response.json();
 
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       return recipe.recipe;  // Update the state with the fetched recipe
     } else {
       console.log("Error getting recipe");
@@ -334,7 +334,7 @@ function findRecipe(RecipeName) {
 
     const recipe = await response.json();
 
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       console.log(recipe.recipe);
       return recipe.recipe;  // Update the state with the fetched recipe
     } else {
@@ -398,7 +398,7 @@ function getQuickFruits() {
 
     const fruits = await response.json();
 
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       return fruits.fruits;  // Update the state with the fetched fruits
     } else {
       console.log("Error getting quick fruits");
@@ -425,7 +425,7 @@ function getQuickVegetables() {
 
     const vegetables = await response.json();
 
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       return vegetables.vegetables;  // Update the state with the fetched vegetables
     } else {
       console.log("Error getting quick vegetables");

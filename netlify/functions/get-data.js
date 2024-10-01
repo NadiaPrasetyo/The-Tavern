@@ -2,7 +2,7 @@ const {database} = require('./db');
 
 // GET DATA
 const handler = async (req) => {
-    const { Username } = JSON.parse(req.body);
+    const { Username } = req.queryStringParameters;
     try {
         const GroceryList = database.collection('GroceryList'); // your grocery collection
         const Inventory = database.collection('Inventory'); // your inventory collection

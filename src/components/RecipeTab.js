@@ -288,11 +288,11 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
       });
 
       const data = await response.json();
-      if (response.statusCode === 409) {
+      if (response.status === 409) {
         // make it known that the user has reached the maximum number of favourites
         alert(data.message);
         return false;
-      } else if (response.statusCode === 200) {
+      } else if (response.status === 200) {
         return true;
       }
 
@@ -318,10 +318,10 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
 
       const data = await response.json();
 
-      if (response.statusCode === 404) {
+      if (response.status === 404) {
         console.log(data.message);
         return false;
-      } else if (response.statusCode === 200) {
+      } else if (response.status === 200) {
         console.log(data.message);
         return true;
       }

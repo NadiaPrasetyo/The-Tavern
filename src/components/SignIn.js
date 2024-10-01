@@ -22,15 +22,17 @@ function SignIn() {
 
     const data = await response.json();
 
-    if (response.statusCodeCode === 200) {
-      setMessage('Login successful');
+    if (response.status === 200) {
+      setMessage('Login successful! Redirecting to home page...');
       sessionStorage.setItem('token', data.token);
+      console.log("logging in correctly, continuing to preferences");
     } else {
       setMessage(data.message || 'Error logging in');
       return;
     }
 
     // get preferences and add to local storage
+    console.log("fetching preferences");
     const response2 = await fetch(`/api/get-preference?username=${encodeURIComponent(username)}`, {
       method: 'GET',
       headers: {
@@ -38,6 +40,7 @@ function SignIn() {
       },
     });
     const data2 = await response2.json();
+    console.log(data2);
     if (data2.preferences.DarkMode) {
       localStorage.setItem('isDarkMode', data2.preferences.DarkMode);
     } else {
@@ -49,6 +52,7 @@ function SignIn() {
       localStorage.setItem('firstDay', 'Monday');
     }
     // Redirect to the home page
+    console.log("redirecting to home");
     window.location.href = '/home';
 
   };

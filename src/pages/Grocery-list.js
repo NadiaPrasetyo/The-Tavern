@@ -28,7 +28,7 @@ function Grocery({userdata}) {
 
       const grocery = await response.json();
 
-      if (response.statusCode === 200) {
+      if (response.status === 200) {
         setGroceryList(grocery.grocery);
       } else {
         console.log("Error getting grocery");
@@ -95,7 +95,7 @@ function Grocery({userdata}) {
         Category: category
       }),
     }).then((response) => {
-      if (response.statusCode === 200) {
+      if (response.status === 200) {
         console.log("Grocery item added successfully");
         //clear the input field
         document.querySelector('.addGroceryItem').value = '';
@@ -171,7 +171,7 @@ function Grocery({userdata}) {
           Name: ''
         }),
       }).then((response) => {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           console.log("Category added successfully");
           setGroceryItemOpen({
             ...groceryItemOpen,
@@ -221,7 +221,7 @@ function Grocery({userdata}) {
           NewCategory: item.Category                    // New Category after editing
         }),
       }).then(response => {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           setGroceryList(
             groceryList.map((element) => {
               if (element.Name === originalName) {
@@ -255,7 +255,7 @@ function Grocery({userdata}) {
         Category: category
       }),
     }).then((response) => {
-      if (response.statusCode === 200) {
+      if (response.status === 200) {
         console.log("Item removed successfully");
         setGroceryList(groceryList.filter(item => item.Name !== itemName));
       } else {
@@ -280,7 +280,7 @@ function Grocery({userdata}) {
         }),
       });
 
-      if (response.statusCode === 200 || response.statusCode === 409) {
+      if (response.status === 200 || response.status === 409) {
         console.log("Grocery item added to inventory");
 
         // Remove the grocery item from the list

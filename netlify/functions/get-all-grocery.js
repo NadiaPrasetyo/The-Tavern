@@ -2,7 +2,7 @@ const {database} = require('./db');
 
 // GET ALL GROCERY ITEMS
 const handler = async (req) => {
-    const { username } = req.query;
+    const { username } = req.queryStringParameters;
     try {
         const collection = database.collection('GroceryList'); // your grocery collection
 

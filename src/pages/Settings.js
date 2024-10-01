@@ -42,7 +42,7 @@ function Settings({userdata}) {
         email: formValues.email,
       }),
     });
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       setMessage('User information updated successfully');
       userdata.name = formValues.name;
       userdata.email = formValues.email;
@@ -92,7 +92,7 @@ function Settings({userdata}) {
 
     const data = await response.json();
 
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       // remove message
       setMessage('Password changed successfully');
       // close modal
