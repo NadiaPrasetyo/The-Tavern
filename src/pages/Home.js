@@ -202,7 +202,7 @@ function GroceryList() {
 
     if (!groceryItemOpen) {
       button.style.animation = 'moveRight 0.5s';
-      button.style.left = '250px';
+      button.style.left = leftMAX;
       groceryItem.placeholder = 'Add grocery item...';
       groceryItem.style.animation = 'openRight 0.5s';
       groceryItem.style.display = 'block';
@@ -575,7 +575,7 @@ function WeekCalendar() {
   );
 }
         
-
+let leftMAX = '250px';
 
 function Home({userdata}) {
   user.username = userdata.username;
@@ -589,6 +589,22 @@ function Home({userdata}) {
   const [source, setSource] = useState("");  // State for iframe source
   const [today, setToday] = useState([]);    // State for today's menu
   const [highlightedRecipe, setHighlightedRecipe] = useState(""); // Track highlighted recipe
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  // Update the window width state when the window is resized
+  useEffect(() => {
+    if (windowWidth < 800) {
+      leftMAX = '130px';
+    }
+
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize
+    );
+  }, []);
 
   // Fetch the menu data (this would typically come from an API)
   // Fetch today's menu and set the first menu item as the default highlighted recipe

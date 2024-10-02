@@ -2511,6 +2511,11 @@ th {
     grid-column: 2;
   }
 
+  .quickIngredient td{
+    font-size: calc(8px + 1vmin);
+    overflow-wrap: break-word;
+  }
+
   /*move the grocery list to the left*/
   .groceryList {
     width: calc(100% - 20px);
@@ -2552,36 +2557,6 @@ th {
   }
 
   /* CHANGE LATER */
-  .addGrocery {
-    font-size: calc(25px + 1vmin);
-    position: relative;
-    left: -3px;
-    border: none;
-    background-color: var(--color-transparent);
-    color: var(--button-browns);
-    width: 33px;
-  }
-
-  .move-right {
-    animation: moveRight 0.5s forwards;
-  }
-
-  .move-left {
-    animation: moveLeft 0.5s forwards;
-  }
-
-  .open {
-    display: block;
-    /* Ensure it's block when open */
-    animation: openRight 0.5s forwards;
-  }
-
-  .close {
-    display: none;
-    /* To be hidden after closing */
-    animation: closeLeft 0.5s forwards;
-  }
-
 
   @keyframes moveRight {
     from {
@@ -2589,13 +2564,13 @@ th {
     }
 
     to {
-      left: 250px;
+      left: 130px;
     }
   }
 
   @keyframes moveLeft {
     from {
-      left: 250px;
+      left: 130px;
     }
 
     to {
@@ -2603,20 +2578,8 @@ th {
     }
   }
 
-  .addGrocery:hover {
-    background-color: var(--color-transparent);
-    cursor: pointer;
-    color: var(--button-browns-hover);
-  }
-
   .addGroceryItem {
-    display: none;
-    position: absolute;
-    width: 280px;
-    height: 31px;
-    border: solid 1px var(--color-transparent);
-    border-radius: 50px;
-    text-indent: 5px;
+    width: 160px;
   }
 
   @keyframes openRight {
@@ -2625,13 +2588,13 @@ th {
     }
 
     to {
-      width: 280px;
+      width: 160px;
     }
   }
 
   @keyframes closeLeft {
     from {
-      width: 280px;
+      width: 160px;
     }
 
     to {
