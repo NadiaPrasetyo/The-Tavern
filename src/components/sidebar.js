@@ -273,8 +273,8 @@ function Sidebar(props) {
             <div className="sidebar closed">
                 <header>
 					<span className="logodisplay"><a href= "/Home"><img id ="sidebar-logo-small" src="/Tavern-logo-small.png" alt="Tavern Logo" /></a></span>
-				    </header>
-				    <nav id="nav">
+				</header>
+				<nav id="nav">
 					<ul>
 						<GetActive closed = 'false' />
 					</ul>

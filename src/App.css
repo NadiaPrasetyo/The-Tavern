@@ -265,14 +265,6 @@ body {
   margin-top: calc(50px + 1vmin);
 }
 
-.sidebar>nav h1 {
-  background: var(--color-brown-light);
-  color: var(--color-background);
-  font-size: 1.5em;
-  margin: 0;
-  padding: 0.85em 0;
-}
-
 .sidebar>nav ul {
   list-style: none;
   padding: 0;
@@ -2438,7 +2430,7 @@ th {
   /* Change the sidebar to be on the top of the page under the profile bar */
   /* Change the sidebar to be on the top of the page under the profile bar */
   .sidebar {
-    padding: none;
+    padding: 0;
     position: fixed;
     /* Moves sidebar to be under profile bar */
     width: 100%;
@@ -2453,7 +2445,6 @@ th {
   .sidebar > nav {
     margin-top: 0;
   }
-
   
   #sidebar-logo-small {
     margin-top: 0;
@@ -2464,13 +2455,15 @@ th {
 
   .sidebar > nav ul{
     display: flex;
-    margin-left: 10px
+    margin-left: 10px;
+    margin-top: 0;
   }
 
   .sidebar > nav ul li a{
-    padding: 6px;
+    font-size: 15px;
+    padding: 4.7px 10px;
     position: relative;
-    top: -15px;
+
   }
 
   .pullTab {
