@@ -63,6 +63,11 @@ function PrivateRoute({ element, handleEndSession, setUsername }) {
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
+    if (!token) {
+      console.error("No token found. Redirecting to login.");
+      window.location.href = '/login';
+      return;
+    }
     checkTokenExpiration(token, handleEndSession, location);
 
     const fetchData = async () => {
