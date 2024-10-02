@@ -11,6 +11,25 @@ import { GiScrollQuill } from "react-icons/gi";
 
 function Sidebar(props) {
     const [isClosed, setSideBar] = React.useState(false);
+    //get the window width
+    const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
+    React.useEffect(() => {
+        if (window.innerWidth < 768) {
+            setSideBar(true);
+        }
+        
+        const handleWindowResize = () => {
+            setWindowWidth(window.innerWidth);
+            if (window.innerWidth < 768) {
+                setSideBar(true);
+            }
+        };
+        window.addEventListener('resize', handleWindowResize);
+        return () => {
+            window.removeEventListener('resize', handleWindowResize);
+        };
+    }, []);
+    
     var template;
 
     React.useEffect(() => {
@@ -53,7 +72,7 @@ function Sidebar(props) {
         if (props.source === null){
             props.source = "Home";
         }
-
+        
         if (openprop.closed === 'false'){
         switch(props.source){
             case "Home":
@@ -269,10 +288,12 @@ function Sidebar(props) {
         return template;
     }
 
+    if (windowWidth < 768) {
+        return closeSidebar();
+    } else    
     if (!isClosed) {
         return openSidebar();
     }
-
     else {
         return closeSidebar();
     }

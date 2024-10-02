@@ -2392,10 +2392,11 @@ th {
   /* Change the sidebar to be on the top of the page under the profile bar */
   /* Change the sidebar to be on the top of the page under the profile bar */
   .sidebar {
+    padding: none;
     position: fixed;
     /* Moves sidebar to be under profile bar */
     width: 100%;
-    height: 50px;
+    height: 30px;
     /* Optional: Adds spacing if needed */
     display: flex;
     /* Ensures sidebar is treated like a block */
@@ -2403,9 +2404,27 @@ th {
     /* Aligns items horizontally */
   }
 
+  .sidebar > nav {
+    margin-top: 0;
+  }
+
+  
+  #sidebar-logo-small {
+    margin-top: 0;
+    width: 30px;
+    height: 30px;
+    /* animation: becomeBig 0.5s; */
+  }
+
   .sidebar > nav ul{
     display: flex;
-    /* Hides the sidebar */
+    margin-left: 10px
+  }
+
+  .sidebar > nav ul li a{
+    padding: 6px;
+    position: relative;
+    top: -15px;
   }
 
   .pullTab {
@@ -2413,27 +2432,165 @@ th {
     /* Hides the pull tab */
   }
 
-  /*hide quick recipe iframe*/
+  .profilebar p{
+    z-index: 1000;
+  }
+  .profilebar .menuIcon {
+    z-index: 1000;
+    /* Hides the menu icon */
+  }
+
+  .todayMenu{
+    width: calc(100% - 20px);
+  }
+
+  .weekCalendar{
+    width: calc(100% - 20px);
+    overflow-x: auto;
+    margin-right: 10px;
+  }
+
   .quickRecipe {
-    display: none;
+    width: calc(100% - 20px);
+    grid-row: 5;
+    grid-column: 1/3;
+    overflow-wrap: break-word;
+    height: 1000px;
   }
 
   /*move the fruits to the left*/
   .quickIngredient {
+    width: calc(100% - 20px);
     grid-row: 1;
     grid-column: 2;
   }
 
   /*move the grocery list to the left*/
   .groceryList {
+    width: calc(100% - 20px);
+    max-width: 49vw;
+    overflow-wrap: break-word;
     grid-row: 2/5;
     grid-column: 2;
   }
 
+  /* LOGIN STYLE */
+
+  .login {
+    width: 100%;
+    height: 100vh;
+    display: grid;
+  }
+  
+  #moving-cover {
+    left: 0;
+    top:0%;
+    width: 100%;
+    height: 40vh;
+    transition:  top 1.5s ease-in-out, height 1.5s ease-in-out;
+  }
+
+  #moving-cover.active {
+    top:40%;
+    left:0;
+    height: 60%;
+  }
+
   /* Change the content to have flex direction column */
   .content {
-    max-width: 100vw !important;
+    max-width: calc(100% - 40px);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
     left: 0 !important;
+    overflow-y: scroll;
+  }
+
+  /* CHANGE LATER */
+  .addGrocery {
+    font-size: calc(25px + 1vmin);
+    position: relative;
+    left: -3px;
+    border: none;
+    background-color: var(--color-transparent);
+    color: var(--button-browns);
+    width: 33px;
+  }
+
+  .move-right {
+    animation: moveRight 0.5s forwards;
+  }
+
+  .move-left {
+    animation: moveLeft 0.5s forwards;
+  }
+
+  .open {
+    display: block;
+    /* Ensure it's block when open */
+    animation: openRight 0.5s forwards;
+  }
+
+  .close {
+    display: none;
+    /* To be hidden after closing */
+    animation: closeLeft 0.5s forwards;
+  }
+
+
+  @keyframes moveRight {
+    from {
+      left: -3px;
+    }
+
+    to {
+      left: 250px;
+    }
+  }
+
+  @keyframes moveLeft {
+    from {
+      left: 250px;
+    }
+
+    to {
+      left: -3px;
+    }
+  }
+
+  .addGrocery:hover {
+    background-color: var(--color-transparent);
+    cursor: pointer;
+    color: var(--button-browns-hover);
+  }
+
+  .addGroceryItem {
+    display: none;
+    position: absolute;
+    width: 280px;
+    height: 31px;
+    border: solid 1px var(--color-transparent);
+    border-radius: 50px;
+    text-indent: 5px;
+  }
+
+  @keyframes openRight {
+    from {
+      width: 0px;
+    }
+
+    to {
+      width: 280px;
+    }
+  }
+
+  @keyframes closeLeft {
+    from {
+      width: 280px;
+    }
+
+    to {
+      width: 0px;
+    }
   }
 
 }
