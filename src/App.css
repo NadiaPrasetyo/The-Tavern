@@ -350,30 +350,29 @@ body {
   left: 250px;
   padding: 1px 25px;
   height: calc(100vh - 50px);
-  width: calc(100vw - 300px);
+  max-width: calc(100vw - 300px);
   overflow: hidden;
-  animation-fill-mode: both;
 }
 
 @keyframes shrink {
   from {
     left: 50px;
-    width: 90%;
+    width: calc(100vw - 100px);
   }
   to {
     left: 250px;
-    width: 74.6%;
+    width: calc(100vw - 300px);
   }
 }
 
 @keyframes spread {
   from {
     left: 250px;
-    width: 74.6%;
+    width: calc(100vw - 300px);
   }
   to {
     left: 50px;
-    width: 90%;
+    width: calc(100vw - 100px);
   }
 }
 
@@ -2113,3 +2112,19 @@ th {
 .dropdown-options button:hover {
   background-color: var(--color-button-hover);
 }
+
+/* MEDIA QUERIES FOR MOBILE VERSION */
+@media only screen and (max-width: 768px) {
+  
+  /* Change the sidebar to be on the top of the page under the profile bar */
+  .pullTab {
+    display: none; /* Hides the pull tab */
+  }
+
+  /* Change the content to have flex direction column */
+  .content {
+    max-width: 50vw;
+  }
+
+}
+
