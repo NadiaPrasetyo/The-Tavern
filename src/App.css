@@ -2430,4 +2430,92 @@ th {
     overflow-y: scroll;
   }
 
+  /* CHANGE LATER */
+  .addGrocery {
+    font-size: calc(25px + 1vmin);
+    position: relative;
+    left: -3px;
+    border: none;
+    background-color: var(--color-transparent);
+    color: var(--button-browns);
+    width: 33px;
+  }
+
+  .move-right {
+    animation: moveRight 0.5s forwards;
+  }
+
+  .move-left {
+    animation: moveLeft 0.5s forwards;
+  }
+
+  .open {
+    display: block;
+    /* Ensure it's block when open */
+    animation: openRight 0.5s forwards;
+  }
+
+  .close {
+    display: none;
+    /* To be hidden after closing */
+    animation: closeLeft 0.5s forwards;
+  }
+
+
+  @keyframes moveRight {
+    from {
+      left: -3px;
+    }
+
+    to {
+      left: 250px;
+    }
+  }
+
+  @keyframes moveLeft {
+    from {
+      left: 250px;
+    }
+
+    to {
+      left: -3px;
+    }
+  }
+
+  .addGrocery:hover {
+    background-color: var(--color-transparent);
+    cursor: pointer;
+    color: var(--button-browns-hover);
+  }
+
+  .addGroceryItem {
+    display: none;
+    position: absolute;
+    width: 280px;
+    height: 31px;
+    border: solid 1px var(--color-transparent);
+    border-radius: 50px;
+    text-indent: 5px;
+  }
+
+  @keyframes openRight {
+    from {
+      width: 0px;
+    }
+
+    to {
+      width: 280px;
+    }
+  }
+
+  @keyframes closeLeft {
+    from {
+      width: 280px;
+    }
+
+    to {
+      width: 0px;
+    }
+  }
+
 }
