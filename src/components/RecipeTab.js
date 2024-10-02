@@ -6,6 +6,8 @@ import { LuFilter } from "react-icons/lu";
 import { LuBookOpenCheck } from "react-icons/lu";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { Droppable } from 'react-beautiful-dnd';
+import { GrPrevious } from "react-icons/gr";
+import { GrNext } from "react-icons/gr";
 import Recipe from './Recipe';
 
 import RecipeInfo from './RecipeInfo';
@@ -537,11 +539,19 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
                 {/* Pagination controls */}
                 <div className='pagination-controls' onClick={(e) => e.stopPropagation()}>
                   <button className='prev-btn' onClick={prevPage} disabled={recipePage === 1}>
-                    Previous
+                    Prev
                   </button>
+                  <button className='prev-media' onClick={prevPage} disabled={recipePage === 1}>
+                    <GrPrevious size={10} />
+                  </button>
+
                   <span className='page-num'>Page {recipePage} of {totalPages}</span>
+                  <span className='page-num-media'>{recipePage} / {totalPages}</span>
                   <button className='next-btn' onClick={nextPage} disabled={recipePage === totalPages}>
                     Next
+                  </button>
+                  <button className='next-media' onClick={nextPage} disabled={recipePage === totalPages}>
+                    <GrNext size={10} />
                   </button>
                 </div>
               </div>
@@ -597,11 +607,18 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
                 {/* Pagination controls */}
                 <div className='pagination-controls' onClick={(e) => e.stopPropagation()}>
                   <button className='prev-btn' onClick={prevPage} disabled={recipePageRecommendation === 1}>
-                    Previous
+                    Prev
+                  </button>
+                  <button className='prev-media' onClick={prevPage} disabled={recipePageRecommendation === 1}>
+                    <GrPrevious size={10} />
                   </button>
                   <span className='page-num'>Page {recipePageRecommendation} of {totalPages}</span>
+                  <span className='page-num-media'>{recipePageRecommendation} / {totalPages}</span>
                   <button className='next-btn' onClick={nextPage} disabled={recipePageRecommendation === totalPages}>
                     Next
+                  </button>
+                  <button className='next-media' onClick={nextPage} disabled={recipePageRecommendation === totalPages}>
+                    <GrNext size={10} />
                   </button>
                 </div>
               </div>

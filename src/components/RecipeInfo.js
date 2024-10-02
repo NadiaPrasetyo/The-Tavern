@@ -45,8 +45,6 @@ const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, inIn
     };
   }, [infoPopUp]);
 
-  if (!isOpen) return null; // Don't render anything if not open
-
   const toggleIngredient = (ingredient) => {
     if (fromRecipeTab) {
       return;
@@ -60,6 +58,25 @@ const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, inIn
       setHighlighted([...highlighted, ingredient]);
     }
   }
+
+  // Handle touch events for highlighting ingredients
+  useEffect(() => {
+    const handleTouchStart = (event) => {
+      if (event.target.matches('.highlightable')) {
+        event.preventDefault(); // Prevent scrolling while interacting with the ingredient
+        toggleIngredient(event.target.textContent); // Toggle the ingredient highlight
+      }
+    };
+
+    // Adding non-passive event listener for touchstart
+    document.addEventListener('touchstart', handleTouchStart, { passive: false });
+
+    return () => {
+      document.removeEventListener('touchstart', handleTouchStart);
+    };
+  }, [highlighted, setHighlighted]);
+
+  if (!isOpen) return null; // Don't render anything if not open
 
   return (
     <div className="recipe-info-overlay" onClick={onClose}>

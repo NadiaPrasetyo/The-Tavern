@@ -15,24 +15,44 @@ const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet, max_
         <div
           className={`recipe-list ${useIdAsDraggableId ? 'menu-recipe' : ''}`}
           ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
+          {...provided.draggableProps} // Only apply draggable props here
         >
           <div className='recipe-title'>
             <a href={recipe.Link} target="_blank" rel="noopener noreferrer">
               {recipe.Name}
             </a>
             <div className="icon-container">
-              <AiOutlineInfoCircle className='info-icon' onClick={() => toggleInfo(recipe)} />
+              {/* Stop drag events for specific icons */}
+              <AiOutlineInfoCircle 
+                className='info-icon' 
+                onClick={() => toggleInfo(recipe)} 
+                onTouchStart={(e) => { e.stopPropagation(); toggleInfo(recipe); }} 
+                onMouseDown={(e) => e.stopPropagation()} // Stop drag on mouse too
+              />
               {favouriteSet != null ? (
                 favouriteSet.has(recipe.Name) ? (
-                  <MdOutlineStarPurple500 className='star-icon filled' onClick={() => toggleFavourite(recipe)} />
+                  <MdOutlineStarPurple500 
+                    className='star-icon filled' 
+                    onClick={() => toggleFavourite(recipe)} 
+                    onTouchStart={(e) => { e.stopPropagation(); toggleFavourite(recipe); }} 
+                    onMouseDown={(e) => e.stopPropagation()} // Prevent drag on star click
+                  />
                 ) : (
-                  <MdOutlineStarBorderPurple500 className='star-icon border' onClick={() => toggleFavourite(recipe)} />
+                  <MdOutlineStarBorderPurple500 
+                    className='star-icon border' 
+                    onClick={() => toggleFavourite(recipe)} 
+                    onTouchStart={(e) => { e.stopPropagation(); toggleFavourite(recipe); }} 
+                    onMouseDown={(e) => e.stopPropagation()} // Prevent drag on star click
+                  />
                 )
-              ) : 
-                <RiDeleteBack2Fill className='remove-icon' onClick={() => removeRecipe(recipe)} />
-              }
+              ) : (
+                <RiDeleteBack2Fill 
+                  className='remove-icon' 
+                  onClick={() => removeRecipe(recipe)} 
+                  onTouchStart={(e) => { e.stopPropagation(); removeRecipe(recipe); }} 
+                  onMouseDown={(e) => e.stopPropagation()} // Prevent drag on delete click
+                />
+              )}
             </div>
           </div>
           <div className='recipe-tags'>

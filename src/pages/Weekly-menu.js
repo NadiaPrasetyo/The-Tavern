@@ -294,7 +294,7 @@ function Menu({userdata}) {
 
         <main className="content">
           {isLoading ? (
-            <div className='loading-menu' style = {sidebarOpen? {transform: "translate(-115px, 0)"} : {transform: "translate(0,0)"}}>
+            <div className={`loading-menu ${sidebarOpen ? 'sidebarOpen' : 'sidebarClose'}`}>
               <Loading />
             </div>
           ) : (
