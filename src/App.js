@@ -1,5 +1,4 @@
 import './App.css';
-//import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Inventory from "./pages/Inventory";
@@ -14,8 +13,8 @@ import Trial from './pages/Trial';
 import Feedback from './pages/Feedback';
 import Loading from './components/Loading';
 import DropDown from './components/DropDown';
-import React, { useState, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
+import React, { useState, useEffect, useRef } from 'react';
+import {jwtDecode} from 'jwt-decode';
 
 const fetchUserProfile = async () => {
   const token = sessionStorage.getItem("token");
@@ -35,7 +34,6 @@ const fetchUserProfile = async () => {
   if (response.status === 200) {
     const data = await response.json();
     return data;
-    // You can now use `data.username`, `data.email`, etc.
   } else {
     console.error("Failed to fetch user profile.");
     return null;
@@ -43,32 +41,30 @@ const fetchUserProfile = async () => {
 };
 
 // Function to check token expiration
-const checkTokenExpiration = (token, setDropdownOpen, setLastPath, location) => {
+const checkTokenExpiration = (token, handleEndSession) => {
   if (!token) return;
   
-  const decoded = jwtDecode(token); // Decode the token
-  const currentTime = Date.now() / 1000; // Get current time in seconds
-  setLastPath(location.pathname);
-  console.log("Current location: ", location.pathname);
+  const decoded = jwtDecode(token);
+  const currentTime = Date.now() / 1000;
 
-
-  if (decoded.exp - 60 < currentTime ) {
-    console.log("Session expired, please log in again.");
-    // sessionStorage.removeItem("token"); // Clear the token
-
-    // if decoded.exp < currentTime, the token is expired immediately after login
-    setDropdownOpen(true); // Open the dropdown instead of alert
+  if (decoded.exp < currentTime) {
+    console.error("Token expired. Redirecting to login.");
+    handleEndSession(false);
+  } else if (decoded.exp - 300 < currentTime) {
+    console.log("Token near expiration. Asking user to continue session.");
+    handleEndSession(true);
   }
 };
 
-
-function PrivateRoute({ element, setDropdownOpen, setLastPath, setUsername }) {
+function PrivateRoute({ element, handleEndSession, setUsername }) {
   const [userdata, setUserdata] = useState(null);
   const [loading, setLoading] = useState(true);
   const location = window.location;
 
   useEffect(() => {
-    checkTokenExpiration(sessionStorage.getItem("token"), setDropdownOpen, setLastPath, location);
+    const token = sessionStorage.getItem("token");
+    checkTokenExpiration(token, handleEndSession, location);
+
     const fetchData = async () => {
       const data = await fetchUserProfile();
       if (data) {
@@ -76,82 +72,75 @@ function PrivateRoute({ element, setDropdownOpen, setLastPath, setUsername }) {
         setUsername(data.username);
       } else {
         console.error("No user data found.");
-        window.location.href = '/login';
+        // window.location.href = '/login';
       }
       setLoading(false);
     };
 
     fetchData();
-  }, [setDropdownOpen]);
+  }, [handleEndSession]);
 
   if (loading) {
     return (
-    <div className='loading-page'>
-      <Loading />
-    </div>
+      <div className='loading-page'>
+        <Loading />
+      </div>
     );
   }
-  if (userdata){
+
+  if (userdata) {
     return React.cloneElement(element, { userdata });
   } else {
     return null;
   }
 }
 
-
 function App() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [loading, setLoading] = useState(true); // Loading spinner for background
-  const [attempt, setAttempt] = useState(0);
-  const [lastPath, setLastPath] = useState('/');
+  const [dropDownEnddedOpen, setDropDownEnddedOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState('');
+  const timerRef = useRef(null);
 
-  const handleEndSession = (ask, path, user) => {
+  const handleEndSession = (ask) => {
     if (!ask) {
       setDropdownOpen(false);
+      setDropDownEnddedOpen(true);
       return;
     }
     setDropdownOpen(true);
-    setLastPath(path);
-    setUsername(user);
+
+    // Start the 5-minute timer when the dropdown opens
+    timerRef.current = setTimeout(() => {
+      setDropdownOpen(false);
+      setDropDownEnddedOpen(true);
+      // window.location.href = '/login';  // Auto-redirect to login after 5 minutes
+    }, 300000); // 5 minutes in milliseconds
   };
 
   // Handle session continuation
-  const handleContinueSession = async (event, password) => {
-    if (!password) {
-      setAttempt(attempt + 1);
-      console.log("Attempt: ", attempt);
-      if (attempt >= 3) {
-        window.location.href = '/login'; // Redirect to login page after 3 attempts
-      }
-      event.preventDefault();
-      return;
-    }
-    console.log(username, password);
+  const handleContinueSession = async () => {
+    clearTimeout(timerRef.current); // Clear the timeout since the user clicked "Continue"
 
-    const response = await fetch('/api/login', {
+    const response = await fetch('/api/continue-session', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         username: username,
-        password,
       }),
     });
 
     if (response.status === 200) {
       const data = await response.json();
       sessionStorage.setItem('token', data.token);
-      // continue to path where the session ended
-      window.location.href = lastPath;
-
       setDropdownOpen(false);
-      setLoading(false); // Stop loading once the session continues
+      setLoading(false);
     } else {
       console.error("Error logging in.");
       setDropdownOpen(false);
-      setLoading(false); // Stop loading once the session continues
+      setLoading(false);
       window.location.href = '/login';
     }
   };
@@ -162,31 +151,35 @@ function App() {
         <DropDown
           isOpen={dropdownOpen}
           setIsOpen={setDropdownOpen}
-          message={"Session Ended. Please enter your password to continue."}
+          message={"Session is ending. Please click to continue."}
           source={"SessionEnd"}
           handleContinueSession={handleContinueSession}
         />
+        <DropDown
+          isOpen={dropDownEnddedOpen}
+          setIsOpen={setDropDownEnddedOpen}
+          message={"Session has ended. Please log in again."}
+          source={"SessionEnd"}
+        />
       </div>
-      
-      {/* Show loading spinner when waiting for user input */}
-      {dropdownOpen && (
+
+      {(dropdownOpen || dropDownEnddedOpen) && (
         <div className="loading-page">
           <Loading />
         </div>
       )}
 
-      {/* Routes */}
       <Routes>
         <Route path="/">
           <Route index element={<Login />} />
-          <Route path="home" element={<PrivateRoute element={<Home />} setDropdownOpen={setDropdownOpen} setLastPath={setLastPath} setUsername={setUsername} />} />
-          <Route path="inventory" element={<PrivateRoute element={<Inventory />} setDropdownOpen={setDropdownOpen} setLastPath={setLastPath} setUsername={setUsername} />} />
-          <Route path="weekly-menu" element={<PrivateRoute element={<Menu />} setDropdownOpen={setDropdownOpen} setLastPath={setLastPath} setUsername={setUsername} />} />
-          <Route path="grocery-list" element={<PrivateRoute element={<Grocery />} setDropdownOpen={setDropdownOpen} setLastPath={setLastPath} setUsername={setUsername} />} />
-          <Route path="settings" element={<PrivateRoute element={<Settings />} setDropdownOpen={setDropdownOpen} setLastPath={setLastPath} setUsername={setUsername} />} />
-          <Route path="preference" element={<PrivateRoute element={<Preference />} setDropdownOpen={setDropdownOpen} setLastPath={setLastPath} setUsername={setUsername} />} />
-          <Route path="options" element={<PrivateRoute element={<Options />} setDropdownOpen={setDropdownOpen} setLastPath={setLastPath} setUsername={setUsername} />} />
-          <Route path="feedback" element={<PrivateRoute element={<Feedback />} setDropdownOpen={setDropdownOpen} setLastPath={setLastPath} setUsername={setUsername} />} />
+          <Route path="home" element={<PrivateRoute element={<Home />} handleEndSession={handleEndSession} setUsername={setUsername} />} />
+          <Route path="inventory" element={<PrivateRoute element={<Inventory />} handleEndSession={handleEndSession} setUsername={setUsername} />} />
+          <Route path="weekly-menu" element={<PrivateRoute element={<Menu />} handleEndSession={handleEndSession} setUsername={setUsername} />} />
+          <Route path="grocery-list" element={<PrivateRoute element={<Grocery />} handleEndSession={handleEndSession} setUsername={setUsername} />} />
+          <Route path="settings" element={<PrivateRoute element={<Settings />} handleEndSession={handleEndSession} setUsername={setUsername} />} />
+          <Route path="preference" element={<PrivateRoute element={<Preference />} handleEndSession={handleEndSession} setUsername={setUsername} />} />
+          <Route path="options" element={<PrivateRoute element={<Options />} handleEndSession={handleEndSession} setUsername={setUsername} />} />
+          <Route path="feedback" element={<PrivateRoute element={<Feedback />} handleEndSession={handleEndSession} setUsername={setUsername} />} />
           <Route path="trial" element={<Trial />} />
           <Route path="login" element={<Login />} />
           <Route path="*" element={<NoPage />} />
@@ -195,6 +188,5 @@ function App() {
     </BrowserRouter>
   );
 }
-
 
 export default App;
