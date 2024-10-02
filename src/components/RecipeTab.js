@@ -112,6 +112,8 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
   useEffect(() => {
     const handleResize = () => {
       if (isOpen) {
+        setIsFilterOpen(false);
+        setInfoOpen(false);
         setContainerMaxHeight(getComputedMaxHeight());
       }
     };

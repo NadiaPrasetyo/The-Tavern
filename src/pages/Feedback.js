@@ -16,7 +16,7 @@ function Feedback({userdata}) {
         <Sidebar source = "Feedback"/>
       </aside>
 
-      <main className ="content setting-content">
+      <main className ="content setting-content feedback-content">
         <iframe src="https://forms.gle/f3iArU8CkjBGCmD9A"  height="1000" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
       </main>
 

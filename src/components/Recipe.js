@@ -15,10 +15,11 @@ const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet, max_
         <div
           className={`recipe-list ${useIdAsDraggableId ? 'menu-recipe' : ''}`}
           ref={provided.innerRef}
-          {...provided.draggableProps} // Only apply draggable props here
+          {...provided.draggableProps}
+          
         >
           <div className='recipe-title'>
-            <a href={recipe.Link} target="_blank" rel="noopener noreferrer">
+            <a href={recipe.Link} target="_blank" rel="noopener noreferrer" {...provided.dragHandleProps}>
               {recipe.Name}
             </a>
             <div className="icon-container">
@@ -55,12 +56,12 @@ const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet, max_
               )}
             </div>
           </div>
-          <div className='recipe-tags'>
+          <div className='recipe-tags' {...provided.dragHandleProps}>
             {recipe.Tag.slice(0, max_tags).map((tag, index) => (
               <span className='r-tag' key={index}>{tag}</span>
             ))}
           </div>
-          <div className='recipe-ingredients'>
+          <div className='recipe-ingredients' {...provided.dragHandleProps}>
             {recipe.Ingredients.slice(0, max_ingredients).map((ingredient, index) => (
               <span className='r-ing' key={index}>{ingredient}</span>
             ))}

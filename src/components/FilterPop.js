@@ -5,7 +5,7 @@ import "../App.css";
 const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onFiltersChange }) => {
     const [includedItems, setIncludedItems] = useState([]);
     const [excludedItems, setExcludedItems] = useState([]);
-    
+
     const [availableTagsState, setAvailableTagsState] = useState(availableTags);
     const [availableIngredientsState, setAvailableIngredientsState] = useState(availableIngredients);
 
@@ -13,6 +13,8 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
     const [excludedTags, setExcludedTags] = useState([]);
     const [includedIngredients, setIncludedIngredients] = useState([]);
     const [excludedIngredients, setExcludedIngredients] = useState([]);
+
+    const [isLoading, setIsTagsIngredientsLoading] = useState(true);
 
     // Close the popup when the Esc key is pressed
     useEffect(() => {
@@ -34,12 +36,14 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
     // Update available tags and ingredients when the popup is opened
     useEffect(() => {
         if (isOpen) {
+            setIsTagsIngredientsLoading(true); // Start loading when the modal opens
             // Filter out included and excluded items from available tags/ingredients
             const filteredTags = availableTags.filter(tag => !includedItems.includes(tag) && !excludedItems.includes(tag));
             const filteredIngredients = availableIngredients.filter(ingredient => !includedItems.includes(ingredient) && !excludedItems.includes(ingredient));
 
             setAvailableTagsState(filteredTags);
             setAvailableIngredientsState(filteredIngredients);
+            setIsTagsIngredientsLoading(false); // Stop loading when the modal opens
         }
     }, [isOpen, availableTags, availableIngredients, includedItems, excludedItems]);
 
@@ -74,7 +78,7 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
             // Add to excluded tags
             setExcludedTags([...excludedTags, item]);
         }
-        
+
     };
 
     // Add include/exclude an ingredient
@@ -105,7 +109,7 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
     const removeItem = (item, type) => {
         if (type === "include") {
             setIncludedItems(includedItems.filter((i) => i !== item)); // Remove from included
-            
+
             // check if the item is a tag or ingredient
             if (includedTags.includes(item)) {
                 let temp = includedTags.filter((i) => i !== item);
@@ -175,41 +179,50 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
                 <div className="columns custom-scroll">
                     <div className="tags-column">
                         <h4>TAGS</h4>
-                        {availableTagsState.length > 0 ? (
-                            availableTagsState.map((tag, index) => (
-                                <div key={index} className="tag-item">
-                                    <button className="include" onClick={() => addTag(tag, "include")}>
-                                        +
-                                    </button>
-                                    <span>{tag}</span>
-                                    <button className="exclude" onClick={() => addTag(tag, "exclude")}>
-                                        -
-                                    </button>
-                                </div>
-                            ))
+                        {!isLoading ? (
+                            availableTagsState.length > 0 ? (
+                                availableTagsState.map((tag, index) => (
+                                    <div key={index} className="tag-item">
+                                        <button className="include" onClick={() => addTag(tag, "include")}>
+                                            +
+                                        </button>
+                                        <span>{tag}</span>
+                                        <button className="exclude" onClick={() => addTag(tag, "exclude")}>
+                                            -
+                                        </button>
+                                    </div>
+                                ))
+                            ) : (
+                                <span className="no-items">No tags available</span>
+                            )
                         ) : (
-                            <span className="no-items">No tags available</span>
+                            <span className="no-items">Loading...</span>
                         )}
+
                     </div>
 
                     <div className="column-separator"></div>
 
                     <div className="ingredients-column">
                         <h4>INGREDIENTS</h4>
-                        {availableIngredientsState.length > 0 ? (
-                            availableIngredientsState.map((ingredient, index) => (
-                                <div key={index} className="ingredient-item">
-                                    <button className="include" onClick={() => addIngredient(ingredient, "include")}>
-                                        +
-                                    </button>
-                                    <span>{ingredient}</span>
-                                    <button className="exclude" onClick={() => addIngredient(ingredient, "exclude")}>
-                                        -
-                                    </button>
-                                </div>
-                            ))
+                        {!isLoading ? (
+                            availableIngredientsState.length > 0 ? (
+                                availableIngredientsState.map((ingredient, index) => (
+                                    <div key={index} className="ingredient-item">
+                                        <button className="include" onClick={() => addIngredient(ingredient, "include")}>
+                                            +
+                                        </button>
+                                        <span>{ingredient}</span>
+                                        <button className="exclude" onClick={() => addIngredient(ingredient, "exclude")}>
+                                            -
+                                        </button>
+                                    </div>
+                                ))
+                            ) : (
+                                <span className="no-items">No ingredients available</span>
+                            )
                         ) : (
-                            <span className="no-items">No ingredients available</span>
+                            <span className="no-items">Loading...</span>
                         )}
                     </div>
                 </div>

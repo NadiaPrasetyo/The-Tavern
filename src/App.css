@@ -1149,6 +1149,7 @@ th {
   /* Start at the edge of the screen */
   top: calc(50% - 45vh);
   width: 40vw;
+  min-width: 300px;
   height: 90vh;
   display: flex;
   flex-direction: row-reverse;
@@ -1463,8 +1464,9 @@ th {
   /* Set a maximum height for modal */
   border-radius: 8px;
   max-width: 40vw;
+  min-width: 324px;
   /* Set a max width for modal */
-  width: 100%;
+  /* width: 100%; */
   margin: 20px 0 0 20px;
   /* Add margin for spacing */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -1647,6 +1649,7 @@ th {
   transform: translate(-60%, -50%);
   background-color: var(--background-color);
   width: 90%;
+  min-width: 350px;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   z-index: 800;
@@ -1758,6 +1761,11 @@ th {
   margin-bottom: 10px;
   align-items: center;
   cursor: default;
+  overflow-wrap: break-word;
+
+  span {
+    max-width: 50%;
+  }
 }
 
 .tag-item {
@@ -2340,29 +2348,20 @@ th {
   .recipe-list {
     padding: 5px;
   }
+
+  .tab-title {
+    font-size: large;
+  }
   
   .recipe-title {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
-  .icon-container {
-    flex-direction: column;
-  }
-
-  .recipe-tags, .recipe-ingredients {
-    font-size: 0.7rem;
-  }
-
-  .r-tag, .r-ing {
-    padding: 2px 7px;
-  }
-
-  .loading-menu.sidebarClose {
-    transform: translate(-20px, 0);
+  .loading-menu {
+    transform: translate(0, 0) !important;
   }
 
   .menu-table {
-    margin-top: 20px;
     grid-template-columns: repeat(1, 1fr);
   }
 
@@ -2371,22 +2370,69 @@ th {
   }
 
   .recipe-info-overlay {
+    position: fixed;
+    height: calc(100vh - 30px);
+    border-radius: 0;
+    top: 30px;
     width: 100vw;
   }
 
   .recipe-info-background {
     position: fixed;
-    max-width: 90vw;
+    max-width: 60vw;
     margin: 20px 5vw 0 5vw;
   }
 
   .highlight-info-popup {
     width: 80vw;
+    max-width: 300px;
     top: 20%;
     transform: translate(-5%, 0);
     padding: 0 10px;
   }
 
+  .recipe-tab-container {
+    width: 300px;
+    right: calc(-300px + 20px);
+    margin: 0;
+  }
+
+  .filter-popup-background {
+    position: fixed;
+    width: 50vw;
+    left: 0.13vw;
+    transform: translate(0, -50%);
+  }
+
+  .recommendation-info {
+    right: 10px;
+    top: 22.5px;
+  }
+
+  .setting-content {
+    padding: 0 5vw;   
+  }
+  .setting-item {
+    width: 90vw;
+  }
+
+  .input-wrapper {
+    max-width: 90vw;
+    margin: 0;
+  }
+
+  .save-setting {
+    margin-right: 5vw;
+  }
+
+  .feedback-content {
+    max-width: 100% !important;
+    padding: 0;
+  }
+
+  .pref {
+    width: 90vw;
+  }
 
 
   /* Change the sidebar to be on the top of the page under the profile bar */
