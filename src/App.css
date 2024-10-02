@@ -2317,10 +2317,11 @@ th {
   /* Change the sidebar to be on the top of the page under the profile bar */
   /* Change the sidebar to be on the top of the page under the profile bar */
   .sidebar {
+    padding: none;
     position: fixed;
     /* Moves sidebar to be under profile bar */
     width: 100%;
-    height: 50px;
+    height: 30px;
     /* Optional: Adds spacing if needed */
     display: flex;
     /* Ensures sidebar is treated like a block */
@@ -2328,9 +2329,27 @@ th {
     /* Aligns items horizontally */
   }
 
+  .sidebar > nav {
+    margin-top: 0;
+  }
+
+  
+  #sidebar-logo-small {
+    margin-top: 0;
+    width: 30px;
+    height: 30px;
+    /* animation: becomeBig 0.5s; */
+  }
+
   .sidebar > nav ul{
     display: flex;
-    /* Hides the sidebar */
+    margin-left: 10px
+  }
+
+  .sidebar > nav ul li a{
+    padding: 6px;
+    position: relative;
+    top: -15px;
   }
 
   .pullTab {
@@ -2338,27 +2357,55 @@ th {
     /* Hides the pull tab */
   }
 
-  /*hide quick recipe iframe*/
+  .profilebar p{
+    z-index: 1000;
+  }
+  .profilebar .menuIcon {
+    z-index: 1000;
+    /* Hides the menu icon */
+  }
+
+  .todayMenu{
+    width: calc(100% - 20px);
+  }
+
+  .weekCalendar{
+    width: calc(100% - 20px);
+    overflow-x: auto;
+    margin-right: 10px;
+  }
+
   .quickRecipe {
-    display: none;
+    width: calc(100% - 20px);
+    grid-row: 5;
+    grid-column: 1/3;
+    overflow-wrap: break-word;
+    height: 1000px;
   }
 
   /*move the fruits to the left*/
   .quickIngredient {
+    width: calc(100% - 20px);
     grid-row: 1;
     grid-column: 2;
   }
 
   /*move the grocery list to the left*/
   .groceryList {
+    width: calc(100% - 20px);
+    max-width: 49vw;
+    overflow-wrap: break-word;
     grid-row: 2/5;
     grid-column: 2;
   }
 
   /* Change the content to have flex direction column */
   .content {
-    max-width: 50vw;
-    left: 0;
+    max-width: calc(100% - 40px);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    left: 0 !important;
+    overflow-y: scroll;
   }
 
 }
