@@ -612,10 +612,11 @@ function Home({userdata}) {
           counter++;
           fetchMenu();
         } else {
-          // If no menu is found after retries, fetch a random recipe
+          // If no menu is found after max retries, get a random recipe
           getRandomRecipe().then((recipe) => {
-            setToday([{ Name: "No Menu Today" }]);
-            setSource(recipe[0].Link);  // Set iframe source to the random recipe
+            if (recipe.length > 0) {
+              setSource(recipe[0].Link);  // Set iframe source to a random recipe
+            }
           });
         }
       }).catch((error) => {
