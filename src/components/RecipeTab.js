@@ -11,6 +11,7 @@ import Recipe from './Recipe';
 import RecipeInfo from './RecipeInfo';
 import FilterPopup from './FilterPop';
 import Loading from './Loading';
+import DropDown from './DropDown';
 import '../App.css';
 
 const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => {
@@ -39,6 +40,7 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
   const [recipePageRecommendation, setRecipePageRecommendation] = useState(1); // The current recipe page for recommendations
   const [recommendationMessage, setRecommendationMessage] = useState('No recommendations'); // The recommendation message
   const [isVisibleRecPopUp, setIsVisibleRecPopUp] = useState(false); // The recommendation info popup state
+  const [dropDownOpen, setDropDownOpen] = useState(false);
 
   const containerRef = useRef(null); // Reference to the container element
   const [containerMaxHeight, setContainerMaxHeight] = useState(0);
@@ -282,8 +284,8 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: userdata.username,
-          recipe: recipe.Name,
+          Username: userdata.username,
+          Name: recipe.Name,
           max_favourites: favouriteMax,
         }),
       });
@@ -291,10 +293,15 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
       const data = await response.json();
       if (response.status === 409) {
         // make it known that the user has reached the maximum number of favourites
-        alert(data.message);
+        // open dropdown instead of alert
+        setDropDownOpen(true);
+        // console.log(data.message);
         return false;
       } else if (response.status === 200) {
         return true;
+      } else {
+        console.log(data.message);
+        return false;
       }
 
     } catch (error) {
@@ -312,8 +319,8 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: userdata.username,
-          recipe: recipe.Name,
+          Username: userdata.username,
+          Name: recipe.Name,
         }),
       });
 
@@ -476,6 +483,8 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
   }, [isVisibleRecPopUp]);
 
   return (
+    <>
+    <DropDown isOpen={dropDownOpen} setIsOpen={setDropDownOpen} options={[{label: 'Okay'}]} message={'You already have the maximum amount of favorite recipes'}/>
     <div className={`recipe-tab-container ${isOpen ? "recipe-open" : ""}`} ref={containerRef}>
       {/* Book content area */}
       <div className='book-container background' onClick={toggleBook}>
@@ -666,6 +675,7 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
         </div>
       </div>
     </div>
+  </>
   );
 };
 

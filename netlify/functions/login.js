@@ -20,7 +20,7 @@ const handler = async (req) => {
       return { statusCode: 400, body: JSON.stringify({ message: "Invalid credentials" } )};
     }
 
-    const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: "1h" });
+    const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: 60 });
     return { statusCode: 200, body: JSON.stringify({ message: "Login successful", token: token })};
   } catch (error) {
     return { statusCode: 500, body: error.toString() }

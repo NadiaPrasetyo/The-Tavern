@@ -71,8 +71,8 @@ function Preference({userdata}) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: username,
-        preferences: preference,
+        Username: username,
+        Preferences: preference,
       }),
     });
 

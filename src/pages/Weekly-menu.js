@@ -7,6 +7,7 @@ import RecipeTab from '../components/RecipeTab.js';
 import MenuColumn from '../components/MenuColumn.js';
 import RecipeInfo from '../components/RecipeInfo.js';
 import Loading from '../components/Loading.js';
+import DropDown from '../components/DropDown.js';
 
 function Menu({userdata}) {
   const max_recipes_per_day = 6;
@@ -25,6 +26,8 @@ function Menu({userdata}) {
   const [inInventory, setInInventory] = useState([]);
   const [inGroceryList, setInGroceryList] = useState([]);
   const [recipeList, setRecipeList] = useState([]);
+  const [dropDownMsg, setDropDownMsg] = useState('');
+  const [dropDownOpen, setDropDownOpen] = useState(false);
 
   const [menu, setMenu] = useState({
     Monday: [],
@@ -196,7 +199,9 @@ function Menu({userdata}) {
     if (!destination) return;
 
     if ((source.droppableId !== 'RecipeList' && destination.droppableId !== 'RecipeList') && (!menu[source.droppableId] || !menu[destination.droppableId])) {
-      alert('Invalid source or destination');
+      // alert('Invalid source or destination');
+      setDropDownMsg('Invalid source or destination');
+      setDropDownOpen(true);
       return;
     }
 
@@ -204,7 +209,9 @@ function Menu({userdata}) {
       if (destination.droppableId === 'RecipeList') return;
       // if destination already has max recipes, return
       if (menu[destination.droppableId].length >= max_recipes_per_day) {
-        alert('Maximum number of recipes reached for '+ destination.droppableId);
+        // alert('Maximum number of recipes reached for '+ destination.droppableId);
+        setDropDownMsg('Maximum number of recipes reached for '+ destination.droppableId);
+        setDropDownOpen(true);
         return;
       }
 
@@ -223,17 +230,15 @@ function Menu({userdata}) {
       const sourceDay = menu[source.droppableId];
       sourceDay.splice(source.index, 1);
 
-      // remove any ingredients from highlightedIngredients that are in the recipe being removed
-      // const removedIngredients = sourceDay[source.index].Ingredients;
-      // setHighlightedIngredients(highlightedIngredients.filter((ingredient) => !removedIngredients.includes(ingredient)));
-
       setMenu({
         ...menu,
         [source.droppableId]: sourceDay,
       });
     } else if (source.droppableId !== destination.droppableId) {
       if (menu[destination.droppableId].length >= max_recipes_per_day) {
-        alert('Maximum number of recipes reached for '+ destination.droppableId);
+        // alert('Maximum number of recipes reached for '+ destination.droppableId);
+        setDropDownMsg('Maximum number of recipes reached for '+ destination.droppableId);
+        setDropDownOpen(true);
         return;
       }
       const sourceDay = menu[source.droppableId];
@@ -247,10 +252,6 @@ function Menu({userdata}) {
         [destination.droppableId]: destinationDay,
       });
     } else {
-      if (menu[destination.droppableId].length >= max_recipes_per_day) {
-        alert('Maximum number of recipes reached for '+ destination.droppableId);
-        return;
-      }
       const day = menu[source.droppableId];
       const [removed] = day.splice(source.index, 1);
       day.splice(destination.index, 0, removed);
@@ -272,6 +273,7 @@ function Menu({userdata}) {
   };
 
   return (
+
     <DragDropContext onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd}>
       <div className="App">
         <header className="App-header">
@@ -281,6 +283,14 @@ function Menu({userdata}) {
         <aside>
           <Sidebar source="Menu" setIsOpen={setSidebarOpen} />
         </aside>
+
+        <DropDown options={[
+            {label: 'Okay'},
+          ]}
+          message={dropDownMsg}
+          isOpen={dropDownOpen}
+          setIsOpen={setDropDownOpen}
+        />
 
         <main className="content">
           {isLoading ? (

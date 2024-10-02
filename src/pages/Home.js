@@ -328,7 +328,6 @@ function findRecipe(RecipeName) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        Username: user.username,
         Name: RecipeName
       }),
     });

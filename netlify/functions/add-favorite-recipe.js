@@ -9,7 +9,7 @@ const handler = async (req) => {
         //check that the collection doesn't already have the item
         const item = await collection.findOne({ Username: Username, Name: Name });
         if (item) {
-            return { statusCode: 409, body: JSON.stringify({ message: "Recipe already exist" }) };
+            return { statusCode: 400, body: JSON.stringify({ message: "Recipe already exist" }) };
         }
 
         // if user already have max_favourites amount of recipes

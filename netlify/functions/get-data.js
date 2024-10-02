@@ -2,7 +2,7 @@ const {database} = require('./db');
 
 // GET DATA
 const handler = async (req) => {
-    const { Username } = req.queryStringParameters;
+    const { username } = req.queryStringParameters;
     try {
         const GroceryList = database.collection('GroceryList'); // your grocery collection
         const Inventory = database.collection('Inventory'); // your inventory collection
@@ -11,10 +11,10 @@ const handler = async (req) => {
 
         // Find the data
         const [grocery, inventory, menu, favorites] = await Promise.all([
-            GroceryList.find({ Username }).toArray(),
-            Inventory.find({ Username }).toArray(),
-            Menu.find({ Username }).toArray(),
-            Favorites.find({ Username }).toArray()
+            GroceryList.find({ Username: username }).toArray(),
+            Inventory.find({ Username: username }).toArray(),
+            Menu.find({ Username: username }).toArray(),
+            Favorites.find({ Username: username }).toArray()
         ]);
 
         // filter the data (remove Username)
