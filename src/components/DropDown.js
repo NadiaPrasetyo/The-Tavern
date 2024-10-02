@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
 import '../App.css'; // Make sure to create a CSS file for styling
-import e from 'cors';
 
 const DropDown = ({ options, message, isOpen, setIsOpen, source, handleContinueSession }) => {
-    const [password, setPassword] = useState(''); // State to track the password input
 
     const handleOptionClick = () => {
         setIsOpen(false);
-    };
-
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value); // Update password state
     };
 
     const handleLogout = () => {
@@ -28,19 +22,13 @@ const DropDown = ({ options, message, isOpen, setIsOpen, source, handleContinueS
                         <h3>{message}</h3>
                         {source === 'SessionEnd' ? (
                             <>
-                                {/* Password input */}
-                                <input
-                                    type="password"
-                                    placeholder="Password"
-                                    value={password}
-                                    onChange={handlePasswordChange}
-                                />
                                 <ul>
-                                    <li>
-                                        <button onClick={(e) => handleContinueSession(e, password)}>
-                                            Continue Session
-                                        </button>
-                                    </li>
+                                    {handleContinueSession &&
+                                        <li>
+                                            <button onClick={(e) => handleContinueSession(e)}>
+                                                Continue Session
+                                            </button>
+                                        </li>}
                                     <li>
                                         <button onClick={handleLogout}>
                                             Logout
