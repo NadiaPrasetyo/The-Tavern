@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap');
 
 :root {
@@ -11,12 +10,18 @@
   --color-brown-hover2: #5846329c;
   --color-brown-medium2: #6653409c;
   --color-brown-dark: #5e4d3a;
-  --color-brown-light2: #a6815cad; /* Tag background color */
-  --color-brown-medium3: #a6815c; /* Scroll thumb color */
-  --color-brown-dark2: #8d664a; /* Scroll thumb hover color */
-  --color-brown-medium4: #7d664f; /* Preference button background */
-  --color-brown-dark3: #665340; /* Preference button hover background */
-  --color-brown-dark-alt: #4c3b2b9c; /* Dark mode toggle background (Approx) */
+  --color-brown-light2: #a6815cad;
+  /* Tag background color */
+  --color-brown-medium3: #a6815c;
+  /* Scroll thumb color */
+  --color-brown-dark2: #8d664a;
+  /* Scroll thumb hover color */
+  --color-brown-medium4: #7d664f;
+  /* Preference button background */
+  --color-brown-dark3: #665340;
+  /* Preference button hover background */
+  --color-brown-dark-alt: #4c3b2b9c;
+  /* Dark mode toggle background (Approx) */
   --color-brown-hover3: #634c319c;
   --color-button-hover: #65411eb1;
 
@@ -25,55 +30,75 @@
   --color-green-hover: #5e7d4f9c;
   --color-green-muted-solid: #708871;
   --color-green-medium: #9fac7f;
-  --color-green-light2: #799f73a8; /* Ingredient background color */
+  --color-green-light2: #799f73a8;
+  /* Ingredient background color */
   --color-green-checkbox: #6fac6a93;
   --color-green-verylight: #e0ecbca0;
   --color-green-sidebar: #79855b73;
-  --color-yellow-green: #f7ffdaa8; /* Scroll track gradient color */
-  --color-green-muted: #9baa74c6; /* No items background */
+  --color-yellow-green: #f7ffdaa8;
+  /* Scroll track gradient color */
+  --color-green-muted: #9baa74c6;
+  /* No items background */
 
   /*Beige colours */
   --color-beige-light: #98a567a0;
-  --color-beige-medium: #dab378a7; /* Tag item border */
-  --color-beige-light3: #ead9bbbe; /* Dark mode toggle ball color (Approx) */
+  --color-beige-medium: #dab378a7;
+  /* Tag item border */
+  --color-beige-light3: #ead9bbbe;
+  /* Dark mode toggle ball color (Approx) */
 
   /* Blue colours */
   --color-blue-link: #1250c185;
   --color-blue-light-transparent: #badce9b9;
-  --color-teal-light: #b8e2edb1; /* Include item background */
-  --color-teal-hover: #81bdc9a8; /* Include item hover background */
+  --color-teal-light: #b8e2edb1;
+  /* Include item background */
+  --color-teal-hover: #81bdc9a8;
+  /* Include item hover background */
   --color-teal-blue: #88b9c3a8;
   --color-teal-bluer: #85bac59c;
-  --color-cyan-light: #bfe6f0bc; /* Included item background */
+  --color-cyan-light: #bfe6f0bc;
+  /* Included item background */
 
   /*Purple colours  */
-  --color-purple-light: #d9b0dda4; /* Menu column background (Approx) */
-  --color-purple-hover: #cc75d797; /* Menu recipe hover background (Approx) */
-  --color-lavender-medium: #c090d2bb; /* Ingredient item border */
-  --color-dark-purple: #d7a2db; /* Highlighted Today's Menu */
-  --color-lavender-light2: #e8c8f4bb; /* Ingredient item background */
-  --color-lavender-light: #a149c1a4; /* Tags info background */
+  --color-purple-light: #d9b0dda4;
+  /* Menu column background (Approx) */
+  --color-purple-hover: #cc75d797;
+  /* Menu recipe hover background (Approx) */
+  --color-lavender-medium: #c090d2bb;
+  /* Ingredient item border */
+  --color-dark-purple: #d7a2db;
+  /* Highlighted Today's Menu */
+  --color-lavender-light2: #e8c8f4bb;
+  /* Ingredient item background */
+  --color-lavender-light: #a149c1a4;
+  /* Tags info background */
 
 
   /*Yellow colours */
-  --color-yellow-light: #d7e1b2bd; /* Recipe info content background */
-  --color-yellow-bright: #f6f099a7; /* Tag item background */
+  --color-yellow-light: #d7e1b2bd;
+  /* Recipe info content background */
+  --color-yellow-bright: #f6f099a7;
+  /* Tag item background */
 
   /*red colours */
-  --color-red-light: #e60e0ebc; /* Delete account background (Approx) */
-  --color-red-light2: #e60e0eef; /* Delete account background (Approx) */
+  --color-red-light: #e60e0ebc;
+  /* Delete account background (Approx) */
+  --color-red-light2: #e60e0eef;
+  /* Delete account background (Approx) */
 
   /*Grey colours */
   --color-grey-light: #e7e0d8;
   --color-offwhite: #fffbf6;
   --color-transparent: #00000000;
   --color-shadow-light: rgba(0, 0, 0, 0.1);
-  --color-shadow-med: rgba(0, 0, 0, 0.5); /* Semi-transparent black for overlay */
+  --color-shadow-med: rgba(0, 0, 0, 0.5);
+  /* Semi-transparent black for overlay */
   --color-popup-border: #ccc;
   --color-popup-arrow: #f9f9f9;
   --color-footer-bg: #c2c7b028;
   --color-border-focus: #2f20129c;
-  --color-border-focus: #5f7a60b3; /* No items border color */
+  --color-border-focus: #5f7a60b3;
+  /* No items border color */
 
   /* Pink colours */
   --color-pink-verylight: #edc6d5c7;
@@ -81,13 +106,16 @@
   --color-pink-light2: #e5b3c7d4;
   --color-pink-medium: #d79fde97;
   --color-pink-dark: #d6a8bbcf;
-  --color-pink-light: #f1cbdac2; /* Excluded item background */
-  --color-pink-hover: #ecb3c9d4; /* Exclude item hover background */
-  --color-pink-link: #c1126f85; /* Edit item color */
+  --color-pink-light: #f1cbdac2;
+  /* Excluded item background */
+  --color-pink-hover: #ecb3c9d4;
+  /* Exclude item hover background */
+  --color-pink-link: #c1126f85;
+  /* Edit item color */
 }
 
 /*Light Mode */
-body{
+body {
   --background-color: var(--color-offwhite);
   --text-color: #000000;
   --color-background: white;
@@ -110,7 +138,7 @@ body{
 }
 
 /*Dark Mode */
-body.dark{
+body.dark {
   --background-color: #121212;
   --text-color: #ffffff;
   --color-background: #121212;
@@ -145,7 +173,8 @@ body {
 
 * {
   font-family: "Hammersmith One", sans-serif;
-  a{
+
+  a {
     color: var(--text-color);
     text-decoration: none;
   }
@@ -157,27 +186,29 @@ body {
 }
 
 /* NAVIGATION BAR */
-.profilebar{
+.profilebar {
   display: flex;
   justify-content: right;
   text-align: right;
   max-height: 30px;
-  p{
+
+  p {
     margin-right: 10px;
     margin-top: 5px;
   }
-  .menuIcon{
+
+  .menuIcon {
     border: none;
     background-color: var(--color-brown-light);
     cursor: pointer;
   }
 
-  .menuIcon:hover{
-    background-color:  var(--color-brown-medium);
+  .menuIcon:hover {
+    background-color: var(--color-brown-medium);
   }
 }
 
-.menuBar{
+.menuBar {
   position: absolute;
   background-color: var(--menudropdown);
   width: 100px;
@@ -188,7 +219,7 @@ body {
   animation: toggle 0.5s;
   z-index: 1000;
 
-  a{
+  a {
     -moz-transition: none;
     -webkit-transition: none;
     -ms-transition: none;
@@ -199,7 +230,7 @@ body {
     text-decoration: none;
   }
 
-  a:hover{
+  a:hover {
     background-color: var(--menudropdown-hover);
   }
 }
@@ -208,6 +239,7 @@ body {
   from {
     height: 0px;
   }
+
   to {
     height: 65px;
   }
@@ -229,43 +261,44 @@ body {
   /* animation: open 0.5s; */
 }
 
-  .sidebar > nav {
-    margin-top: calc(50px + 1vmin);
-  }
+.sidebar>nav {
+  margin-top: calc(50px + 1vmin);
+}
 
-  .sidebar > nav h1 {
-    background: var(--color-brown-light);
-    color: var(--color-background);
-    font-size: 1.5em;
-    margin: 0;
-    padding: 0.85em 0;
-  }
-.sidebar > nav ul {
+.sidebar>nav h1 {
+  background: var(--color-brown-light);
+  color: var(--color-background);
+  font-size: 1.5em;
+  margin: 0;
+  padding: 0.85em 0;
+}
+
+.sidebar>nav ul {
   list-style: none;
   padding: 0;
 }
 
-  .sidebar > nav ul li {
-    display: block;
-    padding: 0;
-  }
+.sidebar>nav ul li {
+  display: block;
+  padding: 0;
+}
 
-    .sidebar > nav ul li a {
-      -moz-transition: none;
-      -webkit-transition: none;
-      -ms-transition: none;
-      transition: none;
-      border: 0;
-      display: block;
-      padding: 0.85em 0;
-      text-decoration: none;
-    }
+.sidebar>nav ul li a {
+  -moz-transition: none;
+  -webkit-transition: none;
+  -ms-transition: none;
+  transition: none;
+  border: 0;
+  display: block;
+  padding: 0.85em 0;
+  text-decoration: none;
+}
 
-      .sidebar > nav ul li a.active {
-        background: var(--color-green-sidebar);
-      }
+.sidebar>nav ul li a.active {
+  background: var(--color-green-sidebar);
+}
 
-.closed{
+.closed {
   width: 50px;
   /*animation: close 0.5s;*/
 }
@@ -274,6 +307,7 @@ body {
   from {
     width: 250px;
   }
+
   to {
     width: 50px;
   }
@@ -283,12 +317,13 @@ body {
   from {
     width: 50px;
   }
+
   to {
     width: 250px;
   }
 }
 
-.pullTab{
+.pullTab {
   position: absolute;
   top: 100px;
   left: 100%;
@@ -301,14 +336,14 @@ body {
 }
 
 /* SIDE BAR LOGOS*/
-#sidebar-logo{
+#sidebar-logo {
   margin-top: 20px;
   width: 150px;
   height: 150px;
   /* animation: becomeSmall 0.5s; */
 }
 
-#sidebar-logo-small{
+#sidebar-logo-small {
   margin-top: 20px;
   width: 50px;
   height: 50px;
@@ -320,6 +355,7 @@ body {
     width: 50px;
     height: 50px;
   }
+
   to {
     width: 150px;
     height: 150px;
@@ -331,6 +367,7 @@ body {
     width: 150px;
     height: 150px;
   }
+
   to {
     width: 50px;
     height: 50px;
@@ -359,6 +396,7 @@ body {
     left: 50px;
     width: calc(100vw - 100px);
   }
+
   to {
     left: 250px;
     width: calc(100vw - 300px);
@@ -370,6 +408,7 @@ body {
     left: 250px;
     width: calc(100vw - 300px);
   }
+
   to {
     left: 50px;
     width: calc(100vw - 100px);
@@ -377,9 +416,9 @@ body {
 }
 
 /* FOOTER */
-footer{
+footer {
   /* disable display for now: nothing in it */
-  display: none ;
+  display: none;
   bottom: 0;
   background-color: var(--color-footer-bg);
   padding: 1px;
@@ -399,25 +438,27 @@ footer{
   margin: 0;
 }
 
-.login-form li + li {
+.login-form li+li {
   margin-top: 1em;
 }
 
 
-.login{
+.login {
   width: 100%;
   height: 100vh;
   font-size: calc(10px + 1vmin);
   display: flex;
 }
 
-#SignIn-container, #SignUp-container{
+#SignIn-container,
+#SignUp-container {
   display: flex;
   justify-content: center;
   flex: 1;
 }
 
-#SignIn-component, #SignUp-component{
+#SignIn-component,
+#SignUp-component {
   background-color: var(--color-login-bg);
   display: flex;
   justify-content: center;
@@ -426,12 +467,12 @@ footer{
   width: 100%;
 }
 
-.form-title{
+.form-title {
   cursor: default;
   border-bottom: 2px dashed black;
 }
 
-.login-form li p{
+.login-form li p {
   margin: 0;
   width: 40vw;
   max-width: 300px;
@@ -445,37 +486,39 @@ footer{
   text-align: left;
 }
 
-.login-form input, .modal input {
+.login-form input,
+.modal input {
   /* Uniform text field size */
   width: 40vw;
   max-width: 300px;
   padding: 5px;
   box-sizing: border-box;
   /* Match form field borders */
-  border: 2px solid  transparent;
+  border: 2px solid transparent;
   border-radius: 5px;
 }
 
-.login-form input:focus, .modal input:focus {
+.login-form input:focus,
+.modal input:focus {
   /* Additional highlight for focused elements */
   border-width: 2px;
   border-color: var(--color-border-focus);
   outline: none;
 }
 
-.login-form button{
-/* This extra margin represent roughly the same space as the space
+.login-form button {
+  /* This extra margin represent roughly the same space as the space
    between the labels and their text fields */
   border-radius: 5px;
   font-size: 1em;
   width: 40vw;
   max-width: 300px;
   padding: 5px;
-  background-color:var(--color-brown-light);
+  background-color: var(--color-brown-light);
   border-color: var(--color-brown-medium2);
 }
 
-.login-form button:hover{
+.login-form button:hover {
   background-color: var(--color-brown-medium2);
   border-color: var(--color-brown-hover);
   cursor: pointer;
@@ -499,25 +542,25 @@ footer{
   left: 50%;
 }
 
-#SignUp-cover{
+#SignUp-cover {
   display: none;
 }
 
-#SignUp-cover.active{
+#SignUp-cover.active {
   text-align: center;
   display: block;
 }
 
-#SignIn-cover{
+#SignIn-cover {
   text-align: center;
   display: block;
 }
 
-#SignIn-cover.active{
+#SignIn-cover.active {
   display: none;
 }
 
-.tavern-logo{
+.tavern-logo {
   width: 200px;
   height: 200px;
   margin: 0 auto;
@@ -587,7 +630,7 @@ footer{
   margin-top: 10px;
   margin-right: 18vw;
   padding: 1vh 2vw;
-  background-color:var(--color-brown-light);
+  background-color: var(--color-brown-light);
   border: none;
   border-radius: 5px;
   color: var(--color-offwhite);
@@ -650,7 +693,7 @@ footer{
 }
 
 /* Home */
-.todayMenu{
+.todayMenu {
   display: flex;
   grid-row: 1/3;
   grid-column: 1;
@@ -660,10 +703,12 @@ footer{
   border: solid 1px var(--color-transparent);
   background: var(--color-green-verylight);
   padding: 10px;
-  th{
+
+  th {
     padding: 10px;
   }
-  td:hover{
+
+  td:hover {
     text-decoration: underline;
   }
 }
@@ -681,7 +726,7 @@ table {
   width: 100%;
 }
 
-td{
+td {
   padding: 5px;
 }
 
@@ -689,7 +734,7 @@ th {
   border-bottom: solid 2px var(--text-color);
 }
 
-.weekCalendar{
+.weekCalendar {
   display: flex;
   grid-row: 3/5;
   grid-column: 1;
@@ -702,15 +747,15 @@ th {
   padding: 10px;
 }
 
-.groceryList{
+.groceryList {
   grid-row: 2/5;
   grid-column: 10;
   width: 295px;
   border: solid 1px var(--color-transparent);
   background: var(--color-green-verylight);
   padding: 10px;
-  
-  h4{
+
+  h4 {
     text-align: center;
     padding-bottom: 12px;
     border-bottom: solid 2px var(--text-color);
@@ -730,13 +775,13 @@ th {
   -ms-user-select: none;
   user-select: none;
 
-  a{
+  a {
     color: var(--color-blue-link);
     font-size: calc(5px + 1vmin);
     display: none;
   }
 
-  .removeItem{
+  .removeItem {
     color: var(--color-pink-link);
   }
 }
@@ -762,22 +807,22 @@ th {
 }
 
 /* On mouse-over, add a grey background color */
-.groceryItem:hover input ~ .checkmark {
+.groceryItem:hover input~.checkmark {
   background-color: var(--checklist-hover);
 }
 
 /* When the checkbox is checked, add a blue background */
-.groceryItem input:checked~ .checkmark {
+.groceryItem input:checked~.checkmark {
   background-color: var(--checklist-checkbox);
 }
 
 /* Strikethrought the text when checkbox is checked */
-.groceryItem input:checked ~ .itemName {
+.groceryItem input:checked~.itemName {
   text-decoration: line-through;
 }
 
 /* Show add to ingredient button when checkbox is checked */
-.groceryItem input:checked ~ a {
+.groceryItem input:checked~a {
   display: block;
 }
 
@@ -789,7 +834,7 @@ th {
 }
 
 /* Show the checkmark when checked */
-.groceryItem input:checked ~ .checkmark:after {
+.groceryItem input:checked~.checkmark:after {
   display: block;
 }
 
@@ -806,7 +851,7 @@ th {
   transform: rotate(45deg);
 }
 
-.addGrocery{
+.addGrocery {
   font-size: calc(25px + 1vmin);
   position: relative;
   left: -3px;
@@ -825,12 +870,14 @@ th {
 }
 
 .open {
-  display: block; /* Ensure it's block when open */
+  display: block;
+  /* Ensure it's block when open */
   animation: openRight 0.5s forwards;
 }
 
 .close {
-  display: none; /* To be hidden after closing */
+  display: none;
+  /* To be hidden after closing */
   animation: closeLeft 0.5s forwards;
 }
 
@@ -839,6 +886,7 @@ th {
   from {
     left: -3px;
   }
+
   to {
     left: 250px;
   }
@@ -848,18 +896,19 @@ th {
   from {
     left: 250px;
   }
+
   to {
     left: -3px;
   }
 }
 
-.addGrocery:hover{
+.addGrocery:hover {
   background-color: var(--color-transparent);
   cursor: pointer;
   color: var(--button-browns-hover);
 }
 
-.addGroceryItem{
+.addGroceryItem {
   display: none;
   position: absolute;
   width: 280px;
@@ -873,6 +922,7 @@ th {
   from {
     width: 0px;
   }
+
   to {
     width: 280px;
   }
@@ -882,49 +932,50 @@ th {
   from {
     width: 280px;
   }
+
   to {
     width: 0px;
   }
 }
 
 /* QUICK RECIPE IN HOME */
-.quickRecipe{
+.quickRecipe {
   grid-row: 1/5;
   grid-column-start: 2;
   grid-column-end: 10;
-  
+
   border: solid 1px var(--color-transparent);
   background: var(--color-green-verylight);
   padding: 10px;
 }
 
-.recipeiFrame{
+.recipeiFrame {
   width: 100%;
   height: 100%;
 }
 
-.iframeContainer{
+.iframeContainer {
   background: var(--color-background);
   position: relative;
   height: 100%;
   width: 100%;
 }
 
-.iframeCannot{
+.iframeCannot {
   justify-content: center;
   align-items: center;
   text-align: center;
   margin-top: 20%;
   font-size: calc(10px + 1vmin);
 
-  a:hover{
+  a:hover {
     color: var(--color-blue-link);
     text-decoration: underline;
   }
 }
 
 /* QUICK INGREDIENT AT HOME*/
-.quickIngredient{
+.quickIngredient {
   display: flex;
   grid-row: 1;
   grid-column: 10;
@@ -934,23 +985,23 @@ th {
   background: var(--color-green-verylight);
   padding: 10px;
 
-  table{
+  table {
     /* makes sure each column is the same size */
     table-layout: fixed;
   }
 
   /* middle line between columns */
-  .first{
-  border-right: solid 2px var(--text-color);
+  .first {
+    border-right: solid 2px var(--text-color);
   }
 
-  th{
+  th {
     font-size: calc(20px + 1vmin);
   }
 }
 
 /* INVENTORY PAGE*/
-#ingredient-content{
+#ingredient-content {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -958,35 +1009,38 @@ th {
   overflow: auto;
 }
 
-.inventory{
+.inventory {
   display: flex;
   border: solid 1px var(--color-transparent);
   background: var(--color-blue-light-transparent);
   padding-left: 10px;
   padding-bottom: 10px;
-  h4{
+
+  h4 {
     padding-bottom: 10px;
     border-bottom: solid 2px var(--text-color);
   }
+
   margin-bottom: 10px;
-  .edit-icon{
+
+  .edit-icon {
     margin-left: 5px;
   }
 
-  .inventoryItem{
+  .inventoryItem {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 5px;
   }
 
-  .inventoryActionsContainer{
+  .inventoryActionsContainer {
     display: flex;
     flex-direction: column;
     gap: 5px;
   }
 
-  .addToGrocery{
+  .addToGrocery {
     color: var(--color-pink-link);
     background-color: var(--color-transparent);
     border: none;
@@ -995,20 +1049,20 @@ th {
   }
 }
 
-.addCategory{
+.addCategory {
   width: 100%;
   height: 50px;
   border: none;
-  background-color:var(--button-browns);
+  background-color: var(--button-browns);
   color: var(--color-background);
   font-size: calc(10px + 1vmin);
 }
 
-.addCategory:hover{
+.addCategory:hover {
   background-color: var(--button-browns-hover);
 }
 
-.popupAddCategory{
+.popupAddCategory {
   display: none;
   position: fixed;
   top: calc(50% - 100px);
@@ -1022,7 +1076,7 @@ th {
   z-index: 1000;
 }
 
-.addCategoryItem{
+.addCategoryItem {
   width: 97%;
   height: 30px;
   background-color: var(--menudropdown);
@@ -1030,49 +1084,51 @@ th {
   margin-bottom: 10px;
 }
 
-.removeFromInventory:hover{
+.removeFromInventory:hover {
   text-decoration: line-through;
   cursor: pointer;
 }
 
-.editItem{
+.editItem {
   color: var(--color-blue-link);
   background-color: var(--color-transparent);
   border: none;
   font-size: calc(10px + 1vmin);
 
 
-  &:focus{
+  &:focus {
     outline: none;
   }
 }
 
 
 /* GROCERY LIST PAGE */
-.grocery{
+.grocery {
   display: flex;
   border: solid 1px var(--color-transparent);
   background: var(--color-pink-lightish);
   padding-left: 10px;
   padding-bottom: 10px;
-  h4{
+
+  h4 {
     padding-bottom: 10px;
     border-bottom: solid 2px var(--text-color);
   }
+
   margin-bottom: 10px;
-  
-  .edit-icon{
+
+  .edit-icon {
     position: relative;
     margin-top: 5px;
   }
 
-  div{
+  div {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
   }
 
-  .editItem{
+  .editItem {
     display: inline-flex;
     margin-left: 32px;
     margin-top: 5px;
@@ -1089,12 +1145,14 @@ th {
 
 .recipe-tab-container {
   position: fixed;
-  right: calc(-40vw + 20px); /* Start at the edge of the screen */
+  right: calc(-40vw + 20px);
+  /* Start at the edge of the screen */
   top: calc(50% - 45vh);
   width: 40vw;
   height: 90vh;
   display: flex;
-  flex-direction: row-reverse; /* Ensure the tab appears on the right */
+  flex-direction: row-reverse;
+  /* Ensure the tab appears on the right */
   justify-content: flex-start;
   transition: right 0.4s ease-in-out;
   border-radius: 50px 0 0 50px;
@@ -1102,7 +1160,8 @@ th {
 }
 
 .recipe-tab-container.recipe-open {
-  right: 0; /* Fully open the tab */
+  right: 0;
+  /* Fully open the tab */
 }
 
 .book-container {
@@ -1111,7 +1170,8 @@ th {
   height: 100%;
   background-color: var(--color-beige-light);
   box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.2);
-  cursor: auto; /* Prevent the book content from being clickable */
+  cursor: auto;
+  /* Prevent the book content from being clickable */
   border-radius: 50px 0 0 50px;
   z-index: 12;
 }
@@ -1128,13 +1188,15 @@ th {
 /* Bookmarks */
 .bookmarks {
   position: absolute;
-  left: 0; /* Start hidden behind the tab on the left */
+  left: 0;
+  /* Start hidden behind the tab on the left */
   top: 10%;
   transition: left 0.4s ease-in-out;
 }
 
 .bookmarks.show {
-  left: -50px; /* Slide out to the left when the tab is open */
+  left: -50px;
+  /* Slide out to the left when the tab is open */
 }
 
 .bookmark {
@@ -1146,7 +1208,8 @@ th {
   border-radius: 50px 0 0 50px;
   /* center items */
   display: flex;
-  transition: background-color 0.3s ease; /* Smooth color transition */
+  transition: background-color 0.3s ease;
+  /* Smooth color transition */
 }
 
 .bookmark-active {
@@ -1189,14 +1252,16 @@ th {
   color: var(--text-color);
 }
 
-.search-icon, .filter-icon {
+.search-icon,
+.filter-icon {
   font-size: 1.5rem;
   margin: 0 10px;
   cursor: pointer;
 }
 
 .recipe-containers {
-  overflow-y: auto;  /* Make the container scrollable if the content exceeds the max height */
+  overflow-y: auto;
+  /* Make the container scrollable if the content exceeds the max height */
 }
 
 .pagination-controls {
@@ -1205,7 +1270,8 @@ th {
   margin: 20px 0;
 }
 
-.prev-btn, .next-btn {
+.prev-btn,
+.next-btn {
   padding: 5px 10px;
   margin: 0 10px;
   background-color: var(--color-brown-hover2);
@@ -1213,7 +1279,8 @@ th {
   cursor: pointer;
 }
 
-.prev-btn:disabled, .next-btn:disabled {
+.prev-btn:disabled,
+.next-btn:disabled {
   background-color: var(--color-green-verylight);
   cursor: not-allowed;
 }
@@ -1227,61 +1294,89 @@ th {
 .recipe-list {
   background-color: var(--recipe-tab-yellow-green);
   margin: 20px 0;
-  max-width: 100%; /* Set a maximum width */
-  padding: 10px; /* Add padding for better spacing */
-  position: relative; /* Position relative for icon placement */
-  overflow: hidden; /* Prevent horizontal scroll */
+  max-width: 100%;
+  /* Set a maximum width */
+  padding: 10px;
+  /* Add padding for better spacing */
+  position: relative;
+  /* Position relative for icon placement */
+  overflow: hidden;
+  /* Prevent horizontal scroll */
 }
 
 .recipe-title {
   font-size: 1.25rem;
   font-weight: bold;
   margin: 10px 0;
-  display: flex; /* Use flexbox for layout */
-  justify-content: space-between; /* Space between title and icons */
-  align-items: center; /* Center items vertically */
-  position: relative; /* Ensure stacking order */
-  z-index: 10; /* Make sure it's above other elements */
+  display: flex;
+  /* Use flexbox for layout */
+  justify-content: space-between;
+  /* Space between title and icons */
+  align-items: center;
+  /* Center items vertically */
+  position: relative;
+  /* Ensure stacking order */
+  z-index: 10;
+  /* Make sure it's above other elements */
 }
 
 .recipe-title a {
-  flex-grow: 1; /* Allow title to grow */
-  text-decoration: none; /* Remove underline for normal state */
-  color: inherit; /* Inherit color from parent */
-  overflow: hidden; /* Hide overflow text */
-  text-overflow: ellipsis; /* Add ellipsis for overflow text */
+  flex-grow: 1;
+  /* Allow title to grow */
+  text-decoration: none;
+  /* Remove underline for normal state */
+  color: inherit;
+  /* Inherit color from parent */
+  overflow: hidden;
+  /* Hide overflow text */
+  text-overflow: ellipsis;
+  /* Add ellipsis for overflow text */
 }
 
 .recipe-title a:hover {
-  text-decoration: underline; /* Underline on hover */
+  text-decoration: underline;
+  /* Underline on hover */
 }
 
 .icon-container {
-  display: flex; /* Flexbox for icon layout */
-  padding-right: 10px; /* Add padding to the left of icons */
-  z-index: 10; /* Ensure icons are above other elements */
+  display: flex;
+  /* Flexbox for icon layout */
+  padding-right: 10px;
+  /* Add padding to the left of icons */
+  z-index: 10;
+  /* Ensure icons are above other elements */
 }
 
-.info-icon, .star-icon, .remove-icon{
-  cursor: pointer; /* Change cursor to pointer for interactivity */
-  margin-left: 5px; /* Add space between icons */
+.info-icon,
+.star-icon,
+.remove-icon {
+  cursor: pointer;
+  /* Change cursor to pointer for interactivity */
+  margin-left: 5px;
+  /* Add space between icons */
 }
 
 .recommendation-info {
-  position: absolute; /* Position the recommendation info */
-  top: 30px; /* Align to the top of the container */
-  right: 70px; /* Align to the right of the container */
+  position: absolute;
+  /* Position the recommendation info */
+  top: 30px;
+  /* Align to the top of the container */
+  right: 70px;
+  /* Align to the right of the container */
   cursor: pointer;
   font-size: 1.75rem;
 }
 
 .rec-info-popup {
   position: absolute;
-  top: 60px; /* Adjust position as needed */
+  top: 60px;
+  /* Adjust position as needed */
   right: 0;
-  width: 200px; /* Adjust width as needed */
+  width: 200px;
+  /* Adjust width as needed */
   padding: 10px;
-  background-color: var(--background-color); /* Background color of the popup */
+  background-color: var(--background-color);
+  /* Background color of the popup */
   border: 1px solid var(--color-popup-border);
   border-radius: 8px;
   box-shadow: 0px 4px 8px var(--color-shadow-light);
@@ -1291,9 +1386,12 @@ th {
 
 /* Tags styling */
 .recipe-tags {
-  display: flex; /* Use flexbox for tags */
-  flex-wrap: wrap; /* Allow tags to wrap to a new line */
-  margin-top: 5px; /* Add spacing above tags */
+  display: flex;
+  /* Use flexbox for tags */
+  flex-wrap: wrap;
+  /* Allow tags to wrap to a new line */
+  margin-top: 5px;
+  /* Add spacing above tags */
 }
 
 .r-tag {
@@ -1301,12 +1399,14 @@ th {
   color: var(--color-background);
   padding: 5px 10px;
   border-radius: 50px;
-  margin: 0 5px 5px 0; /* Space between tags */
+  margin: 0 5px 5px 0;
+  /* Space between tags */
 }
 
 /* Ingredients styling */
 .recipe-ingredients {
-  margin-top: 5px; /* Add spacing above ingredients */
+  margin-top: 5px;
+  /* Add spacing above ingredients */
 }
 
 .r-ing {
@@ -1314,8 +1414,10 @@ th {
   color: var(--color-background);
   padding: 5px 10px;
   border-radius: 50px;
-  margin: 0 5px 5px 0; /* Space between ingredients */
-  display: inline-block; /* Ensure each ingredient is on a new line if long */
+  margin: 0 5px 5px 0;
+  /* Space between ingredients */
+  display: inline-block;
+  /* Ensure each ingredient is on a new line if long */
 }
 
 /* DRAGGING */
@@ -1332,12 +1434,15 @@ th {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--color-shadow-med); /* Semi-transparent background */
-  border-radius: inherit; /* Inherit border radius from parent */
+  background-color: var(--color-shadow-med);
+  /* Semi-transparent background */
+  border-radius: inherit;
+  /* Inherit border radius from parent */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 900; /* Ensure modal is on top */
+  z-index: 900;
+  /* Ensure modal is on top */
 }
 
 .recipe-info-content {
@@ -1348,25 +1453,33 @@ th {
 }
 
 .recipe-info-background {
-  max-height: 75vh; /* Set a maximum height for modal */
+  max-height: 75vh;
+  /* Set a maximum height for modal */
   border-radius: 8px;
-  max-width: 40vw; /* Set a max width for modal */
+  max-width: 40vw;
+  /* Set a max width for modal */
   width: 100%;
-  margin: 20px 0 0 20px; /* Add margin for spacing */
+  margin: 20px 0 0 20px;
+  /* Add margin for spacing */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   overflow-y: hidden;
-  overflow-x: hidden; /* Hide horizontal scroll */
+  overflow-x: hidden;
+  /* Hide horizontal scroll */
 }
 
 .scrollable {
-  max-height: 60vh; /* Set a maximum height for the scrollable content */
-  overflow-y: auto; /* Allow content to scroll if it exceeds max height */
+  max-height: 60vh;
+  /* Set a maximum height for the scrollable content */
+  overflow-y: auto;
+  /* Allow content to scroll if it exceeds max height */
 }
 
 .x-button {
   position: absolute;
-  top: 20px; /* Adjust this value as needed for spacing */
-  right: 20px; /* Adjust this value as needed for spacing */
+  top: 20px;
+  /* Adjust this value as needed for spacing */
+  right: 20px;
+  /* Adjust this value as needed for spacing */
   background-color: transparent;
   border: none;
   font-size: 1.5rem;
@@ -1389,22 +1502,29 @@ th {
 }
 
 .recipe-tags-container {
-  display: flex; /* Flexbox for tag layout */
-  flex-wrap: wrap; /* Allow tags to wrap to the next line */
+  display: flex;
+  /* Flexbox for tag layout */
+  flex-wrap: wrap;
+  /* Allow tags to wrap to the next line */
 }
 
 .recipe-tags-info {
   background-color: var(--color-purple-light);
   padding: 5px 10px;
-  margin: 0 5px 5px 0; /* Space between tags */
+  margin: 0 5px 5px 0;
+  /* Space between tags */
   border-radius: 50px;
-  margin-top: 5px; /* Add spacing above tags */
+  margin-top: 5px;
+  /* Add spacing above tags */
 }
 
 .info-header-container {
-  display: flex; /* Flexbox for header layout */
-  align-items: center; /* Center items vertically */
-  margin-top: 10px; /* Add spacing above header */
+  display: flex;
+  /* Flexbox for header layout */
+  align-items: center;
+  /* Center items vertically */
+  margin-top: 10px;
+  /* Add spacing above header */
 }
 
 .ingredients-header {
@@ -1415,68 +1535,96 @@ th {
 
 .highlight-info-popup {
   position: fixed;
-  top: 30%; /* Adjust position as needed */
+  top: 30%;
+  /* Adjust position as needed */
   right: inherit;
   transform: translate(-110%, 0);
-  width: 300px; 
+  width: 300px;
 }
 
 .recipe-ingredients-container {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Two equal columns */
-  gap: 5px; /* Add some space between the columns */
-  column-gap: 30px; /* Add some space between the columns */
-  padding: 0; /* Remove padding from the container */
+  grid-template-columns: 1fr 1fr;
+  /* Two equal columns */
+  gap: 5px;
+  /* Add some space between the columns */
+  column-gap: 30px;
+  /* Add some space between the columns */
+  padding: 0;
+  /* Remove padding from the container */
 }
 
 .recipe-ingredients-info {
-  list-style-type: square; /* Remove default list styling */
-  padding: 0 5px; /* Add some padding for the individual list items */
-  border-radius: 50px; /* Add border radius to the list items */
-  cursor: default; /* Change cursor to pointer for interactivity */
+  list-style-type: square;
+  /* Remove default list styling */
+  padding: 0 5px;
+  /* Add some padding for the individual list items */
+  border-radius: 50px;
+  /* Add border radius to the list items */
+  cursor: default;
+  /* Change cursor to pointer for interactivity */
 }
 
 .highlightable {
-  cursor: pointer !important; /* Change cursor to pointer for interactivity */
+  cursor: pointer !important;
+  /* Change cursor to pointer for interactivity */
 }
 
-.highlightable:hover, .selected-ing, .in-grocery-list, .pink-highlight {
-  background-color: var(--color-pink-light2) !important; /* Add a light background color for selected ingredients */
+.highlightable:hover,
+.selected-ing,
+.in-grocery-list,
+.pink-highlight {
+  background-color: var(--color-pink-light2) !important;
+  /* Add a light background color for selected ingredients */
 }
 
-.in-inventory, .blue-highlight {
-  background-color: var(--color-teal-blue); /* Add a light background color for ingredients in inventory */
+.in-inventory,
+.blue-highlight {
+  background-color: var(--color-teal-blue);
+  /* Add a light background color for ingredients in inventory */
 }
 
 /* SCROLLER STYLE */
 
-.custom-scroll, * {
-  scrollbar-width: auto; 
-  scrollbar-color: var(--color-brown-medium3) transparent; 
+.custom-scroll,
+* {
+  scrollbar-width: auto;
+  scrollbar-color: var(--color-brown-medium3) transparent;
 }
 
 /* Webkit browsers (Chrome, Edge, Safari) */
-.custom-scroll::-webkit-scrollbar, *::-webkit-scrollbar {
-  width: 15px; /* Width of the scrollbar */
-  height: 8px; /* Height of horizontal scrollbar */
+.custom-scroll::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 15px;
+  /* Width of the scrollbar */
+  height: 8px;
+  /* Height of horizontal scrollbar */
 }
 
-.custom-scroll::-webkit-scrollbar-thumb, *::-webkit-scrollbar-thumb {
-  background-color: var(--color-brown-medium3); /* Custom thumb color */
+.custom-scroll::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background-color: var(--color-brown-medium3);
+  /* Custom thumb color */
 }
 
-.custom-scroll::-webkit-scrollbar-thumb:hover, *::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-brown-dark2); /* Custom thumb color on hover */
+.custom-scroll::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-brown-dark2);
+  /* Custom thumb color on hover */
 }
 
 /* Track with a gradient to create the illusion of a thinner middle */
-.custom-scroll::-webkit-scrollbar-track, *::-webkit-scrollbar-track {
-  background: linear-gradient(to right, transparent 25%, var(--color-yellow-green) 50%, transparent 75%); /* Gradient background */
+.custom-scroll::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: linear-gradient(to right, transparent 25%, var(--color-yellow-green) 50%, transparent 75%);
+  /* Gradient background */
   border-radius: 10px;
 }
 
-.custom-scroll::-webkit-scrollbar-corner, *::-webkit-scrollbar-corner {
-  background: transparent; /* For the bottom-right corner of scrollbars */
+.custom-scroll::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-corner {
+  background: transparent;
+  /* For the bottom-right corner of scrollbars */
 }
 
 /* FILTER POP UP */
@@ -1489,13 +1637,14 @@ th {
 .filter-popup-background {
   position: absolute;
   top: 50%;
-  left: -50%; 
+  left: -50%;
   transform: translate(-60%, -50%);
   background-color: var(--background-color);
   width: 90%;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  z-index: 800; /* Ensure it's behind the popup */
+  z-index: 800;
+  /* Ensure it's behind the popup */
 }
 
 .filter-popup {
@@ -1503,7 +1652,8 @@ th {
   border: 1px solid var(--color-popup-border);
   border-radius: 8px;
   padding: 20px;
-  z-index: 900; /* Make sure it appears above other content */
+  z-index: 900;
+  /* Make sure it appears above other content */
   display: flex;
   flex-direction: column;
 }
@@ -1552,10 +1702,11 @@ th {
 .no-items {
   cursor: default;
   border: 2px solid var(--color-border-focus);
-  background-color:var(--color-green-muted);
+  background-color: var(--color-green-muted);
 }
 
-.included-item:hover, .excluded-item:hover {
+.included-item:hover,
+.excluded-item:hover {
   text-decoration: line-through;
 }
 
@@ -1585,9 +1736,11 @@ th {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 50%; /* Place it in the middle */
+  left: 50%;
+  /* Place it in the middle */
   width: 2px;
-  background-color: var(--text-color); /* Light gray color for the separator */
+  background-color: var(--text-color);
+  /* Light gray color for the separator */
 }
 
 .tag-item,
@@ -1771,14 +1924,17 @@ th {
   margin: 5.6px;
   transition: 0.2s;
 }
+
 /* ---- ---- Light Mode ---- ---- */
 
 .light .toggle {
   background: var(--color-brown-light-transparent);
 }
+
 .light .ball {
   background-color: var(--color-brown-dark-alt);
 }
+
 /* ---- ---- Dark Mode ---- ---- */
 
 .dark .toggle {
@@ -1800,7 +1956,7 @@ th {
 
 .triangle-down {
   transition: transform 0.3s ease;
-  margin:0 5px;
+  margin: 0 5px;
 }
 
 .chosen {
@@ -1821,7 +1977,8 @@ th {
   transition: all 0.3s ease;
 }
 
-.dropbtn:hover, .dropbtn:focus {
+.dropbtn:hover,
+.dropbtn:focus {
   background-color: var(--color-green-sidebar);
   border: 3px solid transparent;
   color: var(--color-background);
@@ -1870,9 +2027,10 @@ th {
   background-color: var(--delete-popup);
   /* border: 3px solid var(--color-red-light; */
   box-shadow: 0 4px 8px var(--color-shadow-med);
-  
-  
-  h2, p {
+
+
+  h2,
+  p {
     margin: 0 0 10px;
     padding: 10px 5px;
     text-align: justify;
@@ -1882,7 +2040,7 @@ th {
 
 .slider {
   accent-color: var(--color-brown-medium2);
-  
+
 }
 
 .font-size-text {
@@ -1924,13 +2082,16 @@ th {
   justify-content: center;
   align-items: center;
   position: relative;
-  width: 184px; /* Adjust to fit the triangle */
-  height: 172px; /* Adjust to fit the triangle */
+  width: 184px;
+  /* Adjust to fit the triangle */
+  height: 172px;
+  /* Adjust to fit the triangle */
 }
 
 .loading-ball {
   position: absolute;
-  background-color: var(--color-green-light2); /* Make the background transparent */
+  background-color: var(--color-green-light2);
+  /* Make the background transparent */
   border: 6px solid transparent;
   border-radius: 50%;
   width: 50px;
@@ -1942,20 +2103,23 @@ th {
 }
 
 .loading-ball:nth-child(1) {
-  top: 0; /* Position for the top icon */
+  top: 0;
+  /* Position for the top icon */
   left: 50%;
   transform: translate(-50%, 0);
   animation: moveBall1 5s ease-in-out infinite;
 }
 
 .loading-ball:nth-child(2) {
-  bottom: 0; /* Position for the bottom-left icon */
+  bottom: 0;
+  /* Position for the bottom-left icon */
   left: 0;
   animation: moveBall2 5s ease-in-out infinite;
 }
 
 .loading-ball:nth-child(3) {
-  bottom: 0; /* Position for the bottom-right icon */
+  bottom: 0;
+  /* Position for the bottom-right icon */
   right: 0;
   animation: moveBall3 5s ease-in-out infinite;
 }
@@ -1967,54 +2131,84 @@ th {
 
 /* Individual movement animations for each ball */
 @keyframes moveBall1 {
-  0%, 100% {
-    transform: translate(-50%, 0); /* Original position for the top ball */
+
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+    /* Original position for the top ball */
   }
+
   33% {
-    transform: translate(50%, 175%); /* Move slightly up and to the left */
+    transform: translate(50%, 175%);
+    /* Move slightly up and to the left */
   }
+
   66% {
-    transform: translate(-150%, 175%); /* Move down slightly */
+    transform: translate(-150%, 175%);
+    /* Move down slightly */
   }
 }
 
 @keyframes moveBall2 {
-  0%, 100% {
-    transform: translate(0, 0); /* Original position for the top ball */
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+    /* Original position for the top ball */
   }
+
   33% {
-    transform: translate(100%, -175%); /* Move slightly up and to the left */
+    transform: translate(100%, -175%);
+    /* Move slightly up and to the left */
   }
+
   66% {
-    transform: translate(200%, 0); /* Move down slightly */
+    transform: translate(200%, 0);
+    /* Move down slightly */
   }
 }
 
 @keyframes moveBall3 {
-  0%, 100% {
-    transform: translate(0, 0); /* Original position for the top ball */
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+    /* Original position for the top ball */
   }
+
   33% {
-    transform: translate(-200%, 0); /* Move down slightly */
+    transform: translate(-200%, 0);
+    /* Move down slightly */
   }
+
   66% {
-    transform: translate(-100%, -175%); /* Move slightly up and to the left */
+    transform: translate(-100%, -175%);
+    /* Move slightly up and to the left */
   }
 }
 
 /* Sway animation for the icons */
 @keyframes sway {
-  0%, 100% {
-    transform: rotate(0deg); /* Original position */
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+    /* Original position */
   }
+
   25% {
-    transform: rotate(60deg); /* Sway to the right */
+    transform: rotate(60deg);
+    /* Sway to the right */
   }
+
   50% {
-    transform: rotate(0deg); /* Return to the original position */
+    transform: rotate(0deg);
+    /* Return to the original position */
   }
+
   75% {
-    transform: rotate(-60deg); /* Sway to the left */
+    transform: rotate(-60deg);
+    /* Sway to the left */
   }
 }
 
@@ -2026,8 +2220,10 @@ th {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--color-shadow-med); /* semi-transparent background */
-  z-index: 999; /* Below dropdown but above everything else */
+  background-color: var(--color-shadow-med);
+  /* semi-transparent background */
+  z-index: 999;
+  /* Below dropdown but above everything else */
   cursor: default;
 }
 
@@ -2045,10 +2241,11 @@ th {
   top: -100%;
   left: calc(50% - 15vw);
   z-index: 1000;
-  transition: top 0.3s ease-out; /* Smooth transition */
+  transition: top 0.3s ease-out;
+  /* Smooth transition */
 }
 
-.dropdown.slide-down{
+.dropdown.slide-down {
   top: 0;
 }
 
@@ -2066,7 +2263,8 @@ th {
 }
 
 .dropdown-options.slide-down {
-  max-height: 500px; /* Set to a large enough value to fit the content */
+  max-height: 500px;
+  /* Set to a large enough value to fit the content */
 }
 
 .dropdown-options h3 {
@@ -2089,7 +2287,7 @@ th {
   margin: 5px 0;
 }
 
-.dropdown-options li + li {
+.dropdown-options li+li {
   margin-left: 10px;
 }
 
@@ -2115,25 +2313,44 @@ th {
 
 /* MEDIA QUERIES FOR MOBILE VERSION */
 @media only screen and (max-width: 768px) {
-  
+
   /* Change the sidebar to be on the top of the page under the profile bar */
+  /* Change the sidebar to be on the top of the page under the profile bar */
+  .sidebar {
+    position: fixed;
+    /* Moves sidebar to be under profile bar */
+    width: 100%;
+    height: 50px;
+    /* Optional: Adds spacing if needed */
+    display: flex;
+    /* Ensures sidebar is treated like a block */
+    flex-direction: row !important;
+    /* Aligns items horizontally */
+  }
+
+  .sidebar > nav ul{
+    display: flex;
+    /* Hides the sidebar */
+  }
+
   .pullTab {
-    display: none; /* Hides the pull tab */
+    display: none;
+    /* Hides the pull tab */
   }
 
   /*hide quick recipe iframe*/
-  .quickRecipe{
+  .quickRecipe {
     display: none;
   }
 
   /*move the fruits to the left*/
-  .quickIngredient{
+  .quickIngredient {
     grid-row: 1;
     grid-column: 2;
   }
 
   /*move the grocery list to the left*/
-  .groceryList{
+  .groceryList {
     grid-row: 2/5;
     grid-column: 2;
   }
@@ -2144,4 +2361,3 @@ th {
   }
 
 }
-

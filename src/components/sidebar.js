@@ -58,85 +58,85 @@ function Sidebar(props) {
         switch(props.source){
             case "Home":
                 return(
-                    <div>
+                    <>
                     <li><a href="/Home" className = "active"><FaHome /></a></li>
                     <li><a href="/Inventory"><RiFridgeFill /></a></li>
                     <li><a href="/Weekly-menu"><BiSolidFoodMenu /></a></li>
                     <li><a href="/Grocery-list"><MdLocalGroceryStore /></a></li>
-                    </div>
+                    </>
 
                 );
             case "Inventory":
                 return(
-                    <div>
+                    <>
                     <li><a href="/Home"><FaHome /></a></li>
                     <li><a href="/Inventory" className = "active"><RiFridgeFill /></a></li>
                     <li><a href="/Weekly-menu"><BiSolidFoodMenu /></a></li>
                     <li><a href="/Grocery-list"><MdLocalGroceryStore /></a></li>
-                    </div>
+                    </>
                 );
             case "Menu":
                 return(
-                    <div>
+                    <>
                     <li><a href="/Home"><FaHome /></a></li>
                     <li><a href="/Inventory"><RiFridgeFill /></a></li>
                     <li><a href="/Weekly-menu" className = "active"><BiSolidFoodMenu /></a></li>
                     <li><a href="/Grocery-list"><MdLocalGroceryStore /></a></li>
-                    </div>
+                    </>
                 );
             case "Grocery":
                 return(
-                    <div>
+                    <>
                     <li><a href="/Home"><FaHome /></a></li>
                     <li><a href="/Inventory"><RiFridgeFill /></a></li>
                     <li><a href="/Weekly-menu"><BiSolidFoodMenu /></a></li>
                     <li><a href="/Grocery-list" className = "active"><MdLocalGroceryStore /></a></li>
-                    </div>
+                    </>
                 );
             case "Settings":
                 return(
-                    <div>
+                    <>
                     <li><a href="/Settings" className = "active"><GiCrown /></a></li>
                     <li><a href="/Preference"><GiQuillInk /></a></li>
                     <li><a href="/Options"><GiTwoHandedSword /></a></li>
                     <li><a href="/Feedback"><GiScrollQuill /></a></li>
-                    </div>
+                    </>
                 );
             case "Preference":
                 return(
-                    <div>
+                    <>
                     <li><a href="/Settings"><GiCrown /></a></li>
                     <li><a href="/Preference" className = "active"><GiQuillInk /></a></li>
                     <li><a href="/Options"><GiTwoHandedSword /></a></li>
                     <li><a href="/Feedback"><GiScrollQuill /></a></li>
-                    </div>
+                    </>
                 );
             case "Options":
                 return(
-                    <div>
+                    <>
                     <li><a href="/Settings"><GiCrown /></a></li>
                     <li><a href="/Preference"><GiQuillInk /></a></li>
                     <li><a href="/Options" className = "active"><GiTwoHandedSword /></a></li>
                     <li><a href="/Feedback"><GiScrollQuill /></a></li>
-                    </div>
+                    </>
                 );
             case "Feedback":
                 return(
-                    <div>
+                    <>
                     <li><a href="/Settings"><GiCrown /></a></li>
                     <li><a href="/Preference"><GiQuillInk /></a></li>
                     <li><a href="/Options"><GiTwoHandedSword /></a></li>
                     <li><a href="/Feedback" className = "active"><GiScrollQuill /></a></li>
-                    </div>
+                    </>
                 );
             default:
                 return(
-                    <div>
+                    <>
                     <li><a href="/Home" className = "active"><FaHome /></a></li>
                     <li><a href="/Inventory"><RiFridgeFill /></a></li>
                     <li><a href="/Weekly-menu"><BiSolidFoodMenu /></a></li>
                     <li><a href="/Grocery-list"><MdLocalGroceryStore /></a></li>
-                    </div>
+                    </>
                 );
             
         }
@@ -144,84 +144,84 @@ function Sidebar(props) {
         switch(props.source){
             case "Home":
                 return(
-                    <div>
+                    <>
                     <li><a href="/Home" className = "active">Home</a></li>
                     <li><a href="/Inventory">Inventory</a></li>
                     <li><a href="/Weekly-menu">Weekly Menu</a></li>
                     <li><a href="/Grocery-list">Grocery List</a></li>
-                    </div>
+                    </>
                 );
             case "Inventory":
                 return(
-                    <div>
+                    <>
                     <li><a href="/Home">Home</a></li>
                     <li><a href="/Inventory" className = "active">Inventory</a></li>
                     <li><a href="/Weekly-menu">Weekly Menu</a></li>
                     <li><a href="/Grocery-list">Grocery List</a></li>
-                    </div>
+                    </>
                 );
             case "Menu":
                 return(
-                    <div>
+                    <>
                     <li><a href="/Home">Home</a></li>
                     <li><a href="/Inventory">Inventory</a></li>
                     <li><a href="/Weekly-menu" className = "active">Weekly Menu</a></li>
                     <li><a href="/Grocery-list">Grocery List</a></li>
-                    </div>
+                    </>
                 );  
             case "Grocery":
                 return(
-                    <div>
+                    <>
                     <li><a href="/Home">Home</a></li>
                     <li><a href="/Inventory">Inventory</a></li>
                     <li><a href="/Weekly-menu">Weekly Menu</a></li>
                     <li><a href="/Grocery-list" className = "active">Grocery List</a></li>
-                    </div>
+                    </>
                 );
             case "Settings":
                 return(
-                    <div>
+                    <>
                     <li><a href="/Settings" className = "active">Settings</a></li>
                     <li><a href="/Preference">Preference</a></li>
                     <li><a href="/Options">Options</a></li>
                     <li><a href="/Feedback">Feedback</a></li>
-                    </div>
+                    </>
                 );
             case "Preference":
                 return(
-                    <div>
+                    <>
                     <li><a href="/Settings">Settings</a></li>
                     <li><a href="/Preference" className = "active">Preference</a></li>
                     <li><a href="/Options">Options</a></li>
                     <li><a href="/Feedback">Feedback</a></li>
-                    </div>
+                    </>
                 );
             case "Options":
                 return(
-                    <div>
+                    <>
                     <li><a href="/Settings">Settings</a></li>
                     <li><a href="/Preference">Preference</a></li>
                     <li><a href="/Options" className = "active">Options</a></li>
                     <li><a href="/Feedback">Feedback</a></li>
-                    </div>
+                    </>
                 );
             case "Feedback":
                 return(
-                    <div>
+                    <>
                     <li><a href="/Settings">Settings</a></li>
                     <li><a href="/Preference">Preference</a></li>
                     <li><a href="/Options">Options</a></li>
                     <li><a href="/Feedback" className = "active">Feedback</a></li>
-                    </div>
+                    </>
                 );
             default:
                 return(
-                    <div>
+                    <>
                     <li><a href="/Home" className = "active">Home</a></li>
                     <li><a href="/Inventory">Inventory</a></li>
                     <li><a href="/Weekly-menu">Weekly Menu</a></li>
                     <li><a href="/Grocery-list">Grocery List</a></li>
-                    </div>
+                    </>
                 );
             
         }
