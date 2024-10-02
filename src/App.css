@@ -2358,6 +2358,7 @@ th {
   /* Change the content to have flex direction column */
   .content {
     max-width: 50vw;
+    left: 0;
   }
 
 }
