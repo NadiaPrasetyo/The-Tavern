@@ -5,9 +5,8 @@ import '../App.css';
 
 const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, inInventory, inGroceryList, fromRecipeTab }) => {
   const [infoPopUp, setInfoPopUp] = useState(false);
-  const [counter, setCounter] = useState(0);
   
-  const isMobile = window.innerWidth <= 768;
+  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
   // Close the modal when the Esc key is pressed
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -72,21 +71,8 @@ const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, inIn
 
   if (!isOpen) return null; // Don't render anything if not open
 
-  const handleClickOutside = (event) => {
-    if (isMobile) {
-      if (counter === 1) {
-        onClose();
-        setCounter(0);
-      } else {
-        setCounter(counter + 1);
-      }
-    } else {
-      onClose();
-    }
-  }
-
   return (
-    <div className="recipe-info-overlay" onClick={(e) => handleClickOutside(e)} >
+    <div className="recipe-info-overlay" onClick={(e) => isTouchDevice ? e.stopPropagation() : onClose} onTouchStart={onClose} >
       <div className="recipe-info-background background">
         <div className="recipe-info-content" onClick={(e) => e.stopPropagation()}>
           <h2>{recipe.Name}</h2>

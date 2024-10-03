@@ -112,13 +112,13 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
   useEffect(() => {
     const handleResize = () => {
       if (isOpen) {
-        setIsFilterOpen(false);
-        setInfoOpen(false);
         setContainerMaxHeight(getComputedMaxHeight());
       }
     };
-
+    
     const debounceResize = () => {
+      setIsFilterOpen(false);
+      setInfoOpen(false);
       clearTimeout(window.resizeTimeout);
       window.resizeTimeout = setTimeout(handleResize, 100); // 100ms debounce
     };

@@ -8,6 +8,7 @@ const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet, max_
 
   // Use `id` as the draggableId if specified, otherwise use `Name`
   const draggableId = useIdAsDraggableId ? recipe.id : recipe.Name;
+  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
 
   return (
     <Draggable key={draggableId} draggableId={draggableId} index={index}>
@@ -16,7 +17,6 @@ const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet, max_
           className={`recipe-list ${useIdAsDraggableId ? 'menu-recipe' : ''}`}
           ref={provided.innerRef}
           {...provided.draggableProps}
-          
         >
           <div className='recipe-title'>
             <a href={recipe.Link} target="_blank" rel="noopener noreferrer" {...provided.dragHandleProps}>
@@ -26,7 +26,7 @@ const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet, max_
               {/* Stop drag events for specific icons */}
               <AiOutlineInfoCircle 
                 className='info-icon' 
-                onClick={() => toggleInfo(recipe)} 
+                onClick={(e) => isTouchDevice ? e.stopPropagation() : toggleInfo(recipe)} 
                 onTouchStart={(e) => { e.stopPropagation(); toggleInfo(recipe); }} 
                 onMouseDown={(e) => e.stopPropagation()} // Stop drag on mouse too
               />
@@ -34,14 +34,14 @@ const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet, max_
                 favouriteSet.has(recipe.Name) ? (
                   <MdOutlineStarPurple500 
                     className='star-icon filled' 
-                    onClick={() => toggleFavourite(recipe)} 
+                    onClick={(e) => isTouchDevice ? e.stopPropagation() : toggleFavourite(recipe)} 
                     onTouchStart={(e) => { e.stopPropagation(); toggleFavourite(recipe); }} 
                     onMouseDown={(e) => e.stopPropagation()} // Prevent drag on star click
                   />
                 ) : (
                   <MdOutlineStarBorderPurple500 
                     className='star-icon border' 
-                    onClick={() => toggleFavourite(recipe)} 
+                    onClick={(e) => isTouchDevice ? e.stopPropagation() : toggleFavourite(recipe)} 
                     onTouchStart={(e) => { e.stopPropagation(); toggleFavourite(recipe); }} 
                     onMouseDown={(e) => e.stopPropagation()} // Prevent drag on star click
                   />
@@ -49,7 +49,7 @@ const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet, max_
               ) : (
                 <RiDeleteBack2Fill 
                   className='remove-icon' 
-                  onClick={() => removeRecipe(recipe)} 
+                  onClick={(e) => isTouchDevice ? e.stopPropagation() : removeRecipe(recipe)} 
                   onTouchStart={(e) => { e.stopPropagation(); removeRecipe(recipe); }} 
                   onMouseDown={(e) => e.stopPropagation()} // Prevent drag on delete click
                 />
