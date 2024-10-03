@@ -2403,6 +2403,7 @@ th {
 
   .setting-content {
     padding: 0 5vw;   
+    overflow-x: hidden;
   }
   .setting-item {
     width: 90vw;
@@ -2426,6 +2427,27 @@ th {
     width: 90vw;
   }
 
+  .dropdown {
+    width: 90vw;
+    left: calc(50% - 45vw);
+  }
+
+  .modal-content {
+    max-width: 80vw;
+  }
+
+  .modal input {
+    width: 70vw;
+  }
+
+  .dropdown-menu{
+    transform: translate(0, 65%);
+    width: 125px;
+  }
+
+  .delete-popup {
+    width: 70vw;
+  }
 
   /* Change the sidebar to be on the top of the page under the profile bar */
   /* Change the sidebar to be on the top of the page under the profile bar */

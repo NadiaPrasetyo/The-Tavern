@@ -84,7 +84,7 @@ function Settings({userdata}) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: localStorage.getItem('username'),
+        username: userdata.username,
         currentPassword: passwords.currentPassword,
         newPassword: passwords.newPassword,
       }),
