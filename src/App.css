@@ -768,6 +768,7 @@ th {
   user-select: none;
 
   a {
+    width: fit-content;
     color: var(--color-blue-link);
     font-size: calc(5px + 1vmin);
     display: none;
@@ -2449,7 +2450,35 @@ th {
     width: 70vw;
   }
 
-  /* Change the sidebar to be on the top of the page under the profile bar */
+  .editItem{
+    width: 25vw;
+  }
+
+  .removeFromInventory {
+    max-width: 25vw;
+    overflow-wrap: break-word;
+  }
+
+  .inventory h4, .grocery h4 {
+    max-width: 80vw;
+    overflow-wrap: break-word;
+  }
+
+  .itemName {
+    /* STILL NEED FIXING OF MAX WIDTH */
+    width: 25vw;
+    overflow-wrap: break-word;
+  }
+
+  .groceryItem a, .addToGrocery {
+    margin-top: 7px;
+    font-size: calc(7px + 1vmin);
+  }
+
+  .grocery .editItem {
+    width: 20vw;
+  }
+
   /* Change the sidebar to be on the top of the page under the profile bar */
   .sidebar {
     padding: 0;

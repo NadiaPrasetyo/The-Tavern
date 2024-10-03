@@ -13,6 +13,8 @@ function Grocery({userdata}) {
   const [isEditable, setIsEditable] = useState({}); // State to track which items are editable
   const [isLoading, setIsLoading] = useState(false);
 
+  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+
   const getGrocery = async (e) => {
     setIsLoading(true);
     try {
@@ -99,8 +101,22 @@ function Grocery({userdata}) {
         console.log("Grocery item added successfully");
         //clear the input field
         document.querySelector('.addGroceryItem').value = '';
-        //update the grocery list
-        setGroceryList([...groceryList, { Name: item, Category: category }]);
+
+        // if Name: '' , Category: category already exists in groceryList, just change the Name
+        if (groceryList.some(element => element.Name === '' && element.Category === category)) {
+          setGroceryList(
+            groceryList.map((element) => {
+              if (element.Name === '' && element.Category === category) {
+                return { Name: item, Category: category };
+              }
+              return element;
+            }
+          ));
+        } else {
+          //update the grocery list
+          setGroceryList([...groceryList, { Name: item, Category: category }]);
+        }
+
       } else {
         console.log("Error adding grocery item");
       }
@@ -203,6 +219,14 @@ function Grocery({userdata}) {
       const item = inputValues[category][index];
       const originalName = categoryList[category][index].Name;
       const originalCategory = categoryList[category][index].Category;
+
+      if (originalName === item.Name && originalCategory === item.Category) {
+        setIsEditable({
+          ...isEditable,
+          [category]: isEditable[category].map((item, i) => (i === index ? !item : item))
+        });
+        return;
+      }
 
       console.log("Original Name:", originalName);
 
@@ -367,7 +391,9 @@ function Grocery({userdata}) {
                             <input type="checkbox" id={item.Name} name={item.Name} value={item.Name} />
                             <span className="checkmark"></span>
                             <span className='itemName'>{item.Name}</span>
-                            <a onClick={() => addToInventory(item.Name)}> add to Inventory</a>
+                            <a onClick={(e) => isTouchDevice? e.stopPropagation() : addToInventory(item.Name)}
+                              onTouchStart={(e) => { e.stopPropagation(); addToInventory(item.Name); }}
+                              > add to Inventory</a>
                             <a className="removeItem" onClick={() => removeItem(item.Category, item.Name)}> remove from Grocery</a>
                           </label>
                         )}

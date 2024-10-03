@@ -31,7 +31,7 @@ const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, inIn
       if (infoPopUp) {
         setInfoPopUp(false);
       }
-    }, 15000); 
+    }, 10000); // 10 seconds
 
     return () => {
       clearTimeout(timeoutId); // Clear the timeout on cleanup
@@ -72,7 +72,7 @@ const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, inIn
   if (!isOpen) return null; // Don't render anything if not open
 
   return (
-    <div className="recipe-info-overlay" onClick={(e) => isTouchDevice ? e.stopPropagation() : onClose} onTouchStart={onClose} >
+    <div className="recipe-info-overlay" onClick={(e) => isTouchDevice ? e.stopPropagation() : onClose()} onTouchStart={(e) => e.target === e.currentTarget ? onClose() : null}>
       <div className="recipe-info-background background">
         <div className="recipe-info-content" onClick={(e) => e.stopPropagation()}>
           <h2>{recipe.Name}</h2>

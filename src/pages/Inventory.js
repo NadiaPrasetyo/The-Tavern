@@ -14,6 +14,8 @@ function Inventory({userdata}) {
   const [popupVisible, setPopupVisible] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
+  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+
   // Get the inventory from the server
   const getInventory = async () => {
     setIsLoading(true);
@@ -97,10 +99,23 @@ function Inventory({userdata}) {
     }).then((response) => {
       if (response.status === 200) {
         console.log("Inventory item added successfully");
-        document.querySelector('.addGroceryItem').value = '';
-        setInventoryList(
-          [...inventoryList, 
-          { Name: item, Category: category }]);
+        document.querySelector('.addGroceryItem').value = ''; // Clear the input field
+        
+        // Name: '', Category: category exists in the inventoryList, just change the Name
+        if (inventoryList.some(element => element.Name === '' && element.Category === category)) {
+          setInventoryList(
+            inventoryList.map((element) => {
+              if (element.Name === '' && element.Category === category) {
+                return { Name: item, Category: category };
+              }
+              return element;
+            })
+          );
+        } else {
+          setInventoryList(
+            [...inventoryList, 
+            { Name: item, Category: category }]);
+        }
       } else {
         console.log("Error adding inventory item");
       }
@@ -204,6 +219,15 @@ function Inventory({userdata}) {
     if (isEditable[category][index]) {
       const item = inputValues[category][index];
       const originalName = categoryList[category][index].Name;
+
+      if (originalName === item.Name && categoryList[category][index].Category === item.Category) {
+        setIsEditable({
+          ...isEditable,
+          [category]: isEditable[category].map((item, i) => (i === index ? !item : item))
+        });
+        return
+      }
+
       const originalCategory = categoryList[category][index].Category;
 
       console.log("Original Name:", originalName);
@@ -375,12 +399,23 @@ function Inventory({userdata}) {
 
                           {/* Display Remove item link if not in edit mode */}
                           {!isEditable[category]?.[index] && (
-                            <span className="inventoryActionsContainer" onMouseEnter={togglePopup(category, index, "enter")} onMouseLeave={togglePopup(category, index, "leave")}>
-                              <a className="removeFromInventory" onClick={() => removeItem(category, item.Name)}>
+                            <span className="inventoryActionsContainer" onMouseEnter={(e) => isTouchDevice ? e.stopPropagation() : togglePopup(category, index, "enter")()} onMouseLeave={togglePopup(category, index, "leave")}>
+                              <a className="removeFromInventory" 
+                              onClick={(e) => isTouchDevice ? e.stopPropagation() : removeItem(category, item.Name)} 
+                              onTouchStart={(e) => {
+                                if (popupVisible[category]?.[index]) {
+                                  e.stopPropagation();
+                                  togglePopup(category, index, "leave")();
+                                  removeItem(category, item.Name);
+                                } else {
+                                  e.stopPropagation();
+                                  togglePopup(category, index, "enter")();
+                                }
+                              }}>
                                 {item.Name}
                               </a>
                               {popupVisible[category]?.[index] &&
-                                <a className="addToGrocery" onClick={addToGrocery(category, item.Name)}>add to Grocery</a>
+                                <a className="addToGrocery" onClick={() => { addToGrocery(category, item.Name)(); togglePopup(category, index, "leave")();}}>add to Grocery</a>
                               }
                             </span>
                           )}
