@@ -15,7 +15,7 @@ function Help({ userdata }) {
     const [selectedVersion, setSelectedVersion] = useState('Desktop');
     const [selectedQuestion, setSelectedQuestion] = useState(null);
 
-    const isSmallScreen = window.innerWidth < 768;
+    const isSmallScreen = window.matchMedia('(max-width: 480px)').matches;
 
     const FAQ = [
         {
@@ -181,15 +181,12 @@ function Help({ userdata }) {
                         styles={{
                             panel: { 
                                 marginRight: isSmallScreen ? '0' : '4rem',
-                                height: '90vh',
+                                height: isSmallScreen ? '620px' : 'calc(min(600px, 95%))',
                                 bottom: '0',
                             },
                             closeBtn: {
                                 translate: isSmallScreen ? "33% -40%" : "33% -33%",
                             },
-                        }}
-                        onToggle={(open) => {
-                            console.log(`Donate panel ${open ? 'opened' : 'closed'}`)
                         }}>
                         {/* add image of kofi logo */}
                         <img className='kofi-logo' src="kofi-logo.webp" alt="Ko-fi logo" />

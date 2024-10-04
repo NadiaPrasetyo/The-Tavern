@@ -2166,12 +2166,13 @@ th {
 .accordian {
   width: 100%;
   margin: 0 auto;
-  padding: 15px 20px;
+  padding: 40px 20px 15px 20px;
 }
 
 .faq-item {
+  width: 100%;
   background-color: var(--color-beige-medium);
-  margin-bottom: 10px;
+  margin: 0 0 10px 10px;
   padding: 10px 20px;
   border-radius: 8px;
   transition: background-color 0.3s ease;
@@ -2182,7 +2183,6 @@ th {
 }
 
 .faq-title {
-  width: 60vw;
   font-weight: 600;
   display: flex;
   justify-content: space-between;
