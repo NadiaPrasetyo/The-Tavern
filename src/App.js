@@ -13,14 +13,26 @@ import Trial from './pages/Trial';
 import Feedback from './pages/Feedback';
 import Loading from './components/Loading';
 import DropDown from './components/DropDown';
+import Landing from './pages/Landing';
 import Help from './pages/Help';
 import React, { useState, useEffect, useRef } from 'react';
 import {jwtDecode} from 'jwt-decode';
 
-const fetchUserProfile = async () => {
-  const token = sessionStorage.getItem("token");
+/**
+ * APP COMPONENT of the application
+ * @author The Tavern Devs
+ */
 
-  if (!token) {
+/**
+ * Function to fetch user profile data from the server
+ * verifies the token and fetches the user profile data
+ * used to get user data in a secure way
+ * @returns the user profile data
+ */
+const fetchUserProfile = async () => {
+  const token = sessionStorage.getItem("token");//try to get the token from the session storage
+
+  if (!token) {//if no token found
     console.error("No token found, please log in.");
     return null;
   }
@@ -41,26 +53,37 @@ const fetchUserProfile = async () => {
   }
 };
 
-// Function to check token expiration
+/**
+ * Function to check token expiration
+ * checks if the token has expired
+ * @param {string} token the token to be checked
+ * @param {function} handleEndSession the function to handle the end of the session
+ */
 const checkTokenExpiration = (token, handleEndSession) => {
   if (!token) return;
   
-  const decoded = jwtDecode(token);
+  const decoded = jwtDecode(token);//get the expiration time of the token
   const currentTime = Date.now() / 1000;
 
-  if (decoded.exp < currentTime) {
+  if (decoded.exp < currentTime) {//if the token has expired
     console.error("Token expired. Redirecting to login.");
-    handleEndSession(false);
-  } else if (decoded.exp - 300 < currentTime) {
+    handleEndSession(false);//end the session
+  } else if (decoded.exp - 300 < currentTime) {//5 minutes before the token expires
     console.log("Token near expiration. Asking user to continue session.");
-    handleEndSession(true);
+    handleEndSession(true);//ask the user to continue the session
   }
 };
 
+/**
+ * PrivateRoute component to handle the private routes so that it checks if the user is logged in or not
+ * @param {object} element the element to be rendered
+ * @param {function} handleEndSession the function to handle the end of the session
+ * @param {function} setUsername the function to set the username
+ * @returns the element to be rendered
+ */
 function PrivateRoute({ element, handleEndSession, setUsername }) {
   const [userdata, setUserdata] = useState(null);
   const [loading, setLoading] = useState(true);
-  const location = window.location;
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
@@ -69,7 +92,7 @@ function PrivateRoute({ element, handleEndSession, setUsername }) {
       window.location.href = '/login';
       return;
     }
-    checkTokenExpiration(token, handleEndSession, location);
+    checkTokenExpiration(token, handleEndSession);//check if the token has expired
 
     const fetchData = async () => {
       const data = await fetchUserProfile();
@@ -84,7 +107,7 @@ function PrivateRoute({ element, handleEndSession, setUsername }) {
     };
 
     fetchData();
-  }, [handleEndSession]);
+  }, [handleEndSession]);//listen for changes in the handleEndSession function or when handleEndSession is called
 
   if (loading) {
     return (
@@ -95,12 +118,16 @@ function PrivateRoute({ element, handleEndSession, setUsername }) {
   }
 
   if (userdata) {
-    return React.cloneElement(element, { userdata });
+    return React.cloneElement(element, { userdata });//to add user data as a prop
   } else {
     return null;
   }
 }
 
+/**
+ * App component to render the application
+ * @returns the App component
+ */
 function App() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropDownEnddedOpen, setDropDownEnddedOpen] = useState(false);
@@ -108,6 +135,11 @@ function App() {
   const [username, setUsername] = useState('');
   const timerRef = useRef(null);
 
+  /**
+   * Function to handle the end of the session
+   * @param {boolean} ask whether to ask the user to continue the session or not
+   * @returns the end of the session
+   */
   const handleEndSession = (ask) => {
     if (!ask) {
       setDropdownOpen(false);
@@ -124,7 +156,10 @@ function App() {
     }, 300000); // 5 minutes in milliseconds
   };
 
-  // Handle session continuation
+  /**
+   * Function to handle the continue session
+   * set the token to continue the session once fetched
+   */
   const handleContinueSession = async () => {
     clearTimeout(timerRef.current); // Clear the timeout since the user clicked "Continue"
 
@@ -177,7 +212,8 @@ function App() {
 
       <Routes>
         <Route path="/">
-          <Route index element={<Login />} />
+          <Route index element={<Landing />} />
+          <Route path="landing" element={<Landing />} />
           <Route path="home" element={<PrivateRoute element={<Home />} handleEndSession={handleEndSession} setUsername={setUsername} />} />
           <Route path="inventory" element={<PrivateRoute element={<Inventory />} handleEndSession={handleEndSession} setUsername={setUsername} />} />
           <Route path="weekly-menu" element={<PrivateRoute element={<Menu />} handleEndSession={handleEndSession} setUsername={setUsername} />} />

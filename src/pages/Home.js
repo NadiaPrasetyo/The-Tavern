@@ -11,8 +11,13 @@ const user = {
   username: 'User',
 };
 
-
+/**
+ * Get today's menu from the server
+ * GET method ONLY
+ * @returns menu if found as an array
+ */
 function getTodayMenu() {
+  //this is a function because I did not know it could be a const in the other main function
   const getTodayMenu = async (e) => {
     // Get today's menu from the server
 
@@ -25,7 +30,6 @@ function getTodayMenu() {
         username: user.username
       }),
     });
-
 
      const menu = await response.json();
 
@@ -41,6 +45,12 @@ function getTodayMenu() {
   return getTodayMenu();
 }
 
+/**
+ * TODAYMENU COMPONENT of the application
+ * @param {object} today the menu for today
+ * @param {function} onRecipeClick the function to handle the recipe click
+ * @param {string} highlightedRecipe the highlighted recipe
+ */
 // TodayMenu component where each menu item is clickable
 function TodayMenu({ today, onRecipeClick, highlightedRecipe }) {
   if (today.length === 0) {
@@ -88,6 +98,10 @@ function TodayMenu({ today, onRecipeClick, highlightedRecipe }) {
   );
 }
 
+/**
+ * Get the 5 last grocery list from the server
+ * @returns the grocery list as an array
+ */
 function get5lastGroceryList() {
   // Get grocery list from the server
   const get5lastGroceryList = async (e) => {
@@ -113,6 +127,11 @@ function get5lastGroceryList() {
 
   return get5lastGroceryList();
 }
+
+/**
+ * GROCERYLIST COMPONENT of the application
+ * @returns the grocery list component
+ */
 function GroceryList() {
   const [groceryList, setGroceryList] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -120,6 +139,10 @@ function GroceryList() {
 
   // Fetch grocery list when the component mounts
   React.useEffect(() => {
+    /**
+     * Fetch the grocery list from the server by calling the get5lastGroceryList function
+     * sets the grocery list and loading state
+     */
     const fetchGroceryList = async () => {
       try {
         const grocery = await get5lastGroceryList();
@@ -144,6 +167,7 @@ function GroceryList() {
     );
   }
 
+  // If the grocery list is empty, display a message
   if (groceryList.length === 0) {
     return (
       <section className="groceryList">
@@ -162,6 +186,11 @@ function GroceryList() {
     );
   }
 
+  /**
+   * Add a grocery item to the list in the database
+   * @param {string} value the grocery item to add
+   * Sets the grocery list state with the updated grocery list
+   */
   function addGroceryItem(value) {
     const addGroceryItem = async () => {
       const response = await fetch('/api/add-grocery-item', {
@@ -181,13 +210,11 @@ function GroceryList() {
         get5lastGroceryList().then((grocery) => {
           setGroceryList(grocery);
         });
-        console.log("Grocery item added");
-        document.querySelector('.addGroceryItem').value = '';
-        document.querySelector('.addGroceryItem').placeholder = 'Grocery item added to the list';
+        document.querySelector('.addGroceryItem').value = ''; // Clear the input field
+        document.querySelector('.addGroceryItem').placeholder = 'Grocery item added to the list'; // Display a message in the input field
       } else if (response.status === 409) {
-        console.log("Grocery item already exists");
-        document.querySelector('.addGroceryItem').value = '';
-        document.querySelector('.addGroceryItem').placeholder = 'Grocery item already exists in the list';
+        document.querySelector('.addGroceryItem').value = '';// Clear the input field
+        document.querySelector('.addGroceryItem').placeholder = 'Grocery item already exists in the list';// Display a message in the input field
       } else {
         console.log("Error adding grocery item");
       }
@@ -196,6 +223,14 @@ function GroceryList() {
     return addGroceryItem();
   }
 
+  /**
+   * Add a grocery item to the list in the database
+   * Toggles the grocery item open state
+   * Sets the button and input field animations
+   * Sets the placeholder text for the input field
+   * Sets the button position
+   * Sets the grocery item open state
+   */
   function addGrocery() {
     const groceryItem = document.querySelector('.addGroceryItem');
     const button = document.querySelector('.addGrocery');
@@ -215,6 +250,7 @@ function GroceryList() {
         addGroceryItem(value);
       }
 
+      //delay the animation to close the input field after adding the item or showing the error message
       setTimeout(() => {
         button.style.animation = 'moveLeft 0.5s';
         button.style.left = '-3px';
@@ -228,6 +264,11 @@ function GroceryList() {
     setGroceryItemOpen(!groceryItemOpen);
   }
 
+  /**
+   * Add a grocery item to the inventory in the database
+   * @param {object} event the event object
+   * Updates the grocery list state with the updated grocery list
+   */
   function addToInventory(event) {
     const item = event.target.parentNode.querySelector('.itemName').textContent;
 
@@ -258,10 +299,12 @@ function GroceryList() {
           }),
         });
 
+        // Update the grocery list with the updated grocery list
         if (response2.status === 200) {
           get5lastGroceryList().then((grocery) => {
             setGroceryList(grocery);
           });
+
         } else {
           console.log("Error removing grocery item from list");
         }
@@ -297,6 +340,10 @@ function GroceryList() {
   );
 }
 
+/**
+ * Function to get a random recipe from the server
+ * @returns the random recipe from the server
+ */
 function getRandomRecipe() {
   const getRandom = async (e) => {
     const response = await fetch('/api/get-random-recipe',{
@@ -309,8 +356,8 @@ function getRandomRecipe() {
     const recipe = await response.json();
 
     if (response.status === 200) {
-      //filter the recipe so its not preppykitchen
-      recipe.recipe = recipe.recipe.filter(recipe => !recipe.Link.includes("preppykitchen.com"));
+      //filter out the preppykitchen.com recipes
+      recipe.recipe = recipe.recipe.filter(item => !item.Link.includes("preppykitchen.com"));
       return recipe.recipe;  // Update the state with the fetched recipe
     } else {
       console.log("Error getting recipe");
@@ -320,6 +367,10 @@ function getRandomRecipe() {
   return getRandom();
 }
 
+/**
+ * Function to find a recipe by name from the server
+ * just to get the source of the recipe
+ */
 function findRecipe(RecipeName) {
   const findRecipe = async (e) => {
     const response = await fetch('/api/find-recipe',{
@@ -345,8 +396,12 @@ function findRecipe(RecipeName) {
   return findRecipe();
 }
 
-
-// QuickRecipe component to display the iframe
+/**
+ * QUICKRECIPE COMPONENT of the application
+ * @param {string} source the source of the recipe
+ * @returns the quick recipe component
+ * displays the recipe in an iframe
+ */
 function QuickRecipe({ source }) {
   // If the source is empty, display a loading message
   if (source === "") {
@@ -382,6 +437,10 @@ function QuickRecipe({ source }) {
       );
 }
 
+/**
+ * Get the quick fruits from the server
+ * @returns the quick fruits from the server
+ */
 function getQuickFruits() {
   const getQuickFruits = async (e) => {
     // Get quick fruits from the server
@@ -409,6 +468,10 @@ function getQuickFruits() {
   return getQuickFruits();
 }
 
+/**
+ * get the quick vegetables from the server
+ * @returns the quick vegetables from the server
+ */
 function getQuickVegetables() {
   const getQuickVegetables = async (e) => {
     // Get quick vegetables from the server
@@ -436,7 +499,12 @@ function getQuickVegetables() {
   return getQuickVegetables();
 }
 
+// Counter to limit the number of retries for fetching quick ingredients
 let counter4 = 0;
+/**
+ * Quick Fruits and Vegetables component of the application
+ * @returns the quick fruits and vegetables component
+ */
 function QuickIngredient(){
   counter4 ++;
   const [fruits, setFruit] = React.useState([]);
@@ -516,6 +584,15 @@ function QuickIngredient(){
   );
 }
 
+/**
+ * WEEKCALENDAR COMPONENT of the application
+ * @returns the week calendar component
+ * displays the week calendar
+ * based on the first day of the week
+ * and highlights the current day
+ * and displays the date
+ * and the day of the week
+ */
 function WeekCalendar() {
   const firstDay = localStorage.getItem('firstDay');
 
@@ -544,6 +621,13 @@ function WeekCalendar() {
     date.setDate(weekStart.getDate() + i);
     dates.push(date);
   }
+
+  /**
+   * Trim the date to only show the day number
+   * @param {number} index the index of the date
+   * @param {object} date the date object
+   * @returns the trimmed date to get the highlighted current day
+   */
   function trimDate(index, date) {
     // Calculate the correct day index based on the first day of the week
     const todayIndex = (day + 6 - firstDayIndex) % 7;
@@ -574,14 +658,20 @@ function WeekCalendar() {
     </section>
   );
 }
-        
+     
+// Set the maximum left position for the add grocery button in terms of left position default is 250px
 let leftMAX = '250px';
 
+/**
+ * HOME COMPONENT of the application
+ * @param {object} userdata the user data
+ * @returns the home component
+ */
 function Home({userdata}) {
   user.username = userdata.username;
   document.onkeydown = function(event) {
     if (event.keyCode === 13) {  // 13 is the keyCode for the 'Enter' key
-      event.preventDefault();  // Prevent the default form submission
+      event.preventDefault();  // Prevent the default form submission on Enter key
       document.querySelector('.addGrocery').click();  // Simulate a button click
     }
   };
@@ -594,7 +684,7 @@ function Home({userdata}) {
   // Update the window width state when the window is resized
   useEffect(() => {
     if (windowWidth < 800) {
-      leftMAX = '130px';
+      leftMAX = '130px';//change the left position of the add grocery button if the window width is less than 800px
     }
 
     const handleResize = () => {
@@ -612,6 +702,7 @@ function Home({userdata}) {
     let counter = 0;
     const MAX_RETRIES = 1;
     
+    // Fetch today's menu
     const fetchMenu = () => {
       getTodayMenu().then((menu) => {
         if (menu.length > 0) {
@@ -620,7 +711,7 @@ function Home({userdata}) {
           setHighlightedRecipe(menu[0].Name); // Highlight the first item
           findRecipe(menu[0].Name).then((recipe) => {
             if (recipe.length > 0) {
-              setSource(recipe[0].Link);  // Set iframe source to the first recipe
+              setSource(recipe[0].Link);  // Set iframe source to the first recipe by default
             }
           });
         } else if (counter < MAX_RETRIES) {
@@ -629,6 +720,7 @@ function Home({userdata}) {
           fetchMenu();
         } else {
           // If no menu is found after max retries, get a random recipe
+          setToday([{ Name: "No menu found" }]);
           getRandomRecipe().then((recipe) => {
             if (recipe.length > 0) {
               setSource(recipe[0].Link);  // Set iframe source to a random recipe

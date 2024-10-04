@@ -57,6 +57,7 @@
   --color-teal-blue: #88b9c3a8;
   --color-teal-bluer: #85bac59c;
   --color-cyan-light: #bfe6f0bc;
+  --color-blue-base: #cfe6ef;
   /* Included item background */
 
   /*Purple colours  */
@@ -71,6 +72,7 @@
   --color-lavender-light2: #e8c8f4bb;
   /* Ingredient item background */
   --color-lavender-light: #a149c1a4;
+  --color-purple-base: #e6cfef;
   /* Tags info background */
 
 
@@ -111,6 +113,7 @@
   --color-pink-hover: #ecb3c9d4;
   /* Exclude item hover background */
   --color-pink-link: #c1126f85;
+  --color-pink-base: #efcfd9;
   /* Edit item color */
 }
 
@@ -1088,7 +1091,6 @@ th {
   border: none;
   font-size: calc(10px + 1vmin);
 
-
   &:focus {
     outline: none;
   }
@@ -1130,6 +1132,11 @@ th {
     background-color: var(--color-transparent);
     border: none;
     font-size: calc(10px + 1vmin);
+  }
+
+  .groceryItem {
+    max-width: 20vw;
+    overflow-wrap: break-word;
   }
 
 }
@@ -2481,6 +2488,129 @@ th {
   background-color: var(--color-button-hover);
 }
 
+/* LANDING PAGE */
+.landingPage{
+  display: grid;
+  
+  img{
+    mix-blend-mode: multiply;
+    z-index: 500;
+  }
+}
+
+#croissant{
+  width: 120px;
+}
+
+#egg{
+  width: 100px;
+}
+
+#carrot{
+  width: 70px;
+}
+
+#soup{
+  width: 150px;
+}
+
+#noodle{
+  width: 150px;
+}
+
+#cow{
+  width: 250px;
+}
+
+#burger{
+  width: 150px;
+}
+
+#beer{
+  width: 120px;
+}
+
+#tomato{
+  width: 120px;
+}
+
+#ricebowl{
+  width: 150px;
+}
+
+#cake{
+  width: 200px;
+}
+
+#spinach{
+  width: 200px;
+}
+
+#donut{
+  width: 110px;
+}
+
+
+.landingHeader{
+  display: flex;
+  /* make the profilebar fixed at the top of the screen */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  justify-content:space-between;
+  height: 30px;
+  background-color: rgba(255, 255, 255, 0.1);
+  align-items: center;
+  font: calc(10px + 1vmin);
+
+  img{
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.landingPage div{
+  padding-top: 30px;
+  width: 100%;
+  height: calc(100vh - 30px);
+}
+
+.section1{
+  background-color: var(--color-green-light);
+}
+
+.section2{
+  background-color: var(--color-blue-base);
+}
+
+.section3{
+  background-color: var(--color-purple-base);
+}
+
+.section4{
+  background-color: var(--color-pink-base);
+}
+
+.landingFooter{
+  display: flex;
+  justify-content:center;
+  height: 30px;
+  align-items: center;
+  font: calc(10px + 1vmin);
+  background-color: var(--color-pink-light);
+}
+
+.loginOrRegisterButton{
+  background-color: var(--color-brown-dark3);
+  color: var(--color-background);
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+
 /* MEDIA QUERIES FOR MOBILE VERSION */
 @media only screen and (max-width: 768px) {
 
@@ -2619,12 +2749,6 @@ th {
     overflow-wrap: break-word;
   }
 
-  .itemName {
-    /* STILL NEED FIXING OF MAX WIDTH */
-    width: 25vw;
-    overflow-wrap: break-word;
-  }
-
   .groceryItem a, .addToGrocery {
     margin-top: 7px;
     font-size: calc(7px + 1vmin);
@@ -2754,8 +2878,6 @@ th {
     left: 0 !important;
     overflow-y: scroll;
   }
-
-  /* CHANGE LATER */
 
   @keyframes moveRight {
     from {
