@@ -3,6 +3,10 @@ import Sidebar from '../components/sidebar.js';
 
 import React from 'react';
 
+/**
+ * NO PAGE FOUND COMPONENT of the application
+ * @returns 404 Page Not Found
+ */
 function NoPage() {
 
   return (

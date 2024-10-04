@@ -9,29 +9,38 @@ import { GiQuillInk } from "react-icons/gi";
 import { GiTwoHandedSword } from "react-icons/gi";
 import { GiScrollQuill } from "react-icons/gi";
 
+/**
+ * SIDEBAR COMPONENT of the application
+ * @param {object} props the source of the page where the sidebar is located
+ */
 function Sidebar(props) {
     const [isClosed, setSideBar] = React.useState(false);
     //get the window width
     const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
+    
+    //listen for changes in the window width
     React.useEffect(() => {
-        if (window.innerWidth < 768) {
+        if (window.innerWidth < 768) { //if the window width is less than 768px set the sidebar to true (closed)
             setSideBar(true);
         }
         
+        //handle the window resize
         const handleWindowResize = () => {
             setWindowWidth(window.innerWidth);
             if (window.innerWidth < 768) {
-                setSideBar(true);
+                setSideBar(true);//if the window width is less than 768px set the sidebar to true (closed)
             }
         };
         window.addEventListener('resize', handleWindowResize);
         return () => {
             window.removeEventListener('resize', handleWindowResize);
         };
-    }, []);
-    
+    }, []);//only run when the component mounts
+
+    //initialize the HTML template that will be returned
     var template;
 
+    //check if the sidebar is closed
     React.useEffect(() => {
         const isClosedFromStorage = sessionStorage.getItem('isClosed') === 'true';
         if (isClosedFromStorage) {
@@ -39,6 +48,11 @@ function Sidebar(props) {
         }
     }, []);
 
+    /**
+     * Function to toggle the sidebar
+     * changes the sidebar from open to closed and vice versa and the animation of the sidebar
+     * alters the styling of sidebar and content
+     */
     function toggleSidebar() {
         if (isClosed) {
             document.querySelector('.sidebar').style.animation = 'open 0.5s';
@@ -46,7 +60,7 @@ function Sidebar(props) {
             document.querySelector('.content').style.left = '250px';
             document.querySelector('.content').style.maxWidth = 'calc(100vw - 300px)';
             document.getElementById('sidebar-logo-small').style.animation = 'becomeBig 0.5s';
-            if (props.setIsOpen !== undefined) {
+            if (props.setIsOpen !== undefined) {//if the origin sidebar is closed set the origin sidebar to open
                 props.setIsOpen(true);
             }
         }
@@ -57,18 +71,22 @@ function Sidebar(props) {
             document.querySelector('.content').style.left = '50px';
             document.querySelector('.content').style.maxWidth = 'calc(100vw - 100px)';
             document.getElementById('sidebar-logo').style.animation = 'becomeSmall 0.5s';
-            if (props.setIsOpen !== undefined) {
+            if (props.setIsOpen !== undefined) {//if the origin sidebar is closed set the origin sidebar to open
                 props.setIsOpen(false);
             }
         }
-        console.log("isClosed = " + isClosed);
         setSideBar(!isClosed);
         sessionStorage.setItem('isClosed', !isClosed);
         
     }
 
+    /**
+     * Function to get the active button in the sidebar
+     * @param {object} openprop the source of the page where the sidebar is located
+     * @return HTML template of the active button
+     */
     function GetActive(openprop){
-
+        //there's a better way to do this, but I am not going to do it
         if (props.source === null){
             props.source = "Home";
         }
@@ -247,7 +265,10 @@ function Sidebar(props) {
     }
     }
 
-
+    /**
+     * Function to return the open sidebar
+     * @returns HTML template of the open sidebar
+     */
     function openSidebar() {
         template = (
             <div className="sidebar">
@@ -268,6 +289,10 @@ function Sidebar(props) {
             return template;
     }
     
+    /**
+     * Function to return the closed sidebar
+     * @returns HTML template of the closed sidebar
+     */
     function closeSidebar() {
         template = (
             <div className="sidebar closed">
@@ -288,6 +313,7 @@ function Sidebar(props) {
         return template;
     }
 
+    //return the closed sidebar if the window width is less than 768px
     if (windowWidth < 768) {
         return closeSidebar();
     } else    
