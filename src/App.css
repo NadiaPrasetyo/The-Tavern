@@ -2336,7 +2336,65 @@ th {
 /* LANDING PAGE */
 .landingPage{
   display: grid;
+  
+  img{
+    mix-blend-mode: multiply;
+    z-index: 500;
+  }
 }
+
+#croissant{
+  width: 120px;
+}
+
+#egg{
+  width: 100px;
+}
+
+#carrot{
+  width: 70px;
+}
+
+#soup{
+  width: 150px;
+}
+
+#noodle{
+  width: 150px;
+}
+
+#cow{
+  width: 250px;
+}
+
+#burger{
+  width: 150px;
+}
+
+#beer{
+  width: 120px;
+}
+
+#tomato{
+  width: 120px;
+}
+
+#ricebowl{
+  width: 150px;
+}
+
+#cake{
+  width: 200px;
+}
+
+#spinach{
+  width: 200px;
+}
+
+#donut{
+  width: 110px;
+}
+
 
 .landingHeader{
   display: flex;
