@@ -15,6 +15,8 @@ function Help({ userdata }) {
     const [selectedVersion, setSelectedVersion] = useState('Desktop');
     const [selectedQuestion, setSelectedQuestion] = useState(null);
 
+    const isSmallScreen = window.innerWidth < 768;
+
     const FAQ = [
         {
             question: 'Q: How do I change my password?',
@@ -174,10 +176,17 @@ function Help({ userdata }) {
                         username="thetaverndevs"
                         classNames={{
                             donateBtn: 'donateBtn',
-                            profileLink: 'myProfileLink'
+                            profileLink: 'myProfileLink',
                         }}
                         styles={{
-                            panel: { marginRight: '4em' }
+                            panel: { 
+                                marginRight: isSmallScreen ? '0' : '4rem',
+                                height: '90vh',
+                                bottom: '0',
+                            },
+                            closeBtn: {
+                                translate: isSmallScreen ? "33% -40%" : "33% -33%",
+                            },
                         }}
                         onToggle={(open) => {
                             console.log(`Donate panel ${open ? 'opened' : 'closed'}`)
