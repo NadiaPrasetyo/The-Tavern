@@ -1860,7 +1860,7 @@ th {
   margin: 0 10px;
 }
 
-.pref p {
+.pref p, .pref a {
   margin: 5px 8px 10px;
   letter-spacing: 0.5px;
 }
@@ -2011,7 +2011,7 @@ th {
   background-color: var(--color-brown-light-transparent);
 }
 
-.day-option {
+.day-option, .browser-option, .version-option {
   padding: 10px;
   cursor: pointer;
   box-shadow: 0px 0px 4px -2px var(--color-shadow-med);
@@ -2056,6 +2056,161 @@ th {
   align-self: center;
   width: 3vw;
 }
+
+.report-bug-modal {
+  max-width: 500px;
+  width: 500px;
+}
+
+#bug-description, #bug-location {
+  resize: vertical;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 0 0 10px;
+  background-color: var(--background-color); /* Change the background color */
+  color: var(--text-color); /* Change text color */
+}
+
+#bug-description {
+  height: 100px;
+}
+
+#bug-location {
+  height: 20px;
+}
+
+.report-bug-modal ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.bugbtn{
+  background-color: var(--background-color);
+  border: 1px solid var(--color-brown-medium2);
+}
+
+.bugbtn:hover, .bugbtn:focus {
+  background-color: var(--color-brown-medium4);
+  border: 1px solid transparent;
+}
+
+.browser-menu {
+  transform: translate(0, 62.5%);
+}
+
+.browser-option:hover, .version-option:hover {
+  background-color: var(--color-brown-medium);
+}
+
+.version-menu {
+  transform: translate(0, 520%);
+}
+
+.message-bug-report {
+  text-align: end;
+  color: var(--color-red-light2);
+}
+
+.kofi-logo {
+  display: inline-block;
+  width: 50px; 
+
+  /* animation with 10 second gaps between another animation */
+  animation: kofi-sway 8s linear infinite;
+}
+
+@keyframes kofi-sway {
+  0%,
+  20% {
+    transform: rotate(0deg);
+  }
+
+  5% {
+    transform: rotate(30deg);
+  }
+
+  10% {
+    transform: rotate(0deg);
+  }
+
+  15% {
+    transform: rotate(-30deg);
+  }
+  
+}
+
+.kofi-donations .donateBtn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  border-radius: 50px;
+  margin-bottom: 5vh;
+}
+
+.faq-divider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.accordian {
+  width: 100%;
+  margin: 0 auto;
+  padding: 15px 20px;
+}
+
+.faq-item {
+  background-color: var(--color-beige-medium);
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.faq-item.selected {
+  background-color: var(--background-color);
+}
+
+.faq-title {
+  width: 60vw;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+}
+
+.faq-question {
+  margin: 0 !important;
+  font-size: 15px;
+  color: var(--text-color);
+  text-align: center;
+}
+
+.faq-answer {
+  height: 0;
+  overflow: hidden;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-color);
+  transition: height 1s ease;
+}
+
+.show {
+  cursor: default;
+}
+
+.expand-toggle {
+  align-self: center;
+  font-size: 1.5rem;
+  height: 25px;
+}
+
 
 .loading-page {
   display: flex;

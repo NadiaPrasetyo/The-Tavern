@@ -8,6 +8,7 @@ import { GiCrown } from "react-icons/gi";
 import { GiQuillInk } from "react-icons/gi";
 import { GiTwoHandedSword } from "react-icons/gi";
 import { GiScrollQuill } from "react-icons/gi";
+import { TbZoomExclamationFilled } from "react-icons/tb";
 
 function Sidebar(props) {
     const [isClosed, setSideBar] = React.useState(false);
@@ -119,6 +120,7 @@ function Sidebar(props) {
                     <li><a href="/Preference"><GiQuillInk /></a></li>
                     <li><a href="/Options"><GiTwoHandedSword /></a></li>
                     <li><a href="/Feedback"><GiScrollQuill /></a></li>
+                    <li><a href="/Help"><TbZoomExclamationFilled /></a></li>
                     </>
                 );
             case "Preference":
@@ -128,6 +130,7 @@ function Sidebar(props) {
                     <li><a href="/Preference" className = "active"><GiQuillInk /></a></li>
                     <li><a href="/Options"><GiTwoHandedSword /></a></li>
                     <li><a href="/Feedback"><GiScrollQuill /></a></li>
+                    <li><a href="/Help"><TbZoomExclamationFilled /></a></li>
                     </>
                 );
             case "Options":
@@ -137,6 +140,7 @@ function Sidebar(props) {
                     <li><a href="/Preference"><GiQuillInk /></a></li>
                     <li><a href="/Options" className = "active"><GiTwoHandedSword /></a></li>
                     <li><a href="/Feedback"><GiScrollQuill /></a></li>
+                    <li><a href="/Help"><TbZoomExclamationFilled /></a></li>
                     </>
                 );
             case "Feedback":
@@ -146,6 +150,17 @@ function Sidebar(props) {
                     <li><a href="/Preference"><GiQuillInk /></a></li>
                     <li><a href="/Options"><GiTwoHandedSword /></a></li>
                     <li><a href="/Feedback" className = "active"><GiScrollQuill /></a></li>
+                    <li><a href="/Help"><TbZoomExclamationFilled /></a></li>
+                    </>
+                );
+            case "Help":
+                return(
+                    <>
+                    <li><a href="/Settings"><GiCrown /></a></li>
+                    <li><a href="/Preference"><GiQuillInk /></a></li>
+                    <li><a href="/Options"><GiTwoHandedSword /></a></li>
+                    <li><a href="/Feedback"><GiScrollQuill /></a></li>
+                    <li><a href="/Help" className = "active"><TbZoomExclamationFilled /></a></li>
                     </>
                 );
             default:
@@ -204,6 +219,7 @@ function Sidebar(props) {
                     <li><a href="/Preference">Preference</a></li>
                     <li><a href="/Options">Options</a></li>
                     <li><a href="/Feedback">Feedback</a></li>
+                    <li><a href="/Help">Help</a></li>
                     </>
                 );
             case "Preference":
@@ -213,6 +229,7 @@ function Sidebar(props) {
                     <li><a href="/Preference" className = "active">Preference</a></li>
                     <li><a href="/Options">Options</a></li>
                     <li><a href="/Feedback">Feedback</a></li>
+                    <li><a href="/Help">Help</a></li>
                     </>
                 );
             case "Options":
@@ -222,6 +239,7 @@ function Sidebar(props) {
                     <li><a href="/Preference">Preference</a></li>
                     <li><a href="/Options" className = "active">Options</a></li>
                     <li><a href="/Feedback">Feedback</a></li>
+                    <li><a href="/Help">Help</a></li>
                     </>
                 );
             case "Feedback":
@@ -231,6 +249,17 @@ function Sidebar(props) {
                     <li><a href="/Preference">Preference</a></li>
                     <li><a href="/Options">Options</a></li>
                     <li><a href="/Feedback" className = "active">Feedback</a></li>
+                    <li><a href="/Help">Help</a></li>
+                    </>
+                );
+            case "Help":
+                return(
+                    <>
+                    <li><a href="/Settings">Settings</a></li>
+                    <li><a href="/Preference">Preference</a></li>
+                    <li><a href="/Options">Options</a></li>
+                    <li><a href="/Feedback">Feedback</a></li>
+                    <li><a href="/Help" className = "active">Help</a></li>
                     </>
                 );
             default:

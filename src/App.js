@@ -13,6 +13,7 @@ import Trial from './pages/Trial';
 import Feedback from './pages/Feedback';
 import Loading from './components/Loading';
 import DropDown from './components/DropDown';
+import Help from './pages/Help';
 import React, { useState, useEffect, useRef } from 'react';
 import {jwtDecode} from 'jwt-decode';
 
@@ -185,6 +186,7 @@ function App() {
           <Route path="preference" element={<PrivateRoute element={<Preference />} handleEndSession={handleEndSession} setUsername={setUsername} />} />
           <Route path="options" element={<PrivateRoute element={<Options />} handleEndSession={handleEndSession} setUsername={setUsername} />} />
           <Route path="feedback" element={<PrivateRoute element={<Feedback />} handleEndSession={handleEndSession} setUsername={setUsername} />} />
+          <Route path="help" element={<PrivateRoute element={<Help />} handleEndSession={handleEndSession} setUsername={setUsername} />} />
           <Route path="trial" element={<Trial />} />
           <Route path="login" element={<Login />} />
           <Route path="*" element={<NoPage />} />
