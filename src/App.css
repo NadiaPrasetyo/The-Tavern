@@ -1088,7 +1088,6 @@ th {
   border: none;
   font-size: calc(10px + 1vmin);
 
-
   &:focus {
     outline: none;
   }
@@ -1130,6 +1129,11 @@ th {
     background-color: var(--color-transparent);
     border: none;
     font-size: calc(10px + 1vmin);
+  }
+
+  .groceryItem {
+    max-width: 20vw;
+    overflow-wrap: break-word;
   }
 
 }
@@ -2461,12 +2465,6 @@ th {
 
   .inventory h4, .grocery h4 {
     max-width: 80vw;
-    overflow-wrap: break-word;
-  }
-
-  .itemName {
-    /* STILL NEED FIXING OF MAX WIDTH */
-    width: 25vw;
     overflow-wrap: break-word;
   }
 
