@@ -299,8 +299,7 @@ function Landing() {
       <div className="section section1">
         <img src="Tavern-banner.png" alt="Tavern Logo" />
         <div className="glassyContainer">
-          <h1>WELCOME!</h1>
-          <h2>"Plan the Feast, Enjoy the Rest”</h2>
+          <p>WELCOME! <br/> "Plan the Feast, Enjoy the Rest”</p>
         </div>
       </div>
       <div className="section section2">
