@@ -2506,39 +2506,101 @@ th {
 }
 
 .artifactContainer img{
+  position: absolute;
   mix-blend-mode: multiply;
   z-index: 500;
-  position: absolute;
+  transition: transform 0.5s ease; /* Smooth transition for movement */
+  pointer-events: all; /* Allow pointer events for images */
 }
 
-#croissant, #beer, #tomato{
-  width: 120px;
+.artifactContainer{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  mix-blend-mode: multiply;
+  pointer-events: none; /* Disable events to see if they show up */
+  z-index: 500; /* Ensure images are on top */
+}
+
+#croissant{
+  width: 9vw;
+  top: 10%;
+  left: 6%;
 }
 
 #egg{
-  width: 100px;
+  width: 8vw;
+  top: 10%;
+  left: 20%;
 }
 
 #carrot{
-  width: 70px;
+  width: 6vw;
+  top: 30%;
+  left: 17%;
 }
 
-#soup, #ricebowl, #burger, #noodle{
-  width: 150px;
+#soup{
+  width: 13vw;
+  top: 40%;
+  left: 27%;
+}
+
+#noodle{
+  width: 14vw;
+  top: 30%;
+  left: 0%;
 }
 
 #cow{
-  width: 250px;
+  width: 20vw;
+  top: 70%;
+  left: 0%;
 }
 
-#cake, #spinach{
-  width: 200px;
+#burger{
+  width: 14vw;
+  top: 50%;
+  left: 55%;
+}
+
+#beer{
+  width: 10vw;
+  top: 7%;
+  left: 70%;
+}
+
+#tomato{
+  width: 10vw;
+  top: 45%;
+  left: 75%;
+}
+
+#ricebowl{
+  width: 15vw;
+  top: 70%;
+  left: 68%;
+}
+
+#cake{
+  width: 17vw;
+  top: 15%;
+  left: 82%;
+}
+
+#spinach{
+  width: 15vw;
+  top: 50%;
+  left: 88%;
 }
 
 #donut{
-  width: 110px;
+  width: 9vw;
+  top: 85%;
+  left: 85%;
 }
-
 
 .landingHeader{
   display: flex;
