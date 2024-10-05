@@ -2491,14 +2491,15 @@ th {
 /* LANDING PAGE */
 .landingPage{
   display: grid;
-  
-  img{
-    mix-blend-mode: multiply;
-    z-index: 500;
-  }
 }
 
-#croissant{
+.artifactContainer img{
+  mix-blend-mode: multiply;
+  z-index: 500;
+  position: absolute;
+}
+
+#croissant, #beer, #tomato{
   width: 120px;
 }
 
@@ -2510,11 +2511,7 @@ th {
   width: 70px;
 }
 
-#soup{
-  width: 150px;
-}
-
-#noodle{
+#soup, #ricebowl, #burger, #noodle{
   width: 150px;
 }
 
@@ -2522,27 +2519,7 @@ th {
   width: 250px;
 }
 
-#burger{
-  width: 150px;
-}
-
-#beer{
-  width: 120px;
-}
-
-#tomato{
-  width: 120px;
-}
-
-#ricebowl{
-  width: 150px;
-}
-
-#cake{
-  width: 200px;
-}
-
-#spinach{
+#cake, #spinach{
   width: 200px;
 }
 
