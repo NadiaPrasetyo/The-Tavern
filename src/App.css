@@ -2491,6 +2491,18 @@ th {
 /* LANDING PAGE */
 .landingPage{
   display: grid;
+  position: relative;
+  overflow-y: auto;
+  /* Make the container scrollable if the content exceeds the max height */
+  overscroll-behavior-y: contain;
+  scroll-snap-type: y mandatory;
+  height: 100vh;
+  width: 100%;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .artifactContainer img{
@@ -2551,6 +2563,8 @@ th {
   padding-top: 30px;
   width: 100%;
   height: calc(100vh - 30px);
+  position: relative;
+  scroll-snap-align: center;
 }
 
 .section1{
