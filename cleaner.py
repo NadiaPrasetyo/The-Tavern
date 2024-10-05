@@ -17,7 +17,9 @@ MONGODB_URI = os.getenv('MONGODB_URI')
 
 client = MongoClient(MONGODB_URI)
 
-collection = client['The-tavern']['Maangchi']
+collection = client['The-tavern']['RecipeList']
+
+recipeList = client['The-tavern']['RecipeList']
 
 memoised = {}
 
@@ -247,6 +249,24 @@ def getDistinctIngredients():
     # return the set
     return allIngredients
 
+def clean_name(name):
+    # strip any leading or trailing spaces
+    name = name.strip()
+
+    # if there's an ( but no ), add a ) at the end
+    if name.count("(") > name.count(")"):
+        name += ")"
+        
+    # replace () with nothing
+    name = name.replace("()", "")
+    # remove any korean characters using character ranges
+    name = re.sub(r'[\u3131-\ucb4c]', '', name)
+    # remove any "( )"
+    name = name.replace("( )", "")
+    # strip any leading or trailing spaces
+    name = name.strip()
+    return name
+
 def printDistinctIngredients():
     # get all the distinct ingredients
     allIngredients = getDistinctIngredients()
@@ -284,7 +304,7 @@ def flagSus(ingredient):
     for word in sus_has_word:
         if word in ingredient:
             return True
-    # if the ingredient is longer tha 50 characters
+    # if the ingredient is longer than 50 characters
     if len(ingredient) > 50:
         return True
     return False
@@ -336,7 +356,8 @@ def fixRecipe(recipe):
                 memoised[cleaned] = new_ingredient
         else:
             # add the cleaned ingredient to the list
-            new_ingredients.add(cleaned)
+            if cleaned:
+                new_ingredients.add(cleaned)
     # update the recipe with the new ingredients
     listed = list(new_ingredients)
     collection.update_one({"_id": recipe["_id"]}, {"$set": {"Ingredients": listed}})
@@ -357,9 +378,77 @@ def main():
     for recipe in recipes:
         # fix the recipe
         fixRecipe(recipe)
+        
+def fixEmptyIngredients(recipe):
+    # print the link and ask user to give the ingredients separated by commas
+    print(recipe['Link'])
+    
+    print(f"Please enter the ingredients separated by commas for {recipe['Name']}")
+    
+    ingredients = input("Ingredients: ")
+    
+    # split the ingredients by commas
+    
+    ingredients = ingredients.split(",")
+    
+    # clean the ingredients
+    
+    ingredients = [clean(ing) for ing in ingredients]
+    
+    # update the recipe with the new ingredients
+    
+    collection.update_one({"_id": recipe["_id"]}, {"$set": {"Ingredients": ingredients}})
+
+def checkIfIngredientsEmpty():
+    # get all the recipes
+    recipes = collection.find({})
+    # loop through the recipes
+    for recipe in recipes:
+        # check if the ingredients are empty
+        if not recipe['Ingredients'] or recipe['Ingredients'] == []:
+            # fix the empty ingredients
+            fixEmptyIngredients(recipe)
+            
+            # delete the recipe
+            # collection.delete_one({"_id": recipe["_id"]})
+            
+def addCollections(collection1, collection2):
+    # get all the recipes from collection1
+    recipes = collection1.find({}) # maangchi
+    # loop through the recipes
+    for recipe in recipes:
+        # make sure the schema is the same
+        Name = recipe['Name']
+        Link = recipe['Link']
+        Ingredients = recipe['Ingredients']
+        Ingredients_set = set(Ingredients)
+        
+        Tag = []
+        if 'Tags' in recipe:
+            Tag = recipe['Tags']
+        else:
+            Tag = recipe['Tag']
+        Tag_set = set(Tag)
+        
+        
+        # insert the recipe into collection2
+        collection2.insert_one({ 'Name': Name, 'Link': Link, 'Ingredients': list(Ingredients_set), 'Tag': list(Tag_set) })
+
+def cleanName(collection1):
+    # get all the recipes
+    recipes = collection1.find({})
+    # loop through the recipes
+    for recipe in recipes:
+        # get the name
+        name = recipe['Name']
+        print(name)
+        # clean the name
+        name = clean_name(name)
+        # update the recipe with the new name
+        collection1.update_one({"_id": recipe["_id"]}, {"$set": {"Name": name}})
 
 # process ingredients
-main()
+# main()
 
 # print all distinct ingredients use it by python cleaner.py > ingredients.txt
 # printDistinctIngredients()
@@ -369,6 +458,15 @@ main()
 
 # for ing in distinctIngredients:
 #     similar(ing, distinctIngredients)
+
+# Fix empty Ingredients
+# checkIfIngredientsEmpty()
+
+# Add all recipes from one collection to another
+# addCollections(collection, recipeList)
+
+# Clean the name of the recipe
+# cleanName(recipeList)
 
 client.close()
 winsound.PlaySound("public/tada-fanfare-a-6313.wav", winsound.SND_FILENAME)

@@ -39,14 +39,29 @@ function Menu({userdata}) {
     Sunday: [],
   });
 
-  const closeInfo = () => {
-    setIsInfoOpen(false);
-    setSelectedRecipe(null);
+  const closeInfo = (e) => {
+    e.stopPropagation();
+    if (e.type === 'touchstart') {
+      setTimeout(() => {
+        setIsInfoOpen(false);
+        setSelectedRecipe(null);
+      }, 300);
+    } else {
+      setIsInfoOpen(false);
+      setSelectedRecipe(null);
+    }
   };
 
-  const toggleInfo = (recipe) => {
-    setSelectedRecipe(recipe);
-    setIsInfoOpen(true);
+  const toggleInfo = (recipe, e) => {
+    if (e.type === 'touchstart') {
+      setTimeout(() => {
+        setSelectedRecipe(recipe);
+        setIsInfoOpen(!isInfoOpen);
+      }, 300);
+    } else {
+      setSelectedRecipe(recipe);
+      setIsInfoOpen(!isInfoOpen);
+    }
   };
 
   const fetchMenu = async () => {

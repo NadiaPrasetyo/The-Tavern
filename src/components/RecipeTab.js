@@ -256,15 +256,23 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
   };
 
   // Toggle the recipe info modal
-  const toggleInfo = (recipe) => {
+  const toggleInfo = (recipe, e) => {
     setSelectedRecipe(recipe);
     setInfoOpen(!isInfoOpen);
   };
 
-  const closeInfo = () => {
-    setInfoOpen(false);
-    setSelectedRecipe(null);
-  }
+  const closeInfo = (e) => {
+    e.stopPropagation();
+    if (e.type === 'touchstart') {
+      setTimeout(() => {
+        setInfoOpen(false);
+        setSelectedRecipe(null);
+      }, 300);
+    } else {
+      setInfoOpen(false);
+      setSelectedRecipe(null);
+    }
+  };
 
   // Toggle the filter popup
   const toggleFilter = () => {

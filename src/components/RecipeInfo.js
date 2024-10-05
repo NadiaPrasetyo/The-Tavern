@@ -72,10 +72,12 @@ const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, inIn
   if (!isOpen) return null; // Don't render anything if not open
 
   return (
-    <div className="recipe-info-overlay" onClick={(e) => isTouchDevice ? e.stopPropagation() : onClose()} onTouchStart={(e) => e.target === e.currentTarget ? onClose() : null}>
+    <div className="recipe-info-overlay" onClick={(e) => isTouchDevice ? e.stopPropagation() : onClose(e)} onTouchStart={(e) => e.target === e.currentTarget ? onClose(e) : null}>
       <div className="recipe-info-background background">
         <div className="recipe-info-content" onClick={(e) => e.stopPropagation()}>
-          <h2>{recipe.Name}</h2>
+          <a className="recipe-info-name" href={recipe.Link} target='_blank' rel="noopener noreferrer">
+            {recipe.Name}
+          </a>
           <div className='scrollable custom-scroll'>
             {/* add image depending on origin tag (Wok Of Life, or Preppy Kitchen) */}
             {recipe.Tag.includes('Wok Of Life') ? <img className='origin-image' src='WokOfLife.jpeg' alt='Wok Of Life logo' /> : null}

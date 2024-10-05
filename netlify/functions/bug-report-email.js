@@ -5,8 +5,8 @@ const transporter = nodeMailer.createTransport({
     port: 465, // 587 for STARTTLS; 465 for SSL
     secure: true, // use false for STARTTLS; true for SSL on port 465
     auth: {
-      user: process.env.TEAM_EMAIL,
-      pass: process.env.TEAM_EMAIL_APP_PASSWORD,
+        user: process.env.TEAM_EMAIL,
+        pass: process.env.TEAM_EMAIL_APP_PASSWORD,
     }
 });
 
@@ -19,13 +19,13 @@ const handler = async (req) => {
         to: process.env.TEAM_EMAIL,
         subject: `Bug Report ${date} ${location}`,
         text: `
-            Date: ${date}
-            Page: ${location}
-            Bug Description: 
-            ${description}
-            Browser: ${browser}
-            Version: ${version}
-            From: ${from_email}`,
+Date: ${date}
+Page: ${location}
+Bug Description: 
+${description}
+Browser: ${browser}
+Version: ${version}
+From: ${from_email}`,
     };
 
     const replyOptions = {
@@ -33,28 +33,29 @@ const handler = async (req) => {
         to: from_email,
         subject: "Bug Report Received",
         text: `
-            Kia ora ${name},
+Kia ora ${name},
 
-            Thank you for submitting a bug report. We have received the following details:
+Thank you for submitting a bug report. We have received the following details:
     
-            Description: 
-            ${description}
-            Page: ${location}
-            Browser: ${browser}
-            Version: ${version}
+Description: 
+${description}
+Page: ${location}
+Browser: ${browser}
+Version: ${version}
 
-            Our team will review the issue and get back to you if further information is needed.
+Our team will review the issue and get back to you if further information is needed.
 
-            Best regards,
-            The Tavern Support Team.`,
+Best regards,
+The Tavern Support Team.`,
     };
 
     try {
         await transporter.sendMail(mailOptions);
         await transporter.sendMail(replyOptions);
 
-        return { statusCode: 200, body: 
-            JSON.stringify({ message: "Bug report sent successfully." })
+        return {
+            statusCode: 200, body:
+                JSON.stringify({ message: "Bug report sent successfully." })
         };
     } catch (error) {
         return { statusCode: 500, body: error.toString() };

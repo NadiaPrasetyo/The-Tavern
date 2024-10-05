@@ -4,6 +4,11 @@ const { database } = require("./db");
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
+const validateEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
 // User registration
 const handler = async (req) => {
   const { username, name, email, password, confirmPassword } = JSON.parse(req.body);
@@ -16,6 +21,9 @@ const handler = async (req) => {
   }
   if (!username || !email || !name) {
     return { statusCode: 400, body: JSON.stringify( { message: "Please fill in all fields" }) };
+  }
+  if (!validateEmail(email)) {
+    return { statusCode: 400, body: JSON.stringify( { message: "Please enter a valid email" }) };
   }
 
   try {

@@ -26,8 +26,8 @@ const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet, max_
               {/* Stop drag events for specific icons */}
               <AiOutlineInfoCircle 
                 className='info-icon' 
-                onClick={(e) => isTouchDevice ? e.stopPropagation() : toggleInfo(recipe)} 
-                onTouchStart={(e) => { e.stopPropagation(); toggleInfo(recipe); }} 
+                onClick={(e) => isTouchDevice ? e.stopPropagation() : toggleInfo(recipe, e)} 
+                onTouchStart={(e) => { e.stopPropagation(); toggleInfo(recipe, e); }} 
                 onMouseDown={(e) => e.stopPropagation()} // Stop drag on mouse too
               />
               {favouriteSet != null ? (

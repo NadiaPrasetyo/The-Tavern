@@ -1287,7 +1287,11 @@ th {
   .random-icon {
     margin-left: 5px;
   }
+}
 
+.random-btn-container {
+  position: fixed;
+  bottom: 10vh;
 }
 
 .prev-media, .next-media, .page-num-media {
@@ -1510,13 +1514,24 @@ th {
   border-radius: 8px;
 }
 
-.recipe-info-content h2 {
+.recipe-info-content a {
   margin: 0 20px 10px 0;
 }
 
 .recipe-info-content ul {
   list-style-type: square;
   padding: 0 0 0 20px;
+}
+
+.recipe-info-name {
+  /* add style of h2 */
+  display: block;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.recipe-info-name:hover {
+  text-decoration: underline;
 }
 
 .recipe-tags-container {
@@ -2104,6 +2119,7 @@ th {
 .bugbtn{
   background-color: var(--background-color);
   border: 1px solid var(--color-brown-medium2);
+  padding: 1vh 1vw;
 }
 
 .bugbtn:hover, .bugbtn:focus {
@@ -2120,7 +2136,7 @@ th {
 }
 
 .version-menu {
-  transform: translate(0, 520%);
+  transform: translate(0, 500%);
 }
 
 .message-bug-report {
@@ -2863,7 +2879,37 @@ th {
   .login {
     width: 100%;
     height: 100vh;
-    display: grid;
+    overflow: hidden;
+    flex-direction: column;
+  }
+
+  .login-form {
+    /* background-color: white; */
+    height: fit-content;
+    width: 65vw;
+
+    p, input, label, button {
+      width: 100% !important;
+    }
+    
+  }
+
+  #SignUp-component {
+    padding-top: 0;
+    align-items: center;
+    height: 60vh;
+  }
+
+  #SignIn-component {
+    align-items: center;
+    padding-top: 0;
+    height: 40vh;
+  }
+
+  .tavern-logo {
+    width: 150px;
+    height: 150px;
+
   }
   
   #moving-cover {

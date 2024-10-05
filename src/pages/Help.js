@@ -96,6 +96,8 @@ function Help({ userdata }) {
             return;
         }
 
+        setMessage('Sending bug report...');
+
 
         const bugDetails = {
             description: document.getElementById('bug-description').value,
