@@ -6,7 +6,7 @@ const handler = async (req) => {
     const collection = database.collection('RecipeList'); // your recipe collection
 
     // Exclude recipes from any source that contains 'preppykitchen.com'
-    const filter = { source: { $not: { $regex: 'preppykitchen\\.com', $options: 'i' } } };
+    const filter = { Link: { $not: { $regex: 'preppykitchen\\.com', $options: 'i' } } };
 
     // Get the count of documents excluding preppykitchen recipes
     const count = await collection.countDocuments(filter);
