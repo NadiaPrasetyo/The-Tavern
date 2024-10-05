@@ -1280,6 +1280,10 @@ th {
   cursor: pointer;
 }
 
+.prev-btn:hover, .next-btn:hover, .random-btn:hover {
+  background-color: var(--color-brown-medium2);
+}
+
 .random-btn {
   display: flex;
   align-items: center;
@@ -1821,6 +1825,29 @@ th {
   visibility: visible;
 }
 
+.bin-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  
+  button {
+    flex: 1;
+    background-color: var(--color-brown-hover2);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: var(--color-brown-medium2);
+  }
+
+  button:disabled {
+    background-color: var(--color-green-verylight);
+    cursor: not-allowed;
+  }
+}
+
 .include {
   border-color: var(--color-teal-blue);
   background-color: var(--color-teal-light);
@@ -2182,23 +2209,19 @@ th {
   margin-bottom: 5vh;
 }
 
-.faq-divider {
+.FAQ {
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
 }
 
 .accordian {
-  width: 100%;
-  margin: 0 auto;
-  padding: 40px 20px 15px 20px;
+  width: 96%;
 }
 
 .faq-item {
   width: 100%;
-  background-color: var(--color-beige-medium);
-  margin: 0 0 10px 10px;
+  background-color: var(--color-brown-light-transparent);
+  margin: 0 0 10px 0;
   padding: 10px 20px;
   border-radius: 8px;
   transition: background-color 0.3s ease;
@@ -3134,6 +3157,17 @@ th {
     to {
       width: 0px;
     }
+  }
+
+  .accordian {
+    width: 80vw;
+  }
+
+  .bin-buttons {
+    /* make into 2 top 2 bottom */
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
 }

@@ -16,7 +16,7 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
 
     const [isLoading, setIsTagsIngredientsLoading] = useState(true);
     const [currentBin, setCurrentBin] = useState("A-C");
-    const [skip, setSkip] = useState(Math.max(1, Math.floor(availableIngredients.length / 50)));
+    const [binLimits, setBinLimits] = useState({});
 
 
     // Close the popup when the Esc key is pressed
@@ -37,74 +37,41 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
     }, [isOpen, onClose]);
 
     const calculateBinLimits = () => {
-        if (availableIngredients.length === 0) return {};
         const bins = {
-            "A-C": [0, 0],
-            "D-L": [0, 0],
-            "M-R": [0, 0],
-            "S-Z": [0, availableIngredients.length - 1],
+            "A-C": [0, -1],
+            "D-L": [-1, -1],
+            "M-R": [-1, -1],
+            "S-Z": [-1, availableIngredients.length - 1],
         };
 
-        let curr = "A-C"; 
-        let backtracking = false;
-        for (let i = 0; i <availableIngredients.length && i >=0 ; backtracking ? i-- : i+=skip) {
-
-            if (availableIngredients[i] === undefined) {
-                continue;
-            }
+        for (let i = 0; i < availableIngredients.length && i >= 0; i ++) {
 
             const firstLetter = availableIngredients[i][0].toUpperCase();
 
-            if (firstLetter >= "A" && firstLetter <= "C" ) {
-                if (backtracking && curr === "A-C") {
-                    backtracking = false;
-                    bins["A-C"][1] = i;
-                    bins["D-L"][0] = i+1;
-                    curr = "D-L";
-                }
+            if (firstLetter >= "A" && firstLetter <= "C") {
                 bins["A-C"][1] = i;
             } else if (firstLetter >= "D" && firstLetter <= "L") {
-                if (curr === "A-C") {
-                    backtracking = true;
-                }
-
-                if (backtracking && curr === "D-L") {
-                    backtracking = false;
-                    bins["D-L"][1] = i;
-                    bins["M-R"][0] = i+1;
-                    curr = "M-R";
+                if (bins["D-L"][0] === -1) {
+                    bins["D-L"][0] = i;
                 }
                 bins["D-L"][1] = i;
             } else if (firstLetter >= "M" && firstLetter <= "R") {
-                if (curr === "D-L") {
-                    backtracking = true;
-                }
-
-                if (backtracking && curr === "M-R") {
-                    backtracking = false;
-                    bins["M-R"][1] = i;
-                    bins["S-Z"][0] = i+1;
-                    curr = "S-Z";
+                if (bins["M-R"][0] === -1) {
+                    bins["M-R"][0] = i;
                 }
                 bins["M-R"][1] = i;
             } else if (firstLetter >= "S" && firstLetter <= "Z") {
-                if (curr === "M-R") {
-                    backtracking = true;
-                }
+                bins["S-Z"][0] = i;
+                break;
             }
         }
-        console.log(bins);
         return bins;
-    }
-
-    const [binLimits, setBinLimits] = useState(calculateBinLimits());
-
+    };
 
     // Update the skip, bin limits, and current bin when the available ingredients change
     useEffect(() => {
         if (!isOpen) return; // Don't run if the popup is closed
-        setSkip(Math.max(1, Math.floor(availableIngredients.length / 50))); // Update skip
-        setBinLimits(calculateBinLimits()); // Update bin limits
+        setBinLimits(calculateBinLimits()); // Calculate the bin limits
         setCurrentBin("A-C"); // Reset to the first bin
     }, [availableIngredients, isOpen]);
 
@@ -112,17 +79,39 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
     useEffect(() => {
         if (isOpen) {
             setIsTagsIngredientsLoading(true); // Start loading when the modal opens
+            if (Object.keys(binLimits).length === 0) {
+                setBinLimits(calculateBinLimits());
+            }
 
-            const currentBinnedIngredients = binLimits[currentBin] ? availableIngredients.slice(binLimits[currentBin][0], binLimits[currentBin][1] + 1) : [];
+            let currentBinnedIngredients = [];
+            let filteredIngredients = [];
+            const keys = Object.keys(binLimits);
+            let currentIndex = keys.indexOf(currentBin);
+
+            while (currentIndex < keys.length) {
+                currentBinnedIngredients = binLimits[keys[currentIndex]] ? availableIngredients.slice(binLimits[keys[currentIndex]][0], binLimits[keys[currentIndex]][1] + 1) : [];
+                filteredIngredients = currentBinnedIngredients.filter(ingredient => !includedItems.includes(ingredient) && !excludedItems.includes(ingredient));
+                
+                if (currentBinnedIngredients.length > 0 && filteredIngredients.length === 0) {
+                    // disable the button if there are no ingredients in the bin
+                    binLimits[keys[currentIndex]] = [-1, -1];
+                }
+
+                if (filteredIngredients.length > 0) {
+                    setCurrentBin(keys[currentIndex]);
+                    break;
+                }
+                currentIndex++;
+            }
+
             // Filter out included and excluded items from available tags/ingredients
             const filteredTags = availableTags.filter(tag => !includedItems.includes(tag) && !excludedItems.includes(tag));
-            const filteredIngredients = currentBinnedIngredients.filter(ingredient => !includedItems.includes(ingredient) && !excludedItems.includes(ingredient));
 
             setAvailableTagsState(filteredTags);
             setAvailableIngredientsState(filteredIngredients);
             setIsTagsIngredientsLoading(false); // Stop loading when the modal opens
         }
-    }, [isOpen, availableTags, availableIngredients, includedItems, excludedItems, currentBin]);
+    }, [includedItems, excludedItems, currentBin, binLimits]);
 
     // Helper function to insert an item in sorted order
     const insertInSortedOrder = (array, item) => {
@@ -285,29 +274,29 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
                         {!isLoading ? (
                             availableIngredientsState.length > 0 ? (
                                 <>
-                                {availableIngredientsState.map((ingredient, index) => (
-                                    <div key={index} className="ingredient-item">
-                                        <button className="include" onClick={() => addIngredient(ingredient, "include")}>
-                                            +
-                                        </button>
-                                        <span>{ingredient}</span>
-                                        <button className="exclude" onClick={() => addIngredient(ingredient, "exclude")}>
-                                            -
-                                        </button>
+                                    {/* show buttons to navigate between bins */}
+                                    <div className="bin-buttons">
+                                        {Object.keys(binLimits).map((bin, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() => setCurrentBin(bin)}
+                                                disabled={binLimits[bin][0] === -1 || binLimits[bin][1] === -1}
+                                            >
+                                                {bin}
+                                            </button>
+                                        ))}
                                     </div>
-                                ))}
-                                {/* show buttons to navigate between bins */}
-                                <div className="bin-buttons">
-                                    {Object.keys(binLimits).map((bin, index) => (
-                                        <button 
-                                            key={index} 
-                                            onClick={() => setCurrentBin(bin)}
-                                            disabled={binLimits[bin][0] === binLimits[bin][1]}
-                                        >
-                                            {bin}
-                                        </button>
+                                    {availableIngredientsState.map((ingredient, index) => (
+                                        <div key={index} className="ingredient-item">
+                                            <button className="include" onClick={() => addIngredient(ingredient, "include")}>
+                                                +
+                                            </button>
+                                            <span>{ingredient}</span>
+                                            <button className="exclude" onClick={() => addIngredient(ingredient, "exclude")}>
+                                                -
+                                            </button>
+                                        </div>
                                     ))}
-                                </div>
                                 </>
                             ) : (
                                 <span className="no-items">No ingredients available</span>

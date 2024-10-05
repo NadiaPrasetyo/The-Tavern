@@ -18,7 +18,7 @@ const Recipe = ({ recipe, index, toggleInfo, toggleFavourite, favouriteSet, max_
           ref={provided.innerRef}
           {...provided.draggableProps}
         >
-          <div className='recipe-title'>
+          <div className='recipe-title' {...(!isTouchDevice && provided.dragHandleProps)}>
             <a href={recipe.Link} target="_blank" rel="noopener noreferrer" {...provided.dragHandleProps}>
               {recipe.Name}
             </a>
