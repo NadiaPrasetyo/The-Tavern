@@ -2517,65 +2517,116 @@ th {
 /* LANDING PAGE */
 .landingPage{
   display: grid;
-  
-  img{
-    mix-blend-mode: multiply;
-    z-index: 500;
+  position: relative;
+  overflow-y: auto;
+  /* Make the container scrollable if the content exceeds the max height */
+  overscroll-behavior-y: contain;
+  scroll-snap-type: y mandatory;
+  height: 100vh;
+  width: 100%;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
 
+.artifactContainer img{
+  position: absolute;
+  mix-blend-mode: multiply;
+  z-index: 500;
+  transition: transform 0.5s ease; /* Smooth transition for movement */
+  pointer-events: all; /* Allow pointer events for images */
+}
+
+.artifactContainer{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  mix-blend-mode: multiply;
+  pointer-events: none; /* Disable events to see if they show up */
+  z-index: 500; /* Ensure images are on top */
+}
+
 #croissant{
-  width: 120px;
+  width: 9vw;
+  top: 10%;
+  left: 6%;
 }
 
 #egg{
-  width: 100px;
+  width: 8vw;
+  top: 10%;
+  left: 20%;
 }
 
 #carrot{
-  width: 70px;
+  width: 6vw;
+  top: 30%;
+  left: 17%;
 }
 
 #soup{
-  width: 150px;
+  width: 13vw;
+  top: 40%;
+  left: 27%;
 }
 
 #noodle{
-  width: 150px;
+  width: 14vw;
+  top: 30%;
+  left: 0%;
 }
 
 #cow{
-  width: 250px;
+  width: 20vw;
+  top: 70%;
+  left: 0%;
 }
 
 #burger{
-  width: 150px;
+  width: 14vw;
+  top: 50%;
+  left: 55%;
 }
 
 #beer{
-  width: 120px;
+  width: 10vw;
+  top: 7%;
+  left: 70%;
 }
 
 #tomato{
-  width: 120px;
+  width: 10vw;
+  top: 45%;
+  left: 75%;
 }
 
 #ricebowl{
-  width: 150px;
+  width: 15vw;
+  top: 70%;
+  left: 68%;
 }
 
 #cake{
-  width: 200px;
+  width: 17vw;
+  top: 15%;
+  left: 82%;
 }
 
 #spinach{
-  width: 200px;
+  width: 15vw;
+  top: 50%;
+  left: 88%;
 }
 
 #donut{
-  width: 110px;
+  width: 9vw;
+  top: 85%;
+  left: 85%;
 }
-
 
 .landingHeader{
   display: flex;
@@ -2600,22 +2651,128 @@ th {
   padding-top: 30px;
   width: 100%;
   height: calc(100vh - 30px);
+  position: relative;
+  scroll-snap-align: center;
+}
+
+.glassyContainer{
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(2px);
+  border-radius: 10px;
+  z-index: 501;
+  box-shadow: 0 4px 8px var(--color-shadow-med);
+  /* Fade-in properties */
+  opacity: 0; /* Initially hidden */
+  transition: opacity 1s ease-in; /* 1-second fade-in animation */
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px); /* Optional: Slight upward movement */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade-out animation */
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px); /* Optional: Slight downward movement */
+  }
+}
+
+/* Apply the animation when the fade-in class is added */
+.fade-in {
+  animation: fadeIn 1s ease forwards;
+  opacity: 1;
+}
+
+/* Apply the fade-out animation when the class is removed */
+.fade-out {
+  animation: fadeOut 1s ease forwards;
+  opacity: 0;
 }
 
 .section1{
   background-color: var(--color-green-light);
+  img{
+    width: 22%;
+    object-fit: cover;
+    position: absolute;
+    left: calc(50% - 11%);
+    z-index: 501;
+  }
+
+  div {
+    width: 40%;
+    height: 15%;
+    top: 73%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+  }  
+
+  p{
+    font-size: 1.5rem;
+    color: var(--color-green-muted-solid);
+  }
 }
 
 .section2{
   background-color: var(--color-blue-base);
+  div {
+    width: 60%;
+    height: 60%;
+    top: 15%;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: left;
+    padding: 20px;
+  }  
 }
 
 .section3{
   background-color: var(--color-purple-base);
+  div {
+    width: 50%;
+    height: 70%;
+    top: 20%;
+    left: 46%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }  
 }
 
 .section4{
   background-color: var(--color-pink-base);
+
+  div {
+    width: 60%;
+    height: 60%;
+    top: 15%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+  }  
 }
 
 .landingFooter{
