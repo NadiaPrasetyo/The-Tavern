@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { TbSearch } from "react-icons/tb";
-import { IoIosHourglass } from "react-icons/io";
+import { RiDiceLine } from "react-icons/ri";
+import { FaDiceD20 } from "react-icons/fa";
 import { MdOutlineStarPurple500 } from "react-icons/md";
 import { LuFilter } from "react-icons/lu";
 import { LuBookOpenCheck } from "react-icons/lu";
@@ -16,7 +17,7 @@ import Loading from './Loading';
 import DropDown from './DropDown';
 import '../App.css';
 
-const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => {
+const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1); // The current page
   const [searchQuery, setSearchQuery] = useState(''); // The search input value
@@ -42,7 +43,8 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
   const [recipePageRecommendation, setRecipePageRecommendation] = useState(1); // The current recipe page for recommendations
   const [recommendationMessage, setRecommendationMessage] = useState('No recommendations'); // The recommendation message
   const [isVisibleRecPopUp, setIsVisibleRecPopUp] = useState(false); // The recommendation info popup state
-  const [dropDownOpen, setDropDownOpen] = useState(false);
+  const [dropDownOpen, setDropDownOpen] = useState(false); // The dropdown state (used as alert)
+  const [randomRecipe, setRandomRecipe] = useState(null); // The random recipe
 
   const containerRef = useRef(null); // Reference to the container element
   const [containerMaxHeight, setContainerMaxHeight] = useState(0);
@@ -158,6 +160,11 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
       setIsOpenRecommendation(true);
     } else {
       setIsOpenRecommendation(false);
+    }
+
+    if (page ===3){
+      // random page
+      getRandomRecipe();
     }
 
     // Fetch favourite recipes when the Favourites page is clicked
@@ -486,6 +493,35 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
     };
   }, [isVisibleRecPopUp]);
 
+  // Get a random recipe
+
+  const getRandomRecipe = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/get-random-recipe-unfiltered', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (!data.recipe) {
+        console.log(data.message);
+        return;
+      }
+
+      setRandomRecipe(data.recipe[0]);
+      setRecipeList(data.recipe);
+
+    }
+    catch (error) {
+      console.error("Error getting random recipe:", error);
+    }
+    setIsLoading(false);
+  }
+
   return (
     <>
     <DropDown isOpen={dropDownOpen} setIsOpen={setDropDownOpen} options={[{label: 'Okay'}]} message={'You already have the maximum amount of favorite recipes'}/>
@@ -626,15 +662,38 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
               </div>
             }
             {currentPage === 3 &&
-              <div className='history-tab'>
-                <div className='tab-title'>HISTORY</div>
-                <div className='search-bar-container' onClick={(e) => e.stopPropagation()}>
-                  <input className='search-bar' type='text' placeholder='Search for recipes' />
-                  <TbSearch className='search-icon' />
-                  <LuFilter className='filter-icon' />
-                </div>
+              <div className='random-tab'>
+                <div className='tab-title'>RANDOM</div>
                 <div className='recipe-containers custom-scroll' style={{ maxHeight: containerMaxHeight }} onClick={(e) => e.stopPropagation()}>
-                  <div className='recipe-list'>COMING SOON!</div>
+                  {isLoading ? (
+                    <div className='loading-cont'>
+                      <Loading />
+                    </div>
+                  ) : randomRecipe ? (
+                    <Droppable droppableId="RecipeList">
+                      {(provided) => (
+                        <div ref={provided.innerRef}
+                          {...provided.droppableProps}>
+                          <Recipe recipe={randomRecipe} 
+                          index={0} 
+                          toggleInfo={toggleInfo} 
+                          toggleFavourite={toggleFavourite} 
+                          favouriteSet={favouriteSet}
+                          max_tags={max_tags}
+                          max_ingredients={max_ingredients}/>
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  ) : (
+                    <div className='no-result'>No random recipe found</div>
+                  )}
+                </div>
+                {/* button for random */}
+                <div className='random-btn-container' onClick={(e) => e.stopPropagation()}>
+                  <button className='random-btn' onClick={getRandomRecipe} >
+                    Get Random Recipe <RiDiceLine className='random-icon' size={20} />
+                  </button>
                 </div>
               </div>
             }
@@ -687,7 +746,7 @@ const RecipeTab = ({ userdata, recipeList, setRecipeList, isOpenDrag, setIsOpenD
           <LuBookOpenCheck size={30} />
         </div>
         <div onClick={() => changePage(3)} className={`bookmark ${currentPage === 3 ? 'bookmark-active' : 'bookmark-inactive'}`}>
-          <IoIosHourglass size={30} />
+          <FaDiceD20 size={30} />
         </div>
         <div onClick={() => changePage(4)} className={`bookmark ${currentPage === 4 ? 'bookmark-active' : 'bookmark-inactive'}`}>
           <MdOutlineStarPurple500 size={30} />

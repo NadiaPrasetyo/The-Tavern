@@ -1272,12 +1272,22 @@ th {
 }
 
 .prev-btn, .prev-media,
-.next-btn, .next-media {
+.next-btn, .next-media, .random-btn {
   padding: 5px 10px;
   margin: 0 10px;
   background-color: var(--color-brown-hover2);
   border-radius: 5px;
   cursor: pointer;
+}
+
+.random-btn {
+  display: flex;
+  align-items: center;
+
+  .random-icon {
+    margin-left: 5px;
+  }
+
 }
 
 .prev-media, .next-media, .page-num-media {

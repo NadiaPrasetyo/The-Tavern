@@ -313,7 +313,6 @@ function Menu({userdata}) {
               </div>
               <RecipeTab
                 userdata={userdata}
-                recipeList={recipeList}
                 setRecipeList={setRecipeList}
                 isOpenDrag={recipeTabOpen}
                 setIsOpenDrag={setRecipeTabOpen}
