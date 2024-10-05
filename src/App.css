@@ -2626,7 +2626,7 @@ th {
   width: 100%;
   height: calc(100vh - 30px);
   position: relative;
-  scroll-snap-align: start;
+  scroll-snap-align: center;
 }
 
 .glassyContainer{
@@ -2702,14 +2702,46 @@ th {
 
 .section2{
   background-color: var(--color-blue-base);
+  div {
+    width: 60%;
+    height: 60%;
+    top: 15%;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: left;
+    padding: 20px;
+  }  
 }
 
 .section3{
   background-color: var(--color-purple-base);
+  div {
+    width: 50%;
+    height: 70%;
+    top: 20%;
+    left: 46%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }  
 }
 
 .section4{
   background-color: var(--color-pink-base);
+
+  div {
+    width: 60%;
+    height: 60%;
+    top: 15%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+  }  
 }
 
 .landingFooter{
