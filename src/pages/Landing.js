@@ -19,9 +19,20 @@ function Landing() {
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const index = Array.from(sections).indexOf(entry.target);
-          setOnSection(index); // Set the index of the active section
+        const sectionContent = entry.target.querySelector('.glassyContainer');
+        if (sectionContent) { // Check if glassyContainer exists
+          if (entry.isIntersecting) {
+            const index = Array.from(sections).indexOf(entry.target);
+            setOnSection(index); // Set the index of the active section
+
+            // Add the 'fade-in' class and remove 'fade-out'
+            sectionContent.classList.add('fade-in');
+            sectionContent.classList.remove('fade-out');
+          } else {
+            // Remove the 'fade-in' class and add 'fade-out'
+            sectionContent.classList.remove('fade-in');
+            sectionContent.classList.add('fade-out');
+          }
         }
       });
     }, observerOptions);
@@ -218,12 +229,23 @@ function Landing() {
       </span>
 
       <div className="section section1">
+        <img src="Tavern-banner.png" alt="Tavern Logo" />
+        <div className="glassyContainer">
+          <h1>WELCOME!</h1>
+          <h2>"Plan the Feast, Enjoy the Rest”</h2>
+        </div>
       </div>
       <div className="section section2">
+        <div className="glassyContainer">
+        </div>
       </div>
       <div className="section section3">
+        <div className="glassyContainer">
+        </div>
       </div>
       <div className="section section4">
+        <div className="glassyContainer">
+        </div>
       </div>
 
       <footer className="landingFooter">

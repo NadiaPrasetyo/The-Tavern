@@ -2626,11 +2626,78 @@ th {
   width: 100%;
   height: calc(100vh - 30px);
   position: relative;
-  scroll-snap-align: center;
+  scroll-snap-align: start;
+}
+
+.glassyContainer{
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(2px);
+  border-radius: 10px;
+  z-index: 501;
+  box-shadow: 0 4px 8px var(--color-shadow-med);
+  /* Fade-in properties */
+  opacity: 0; /* Initially hidden */
+  transition: opacity 1s ease-in; /* 1-second fade-in animation */
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px); /* Optional: Slight upward movement */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade-out animation */
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px); /* Optional: Slight downward movement */
+  }
+}
+
+/* Apply the animation when the fade-in class is added */
+.fade-in {
+  animation: fadeIn 1s ease forwards;
+  opacity: 1;
+}
+
+/* Apply the fade-out animation when the class is removed */
+.fade-out {
+  animation: fadeOut 1s ease forwards;
+  opacity: 0;
 }
 
 .section1{
   background-color: var(--color-green-light);
+  img{
+    width: 22%;
+    object-fit: cover;
+    position: absolute;
+    left: calc(50% - 11%);
+    z-index: 501;
+  }
+
+  div {
+    width: 40%;
+    height: 15%;
+    top: 73%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+  }  
 }
 
 .section2{
