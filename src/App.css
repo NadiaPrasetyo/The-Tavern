@@ -59,6 +59,7 @@
   --color-teal-bluer: #85bac59c;
   --color-cyan-light: #bfe6f0bc;
   --color-blue-base: #cfe6ef;
+  --color-blue-dark: #356c9a;
   /* Included item background */
 
   /*Purple colours  */
@@ -74,6 +75,7 @@
   /* Ingredient item background */
   --color-lavender-light: #a149c1a4;
   --color-purple-base: #e6cfef;
+  --color-purple-dark: #83508f;
   /* Tags info background */
 
 
@@ -2774,7 +2776,7 @@ th {
     justify-content: left;
     align-items: left;
     padding: 20px;
-    color: #356c9a;
+    color: var(--color-blue-dark);
   }
 
   h3 {
@@ -2800,7 +2802,7 @@ th {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    color: #83508f;
+    color: var(--color-purple-dark);
   } 
 
   h3 {
@@ -2830,7 +2832,7 @@ th {
     padding: 20px;
     margin-left: auto;
     margin-right: auto;
-    color: #ca6d9e;
+    color: var(--color-pink-link);
   }  
 
   h3 {
@@ -3218,6 +3220,202 @@ th {
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 1fr 1fr;
   }
-/* Push */
+
+  /* LANDING PAGE MEDIA QUERIES */
+  
+  .section1{
+    background-color: var(--color-green-light);
+    img{
+      width: 22%;
+      object-fit: cover;
+      position: absolute;
+      left: calc(50% - 11%);
+      z-index: 501;
+    }
+
+    div {
+      width: 40%;
+      height: 15%;
+      top: 73%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 0px;
+      color: var(--color-green-muted-solid);
+    }  
+
+    p{
+      font-family: playfair-display;
+      font-size: 1.5rem;
+      font-style: italic;
+    }
+  }
+
+
+  .section2{
+    background-color: var(--color-blue-base);
+    div {
+      width: 60%;
+      height: 60%;
+      top: 15%;
+      display: flex;
+      flex-direction: column;
+      justify-content: left;
+      align-items: left;
+      padding: 20px;
+      color: var(--color-blue-dark);
+    }
+
+    h3 {
+      margin: 0;
+      padding: 0;
+      line-height: 1vh;
+    }
+    
+    p{
+      font-family: playfair-display;
+      font-style: italic;
+      line-height: 2vw;
+    }
+  }
+
+  .section3{
+    background-color: var(--color-purple-base);
+    div {
+      width: 50%;
+      height: 70%;
+      top: 20%;
+      left: 46%;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      color: var(--color-purple-dark);
+    } 
+
+    h3 {
+      margin: 0;
+      padding: 0;
+      line-height: 1vh;
+    }
+    
+    p{
+      font-family: playfair-display;
+      font-style: italic;
+      line-height: 2vw;
+    }
+  }
+
+  .section4{
+    background-color: var(--color-pink-base);
+
+    div {
+      width: 60%;
+      height: 60%;
+      top: 15%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      margin-left: auto;
+      margin-right: auto;
+      color: var(--color-pink-link);
+    }  
+
+    h3 {
+      margin: 0;
+      padding: 0;
+      line-height: 1vh;
+    }
+    
+    p{
+      font-family: playfair-display;
+      font-style: italic;
+      line-height: 2vw;
+    }
+
+  }
+
+  #croissant{
+    width: 9vw;
+    top: 10%;
+    left: 6%;
+  }
+
+  #egg{
+    width: 8vw;
+    top: 10%;
+    left: 20%;
+  }
+
+  #carrot{
+    width: 6vw;
+    top: 30%;
+    left: 17%;
+  }
+
+  #soup{
+    width: 13vw;
+    top: 40%;
+    left: 27%;
+  }
+
+  #noodle{
+    width: 14vw;
+    top: 30%;
+    left: 0%;
+  }
+
+  #cow{
+    width: 20vw;
+    top: 70%;
+    left: 0%;
+  }
+
+  #burger{
+    width: 14vw;
+    top: 50%;
+    left: 55%;
+  }
+
+  #beer{
+    width: 10vw;
+    top: 7%;
+    left: 70%;
+  }
+
+  #tomato{
+    width: 10vw;
+    top: 45%;
+    left: 75%;
+  }
+
+  #ricebowl{
+    width: 15vw;
+    top: 70%;
+    left: 68%;
+  }
+
+  #cake{
+    width: 17vw;
+    top: 15%;
+    left: 82%;
+  }
+
+  #spinach{
+    width: 15vw;
+    top: 50%;
+    left: 88%;
+  }
+
+  #donut{
+    width: 9vw;
+    top: 85%;
+    left: 85%;
+  }
 
 }
