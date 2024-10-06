@@ -15,7 +15,7 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
     const [excludedIngredients, setExcludedIngredients] = useState([]);
 
     const [isLoading, setIsTagsIngredientsLoading] = useState(true);
-    const [currentBin, setCurrentBin] = useState("A-C");
+    const [currentBin, setCurrentBin] = useState("a");
     const [binLimits, setBinLimits] = useState({});
 
 
@@ -38,33 +38,71 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
 
     const calculateBinLimits = () => {
         const bins = {
-            "A-C": [0, -1],
-            "D-L": [-1, -1],
-            "M-R": [-1, -1],
-            "S-Z": [-1, availableIngredients.length - 1],
+            "a": [0, -1],
+            "b": [-1, -1],
+            "c": [-1, -1],
+            "d": [-1, -1],
+            "e": [-1, -1],
+            "f": [-1, -1],
+            "g": [-1, -1],
+            "h": [-1, -1],
+            "i": [-1, -1],
+            "j": [-1, -1],
+            "k": [-1, -1],
+            "l": [-1, -1],
+            "m": [-1, -1],
+            "n": [-1, -1],
+            "o": [-1, -1],
+            "p": [-1, -1],
+            "q": [-1, -1],
+            "r": [-1, -1],
+            "s": [-1, -1],
+            "t": [-1, -1],
+            "u": [-1, -1],
+            "v": [-1, -1],
+            "w": [-1, -1],
+            "x": [-1, -1],
+            "y": [-1, -1],
+            "z": [-1, -1],
         };
 
-        for (let i = 0; i < availableIngredients.length && i >= 0; i ++) {
+        // Because c is the most common first letter, we can optimize the loop by breaking it when we reach c so that we don't need to loop through c
 
-            const firstLetter = availableIngredients[i][0].toUpperCase();
+        // Loop through the available ingredients and update the bins
+        for (let i = 0; i < availableIngredients.length && i >= 0; i++) {
 
-            if (firstLetter >= "A" && firstLetter <= "C") {
-                bins["A-C"][1] = i;
-            } else if (firstLetter >= "D" && firstLetter <= "L") {
-                if (bins["D-L"][0] === -1) {
-                    bins["D-L"][0] = i;
-                }
-                bins["D-L"][1] = i;
-            } else if (firstLetter >= "M" && firstLetter <= "R") {
-                if (bins["M-R"][0] === -1) {
-                    bins["M-R"][0] = i;
-                }
-                bins["M-R"][1] = i;
-            } else if (firstLetter >= "S" && firstLetter <= "Z") {
-                bins["S-Z"][0] = i;
+            const firstLetter = availableIngredients[i][0].toLowerCase();
+
+            if (bins[firstLetter][0] === -1) {
+                bins[firstLetter][0] = i;
+            }
+            if (firstLetter !== "c") {
+                bins[firstLetter][1] = i;
+            }
+
+            // if the first letter is c, break the loop
+            if (firstLetter === "c") {
                 break;
             }
         }
+
+        for (let i = availableIngredients.length - 1; i >= 0; i--) {
+            const lastLetter = availableIngredients[i][0].toLowerCase();
+            
+            if (bins[lastLetter][1] === -1) {
+                bins[lastLetter][1] = i;
+            }
+
+            if (lastLetter !== "c") {
+                bins[lastLetter][0] = i;
+            }
+
+            // if the first letter is c, break the loop
+            if (lastLetter === 'c') {
+                break;
+            }
+        }
+
         return bins;
     };
 
@@ -72,7 +110,7 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
     useEffect(() => {
         if (!isOpen) return; // Don't run if the popup is closed
         setBinLimits(calculateBinLimits()); // Calculate the bin limits
-        setCurrentBin("A-C"); // Reset to the first bin
+        setCurrentBin("a"); // Reset to the first bin
     }, [availableIngredients, isOpen]);
 
     // Update available tags and ingredients when the popup is opened
@@ -91,7 +129,7 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
             while (currentIndex < keys.length) {
                 currentBinnedIngredients = binLimits[keys[currentIndex]] ? availableIngredients.slice(binLimits[keys[currentIndex]][0], binLimits[keys[currentIndex]][1] + 1) : [];
                 filteredIngredients = currentBinnedIngredients.filter(ingredient => !includedItems.includes(ingredient) && !excludedItems.includes(ingredient));
-                
+
                 if (currentBinnedIngredients.length > 0 && filteredIngredients.length === 0) {
                     // disable the button if there are no ingredients in the bin
                     binLimits[keys[currentIndex]] = [-1, -1];
@@ -274,18 +312,6 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
                         {!isLoading ? (
                             availableIngredientsState.length > 0 ? (
                                 <>
-                                    {/* show buttons to navigate between bins */}
-                                    <div className="bin-buttons">
-                                        {Object.keys(binLimits).map((bin, index) => (
-                                            <button
-                                                key={index}
-                                                onClick={() => setCurrentBin(bin)}
-                                                disabled={binLimits[bin][0] === -1 || binLimits[bin][1] === -1}
-                                            >
-                                                {bin}
-                                            </button>
-                                        ))}
-                                    </div>
                                     {availableIngredientsState.map((ingredient, index) => (
                                         <div key={index} className="ingredient-item">
                                             <button className="include" onClick={() => addIngredient(ingredient, "include")}>
@@ -305,6 +331,18 @@ const FilterPopup = ({ isOpen, onClose, availableTags, availableIngredients, onF
                             <span className="no-items">Loading...</span>
                         )}
                     </div>
+                        {/* show buttons to navigate between bins */}
+                        <div className="bin-buttons">
+                            {Object.keys(binLimits).map((bin, index) => (
+                                <a className={`${currentBin === bin ? 'active' : ''} ${(binLimits[bin][0] === -1 || binLimits[bin][1] === -1) ? 'disabled' : ''}`}
+                                    key={index}
+                                    onClick={() => setCurrentBin(bin)}
+                                >
+                                    {bin}
+                                </a>
+                            ))}
+                        </div>
+
                 </div>
                 <IoMdClose className='x-button' onClick={onClose}></IoMdClose>
             </div>
