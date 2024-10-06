@@ -309,7 +309,7 @@ function Landing() {
           <h3>Inventory Management</h3>
           <p>Know exactly what you have at home! Our inventory tool keeps track of the ingredients in your kitchen, so you can plan meals that use what's already on hand, reducing waste and saving time.</p>
 
-          <h3>Grocery List Generator</h3>
+          <h3>Integrated Grocery List</h3>
           <p>Generate a shopping list based on your weekly meal plan, using what you already have.</p>
 
           <h3>Weekly Menu Planner</h3>
@@ -321,7 +321,7 @@ function Landing() {
       </div>
       <div className="section section3">
         <div className="glassyContainer"><h3>Sustainable Choices</h3>
-        <p>Our platform emphasizes meals that make the most of what's already in your kitchen. By reducing food waste and promoting seasonal, low-impact ingredients, <span class="highlight">The Tavern</span> helps you make choices that are good for both your table and the planet.</p>
+        <p>Our platform emphasizes meals that make the most of what's already in your kitchen. By <strong>reducing food waste </strong> and promoting seasonal, low-impact ingredients, <span class="highlight">The Tavern</span> helps you make choices that are good for both your table and the planet.</p>
 
         <h3>Smart Grocery Shopping</h3>
         <p>Because we focus on using what you already own, <span class="highlight">The Tavern</span> saves you from buying unnecessary ingredients. Shop smarter, not harder, and enjoy more efficient, stress-free grocery trips.</p>
@@ -332,8 +332,6 @@ function Landing() {
         <h3>Completely Free</h3>
         <p><span class="highlight">The Tavern</span> is free to use—no subscriptions, no hidden costs. We believe in making meal planning accessible to everyone.</p>
 
-
-        <h3>Plan the Feast, Enjoy the Rest</h3>
         </div>
       </div>
       <div className="section section4">

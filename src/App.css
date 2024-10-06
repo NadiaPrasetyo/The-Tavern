@@ -2714,6 +2714,10 @@ th {
   }
 }
 
+.highlight{
+  color: var(--color-green-muted-solid);
+}
+
 /* Apply the animation when the fade-in class is added */
 .fade-in {
   animation: fadeIn 1s ease forwards;
@@ -2770,8 +2774,20 @@ th {
     justify-content: left;
     align-items: left;
     padding: 20px;
-    line-height: 1vw;
-  }  
+    color: #356c9a;
+  }
+
+  h3 {
+    margin: 0;
+    padding: 0;
+    line-height: 1vh;
+  }
+  
+  p{
+    font-family: playfair-display;
+    font-style: italic;
+    line-height: 2vw;
+  }
 }
 
 .section3{
@@ -2784,7 +2800,20 @@ th {
     display: flex;
     flex-direction: column;
     padding: 20px;
-  }  
+    color: #83508f;
+  } 
+
+  h3 {
+    margin: 0;
+    padding: 0;
+    line-height: 1vh;
+  }
+  
+  p{
+    font-family: playfair-display;
+    font-style: italic;
+    line-height: 2vw;
+  }
 }
 
 .section4{
@@ -2801,7 +2830,21 @@ th {
     padding: 20px;
     margin-left: auto;
     margin-right: auto;
+    color: #ca6d9e;
   }  
+
+  h3 {
+    margin: 0;
+    padding: 0;
+    line-height: 1vh;
+  }
+  
+  p{
+    font-family: playfair-display;
+    font-style: italic;
+    line-height: 2vw;
+  }
+
 }
 
 .landingFooter{
