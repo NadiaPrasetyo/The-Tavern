@@ -152,24 +152,35 @@ function Menu({userdata}) {
   };
 
   const postIngredientsToGroceryList = async () => {
-    try {
-      const response = await fetch('/api/add-many-to-grocery', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          Username: userdata.username,
-          Items: highlightedIngredients,
-          Category: 'From Menu',
-        }),
-      });
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error('Error:', error);
+    const url = '/api/add-many-to-grocery';
+    const payload = {
+      Username: userdata.username,
+      Items: highlightedIngredients,
+      Category: 'From Menu',
+    };
+  
+    if (navigator.sendBeacon) {
+      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+      navigator.sendBeacon(url, blob);
+      console.log('Beacon sent:', payload);
+    } else {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+          keepalive: true,
+        });
+        console.log('Fetch response:', await response.json());
+        console.log('Fetch sent:', payload);
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
     }
   };
+  
 
   // Autosave every 30 seconds if changes were made
   useEffect(() => {
