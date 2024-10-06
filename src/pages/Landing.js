@@ -8,6 +8,24 @@ function Landing() {
   localStorage.setItem('isDarkMode', isDarkMode);
 
   const [onSection, setOnSection] = useState(0); // Track section index
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width
+  const [windowSmall, setWindowSmall] = useState(false); // Track if window is small
+
+  // Update window width state when the window is resized
+  useEffect(() => {
+    if (windowWidth < 768) {
+      setWindowSmall(true);
+    }
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
 
   useEffect(() => {
     const sections = document.querySelectorAll('.section');
@@ -50,109 +68,216 @@ function Landing() {
 
   // Movement styles based on the active section
   const getImageTransform = (imageId) => {
-    switch (onSection) {
-      case 0:
-        // Default position for section 1
-        return 'translate(0px, 0px)';
-      case 1:
-        // Move images up when in section 2
-        switch (imageId) {
-          case 'croissant':
-            return 'translate(25vw, -1vw)';
-          case 'egg':
-            return 'translate(30vw, -3vw)';
-          case 'carrot':
-            return 'translate(45vw, 0)';
-          case 'soup':
-            return 'translate(7vw, 13vw)';
-          case 'noodle':
-            return 'translate(10vw, -15vw)';
-          case 'cow':
-            return 'translate(3vw, 3vw)';
-          case 'burger':
-            return 'translate(0, 8vw)';
-          case 'beer':
-            return 'translate(0, -3vw)';
-          case 'tomato':
-            return 'translate(0, -2vw)';
-          case 'ricebowl':
-            return 'translate(3vw, 0)';
-          case 'cake':
-            return 'translate(0, -3vw)';
-          case 'spinach':
-            return 'translate(0vw, -1vw)';
-          case 'donut':
-            return 'translate(2vw, 0vw)';
-          default:
-            return 'translate(0px, 0px)';
-        }
-      case 2:
-        // Move images to the right when in section 3
-        switch (imageId) {
-          case 'croissant':
-            return 'translate(-2vw, 0)';
-          case 'egg':
-            return 'translate(-1vw, 0)';
-          case 'carrot':
-            return 'translate(-3vw, 0)';
-          case 'soup':
-            return 'translate(-5vw, 10vw)';
-          case 'noodle':
-            return 'translate(0vw, 0vw)';
-          case 'cow':
-            return 'translate(0vw, 0vw)';
-          case 'burger':
-            return 'translate(-30vw, -10vw)';
-          case 'beer':
-            return 'translate(-38vw, -5vw)';
-          case 'tomato':
-            return 'translate(-40vw, 5vw)';
-          case 'ricebowl':
-            return 'translate(-20vw, -33vw)';
-          case 'cake':
-            return 'translate(-13vw, -10vw)';
-          case 'spinach':
-            return 'translate(0, -24vw)';
-          case 'donut':
-            return 'translate(-46vw, -2vw)';
-          default:
-            return 'translate(0px, 0px)';
-        }
-      case 3:
-        // Example for section 4 - you can customize it further
-        switch (imageId) {
-          
-          case 'croissant':
-            return 'translate(-3vw, -2vw)';
-          case 'egg':
-            return 'translate(-1vw, -3vw)';
-          case 'carrot':
-            return 'translate(-5vw, -5vw)';
-          case 'soup':
-            return 'translate(-5vw, 13vw)';
-          case 'noodle':
-            return 'translate(1vw, -1vw)';
-          case 'cow':
-            return 'translate(-3vw, -1vw)';
-          case 'burger':
-            return 'translate(-10vw, 13vw)';
-          case 'beer':
-            return 'translate(-30vw, -5vw)';
-          case 'tomato':
-            return 'translate(-15vw, -20vw)';
-          case 'ricebowl':
-            return 'translate(-5vw, 5vw)';
-          case 'cake':
-            return 'translate(0, -5vw)';
-          case 'spinach':
-            return 'translate(-3vw, -4vw)';
-          case 'donut':
-            return 'translate(2vw, -3vw)';
-          default:
-            return 'translate(0px, 0px)';
-        }
-      default:
-        return 'translate(0px, 0px)';
+    if (!windowSmall) {
+      switch (onSection) {
+        case 0:
+          // Default position for section 1
+          return 'translate(0px, 0px)';
+        case 1:
+          // Move images up when in section 2
+          switch (imageId) {
+            case 'croissant':
+              return 'translate(25vw, -1vw)';
+            case 'egg':
+              return 'translate(30vw, -3vw)';
+            case 'carrot':
+              return 'translate(45vw, 0)';
+            case 'soup':
+              return 'translate(7vw, 13vw)';
+            case 'noodle':
+              return 'translate(10vw, -15vw)';
+            case 'cow':
+              return 'translate(3vw, 3vw)';
+            case 'burger':
+              return 'translate(0, 8vw)';
+            case 'beer':
+              return 'translate(0, -3vw)';
+            case 'tomato':
+              return 'translate(0, -2vw)';
+            case 'ricebowl':
+              return 'translate(3vw, 0)';
+            case 'cake':
+              return 'translate(0, -3vw)';
+            case 'spinach':
+              return 'translate(0vw, -1vw)';
+            case 'donut':
+              return 'translate(2vw, 0vw)';
+            default:
+              return 'translate(0px, 0px)';
+          }
+        case 2:
+          // Move images to the right when in section 3
+          switch (imageId) {
+            case 'croissant':
+              return 'translate(-2vw, 0)';
+            case 'egg':
+              return 'translate(-1vw, 0)';
+            case 'carrot':
+              return 'translate(-3vw, 0)';
+            case 'soup':
+              return 'translate(-5vw, 10vw)';
+            case 'noodle':
+              return 'translate(0vw, 0vw)';
+            case 'cow':
+              return 'translate(0vw, 0vw)';
+            case 'burger':
+              return 'translate(-30vw, -10vw)';
+            case 'beer':
+              return 'translate(-38vw, -5vw)';
+            case 'tomato':
+              return 'translate(-40vw, 5vw)';
+            case 'ricebowl':
+              return 'translate(-20vw, -33vw)';
+            case 'cake':
+              return 'translate(-13vw, -10vw)';
+            case 'spinach':
+              return 'translate(0, -24vw)';
+            case 'donut':
+              return 'translate(-46vw, -2vw)';
+            default:
+              return 'translate(0px, 0px)';
+          }
+        case 3:
+          // Example for section 4 - you can customize it further
+          switch (imageId) {
+            
+            case 'croissant':
+              return 'translate(-3vw, -2vw)';
+            case 'egg':
+              return 'translate(-1vw, -3vw)';
+            case 'carrot':
+              return 'translate(-5vw, -5vw)';
+            case 'soup':
+              return 'translate(-5vw, 13vw)';
+            case 'noodle':
+              return 'translate(1vw, -1vw)';
+            case 'cow':
+              return 'translate(-3vw, -1vw)';
+            case 'burger':
+              return 'translate(-10vw, 13vw)';
+            case 'beer':
+              return 'translate(-30vw, -5vw)';
+            case 'tomato':
+              return 'translate(-15vw, -20vw)';
+            case 'ricebowl':
+              return 'translate(-5vw, 5vw)';
+            case 'cake':
+              return 'translate(0, -5vw)';
+            case 'spinach':
+              return 'translate(-3vw, -4vw)';
+            case 'donut':
+              return 'translate(2vw, -3vw)';
+            default:
+              return 'translate(0px, 0px)';
+          }
+        default:
+          return 'translate(0px, 0px)';
+      }
+    } else {
+      switch (onSection) {
+        case 0:
+          // Default position for section 1
+          return 'translate(0px, 0px)';
+        case 1:
+          // Move images up when in section 2
+          switch (imageId) {
+            case 'croissant':
+              return 'translate(5vw, -10vw)';
+            case 'egg':
+              return 'translate(0vw, -5vw)';
+            case 'carrot':
+              return 'translate(5vw, -20vw)';
+            case 'soup':
+              return 'translate(-30vw, 13vw)';
+            case 'noodle':
+              return 'translate(-30vw, -15vw)';
+            case 'cow':
+              return 'translate(-5vw, 10vw)';
+            case 'burger':
+              return 'translate(8vw, 80vw)';
+            case 'beer':
+              return 'translate(0, -10vw)';
+            case 'tomato':
+              return 'translate(0, -2vw)';
+            case 'ricebowl':
+              return 'translate(3vw, 0)';
+            case 'cake':
+              return 'translate(0, -3vw)';
+            case 'spinach':
+              return 'translate(10vw, -1vw)';
+            case 'donut':
+              return 'translate(9vw, 3vw)';
+            default:
+              return 'translate(0px, 0px)';
+          }
+        case 2:
+          // Move images to the right when in section 3
+          switch (imageId) {
+            case 'croissant':
+              return 'translate(-10vw, 0)';
+            case 'egg':
+              return 'translate(-1vw, -20vw)';
+            case 'carrot':
+              return 'translate(20vw, -5vw)';
+            case 'soup':
+              return 'translate(-5vw, 10vw)';
+            case 'noodle':
+              return 'translate(-10vw, -30vw)';
+            case 'cow':
+              return 'translate(0vw, 0vw)';
+            case 'burger':
+              return 'translate(-50vw, 0vw)';
+            case 'beer':
+              return 'translate(-2vw, -20vw)';
+            case 'tomato':
+              return 'translate(-40vw, 5vw)';
+            case 'ricebowl':
+              return 'translate(30vw, 0vw)';
+            case 'cake':
+              return 'translate(-13vw, -10vw)';
+            case 'spinach':
+              return 'translate(30vw, 0vw)';
+            case 'donut':
+              return 'translate(-46vw, -2vw)';
+            default:
+              return 'translate(0px, 0px)';
+          }
+        case 3:
+          // Example for section 4 - you can customize it further
+          switch (imageId) {
+            
+            case 'croissant':
+              return 'translate(-3vw, -2vw)';
+            case 'egg':
+              return 'translate(-1vw, -3vw)';
+            case 'carrot':
+              return 'translate(-5vw, -5vw)';
+            case 'soup':
+              return 'translate(-5vw, 13vw)';
+            case 'noodle':
+              return 'translate(1vw, -1vw)';
+            case 'cow':
+              return 'translate(-3vw, -1vw)';
+            case 'burger':
+              return 'translate(-10vw, 13vw)';
+            case 'beer':
+              return 'translate(-30vw, -5vw)';
+            case 'tomato':
+              return 'translate(-15vw, -20vw)';
+            case 'ricebowl':
+              return 'translate(-5vw, 5vw)';
+            case 'cake':
+              return 'translate(0, -5vw)';
+            case 'spinach':
+              return 'translate(-3vw, -4vw)';
+            case 'donut':
+              return 'translate(2vw, -3vw)';
+            default:
+              return 'translate(0px, 0px)';
+          }
+        default:
+          return 'translate(0px, 0px)';
+      }
     }
   };
 
