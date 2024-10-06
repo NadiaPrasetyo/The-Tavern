@@ -11,7 +11,7 @@ const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, inIn
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
-        onClose(); // Call the onClose function when Esc is pressed
+        onClose(event); // Call the onClose function when Esc is pressed
       }
     };
 

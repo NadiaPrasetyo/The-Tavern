@@ -89,7 +89,7 @@ function PrivateRoute({ element, handleEndSession, setUsername }) {
     const token = sessionStorage.getItem("token");
     if (!token) {
       console.error("No token found. Redirecting to login.");
-      window.location.href = '/login';
+      window.location.href = '/';
       return;
     }
     checkTokenExpiration(token, handleEndSession);//check if the token has expired
@@ -182,7 +182,7 @@ function App() {
       console.error("Error logging in.");
       setDropdownOpen(false);
       setLoading(false);
-      window.location.href = '/login';
+      window.location.href = '/';
     }
   };
 

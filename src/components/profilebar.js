@@ -32,7 +32,7 @@ function ProfileBar({userdata, source}) {
           ) : (
           <a href="/Home">Home</a>
           )}
-          <a href="/Login">Logout</a>
+          <a href="/">Logout</a>
         </div>
         
       </div>

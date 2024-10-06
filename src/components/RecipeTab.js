@@ -74,11 +74,6 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
     // close the recipe info modal 
     setInfoOpen(false);
     setSelectedRecipe(null);
-    
-    // if closed get favourites
-    if (!isOpen) {
-      getFavourites();
-    }
 
     setIsOpen(!isOpen);
     setIsOpenDrag(!isOpen);
@@ -257,8 +252,16 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
 
   // Toggle the recipe info modal
   const toggleInfo = (recipe, e) => {
-    setSelectedRecipe(recipe);
-    setInfoOpen(!isInfoOpen);
+    e.stopPropagation();
+    if (e.type === 'touchstart') {
+      setTimeout(() => {
+        setSelectedRecipe(recipe);
+        setInfoOpen(!isInfoOpen);
+      }, 300);
+    } else {
+      setSelectedRecipe(recipe);
+      setInfoOpen(!isInfoOpen);
+    }
   };
 
   const closeInfo = (e) => {
@@ -397,8 +400,8 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
       setFavouriteRecipes(data.favourites);
       const favSet = new Set(data.favourites.map((recipe) => recipe.Name));
       setFavouriteSet(favSet);
-
       setRecipeList(data.favourites);
+      
 
     } catch (error) {
       console.error("Error getting favourites:", error);
