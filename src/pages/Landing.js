@@ -299,19 +299,49 @@ function Landing() {
       <div className="section section1">
         <img src="Tavern-banner.png" alt="Tavern Logo" />
         <div className="glassyContainer">
-          <p>WELCOME! <br/> "Plan the Feast, Enjoy the Rest”</p>
+          <h1>WELCOME! </h1> 
+          <p>Plan the Feast, Enjoy the Rest</p>
         </div>
       </div>
       <div className="section section2">
         <div className="glassyContainer">
+          <p>Welcome to <span class="highlight">The Tavern</span>, the ultimate free meal planning platform that puts sustainability and simplicity first!</p>
+          <h3>Inventory Management</h3>
+          <p>Know exactly what you have at home! Our inventory tool keeps track of the ingredients in your kitchen, so you can plan meals that use what's already on hand, reducing waste and saving time.</p>
+
+          <h3>Grocery List Generator</h3>
+          <p>Generate a shopping list based on your weekly meal plan, using what you already have.</p>
+
+          <h3>Weekly Menu Planner</h3>
+          <p>Organize your meals for the week with our simple drag-and-drop planner. Prioritize recipes that use your existing inventory to make the most out of what's in your pantry.</p>
+
+          <h3>Recipe Inspiration Library</h3>
+          <p>Need some fresh ideas? Browse our collection of various, easy-to-make recipes.</p>
         </div>
       </div>
       <div className="section section3">
-        <div className="glassyContainer">
+        <div className="glassyContainer"><h3>Sustainable Choices</h3>
+        <p>Our platform emphasizes meals that make the most of what's already in your kitchen. By reducing food waste and promoting seasonal, low-impact ingredients, <span class="highlight">The Tavern</span> helps you make choices that are good for both your table and the planet.</p>
+
+        <h3>Smart Grocery Shopping</h3>
+        <p>Because we focus on using what you already own, <span class="highlight">The Tavern</span> saves you from buying unnecessary ingredients. Shop smarter, not harder, and enjoy more efficient, stress-free grocery trips.</p>
+
+        <h3>Effortless Meal Prep</h3>
+        <p>With our integrated tools, meal planning has never been easier. Simply manage your inventory, plan your meals, generate your shopping list, and enjoy your cooking time—stress-free.</p>
+
+        <h3>Completely Free</h3>
+        <p><span class="highlight">The Tavern</span> is free to use—no subscriptions, no hidden costs. We believe in making meal planning accessible to everyone.</p>
+
+
+        <h3>Plan the Feast, Enjoy the Rest</h3>
         </div>
       </div>
       <div className="section section4">
         <div className="glassyContainer">
+        <h2>Plan the Feast, Enjoy the Rest</h2>
+        <p>At <span class="highlight">The Tavern</span>, meal planning is easy, sustainable, and enjoyable. Let us help you manage your inventory, plan your week, create efficient grocery lists, and explore new recipes—all in one place.</p>
+
+        <p><strong>Ready to get started? Plant the feast, enjoy the rest, and make every meal a celebration with <span class="highlight">The Tavern</span>!</strong></p>
         </div>
       </div>
 
