@@ -3232,13 +3232,6 @@ th {
     width: 80vw;
   }
 
-  .bin-buttons {
-    /* make into 2 top 2 bottom */
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    grid-template-columns: 1fr 1fr;
-  }
-
   /* LANDING PAGE MEDIA QUERIES */
   
   .section1{
