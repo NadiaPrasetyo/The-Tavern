@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 :root {
 
@@ -2713,6 +2714,10 @@ th {
   }
 }
 
+.highlight{
+  color: var(--color-green-muted-solid);
+}
+
 /* Apply the animation when the fade-in class is added */
 .fade-in {
   animation: fadeIn 1s ease forwards;
@@ -2746,13 +2751,17 @@ th {
     padding: 20px;
     margin-left: auto;
     margin-right: auto;
+    line-height: 0px;
+    color: var(--color-green-muted-solid);
   }  
 
   p{
+    font-family: playfair-display;
     font-size: 1.5rem;
-    color: var(--color-green-muted-solid);
+    font-style: italic;
   }
 }
+
 
 .section2{
   background-color: var(--color-blue-base);
@@ -2765,7 +2774,20 @@ th {
     justify-content: left;
     align-items: left;
     padding: 20px;
-  }  
+    color: #356c9a;
+  }
+
+  h3 {
+    margin: 0;
+    padding: 0;
+    line-height: 1vh;
+  }
+  
+  p{
+    font-family: playfair-display;
+    font-style: italic;
+    line-height: 2vw;
+  }
 }
 
 .section3{
@@ -2778,7 +2800,20 @@ th {
     display: flex;
     flex-direction: column;
     padding: 20px;
-  }  
+    color: #83508f;
+  } 
+
+  h3 {
+    margin: 0;
+    padding: 0;
+    line-height: 1vh;
+  }
+  
+  p{
+    font-family: playfair-display;
+    font-style: italic;
+    line-height: 2vw;
+  }
 }
 
 .section4{
@@ -2795,7 +2830,21 @@ th {
     padding: 20px;
     margin-left: auto;
     margin-right: auto;
+    color: #ca6d9e;
   }  
+
+  h3 {
+    margin: 0;
+    padding: 0;
+    line-height: 1vh;
+  }
+  
+  p{
+    font-family: playfair-display;
+    font-style: italic;
+    line-height: 2vw;
+  }
+
 }
 
 .landingFooter{
