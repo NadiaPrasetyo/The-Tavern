@@ -3094,16 +3094,16 @@ th {
   
   #moving-cover {
     left: 0;
-    top:0%;
+    top: 0;
     width: 100%;
     height: 40vh;
     transition:  top 1.5s ease-in-out, height 1.5s ease-in-out;
   }
 
   #moving-cover.active {
-    top:40%;
+    top:40vh;
     left:0;
-    height: 60%;
+    height: 60vh;
   }
 
   /* Change the content to have flex direction column */

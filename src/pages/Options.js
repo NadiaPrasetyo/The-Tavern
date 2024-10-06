@@ -9,7 +9,7 @@ function Options({userdata}) {
   const [displayConfirm, setDisplayConfirm] = useState(false);
   // redirect to /login
   const logout = () => {
-    window.location.href = '/login';
+    window.location.href = '/';
   }
 
   const deleteAccount = async () => {
@@ -26,7 +26,7 @@ function Options({userdata}) {
     console.log(data.message);
     
     // redirect to login page
-    window.location.href = '/login';
+    window.location.href = '/';
     
   }
 
