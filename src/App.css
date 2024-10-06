@@ -1758,6 +1758,12 @@ th {
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
+
+  scrollbar-width: thin;
+}
+
+.columns::-webkit-scrollbar {
+  width: 5px;
 }
 
 .columns h4 {
@@ -1769,7 +1775,7 @@ th {
 .tags-column,
 .ingredients-column {
   flex: 1;
-  margin: 0 10px;
+  margin: 0 8px;
   min-width: 100px;
 }
 
@@ -1777,7 +1783,7 @@ th {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 50%;
+  left: 47.5%;
   /* Place it in the middle */
   width: 2px;
   background-color: var(--text-color);
@@ -1830,24 +1836,36 @@ th {
 
 .bin-buttons {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: start;
   margin: 10px 0;
   
-  button {
+  a {
     flex: 1;
-    background-color: var(--color-brown-hover2);
+    font-size: 0.9rem;
+    text-align: center;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
 
-  button:hover {
+  a.active {
+    background-color: var(--color-green-hover);
+  }
+
+  a:hover {
     background-color: var(--color-brown-medium2);
   }
 
-  button:disabled {
-    background-color: var(--color-green-verylight);
-    cursor: not-allowed;
+  a.disabled {
+    color: var(--color-setting-input);
+    text-decoration: line-through;
+    /* cursor: not-allowed; */
+    /* background-color: var(--color-green-verylight); */
+    
+    &:hover {
+      background-color: var(--color-green-verylight);
+    }
   }
 }
 
@@ -3212,13 +3230,6 @@ th {
 
   .accordian {
     width: 80vw;
-  }
-
-  .bin-buttons {
-    /* make into 2 top 2 bottom */
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    grid-template-columns: 1fr 1fr;
   }
 
   /* LANDING PAGE MEDIA QUERIES */
