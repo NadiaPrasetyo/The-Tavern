@@ -15,6 +15,7 @@ import Loading from './components/Loading';
 import DropDown from './components/DropDown';
 import Landing from './pages/Landing';
 import Help from './pages/Help';
+import Tutorial from './pages/HelpnTutorial';
 import React, { useState, useEffect, useRef } from 'react';
 import {jwtDecode} from 'jwt-decode';
 
@@ -214,6 +215,7 @@ function App() {
         <Route path="/">
           <Route index element={<Landing />} />
           <Route path="landing" element={<Landing />} />
+          <Route path="tutorial" element={<Tutorial />} />
           <Route path="home" element={<PrivateRoute element={<Home />} handleEndSession={handleEndSession} setUsername={setUsername} />} />
           <Route path="inventory" element={<PrivateRoute element={<Inventory />} handleEndSession={handleEndSession} setUsername={setUsername} />} />
           <Route path="weekly-menu" element={<PrivateRoute element={<Menu />} handleEndSession={handleEndSession} setUsername={setUsername} />} />

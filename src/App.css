@@ -2271,7 +2271,7 @@ th {
   text-align: center;
 }
 
-.faq-answer {
+.faq-answer, .tut-answer {
   height: 0;
   overflow: hidden;
   font-weight: 400;
@@ -2694,6 +2694,19 @@ th {
   }
 }
 
+.headerButtons{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin: 0;
+  padding: 0 !important;
+  max-height: 30px;
+
+  a + a {
+    margin-left: 10px;
+  }
+}
+
 .landingPage div{
   padding-top: 30px;
   width: 100%;
@@ -2888,6 +2901,44 @@ th {
   transition: background-color 0.3s ease;
 }
 
+.tutorial-main {
+  display: flex;
+  flex-direction: row;
+  background-color: var(--color-green-light);
+
+  .faq-item {
+    background-color: var(--color-green-light2);
+  }
+}
+
+.tutorial-btn {
+  background-color: transparent;
+  color: var(--text-color);
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.tutorial-btn.active {
+  background-color: var(--color-green-checkbox);
+}
+
+.help-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+  padding: 20px;
+}
+
+.tutorial-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+  padding: 20px;
+}
 
 /* MEDIA QUERIES FOR MOBILE VERSION */
 @media only screen and (max-width: 768px) {

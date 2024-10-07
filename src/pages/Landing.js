@@ -282,7 +282,10 @@ function Landing() {
     <div className="landingPage">
       <header className="landingHeader">
         <img src="Tavern-logo-small.png" alt="Tavern Logo" />
-        <a className="loginOrRegisterButton" href="/Login"> Login/Register </a>
+        <div className="headerButtons">
+          <a className="tutorial-btn" href="/tutorial"> Help & Tutorial </a>
+          <a className="loginOrRegisterButton" href="/Login"> Login/Register </a>
+        </div>
       </header>
 
       <span className="artifactContainer">
