@@ -3415,12 +3415,17 @@ th {
   }
 
   /* Tutorial page MEDIA */
+    
+  .contact-us {
+    width: 100%;
+    flex-direction: column;
+  }
+
   .tutorial-main {
     flex-direction: column;
   }
 
   .tutorial-column {
-    width: 100%;
     top: 0;
     height: 100vh;
   }
