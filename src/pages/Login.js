@@ -20,18 +20,18 @@ function Login() {
 
       <main className ="login">
         <div id ="SignIn-container"
-        onMouseEnter={() => setOnRightSide(true)}
         >
 
           <SignIn />
         </div>
         <div id ="SignUp-container"
-        onMouseEnter={() => setOnRightSide(false)}
         >
             <SignUp />
         </div>
         <div id="moving-cover"
         className={onRightSide ? "active" : ""}
+        onMouseEnter={() => setOnRightSide(!onRightSide)}
+        onTouchStart={() => setOnRightSide(!onRightSide)}
         >
             <div id="SignIn-cover"
             className={onRightSide ? "active" : ""}
