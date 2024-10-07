@@ -2735,7 +2735,7 @@ th {
 }
 
 .highlight{
-  color: var(--color-green-muted-solid);
+  color: black;
 }
 
 /* Apply the animation when the fade-in class is added */
