@@ -9,23 +9,19 @@ function Landing() {
 
   const [onSection, setOnSection] = useState(0); // Track section index
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width
-  const [windowSmall, setWindowSmall] = useState(false); // Track if window is small
 
-  // Update window width state when the window is resized
+  // Update window width state when the window is resized and update the windowSmall state if the window is less than 768px, 
   useEffect(() => {
-    if (windowWidth < 768) {
-      setWindowSmall(true);
-    }
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
 
     window.addEventListener('resize', handleResize);
+
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
 
   useEffect(() => {
     const sections = document.querySelectorAll('.section');
@@ -67,8 +63,114 @@ function Landing() {
   }, []);
 
   // Movement styles based on the active section
-  const getImageTransform = (imageId) => {
-    if (!windowSmall) {
+  const getImageTransform = (imageId, windowSmall) => {
+      if (windowSmall){
+          switch (onSection) {
+            case 0:
+              // Default position for section 1
+              return 'translate(0px, 0px)';
+            case 1:
+              // Move images up when in section 2
+              switch (imageId) {
+                case 'croissant':
+                  return 'translate(5vw, -10vw)';
+                case 'egg':
+                  return 'translate(0vw, -5vw)';
+                case 'carrot':
+                  return 'translate(5vw, -20vw)';
+                case 'soup':
+                  return 'translate(-30vw, 13vw)';
+                case 'noodle':
+                  return 'translate(-30vw, -15vw)';
+                case 'cow':
+                  return 'translate(-5vw, 10vw)';
+                case 'burger':
+                  return 'translate(8vw, 80vw)';
+                case 'beer':
+                  return 'translate(0, -10vw)';
+                case 'tomato':
+                  return 'translate(0, -2vw)';
+                case 'ricebowl':
+                  return 'translate(3vw, 0)';
+                case 'cake':
+                  return 'translate(0, -3vw)';
+                case 'spinach':
+                  return 'translate(10vw, -1vw)';
+                case 'donut':
+                  return 'translate(9vw, 3vw)';
+                default:
+                  return 'translate(0px, 0px)';
+              }
+            case 2:
+              // Move images to the right when in section 3
+              switch (imageId) {
+                case 'croissant':
+                  return 'translate(-10vw, 0)';
+                case 'egg':
+                  return 'translate(-1vw, -20vw)';
+                case 'carrot':
+                  return 'translate(20vw, -5vw)';
+                case 'soup':
+                  return 'translate(-5vw, 10vw)';
+                case 'noodle':
+                  return 'translate(-10vw, -30vw)';
+                case 'cow':
+                  return 'translate(0vw, 0vw)';
+                case 'burger':
+                  return 'translate(-50vw, 0vw)';
+                case 'beer':
+                  return 'translate(-2vw, -20vw)';
+                case 'tomato':
+                  return 'translate(10vw, 5vw)';
+                case 'ricebowl':
+                  return 'translate(30vw, 0vw)';
+                case 'cake':
+                  return 'translate(-13vw, -10vw)';
+                case 'spinach':
+                  return 'translate(30vw, 0vw)';
+                case 'donut':
+                  return 'translate(0vw, -2vw)';
+                default:
+                  return 'translate(0px, 0px)';
+              }
+            case 3:
+              // Example for section 4 - you can customize it further
+              switch (imageId) {
+                
+                case 'croissant':
+                  return 'translate(-3vw, -5vw)';
+                case 'egg':
+                  return 'translate(0vw, -3vw)';
+                case 'carrot':
+                  return 'translate(0vw, -20vw)';
+                case 'soup':
+                  return 'translate(-3vw, 20vw)';
+                case 'noodle':
+                  return 'translate(-10vw, -15vw)';
+                case 'cow':
+                  return 'translate(30vw, 5vw)';
+                case 'burger':
+                  return 'translate(-50vw, 10vw)';
+                case 'beer':
+                  return 'translate(0vw, -10vw)';
+                case 'tomato':
+                  return 'translate(0vw, -20vw)';
+                case 'ricebowl':
+                  return 'translate(10vw, -20vw)';
+                case 'cake':
+                  return 'translate(0, -5vw)';
+                case 'spinach':
+                  return 'translate(10vw, -20vw)';
+                case 'donut':
+                  return 'translate(2vw, -3vw)';
+                default:
+                  return 'translate(0px, 0px)';
+              }
+            default:
+              return 'translate(0px, 0px)';
+          }
+
+      }else{
       switch (onSection) {
         case 0:
           // Default position for section 1
@@ -172,112 +274,7 @@ function Landing() {
           }
         default:
           return 'translate(0px, 0px)';
-      }
-    } else {
-      switch (onSection) {
-        case 0:
-          // Default position for section 1
-          return 'translate(0px, 0px)';
-        case 1:
-          // Move images up when in section 2
-          switch (imageId) {
-            case 'croissant':
-              return 'translate(5vw, -10vw)';
-            case 'egg':
-              return 'translate(0vw, -5vw)';
-            case 'carrot':
-              return 'translate(5vw, -20vw)';
-            case 'soup':
-              return 'translate(-30vw, 13vw)';
-            case 'noodle':
-              return 'translate(-30vw, -15vw)';
-            case 'cow':
-              return 'translate(-5vw, 10vw)';
-            case 'burger':
-              return 'translate(8vw, 80vw)';
-            case 'beer':
-              return 'translate(0, -10vw)';
-            case 'tomato':
-              return 'translate(0, -2vw)';
-            case 'ricebowl':
-              return 'translate(3vw, 0)';
-            case 'cake':
-              return 'translate(0, -3vw)';
-            case 'spinach':
-              return 'translate(10vw, -1vw)';
-            case 'donut':
-              return 'translate(9vw, 3vw)';
-            default:
-              return 'translate(0px, 0px)';
-          }
-        case 2:
-          // Move images to the right when in section 3
-          switch (imageId) {
-            case 'croissant':
-              return 'translate(-10vw, 0)';
-            case 'egg':
-              return 'translate(-1vw, -20vw)';
-            case 'carrot':
-              return 'translate(20vw, -5vw)';
-            case 'soup':
-              return 'translate(-5vw, 10vw)';
-            case 'noodle':
-              return 'translate(-10vw, -30vw)';
-            case 'cow':
-              return 'translate(0vw, 0vw)';
-            case 'burger':
-              return 'translate(-50vw, 0vw)';
-            case 'beer':
-              return 'translate(-2vw, -20vw)';
-            case 'tomato':
-              return 'translate(-40vw, 5vw)';
-            case 'ricebowl':
-              return 'translate(30vw, 0vw)';
-            case 'cake':
-              return 'translate(-13vw, -10vw)';
-            case 'spinach':
-              return 'translate(30vw, 0vw)';
-            case 'donut':
-              return 'translate(-46vw, -2vw)';
-            default:
-              return 'translate(0px, 0px)';
-          }
-        case 3:
-          // Example for section 4 - you can customize it further
-          switch (imageId) {
-            
-            case 'croissant':
-              return 'translate(-3vw, -2vw)';
-            case 'egg':
-              return 'translate(-1vw, -3vw)';
-            case 'carrot':
-              return 'translate(-5vw, -5vw)';
-            case 'soup':
-              return 'translate(-5vw, 13vw)';
-            case 'noodle':
-              return 'translate(1vw, -1vw)';
-            case 'cow':
-              return 'translate(-3vw, -1vw)';
-            case 'burger':
-              return 'translate(-10vw, 13vw)';
-            case 'beer':
-              return 'translate(-30vw, -5vw)';
-            case 'tomato':
-              return 'translate(-15vw, -20vw)';
-            case 'ricebowl':
-              return 'translate(-5vw, 5vw)';
-            case 'cake':
-              return 'translate(0, -5vw)';
-            case 'spinach':
-              return 'translate(-3vw, -4vw)';
-            case 'donut':
-              return 'translate(2vw, -3vw)';
-            default:
-              return 'translate(0px, 0px)';
-          }
-        default:
-          return 'translate(0px, 0px)';
-      }
+        }
     }
   };
 
@@ -295,7 +292,8 @@ function Landing() {
           src="food-pics/16.jpg"
           alt="croissant"
           style={{
-            transform: getImageTransform('croissant'),
+            // Move the image based on the active section and width of the window
+            transform: getImageTransform('croissant', windowWidth < 768),
             transition: 'transform 0.5s ease', // Smooth transition
           }}
         />
@@ -305,7 +303,7 @@ function Landing() {
           src="food-pics/17.jpg"
           alt="egg"
           style={{
-            transform: getImageTransform('egg'),
+            transform: getImageTransform('egg', windowWidth < 768),
             transition: 'transform 0.5s ease',
           }}
         />
@@ -315,7 +313,7 @@ function Landing() {
           src="food-pics/18.jpg"
           alt="carrot"
           style={{
-            transform: getImageTransform('carrot'),
+            transform: getImageTransform('carrot', windowWidth < 768),
             transition: 'transform 0.5s ease',
           }}
         />
@@ -325,7 +323,7 @@ function Landing() {
           src="food-pics/19.jpg"
           alt="soup"
           style={{
-            transform: getImageTransform('soup'),
+            transform: getImageTransform('soup', windowWidth < 768),
             transition: 'transform 0.5s ease',
           }}
         />
@@ -335,7 +333,7 @@ function Landing() {
           src="food-pics/20.jpg"
           alt="noodle"
           style={{
-            transform: getImageTransform('noodle'),
+            transform: getImageTransform('noodle', windowWidth < 768),
             transition: 'transform 0.5s ease',
           }}
         />
@@ -345,7 +343,7 @@ function Landing() {
           src="food-pics/21.jpg"
           alt="cow"
           style={{
-            transform: getImageTransform('cow'),
+            transform: getImageTransform('cow', windowWidth < 768),
             transition: 'transform 0.5s ease',
           }}
         />
@@ -355,7 +353,7 @@ function Landing() {
           src="food-pics/22.jpg"
           alt="burger"
           style={{
-            transform: getImageTransform('burger'),
+            transform: getImageTransform('burger', windowWidth < 768),
             transition: 'transform 0.5s ease',
           }}
         />
@@ -365,7 +363,7 @@ function Landing() {
           src="food-pics/23.jpg"
           alt="beer"
           style={{
-            transform: getImageTransform('beer'),
+            transform: getImageTransform('beer', windowWidth < 768),
             transition: 'transform 0.5s ease',
           }}
         />
@@ -375,7 +373,7 @@ function Landing() {
           src="food-pics/24.jpg"
           alt="tomato"
           style={{
-            transform: getImageTransform('tomato'),
+            transform: getImageTransform('tomato', windowWidth < 768),
             transition: 'transform 0.5s ease',
           }}
         />
@@ -385,7 +383,7 @@ function Landing() {
           src="food-pics/25.jpg"
           alt="ricebowl"
           style={{
-            transform: getImageTransform('ricebowl'),
+            transform: getImageTransform('ricebowl', windowWidth < 768),
             transition: 'transform 0.5s ease',
           }}
         />
@@ -395,7 +393,7 @@ function Landing() {
           src="food-pics/26.jpg"
           alt="cake"
           style={{
-            transform: getImageTransform('cake'),
+            transform: getImageTransform('cake', windowWidth < 768),
             transition: 'transform 0.5s ease',
           }}
         />
@@ -405,7 +403,7 @@ function Landing() {
           src="food-pics/27.jpg"
           alt="spinach"
           style={{
-            transform: getImageTransform('spinach'),
+            transform: getImageTransform('spinach', windowWidth < 768),
             transition: 'transform 0.5s ease',
           }}
         />
@@ -415,7 +413,7 @@ function Landing() {
           src="food-pics/28.jpg"
           alt="donut"
           style={{
-            transform : getImageTransform('donut'),
+            transform : getImageTransform('donut', windowWidth < 768),
             transition: 'transform 0.5s ease',
           }}
         />

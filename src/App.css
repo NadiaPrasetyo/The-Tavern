@@ -3287,70 +3287,70 @@ th {
   }
 
   #croissant{
-    width: 15vh;
+    width: 30vw;
     top: 5%;
     left: 2%;
   }
 
   #egg{
-    width: 15vh;
+    width: 30vw;
   }
 
   #carrot{
-    width: 10vh;
+    width: 20vw;
     top: 15%;
     rotate: -45deg;
     left: 13%;
   }
 
   #soup{
-    width: 19vh;
+    width: 34vw;
     top: 55%;
     left: 0%;
   }
 
   #noodle{
-    width: 20vh;
+    width: 35vw;
   }
 
   #cow{
-    width: 30vh;
+    width: 45vw;
     top: 80%;
   }
 
   #burger{
-    width: 20vh;
+    width: 35vw;
     top: 40%;
     left: 40%;
   }
 
   #beer{
-    width: 16vh;
+    width: 31vw;
     left: 50%;
   }
 
   #tomato{
-    width: 13vh;
+    width: 28vw;
     top: 38%;
     left: 80%;
   }
 
   #ricebowl{
-    width: 21vh;
+    width: 36vw;
   }
 
   #cake{
-    width: 23vh;
-    left: 72%;
+    width: 40vw;
+    left: 75%;
   }
 
   #spinach{
-    width: 21vh;
+    width: 36vw;
     left: 68%;
   }
 
   #donut{
-    width: 15vh;
+    width: 30vw;
     left: 75%;
   }
 
