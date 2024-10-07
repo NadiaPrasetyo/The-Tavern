@@ -740,9 +740,13 @@ th {
   text-align: center;
   flex-wrap: wrap;
   border: solid 1px var(--color-transparent);
-  font-size: calc(7px + 1vmin);
+  font-size: calc(5px + 1vmin);
   background: var(--color-green-verylight);
   padding: 10px;
+
+  td{
+    cursor: pointer;
+  }
 }
 
 .groceryList {

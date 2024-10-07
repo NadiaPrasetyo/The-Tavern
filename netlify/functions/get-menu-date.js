@@ -4,13 +4,10 @@ const {database} = require('./db');
 const handler = async (req) => {
   try {
     const collection = database.collection('Menu'); // your menu collection
+    const { Username, Day } = JSON.parse(req.body);
 
-    // Find the menu for today
-    //check day of the week
-    const today = new Date();
-    const day = today.getDay();
     let day_string = "";
-    switch (day) {
+    switch (Day) {
       case 0:
         day_string = "Sunday";
         break;
@@ -34,11 +31,8 @@ const handler = async (req) => {
         break;
     }
 
-    //check username
-    const username = JSON.parse(req.body).username;
-
     const menu = await collection
-        .find({ Username: username, Day: day_string })
+        .find({ Username: Username, Day: day_string })
         .toArray();
 
     // If everything is OK

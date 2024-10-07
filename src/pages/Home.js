@@ -12,22 +12,21 @@ const user = {
 };
 
 /**
- * Get today's menu from the server
- * GET method ONLY
+ * Get specific date's menu from the server
  * @returns menu if found as an array
  */
-function getTodayMenu() {
+function getMenuForDate(selectedDate) {
   //this is a function because I did not know it could be a const in the other main function
-  const getTodayMenu = async (e) => {
-    // Get today's menu from the server
-
-    const response = await fetch('/api/get-menu-today',{
+  const getMenuDate = async (e) => {
+    // Get selected day's menu from the server
+    const response = await fetch('/api/get-menu-date',{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: user.username
+        Username: user.username,
+        Day: selectedDate.getDay(),
       }),
     });
 
@@ -42,18 +41,41 @@ function getTodayMenu() {
     
   } 
 
-  return getTodayMenu();
+  return getMenuDate();
 }
-
 /**
  * TODAYMENU COMPONENT of the application
- * @param {object} today the menu for today
- * @param {function} onRecipeClick the function to handle the recipe click
- * @param {string} highlightedRecipe the highlighted recipe
+ * @param {object} props contains menu, selectedDay, onRecipeClick, highlightedRecipe
+ * @returns the today's menu component
  */
-// TodayMenu component where each menu item is clickable
-function TodayMenu({ today, onRecipeClick, highlightedRecipe }) {
-  if (today.length === 0) {
+function TodayMenu({ menu, selectedDay, onRecipeClick, highlightedRecipe }) {
+  //get the string of the selected day
+   let day_string = "";
+   switch (selectedDay.getDay()) {
+     case 0:
+       day_string = "Sunday";
+       break;
+     case 1:
+       day_string = "Monday";
+        break;
+      case 2:
+        day_string = "Tuesday";
+        break;
+      case 3:
+        day_string = "Wednesday";
+        break;
+      case 4:
+        day_string = "Thursday";
+        break;
+      case 5:
+        day_string = "Friday";
+        break;
+      case 6:
+        day_string = "Saturday";
+        break;
+    }
+  // If the menu is empty or not yet loaded, show a loading message
+  if (!menu || menu.length === 0) {
     return (
       <section className='todayMenu'>
         <table>
@@ -72,16 +94,17 @@ function TodayMenu({ today, onRecipeClick, highlightedRecipe }) {
     );
   }
 
+  // If the menu is available, display the items
   return (
     <section className='todayMenu'>
       <table>
         <thead>
           <tr>
-            <th>Today</th>
+            <th>{day_string}</th>
           </tr>
         </thead>
         <tbody>
-          {today.map((item, index) => (
+          {menu.map((item, index) => (
             <tr key={index}>
               <td
                 onClick={() => onRecipeClick(item.Name)}  // Handle recipe click
@@ -593,8 +616,15 @@ function QuickIngredient(){
  * and displays the date
  * and the day of the week
  */
-function WeekCalendar() {
-  const firstDay = localStorage.getItem('firstDay');
+/**
+ * WEEKCALENDAR COMPONENT of the application
+ * @param {object} props contains selectedDay and onDateClick
+ * @returns the week calendar component
+ * displays the week calendar
+ * and highlights the selected day
+ */
+function WeekCalendar({ selectedDay, onDateClick }){
+  const firstDay = localStorage.getItem('firstDay') || 'Monday';  // Default to Monday if no firstDay set
 
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const daysArranged = days.slice(days.indexOf(firstDay)).concat(days.slice(0, days.indexOf(firstDay)));
@@ -622,21 +652,40 @@ function WeekCalendar() {
     dates.push(date);
   }
 
-  /**
-   * Trim the date to only show the day number
-   * @param {number} index the index of the date
-   * @param {object} date the date object
-   * @returns the trimmed date to get the highlighted current day
-   */
-  function trimDate(index, date) {
-    // Calculate the correct day index based on the first day of the week
-    const todayIndex = (day + 6 - firstDayIndex) % 7;
-    // If today, change the color to a different color
-    if (index === todayIndex) {
-      return <span style={{background: ' #79855b73', borderRadius: '20px', paddingLeft: '3px', paddingRight: '3px'}}>{date.toDateString().slice(8, 10)}</span>;
-    }
-    return date.toDateString().slice(8, 10);
+  // Function to handle clicks on a date and notify the parent component
+  const handleDateClick = (date) => {
+    onDateClick(date);  // Update the selected day in the parent component
+  };
+
+  // Function to highlight the selected date and trim the date to only show the day number
+  function trimDate(date) {
+    const isSelected = date.toDateString() === selectedDay.toDateString(); // Check if it's the selected date
+
+    const style = {
+      background: isSelected ? '#79855b73' : 'transparent',  // Highlight selected date
+      borderRadius: '20px',
+      paddingLeft: '3px',
+      paddingRight: '3px',
+    };
+
+    return <span style={style}>{date.toDateString().slice(8, 10)}</span>;
   }
+  
+  // /**
+  //  * Trim the date to only show the day number
+  //  * @param {number} index the index of the date
+  //  * @param {object} date the date object
+  //  * @returns the trimmed date to get the highlighted current day
+  //  */
+  // function trimDate(index, date) {
+  //   // Calculate the correct day index based on the first day of the week
+  //   const todayIndex = (day + 6 - firstDayIndex) % 7;
+  //   // If today, change the color to a different color
+  //   if (index === todayIndex) {
+  //     return <span style={{background: ' #79855b73', borderRadius: '20px', paddingLeft: '3px', paddingRight: '3px'}}>{date.toDateString().slice(8, 10)}</span>;
+  //   }
+  //   return date.toDateString().slice(8, 10);
+  // }
 
   return (
     <section className='weekCalendar'>
@@ -647,9 +696,11 @@ function WeekCalendar() {
           ))}
         </tr>
         <tbody>
-          <tr>
+        <tr>
             {dates.map((date, index) => (
-              <td key={index}>{trimDate(index, date)}</td>
+              <td key={index} onClick={() => handleDateClick(date)}>
+                {trimDate(date)}
+              </td>
             ))}
           </tr>
         </tbody>
@@ -677,9 +728,10 @@ function Home({userdata}) {
   };
 
   const [source, setSource] = useState("");  // State for iframe source
-  const [today, setToday] = useState([]);    // State for today's menu
+  const [menu, setMenu] = useState([]);    // State for selected day's menu
   const [highlightedRecipe, setHighlightedRecipe] = useState(""); // Track highlighted recipe
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [selectedDay, setSelectedDay] = useState(new Date()); // Track selected day
 
   // Update the window width state when the window is resized
   useEffect(() => {
@@ -701,40 +753,39 @@ function Home({userdata}) {
   useEffect(() => {
     let counter = 0;
     const MAX_RETRIES = 1;
-    
-    // Fetch today's menu
-    const fetchMenu = () => {
-      getTodayMenu().then((menu) => {
-        if (menu.length > 0) {
-          // If a menu is found, highlight the first item and set the source
-          setToday(menu);
-          setHighlightedRecipe(menu[0].Name); // Highlight the first item
-          findRecipe(menu[0].Name).then((recipe) => {
-            if (recipe.length > 0) {
-              setSource(recipe[0].Link);  // Set iframe source to the first recipe by default
-            }
-          });
-        } else if (counter < MAX_RETRIES) {
-          // Retry fetching menu if counter is less than max retries
-          counter++;
-          fetchMenu();
-        } else {
-          // If no menu is found after max retries, get a random recipe
-          setToday([{ Name: "No menu found" }]);
-          getRandomRecipe().then((recipe) => {
-            if (recipe.length > 0) {
-              setSource(recipe[0].Link);  // Set iframe source to a random recipe
-            }
-          });
-        }
-      }).catch((error) => {
-        console.log('Error fetching menu:', error);
-      });
-    };
 
-    // Initial fetch
-    fetchMenu();
-  }, []);
+      // Fetch the menu for the selected day
+      const fetchMenu = (selectedDate) => {
+        getMenuForDate(selectedDate).then((menuData) => {
+          if (menuData.length > 0) {
+            // If menu exists for the selected day, highlight the first item and set the source
+            setMenu(menuData);
+            setHighlightedRecipe(menuData[0].Name);
+            findRecipe(menuData[0].Name).then((recipe) => {
+              if (recipe.length > 0) {
+                setSource(recipe[0].Link);  // Set iframe source to the first recipe
+              }
+            });
+          } else if (counter < MAX_RETRIES) {
+            // Retry fetching menu if counter is less than max retries
+            counter++;
+            fetchMenu(selectedDate);
+          } else {
+            setMenu([{ Name: "No menu found" }]);
+            getRandomRecipe().then((recipe) => {
+              if (recipe.length > 0) {
+                setSource(recipe[0].Link);  // Set iframe source to a random recipe
+              }
+            });// If no menu is found after max retries, get a random recipe
+          }
+        }).catch((error) => {
+          console.log('Error fetching menu:', error);
+        });
+      };
+
+      // Trigger fetch whenever the selectedDay changes
+      fetchMenu(selectedDay);
+  }, [selectedDay]);
 
   // This function will update the iframe source when a menu item is clicked
   const handleMenuClick = (recipeName) => {
@@ -746,24 +797,32 @@ function Home({userdata}) {
     });
   };
 
+  // Function to handle date change (from WeekCalendar)
+  const handleDateChange = (newDate) => {
+    setSelectedDay(newDate);  // Update the selected day
+  };
+
   return (
-    
+      
     <div className="App">
       <header className = "App-header">
         <ProfileBar userdata={userdata} source={"BasePage"}/>
       </header>
-
       <aside>
         <Sidebar source = "Home"/>
       </aside>
 
-      <main className ="content">
-        <TodayMenu today={today} onRecipeClick={handleMenuClick} highlightedRecipe={highlightedRecipe}/>
-        <WeekCalendar />
+      <main className="content">
+        {/* Pass the selectedDay to TodayMenu and handle recipe click */}
+        <TodayMenu menu={menu} selectedDay={selectedDay} onRecipeClick={handleMenuClick} highlightedRecipe={highlightedRecipe} />
+
+        {/* Pass selectedDay and handle date change */}
+        <WeekCalendar selectedDay={selectedDay} onDateClick={handleDateChange} />
+
         <GroceryList />
-        <QuickRecipe source ={source}/>
-        <QuickIngredient />        
-      </main>     
+        <QuickRecipe source={source} />
+        <QuickIngredient />
+      </main>   
 
 
       <footer>
@@ -771,6 +830,7 @@ function Home({userdata}) {
       </footer>
 
     </div>
+    
   );
 }
 
