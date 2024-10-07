@@ -23,6 +23,7 @@ function Menu({userdata}) {
   // arrange days based on first day of the week 
   const days = daysDefault.slice(daysDefault.indexOf(firstDay)).concat(daysDefault.slice(0, daysDefault.indexOf(firstDay)));
   const [highlightedIngredients, setHighlightedIngredients] = useState([]);
+  const [addedIngredients, setAddedIngredients] = useState([]);
   const [inInventory, setInInventory] = useState([]);
   const [inGroceryList, setInGroceryList] = useState([]);
   const [recipeList, setRecipeList] = useState([]);
@@ -50,6 +51,25 @@ function Menu({userdata}) {
       setIsInfoOpen(false);
       setSelectedRecipe(null);
     }
+    
+    // const added = add all from highlightedIngredients and addedIngredients
+    const added = [...new Set([...addedIngredients, ...highlightedIngredients])];
+
+    // const adding = anything in highlightedIngredients that is not in addedIngredients
+    const adding = highlightedIngredients.filter((item) => !addedIngredients.includes(item));
+
+    // const removed = anything in added thats not in highlightedIngredients
+    const removed = added.filter((item) => !highlightedIngredients.includes(item));
+
+    // console.log('Highlighted:', highlightedIngredients);
+    // console.log('Added:', added);
+    // console.log('Removed:', removed);
+    // console.log('Adding:', adding);
+
+    postIngredientsToGroceryList(adding);
+    removeIngredientsFromGroceryList(removed);
+
+    setAddedIngredients(highlightedIngredients);
   };
 
   const toggleInfo = (recipe, e) => {
@@ -151,14 +171,45 @@ function Menu({userdata}) {
     }
   };
 
-  const postIngredientsToGroceryList = async () => {
+  const postIngredientsToGroceryList = async (adding) => {
+    if (adding.length === 0) return;
     const url = '/api/add-many-to-grocery';
     const payload = {
       Username: userdata.username,
-      Items: highlightedIngredients,
+      Items: adding,
       Category: 'From Menu',
     };
   
+    if (navigator.sendBeacon) {
+      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+      navigator.sendBeacon(url, blob);
+      console.log('Beacon sent:', payload);
+    } else {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+          keepalive: true,
+        });
+        console.log('Fetch response:', await response.json());
+        console.log('Fetch sent:', payload);
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
+    }
+  };
+
+  const removeIngredientsFromGroceryList = async (removed) => {
+    if (removed.length === 0) return;
+    const url = '/api/remove-many-from-grocery';
+    const payload = {
+      Username: userdata.username,
+      Items: removed,
+    };
+
     if (navigator.sendBeacon) {
       const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
       navigator.sendBeacon(url, blob);
@@ -197,6 +248,8 @@ function Menu({userdata}) {
     const handleBeforeUnload = () => {
       if (highlightedIngredients.length > 0) {
         postIngredientsToGroceryList(); // Add highlighted ingredients to grocery list
+        // event.preventDefault();
+        // event.returnValue = ''; // Chrome requires returnValue to be set
       }
       if (!hasChanges) return;
       updateMenu(); // Update menu in database
