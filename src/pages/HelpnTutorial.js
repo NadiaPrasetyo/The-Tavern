@@ -59,11 +59,11 @@ function Tutorial() {
     const Tutorial = [
         // Home Questions
         {
-            question: 'How do I change the recipe viewed in the Home page?',
+            question: 'Q: How do I change the recipe viewed in the Home page?',
             answer: 'A: You can change the recipe viewed in the Home page by clicking on the recipe name on the today menu (if you don\'t have any, it\'ll be random).'
         },
         {
-            question: 'Can I change the menu displayed in the today menu section?',
+            question: 'Q: Can I change the menu displayed in the today menu section?',
             answer: 'A: Yes, by changing the recipes for the day in the Weekly Menu page, the today menu will update accordingly. Or you can click on the day in the calendar to view the menu for that day.'
         },
 

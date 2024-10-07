@@ -94,6 +94,7 @@
   /*Grey colours */
   --color-grey-light: #e7e0d8;
   --color-offwhite: #fffbf6;
+  --color-offwhite2: #f5ede2;
   --color-transparent: #00000000;
   --color-shadow-light: rgba(0, 0, 0, 0.1);
   --color-shadow-med: rgba(0, 0, 0, 0.5);
@@ -2933,11 +2934,16 @@ th {
 }
 
 .tutorial-column {
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  top:15vh;
+  height: 85vh; 
   width: 50%;
   padding: 20px;
+  .faq-item{
+    background-color: var(--color-offwhite2);
+  }
 }
 
 /* MEDIA QUERIES FOR MOBILE VERSION */
