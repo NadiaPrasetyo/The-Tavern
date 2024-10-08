@@ -5,18 +5,26 @@ import ProfileBar from '../components/profilebar.js';
 import { IoAddCircle } from "react-icons/io5";
 import { AiOutlineEdit } from "react-icons/ai";
 
+/**
+ * INVENTORY COMPONENT of the application
+ * @param {Object} userdata - user data
+ * @returns the Inventory component
+ */
 function Inventory({userdata}) {
-  const [groceryItemOpen, setGroceryItemOpen] = useState({});
-  const [groceryItemValue, setGroceryItemValue] = useState('');
-  const [inventoryList, setInventoryList] = useState([]);
-  const [inputValues, setInputValues] = useState({});
+  const [groceryItemOpen, setGroceryItemOpen] = useState({});//state to track the open/close status of the grocery item input field
+  const [groceryItemValue, setGroceryItemValue] = useState('');//state to track the value of the grocery item input field
+  const [inventoryList, setInventoryList] = useState([]);//state to store the inventory list
+  const [inputValues, setInputValues] = useState({});//state to store the input values for edit (each with a Name and Category)
   const [isEditable, setIsEditable] = useState({}); // State to track which items are editable
-  const [popupVisible, setPopupVisible] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [popupVisible, setPopupVisible] = useState({});//state to track the visibility of the popup
+  const [isLoading, setIsLoading] = useState(false);//state to track the loading status
 
-  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;//check if the device is a touch device
 
-  // Get the inventory from the server
+  /**
+   * Function to get the inventory list from the database
+   * @returns the inventory list
+   */
   const getInventory = async () => {
     setIsLoading(true);
     try {
@@ -40,21 +48,22 @@ function Inventory({userdata}) {
     } catch (error) {
       console.error('Error:', error);
     }
-    setIsLoading(false);
+    setIsLoading(false);//set loading to false after fetching the inventory list
   }
 
+  // Fetch the inventory list on page load
   useEffect(() => {
     getInventory();
   }, []);
 
 
-  document.onkeydown = function (event) {
+  document.onkeydown = function (event) {//prevents the form from submitting when the enter key is pressed
     if (event.keyCode === 13) {
       event.preventDefault();
       const addGroceryButtons = document.querySelectorAll('.addGrocery');
       for (let i = 0; i < addGroceryButtons.length; i++) {
-        if (addGroceryButtons[i].style.left === '250px') {
-          addGroceryButtons[i].click();
+        if (addGroceryButtons[i].classList.contains('move-right')) {//check if the add grocery button is open
+          addGroceryButtons[i].click();//click the add grocery button if it is open
           break;
         }
       }
@@ -68,6 +77,7 @@ function Inventory({userdata}) {
     categoryList[category] = inventoryList.filter(item => item.Category === category);
   });
 
+  // Initialize the input values and editable status
   useEffect(() => {
     if (inventoryList.length > 0) {
       const categories = [...new Set(inventoryList.map(item => item.Category))];
@@ -84,6 +94,11 @@ function Inventory({userdata}) {
     }
   }, [inventoryList]);
 
+  /**
+   * Function to add an inventory item to the database
+   * @param {String} item - the item to add
+   * @param {String} category - the category to add the item to
+   */
   function addInventoryItem(item, category) {
     console.log("Adding inventory item: " + item + " to category: " + category);
     fetch('/api/add-inventory-item', {
@@ -98,7 +113,7 @@ function Inventory({userdata}) {
       }),
     }).then((response) => {
       if (response.status === 200) {
-        console.log("Inventory item added successfully");
+        console.log("Inventory item added successfully");//log success message
         document.querySelector('.addGroceryItem').value = ''; // Clear the input field
         
         // Name: '', Category: category exists in the inventoryList, just change the Name
@@ -111,7 +126,7 @@ function Inventory({userdata}) {
               return element;
             })
           );
-        } else {
+        } else {//add the new item to the inventory list
           setInventoryList(
             [...inventoryList, 
             { Name: item, Category: category }]);
@@ -122,52 +137,66 @@ function Inventory({userdata}) {
     });
   }
 
+  /**
+   * Function to add an inventory item to the grocery list
+   * @param {String} category - the category to add the item to
+   * @returns the inventory item
+   * @returns the grocery item
+   */
   function addInventory(category) {
-    if (groceryItemOpen[category] === undefined) {
+    if (groceryItemOpen[category] === undefined) {//check if the grocery item open is undefined and initialize it if it is
       setGroceryItemOpen({
         ...groceryItemOpen,
-        [category]: false
+        [category]: false//set the grocery item open to false (default)
       });
     }
-    const isOpen = groceryItemOpen[category];
 
-    if (!isOpen) {
+    const isOpen = groceryItemOpen[category];//check if the grocery item input field is open
+    
+    //if the grocery item input field is not open, open it
+    if (!isOpen) {//if the grocery item input field is not open, open it
       setGroceryItemOpen({
         ...groceryItemOpen,
         [category]: true
       });
-    } else {
+    } else {//if the grocery item input field is open, add the item to the inventory list and close the input field
       const value = groceryItemValue.trim();
-      if (value !== '') {
-        addInventoryItem(value, category);
-        setGroceryItemValue('');
+      if (value !== '') {//check if the value is not empty
+        addInventoryItem(value, category);//add the item to the inventory list
+        setGroceryItemValue('');//clear the grocery item value
       }
       setGroceryItemOpen({
-        ...groceryItemOpen,
+        ...groceryItemOpen,//close the grocery item input field
         [category]: false
       });
     }
   }
 
+  /**
+   * Function to add a category to the database
+   * @param {Event} event - the event that triggered the function
+   * @param {Boolean} confirmedPopup - the status of the popup
+   * @returns the category
+   */
   function addCategory(event, confirmedPopup) {
-    const buttonClick = event.target;
+    const buttonClick = event.target;//get the button that was clicked
 
-    if (!confirmedPopup) {
+    if (!confirmedPopup) {//if the popup is not confirmed
       //get the source button
       const popup = document.querySelector('.popupAddCategory');
       //check if popup is already open
-      if (popup.style.display === 'block') {
+      if (popup.style.display === 'block') {//if the popup is already open, close it
         popup.style.display = 'none';
         return;
       }
 
-      popup.style.display = 'block';
+      popup.style.display = 'block';//if the popup is not open, open it
 
-    } else {
+    } else {//if popup is confirmed
       const categoryElement = buttonClick.closest('.popupAddCategory').querySelector('.addCategoryItem');
-      const category = categoryElement.value.trim();
+      const category = categoryElement.value.trim(); //get the value of the category input field
 
-      if (category === '') {
+      if (category === '') { //check if the category is empty
         //close the popup
         document.querySelector('.popupAddCategory').style.display = 'none';
         //clear the popup input field
@@ -175,6 +204,7 @@ function Inventory({userdata}) {
         return;
       }
 
+      //if the category is not empty, add the category to the database
       fetch('/api/add-category', {
         method: 'POST',
         headers: {
@@ -188,12 +218,12 @@ function Inventory({userdata}) {
       }).then((response) => {
         if (response.status === 200) {
           console.log("Category added successfully");
-          setGroceryItemOpen({
+          setGroceryItemOpen({//close the inventory item input field
             ...groceryItemOpen,
             [category]: false
           });
 
-          setInventoryList(
+          setInventoryList(//add the new category to the inventory list
             [...inventoryList, 
             { Name: '', Category: category }]);
             
@@ -201,46 +231,56 @@ function Inventory({userdata}) {
           console.log("Error adding category");
         }
       });
-      categoryElement.value = '';
-      document.querySelector('.popupAddCategory').style.display = 'none';
+      categoryElement.value = '';//clear the category input field
+      document.querySelector('.popupAddCategory').style.display = 'none';//close the popup
     }
   }
 
+  /**
+   * Function to handle input change for edit item (both Name and Category)
+   * @param {String} category - the category of the item
+   * @param {Event} e - the event that triggered the function
+   * @param {Number} index - the index of the item
+   * @param {String} field - the field to change
+   */
   const handleInputChange = (category, e, index, field) => {
-    const { value } = e.target;
-    setInputValues(prevValues => ({
+    const { value } = e.target;//get the value of the input field
+    setInputValues(prevValues => ({ //update the input values with the new value
       ...prevValues,
       [category]: prevValues[category].map((item, i) => (i === index ? { ...item, [field]: value } : item))
     }));
   };
 
+  /**
+   * Function to handle edit click
+   * @param {String} category - the category of the item
+   * @param {Number} index - the index of the item
+  */
   const handleEditClick = (category, index) => {
 
-    if (isEditable[category][index]) {
+    if (isEditable[category][index]) {//if the item is in edit mode, update the item
       const item = inputValues[category][index];
       const originalName = categoryList[category][index].Name;
 
+      // If the item is not changed, do not update
       if (originalName === item.Name && categoryList[category][index].Category === item.Category) {
         setIsEditable({
           ...isEditable,
           [category]: isEditable[category].map((item, i) => (i === index ? !item : item))
         });
-        return
-      }
+        return;
+      };
 
-      const originalCategory = categoryList[category][index].Category;
+      const originalCategory = categoryList[category][index].Category;//get the original category of the item
 
-      console.log("Original Name:", originalName);
-
-      console.log("Updating item:", item);
-
+      // If the item is changed, update the item
       fetch('/api/update-inventory-item', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Username: userdata.username,   // Username
+          Username: userdata.username,                  // Username
           Name: originalName,                           // Original Name (to find the document)
           Category: originalCategory,                   // Original Category (optional for matching)
           NewName: item.Name,                           // New Name after editing
@@ -253,9 +293,9 @@ function Inventory({userdata}) {
           setInventoryList(
             inventoryList.map((element) => {
               if (element.Name === originalName) {
-                return { Name: item.Name, Category: item.Category };
+                return { Name: item.Name, Category: item.Category };//update the item with the new values
               }
-              return element;
+              return element;//return the element as is if not updated
             }
           ));
 
@@ -264,6 +304,7 @@ function Inventory({userdata}) {
         }
       }).catch(error => console.error('Error:', error));
     }
+    // Toggle the edit mode to enable and disable editing
     setIsEditable({
       ...isEditable,
       [category]: isEditable[category].map((item, i) => (i === index ? !item : item))
@@ -271,9 +312,13 @@ function Inventory({userdata}) {
 
   };
 
+  /**
+   * Function to remove an item from the inventory list
+   * @param {String} category - the category of the item
+   * @param {String} itemName - the name of the item
+   */
   const removeItem = (category, itemName) => {
-    console.log("Removing item: " + itemName);
-    console.log("Removing item: " + itemName);
+    // Remove the item from the database
     fetch('/api/remove-inventory-item', {
       method: 'POST',
       headers: {
@@ -289,7 +334,7 @@ function Inventory({userdata}) {
         console.log("Item removed successfully");
         // Update the inventory list
         setInventoryList(
-          inventoryList.filter(item => item.Name !== itemName)
+          inventoryList.filter(item => item.Name !== itemName)//remove the item from the inventory list if it exists
         );
       } else {
         console.log("Error removing item");
@@ -297,6 +342,12 @@ function Inventory({userdata}) {
     });
   };
 
+  /**
+   * Function to toggle the popup visibility of add Category and add Grocery
+   * @param {String} category - the category of the item
+   * @param {Number} index - the index of the item
+   * @param {String} type - the type of the popup
+   */
   const togglePopup = (category, index, type) => {
     return () => {
       if (type === 'enter') {
@@ -321,9 +372,13 @@ function Inventory({userdata}) {
     };
   }
 
+  /**
+   * Function to add an item to the grocery list
+   * @param {String} category - the category of the item
+   * @param {String} itemName - the name of the item
+   */
   const addToGrocery = (category, itemName) => {
     return () => {
-      console.log("Adding item to grocery list: " + itemName);
       fetch('/api/add-grocery-item', {
         method: 'POST',
         headers: {
@@ -336,7 +391,7 @@ function Inventory({userdata}) {
         }),
       }).then((response) => {
         if (response.status === 200) {
-          console.log("Item added to grocery list successfully");
+          console.log("Item added to grocery list successfully");//if the item is added to the grocery list successfully
           //remove the item from the inventory list
           //call the removeItem function
           removeItem(category, itemName);
@@ -348,6 +403,7 @@ function Inventory({userdata}) {
     };
   }
 
+  // Render the Inventory component
   return (
     <div className="App">
       <header className="App-header">
