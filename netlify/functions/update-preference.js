@@ -13,7 +13,7 @@ const handler = async (req) => {
             // Update the preferences in the database    
             await collection.updateOne({ Username: Username }, { $set: Preferences }, { upsert: true });
         }
-
+        
         // If everything is OK
         return {statusCode: 200, body: JSON.stringify({ message: "Preferences updated successfully" })};
 
