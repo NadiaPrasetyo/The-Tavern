@@ -41,7 +41,7 @@ const handler = async (req) => {
             
                 <p>You have requested to reset your password. Please click the button below to reset your password:</p>
                 
-                <a href='http://localhost:8888/reset-password?token=${token}' 
+                <a href='https://the-tavern-menu.netlify.app/reset-password?token=${token}' 
                    style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: #708871; text-decoration: none; border-radius: 5px;">
                    Reset Password
                 </a>
