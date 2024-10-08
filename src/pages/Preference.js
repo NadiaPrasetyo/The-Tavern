@@ -21,17 +21,21 @@ function Preference({userdata}) {
 
   const DarkModeToggle = () => {
     const { isDarkMode, toggleDarkMode } = useContext(ThemeContext);
-    setisDarkModeSwitch(isDarkMode);
-
+  
+    // Use effect to update the state after the render
+    useEffect(() => {
+      setisDarkModeSwitch(isDarkMode);
+    }, [isDarkMode]); // Only run this effect when `isDarkMode` changes
+  
     return (
       <div className="pref dark-mode">
-      <h2>Dark Mode</h2>
-      <input className="checkbox" type="checkbox" id="toggle"/>
-      <div className={isDarkMode ? 'dark' : 'light'}>
-        <label className='toggle' onClick={toggleDarkMode}>
-          <span className="ball"></span>
-        </label>
-      </div>
+        <h2>Dark Mode</h2>
+        <input className="checkbox" type="checkbox" id="toggle"/>
+        <div className={isDarkMode ? 'dark' : 'light'}>
+          <label className='toggle' onClick={toggleDarkMode}>
+            <span className="ball"></span>
+          </label>
+        </div>
       </div>
     );
   };
@@ -62,7 +66,7 @@ function Preference({userdata}) {
     const username = userdata.username;
 
     const preference = {};
-    if (isDarkModeSwitch !== null) preference.DarkMode = isDarkModeSwitch;
+    if (isDarkModeSwitch) preference.DarkMode = isDarkModeSwitch;
     if (selectedDay !== 'Monday') preference.FirstDay = selectedDay;
 
     const response = await fetch('/api/update-preference', {
@@ -97,11 +101,9 @@ function Preference({userdata}) {
   // save the preference to localstorage
   useEffect(() => {
     const savePreference = () => {
-      if (isDarkModeSwitch || selectedDay !== 'Monday') {
-        updatePreference();
-        localStorage.setItem('isDarkMode', isDarkModeSwitch);
-        localStorage.setItem('firstDay', selectedDay);
-      }
+      updatePreference();
+      localStorage.setItem('isDarkMode', isDarkModeSwitch);
+      localStorage.setItem('firstDay', selectedDay);
     };
     
     // before unload, save the preference
