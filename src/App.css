@@ -2752,9 +2752,12 @@ th {
   width: 100%;
   height: calc(100vh - 30px);
   position: relative;
-  scroll-snap-align: center;
 }
 
+.section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
 .glassyContainer{
   background-color: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(2px);
