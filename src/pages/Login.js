@@ -1,17 +1,22 @@
 import '../App.css';
 import React, { useState } from 'react';
-
 import SignIn from '../components/SignIn.js';
 import SignUp from '../components/SignUp.js';
 
-
+/**
+ * LOGIN COMPONENT of the application
+ * @returns the login page
+ */
 function Login() {
   // remove everything from localStorage
   const isDarkMode = localStorage.getItem('isDarkMode');
+  // clear the localStorage and sessionStorage
   localStorage.clear();
   sessionStorage.clear();
+  // set the dark mode preference
   localStorage.setItem('isDarkMode', isDarkMode);
 
+  // state to check if the moving cover is on the right side
   const [onRightSide, setOnRightSide] = useState(true);
 
   return (

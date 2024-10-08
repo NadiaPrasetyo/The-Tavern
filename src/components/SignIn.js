@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
 
+/**
+ * SIGN IN COMPONENT of the application
+ * @returns the sign in page
+ */
 function SignIn() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [forgotPasswordMessage, setForgotPasswordMessage] = useState('');
-  const [displyPopUp, setDisplayPopUp] = useState(false);
+  const [username, setUsername] = useState(''); // State variable for username
+  const [password, setPassword] = useState(''); // State variable for password
+  const [message, setMessage] = useState(''); // State variable for message
+  const [forgotPasswordMessage, setForgotPasswordMessage] = useState(''); // State variable for forgot password message
+  const [displyPopUp, setDisplayPopUp] = useState(false); // State variable for displaying forgot password pop up
 
+  /**
+   * Function to handle the submit of the form
+   * @param {object} e the event object
+   */
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent the default form action
 
     // Send the username and raw password to the server
     const response = await fetch('/api/login', {
@@ -24,10 +32,9 @@ function SignIn() {
 
     const data = await response.json();
 
-    if (response.status === 200) {
-      setMessage('Login successful! Redirecting to home page...');
-      sessionStorage.setItem('token', data.token);
-      console.log("logging in correctly, continuing to preferences");
+    if (response.status === 200) { // Successful login
+      setMessage('Login successful! Redirecting to home page...'); // Set the message
+      sessionStorage.setItem('token', data.token); // Set the token in session storage
     } else {
       setMessage(data.message || 'Error logging in');
       return;
@@ -43,28 +50,31 @@ function SignIn() {
     });
     const data2 = await response2.json();
     console.log(data2);
-    if (data2.preferences.DarkMode) {
-      localStorage.setItem('isDarkMode', data2.preferences.DarkMode);
+    if (data2.preferences.DarkMode) { // if dark mode preference exists
+      localStorage.setItem('isDarkMode', data2.preferences.DarkMode); // set the dark mode preference
     } else {
-      localStorage.setItem('isDarkMode', false);
+      localStorage.setItem('isDarkMode', false); // if not set the dark mode preference to false
     }
-    if (data2.preferences.FirstDay) {
-      localStorage.setItem('firstDay', data2.preferences.FirstDay);
+    if (data2.preferences.FirstDay) { // if first day preference exists
+      localStorage.setItem('firstDay', data2.preferences.FirstDay); // set the first day preference
     } else {
-      localStorage.setItem('firstDay', 'Monday');
+      localStorage.setItem('firstDay', 'Monday'); // if not set the first day preference to Monday
     }
     // Redirect to the home page
-    console.log("redirecting to home");
-    window.location.href = '/home';
+    window.location.href = '/home'; // Redirect to the home page
 
   };
 
+  /**
+   * Function to handle the forgot password
+   * set the forgot password message
+   */
   const forgotPassword = async() => {
-    if (username === '') {
+    if (username === '') { // if username is empty set the message
       setMessage('Enter a username');
       return;
     }
-    setForgotPasswordMessage('Sending password reset email...');
+    setForgotPasswordMessage('Sending password reset email...'); // set the message
     try {
       const response = await fetch('/api/forgot-password', {
         method: 'POST',
@@ -76,13 +86,13 @@ function SignIn() {
         }),
       });
       const data = await response.json();
-      if (response.status === 200) {
+      if (response.status === 200) { // if successful
         setForgotPasswordMessage('Password reset email sent');
-        setTimeout(() => {
+        setTimeout(() => { // close the pop up after 3 seconds
           setDisplayPopUp(false);
         }, 3000);
       } else {
-        setForgotPasswordMessage(data.message || 'Error resetting password');
+        setForgotPasswordMessage(data.message || 'Error resetting password'); // if not successful set the message
       }
     } catch (error) {
       setForgotPasswordMessage('Error resetting password');
