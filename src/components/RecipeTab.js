@@ -10,19 +10,26 @@ import { Droppable } from 'react-beautiful-dnd';
 import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
 import Recipe from './Recipe';
-
 import RecipeInfo from './RecipeInfo';
 import FilterPopup from './FilterPop';
 import Loading from './Loading';
 import DropDown from './DropDown';
 import '../App.css';
 
+/**
+ * RECIPE TAB COMPONENT of the application
+ * @param {object} userdata the user data
+ * @param {function} setRecipeList the function to set the recipe list
+ * @param {boolean} isOpenDrag the state of the drag
+ * @param {function} setIsOpenDrag the function to set the drag state
+ * @returns the recipe tab
+ */
 const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1); // The current page
+  const [isOpen, setIsOpen] = useState(false); // The book tab state (open or closed)
+  const [currentPage, setCurrentPage] = useState(1); // The current page of the book tab
   const [searchQuery, setSearchQuery] = useState(''); // The search input value
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery); // Add a debounced version of the search query
-  const [recipes, setRecipes] = useState([]); // The fetched recipes
+  const [recipes, setRecipes] = useState([]); // The fetched recipes array
   const [totalPages, setTotalPages] = useState(1); // The total number of pages
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const [recipePage, setRecipePage] = useState(1); // The current recipe page
@@ -36,7 +43,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
   const [includedIngredients, setIncludedIngredients] = useState([]); // The included ingredients for filtering
   const [excludedIngredients, setExcludedIngredients] = useState([]); // The excluded ingredients for filtering
   const [favouriteRecipes, setFavouriteRecipes] = useState([]); // State for favourite recipes
-  const [favouriteSet, setFavouriteSet] = useState(new Set()); // Set for favorite recipes
+  const [favouriteSet, setFavouriteSet] = useState(new Set()); // Set for favorite recipes (to check if a recipe is a favourite, cannot have duplicates)
   const [isLoadingFavourites, setIsLoadingFavourites] = useState(false); // Loading state for favourites
   const [recommendationRecipes, setRecommendationRecipes] = useState([]); // State for recommendation recipes
   const [isOpenRecommendation, setIsOpenRecommendation] = useState(false); // The recommendation tab state
@@ -44,10 +51,10 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
   const [recommendationMessage, setRecommendationMessage] = useState('No recommendations'); // The recommendation message
   const [isVisibleRecPopUp, setIsVisibleRecPopUp] = useState(false); // The recommendation info popup state
   const [dropDownOpen, setDropDownOpen] = useState(false); // The dropdown state (used as alert)
-  const [randomRecipe, setRandomRecipe] = useState(null); // The random recipe
+  const [randomRecipe, setRandomRecipe] = useState(null); // The random recipe 
 
   const containerRef = useRef(null); // Reference to the container element
-  const [containerMaxHeight, setContainerMaxHeight] = useState(0);
+  const [containerMaxHeight, setContainerMaxHeight] = useState(0); // The maximum height of the container
 
   const favouriteMax = 10; // Maximum number of favourite recipes
   const recipesPerPage = 10; // Limit the number of recipes per page
@@ -79,19 +86,23 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
     setIsOpenDrag(!isOpen);
   };
 
+  /**
+   * Function to get the computed max height of the container
+   * @returns the computed max height of the container
+   */
   function getComputedMaxHeight() {
     // get container height
     const containerHeight = containerRef.current.offsetHeight;
     let totalHeaderHeight = 0;
-    const headerHeight = containerRef.current.querySelector('.tab-title').offsetHeight;
+    const headerHeight = containerRef.current.querySelector('.tab-title').offsetHeight; // Get the height of the tab title
     totalHeaderHeight += headerHeight;
-    if (containerRef.current.querySelector('.search-bar-container')) {
+    if (containerRef.current.querySelector('.search-bar-container')) { // Check if the search bar exists
       const searchHeight = containerRef.current.querySelector('.search-bar-container').offsetHeight;
-      totalHeaderHeight += searchHeight;
+      totalHeaderHeight += searchHeight; // Add the height of the search bar
     }
-    if (containerRef.current.querySelector('.pagination-controls')) {
+    if (containerRef.current.querySelector('.pagination-controls')) { // Check if the pagination controls exist
       const paginationHeight = containerRef.current.querySelector('.pagination-controls').offsetHeight;
-      totalHeaderHeight += paginationHeight + 30; // 20 is the padding/margin
+      totalHeaderHeight += paginationHeight + 30; // add the height of the pagination controls and some extra padding
     }
     // Calculate available height for recipes
     const availableHeight = containerHeight - totalHeaderHeight - 40; // Adjust for any extra padding/margins
@@ -113,6 +124,9 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
       }
     };
     
+    /**
+     * Function to debounce the resize event
+     */
     const debounceResize = () => {
       setIsFilterOpen(false);
       setInfoOpen(false);
@@ -140,8 +154,12 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
   }, [searchQuery]);
 
 
-  // Change the content of the book based on the clicked bookmark
+  /**
+   * Function to change the current page
+   * @param {int} page 
+   */
   const changePage = (page) => {
+    // set the current page
     setCurrentPage(page);
     // close the filter popup when changing the page
     setIsFilterOpen(false);
@@ -151,9 +169,9 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
       setSelectedRecipe(null);
     }
 
-    if (page === 2) {
+    if (page === 2) { // Open the recommendation tab
       setIsOpenRecommendation(true);
-    } else {
+    } else { // Close the recommendation tab
       setIsOpenRecommendation(false);
     }
 
@@ -168,14 +186,25 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
     }
   };
 
-  // Handle the search input change and reset the page to 1
+  /**
+   * Handle the search input change and reset the page to 1
+   * @param {Event} e 
+   */
   const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
+    setSearchQuery(e.target.value); // Set the search query
     setRecipePage(1); // Reset the current page to 1 whenever the search input changes
     setRecipePageRecommendation(1); // Reset the current page to 1 whenever the search input changes
   };
 
-  // Fetch recipes from the server based on the current page, search query, includedItems, and excludedItems
+  /**
+   * Fetch recipes from the server based on the current page, search query, includedItems, and excludedItems
+   * @param {int} page 
+   * @param {string} query 
+   * @param {Array} includedTags 
+   * @param {Array} excludedTags 
+   * @param {Array} includedIngredients 
+   * @param {Array} excludedIngredients 
+   */
   const fetchRecipes = async (page, query, includedTags = [], excludedTags = [], includedIngredients = [], excludedIngredients = []) => {
     setIsLoading(true);
     try {
@@ -222,8 +251,9 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    if (isOpen && currentPage === 1) {
+  // Fetch recipes on initial load, when the search query changes, or when the page changes, and when the filters change
+  useEffect(() => { 
+    if (isOpen && currentPage === 1) { // Only fetch recipes when the book tab is open and the current page is 1 (browse recipes)
       fetchRecipes(recipePage, debouncedSearchQuery, includedTags, excludedTags, includedIngredients, excludedIngredients);
     }
   }, [recipePage, debouncedSearchQuery, isOpen, includedTags, excludedTags, includedIngredients, excludedIngredients, currentPage]);
@@ -231,11 +261,11 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
 
   // Handle pagination (next and previous page)
   const nextPage = () => {
-    if (isOpenRecommendation) {
+    if (isOpenRecommendation) { // Check if the recommendation tab is open
       if (recipePageRecommendation < totalPages) {
         setRecipePageRecommendation(recipePageRecommendation + 1);
       }
-    } else if (recipePage < totalPages) {
+    } else if (recipePage < totalPages) { // Check if the browse recipes tab is open
       setRecipePage(recipePage + 1);
     }
   };
@@ -250,27 +280,35 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
     }
   };
 
-  // Toggle the recipe info modal
+  /**
+   * Function to toggle the recipe info modal
+   * @param {dictionary} recipe 
+   * @param {Event} e 
+   */
   const toggleInfo = (recipe, e) => {
     e.stopPropagation();
     if (e.type === 'touchstart') {
       setTimeout(() => {
         setSelectedRecipe(recipe);
         setInfoOpen(!isInfoOpen);
-      }, 300);
+      }, 300); // Delay the opening of the info modal on touch devices
     } else {
       setSelectedRecipe(recipe);
       setInfoOpen(!isInfoOpen);
     }
   };
 
+  /**
+   * Function to close the recipe info modal
+   * @param {Event} e
+  */
   const closeInfo = (e) => {
     e.stopPropagation();
     if (e.type === 'touchstart') {
       setTimeout(() => {
         setInfoOpen(false);
         setSelectedRecipe(null);
-      }, 300);
+      }, 300); // Delay the closing of the info modal on touch devices
     } else {
       setInfoOpen(false);
       setSelectedRecipe(null);
@@ -282,10 +320,17 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
     setIsFilterOpen(!isFilterOpen);
   };
 
-  const closeFilter = () => {
+  const closeFilter = () => { // Close the filter popup
     setIsFilterOpen(false);
   }
 
+  /**
+   * Function to handle the filters change
+   * @param {Array} includedTags 
+   * @param {Array} excludedTags 
+   * @param {Array} includedIngredients 
+   * @param {Array} excludedIngredients 
+   */
   const handleFiltersChange = (includedTags, excludedTags, includedIngredients, excludedIngredients) => {
     setIncludedTags(includedTags);
     setExcludedTags(excludedTags);
@@ -297,7 +342,11 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
 
   // FAVOURITES FUNCTIONS
 
-  // Add a recipe to favourites using a post request
+  /**
+   * Function to add a favourite recipe
+   * @param {dictionary} recipe 
+   * @returns true if successful, false otherwise
+   */
   const addFavourite = async (recipe) => {
     try {
       const response = await fetch('/api/add-favorite-recipe', {
@@ -331,7 +380,9 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
     }
   };
 
-
+  /**
+   * @TODO Comments
+   */
   // Remove a recipe from favourites using a delete request
   const removeFavourite = async (recipe) => {
     try {
