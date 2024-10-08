@@ -4,6 +4,8 @@ function SignIn() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [forgotPasswordMessage, setForgotPasswordMessage] = useState('');
+  const [displyPopUp, setDisplayPopUp] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,6 +59,36 @@ function SignIn() {
 
   };
 
+  const forgotPassword = async() => {
+    if (username === '') {
+      setMessage('Enter a username');
+      return;
+    }
+    setForgotPasswordMessage('Sending password reset email...');
+    try {
+      const response = await fetch('/api/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+        }),
+      });
+      const data = await response.json();
+      if (response.status === 200) {
+        setForgotPasswordMessage('Password reset email sent');
+        setTimeout(() => {
+          setDisplayPopUp(false);
+        }, 3000);
+      } else {
+        setForgotPasswordMessage(data.message || 'Error resetting password');
+      }
+    } catch (error) {
+      setForgotPasswordMessage('Error resetting password');
+    }
+  };
+
   return (
     <div id = "SignIn-component">
       <form className='login-form' onSubmit={handleSubmit}>
@@ -70,6 +102,7 @@ function SignIn() {
             <input
               type="text"
               value={username}
+              placeholder='Enter username case sensitive'
               onChange={(e) => setUsername(e.target.value)}
             />
           </li>
@@ -77,18 +110,35 @@ function SignIn() {
             <label>Password:</label><br/>
             <input
               type="password"
+              placeholder='Enter password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </li>
           <li>
-            <button type="submit">Sign In</button>
-          </li>
-          <li>
+            <button type="submit">Sign In</button><br/>
+            <a onClick={() => setDisplayPopUp(true)}>Forgot password</a>
             {message && <p>{message}</p>}
           </li>
         </ul>
       </form>
+
+      {/* pop up for confirm forgot password */}
+      {displyPopUp && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Forgot Password</h2>
+            <p>Enter your username to reset your password</p>
+            <input type="text" placeholder="username (case sensitive)" onChange={(e) => setUsername(e.target.value)} />
+            <div className="modal-buttons">
+              <button onClick={() => setDisplayPopUp(false)}>Cancel</button>
+              <button onClick={forgotPassword}>Reset Password</button>
+            </div>
+            {forgotPasswordMessage && <p>{forgotPasswordMessage}</p>}
+          </div>
+        </div>
+      )  
+      }
     </div>
   );
 }

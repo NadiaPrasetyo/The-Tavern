@@ -16,6 +16,8 @@ import DropDown from './components/DropDown';
 import Landing from './pages/Landing';
 import Help from './pages/Help';
 import Tutorial from './pages/HelpnTutorial';
+import ResetPassword from './pages/ResetPassword';
+import ResetPasswordError from './pages/ResetPasswordError';
 import React, { useState, useEffect, useRef } from 'react';
 import {jwtDecode} from 'jwt-decode';
 
@@ -227,6 +229,8 @@ function App() {
           <Route path="help" element={<PrivateRoute element={<Help />} handleEndSession={handleEndSession} setUsername={setUsername} />} />
           <Route path="trial" element={<Trial />} />
           <Route path="login" element={<Login />} />
+          <Route path="reset-password" element={<ResetPassword />} />
+          <Route path="reset-password-error" element={<ResetPasswordError />} />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>

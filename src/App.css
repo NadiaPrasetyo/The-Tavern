@@ -447,6 +447,15 @@ footer {
   height: 100vh;
   font-size: calc(10px + 1vmin);
   display: flex;
+
+  a {
+    color: var(--color-setting-input);
+    font-size: 0.8em;
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 #SignIn-container,
@@ -464,6 +473,28 @@ footer {
   padding-top: 10%;
   box-shadow: 0 0 10px 0 --color-shadow-light;
   width: 100%;
+}
+
+#Reset-component {
+  background-color: var(--color-login-bg);
+  display: flex;
+  justify-content: center;
+  padding-top: 10%;
+  box-shadow: 0 0 10px 0 --color-shadow-light;
+  width: 100%;
+}
+
+#Reset-error-component {
+  background-color: var(--delete-popup);
+  display: flex;
+  justify-content: center;
+  padding-top: 10%;
+  box-shadow: 0 0 10px 0 --color-shadow-light;
+  width: 100%;
+
+  .form-title {
+    color: var(--color-red-light);
+  }
 }
 
 .form-title {
@@ -3205,7 +3236,7 @@ th {
     height: fit-content;
     width: 65vw;
 
-    p, input, label, button {
+    p, input, label, button, a {
       width: 100% !important;
     }
     
