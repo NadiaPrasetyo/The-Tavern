@@ -60,22 +60,79 @@ function Tutorial() {
         // Home Questions
         {
             question: 'How do I change the recipe viewed in the Home page?',
-            answer: 'A: You can change the recipe viewed in the Home page by clicking on the recipe name on the today menu (if you don\'t have any, it\'ll be random).'
+            answer: 'You can change the recipe viewed in the Home page by clicking on the recipe name on the today menu (if you don\'t have any, it\'ll be random).'
         },
         {
             question: 'Can I change the menu displayed in the today menu section?',
-            answer: 'A: Yes, by changing the recipes for the day in the Weekly Menu page, the today menu will update accordingly. Or you can click on the day in the calendar to view the menu for that day.'
+            answer: 'Yes, by changing the recipes for the day in the Weekly Menu page, the today menu will update accordingly. Or you can click on the day in the calendar to view the menu for that day.'
         },
-
+        {
+            question: 'How can I add items to the fruits vegetable display in the Home page?',
+            answer: 'You can add items to the fruits vegetable display by going to the Inventory page and adding items to the "Fruits" and "Vegetables" category (if you don\'t have these categories, you can add them by clicking the add Category button at the bottom of the page).'
+        },
+        {
+            question: 'What is the grocery list in the home page for?',
+            answer: 'The grocery list in the home page is a quick view of the last 5 items added to the grocery list, it gives you a quick access to the grocery and if you want to add those items to the inventory. You can view the full grocery list and functionality by going to the Grocery List page.'
+        },
+        {
+            question: 'How do I add items to the grocery list in the home page?',
+            answer: 'You can add items to the grocery list in the home page by clicking on the plus (+) button on the grocery list, type in the item you want to add, and click the plus (+) button again.'
+        },
+        {
+            question: 'How do I remove items from the grocery list in the home page?',
+            answer: 'Unfortunately, you cannot remove items from the grocery list in the home page, you can only cross them out or remove and add to inventory in the home page. If you want to fully remove items from the grocery list without adding to the inventory, you can go to the Grocery List page.'
+        },
+        {
+            question: 'Why is the recipe viewer not showing the recipe?',
+            answer: 'Unfortunately, some recipes may not be available for viewing due to the blocking of iframes from the website. You can click the link provided to view the recipe on the website in a new page.'
+        },
+        // Inventory Questions
+        {
+            question: 'How do I add items to the inventory?',
+            answer: 'You can add items to the inventory by going to the Inventory page, clicking the plus (+) button, typing in the item you want to add, and clicking the plus (+) button again.'
+        },
+        {
+            question: 'How do I remove items from the inventory?',
+            answer: 'You can remove items from the inventory by moving your mouse to the item you want to remove, when the item is has a line through it, that indicates that it will be removed once clicked.'
+        },
+        {
+            question: 'How do I add categories to the inventory?',
+            answer: 'You can add categories to the inventory by clicking the add Category button at the bottom of the page, typing in the category you want to add, and clicking the plus (+) button.'
+        },
+        {
+            question: 'How do I cancel adding a category to the inventory?',
+            answer: 'You can cancel adding a category to the inventory by clicking the add Category button at the bottom of the page again.'
+        },
+        {
+            question: 'How do I remove categories from the inventory?',
+            answer: 'You can remove categories from the inventory by removing all items from the category, then the category will be removed automatically.'
+        },
+        {
+            question: 'How do I add items to the grocery list from the inventory?',
+            answer: 'You can add items to the grocery list from the inventory by moving your mouse to the item you want to add, when the item shows the add to grocery option, that indicates that it will be added to the grocery list once clicked (on the add to grocery option).'
+        },
+        {
+            question: 'How do I cancel adding an item to the inventory?',
+            answer: 'You can cancel adding an item to the inventory by clicking the plus (+) button again with nothing in the input.'
+        },
+        {
+            question: 'How do I edit an item in the inventory?',
+            answer: 'You can edit an item in the inventory by clicking the pencil icon on the item you want to edit. This will show the item and category as blue, you can then edit the item and category and click the pencil icon again to save the changes.'
+        },
+        {
+            question: 'How do I cancel editing an item in the inventory?',
+            answer: 'You can cancel editing an item in the inventory by clicking the pencil icon again with no changes.'
+        },
         // Weekly Menu Questions
         {
-            question: 'Q: How do I add a recipe?',
-            answer: 'A: You can add a recipe by going to the Weekly Menu page, open the recipe tab by clicking the green tab on the right, and then drag and drop the recipe into the Menu Table.'
+            question: 'How do I add a recipe?',
+            answer: 'You can add a recipe by going to the Weekly Menu page, open the recipe tab by clicking the green tab on the right, and then drag and drop the recipe into the Menu Table.'
         },
         {
-            question: 'Q: How do I remove a recipe?',
-            answer: 'A: You can remove a recipe by going to the Weekly Menu page, click the remove banner on the recipe you want to remove, or drag and drop the recipe back into the recipe tab.'
+            question: 'How do I remove a recipe?',
+            answer: 'You can remove a recipe by going to the Weekly Menu page, click the remove banner on the recipe you want to remove, or drag and drop the recipe back into the recipe tab.'
         },
+        
 
     ];
 
