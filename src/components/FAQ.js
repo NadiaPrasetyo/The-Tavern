@@ -32,7 +32,7 @@ function FAQ() {
         },
         {
             question: 'Q: How do I report a bug?',
-            answer: 'A: You can report a bug by clicking on the "Report Bug" button below.'
+            answer: 'A: You can report a bug by clicking on the "Report Bug" button in your Help page.'
         },
         {
             question: 'Q: How do I support the developers?',

@@ -39,6 +39,8 @@
   --color-yellow-green: #f7ffdaa8;
   /* Scroll track gradient color */
   --color-green-muted: #9baa74c6;
+  /* Forget password pop up */
+  --color-green-pop: #16570090;
   /* No items background */
 
   /*Beige colours */
@@ -452,7 +454,9 @@ footer {
     color: var(--color-setting-input);
     font-size: 0.8em;
     cursor: pointer;
+    transition: color 0.3s ease;
     &:hover {
+      color: var(--text-color);
       text-decoration: underline;
     }
   }
@@ -473,6 +477,10 @@ footer {
   padding-top: 10%;
   box-shadow: 0 0 10px 0 --color-shadow-light;
   width: 100%;
+}
+
+.forget-password {
+  background-color: var(--color-green-pop) !important;
 }
 
 #Reset-component {

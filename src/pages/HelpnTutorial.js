@@ -6,6 +6,10 @@ import FAQ from '../components/FAQ';
 import Contacts from '../components/Contacts';
 
 function Tutorial() {
+    const isDarkMode = localStorage.getItem('isDarkMode');
+    localStorage.clear();
+    sessionStorage.clear();
+    localStorage.setItem('isDarkMode', isDarkMode);
     const [selectedTutorial, setSelectedTutorial] = useState(null);
 
     const isSmallScreen = window.matchMedia('(max-width: 480px)').matches;

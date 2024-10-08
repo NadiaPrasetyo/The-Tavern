@@ -126,7 +126,7 @@ function SignIn() {
       {/* pop up for confirm forgot password */}
       {displyPopUp && (
         <div className="modal">
-          <div className="modal-content">
+          <div className="modal-content forget-password">
             <h2>Forgot Password</h2>
             <p>Enter your username to reset your password</p>
             <input type="text" placeholder="username (case sensitive)" onChange={(e) => setUsername(e.target.value)} />
