@@ -4,25 +4,43 @@ import ProfileBar from '../components/profilebar.js';
 import { AiOutlineEdit } from "react-icons/ai";
 import React, { useState } from 'react';
 
+/**
+ * SETTINGS COMPONENT of the application
+ * @param {object} userdata the user data
+ * @returns the settings page
+ */
 function Settings({userdata}) {
-  const [isEditable, setIsEditable] = useState({ name: false, email: false });
-  const [message, setMessage] = useState('');
-  const [formValues, setFormValues] = useState({
-    username: userdata.username || '',
-    name: userdata.name || '',
-    email: userdata.email || '',
+  const [isEditable, setIsEditable] = useState({ name: false, email: false }); // State variable for editable fields
+  const [message, setMessage] = useState(''); // State variable for message
+  const [formValues, setFormValues] = useState({ // State variable for form values
+    username: userdata.username || '', // Set the username to the user's username
+    name: userdata.name || '', // Set the name to the user's name
+    email: userdata.email || '', // Set the email to the user's email
     password: ''  // Password fields should not show the actual password
   });
 
-  const handleEditClick = (field) => {
-    // Mark the field as editable
+  /**
+   * Function to handle the edit click (make the field editable)
+   * @param {string} field 
+   */
+  const handleEditClick = (field) => { // Function to handle the edit click
+    // Mark the field as editable by setting the state variable to true
     setIsEditable({ ...isEditable, [field]: true });
   };
 
-  const handleInputChange = (e) => {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value });
+  /**
+   * Function to handle the input change
+   * @param {Event} e 
+   */
+  const handleInputChange = (e) => { // Function to handle the input change
+    setFormValues({ ...formValues, [e.target.name]: e.target.value }); // Set the form values of the changed field
   };
 
+  /**
+   * Function to handle the save click
+   * @param {Event} e
+   * sends a POST request to the server with the username, name, and email to update the user's information
+   */
   const handleSave = async (e) => {
     // if name and email are not edited, do not send a request to the server
     if (!isEditable.name && !isEditable.email) {
@@ -42,34 +60,51 @@ function Settings({userdata}) {
         email: formValues.email,
       }),
     });
-    if (response.status === 200) {
+    if (response.status === 200) { // if the response is successful
       setMessage('User information updated successfully');
-      userdata.name = formValues.name;
-      userdata.email = formValues.email;
+      userdata.name = formValues.name; // update the user's name
+      userdata.email = formValues.email; // update the user's email
     } else {
       setMessage('Error updating user information');
     }
 
     // Reset all fields to uneditable
-    setIsEditable({ username: false, name: false, email: false, password: false });
+    setIsEditable({ name: false, email: false }); 
   };
 
-  // Password handling
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '', confirmNewPassword: '' });
+  // Password handling  
+  const [showPasswordModal, setShowPasswordModal] = useState(false); // State variable for showing the password modal
+  const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '', confirmNewPassword: '' }); // State variable for passwords
 
+  /**
+   * Function to handle the password change
+   * shows the password modal
+   */
   const handlePasswordChange = () => {
     setShowPasswordModal(true);
   };
 
+  /**
+   * Function to close the password modal
+   */
   const closePasswordModal = () => {
     setShowPasswordModal(false);
   };
 
+  /**
+   * Function to handle the password input change
+   * @param {Event} e
+   * sets the password state variable
+   */
   const handlePasswordInputChange = (e) => {
     setPasswords({ ...passwords, [e.target.name]: e.target.value });
   };
 
+  /**
+   * Function to handle the password save
+   * @param {Event} e
+   * sends a POST request to the server with the username, current password, and new password to change the user's password
+   */
   const handlePasswordSave = async(e) => {
     if (passwords.newPassword !== passwords.confirmNewPassword) {
       setMessage('Passwords do not match');
@@ -99,7 +134,7 @@ function Settings({userdata}) {
       closePasswordModal();
 
     } else {
-      setMessage(data.message || 'Error changing password');
+      setMessage(data.message || 'Error changing password'); // if not successful set the message
     }
 
   };
