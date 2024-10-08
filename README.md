@@ -1,7 +1,7 @@
 # The-Tavern
 The Tavern is a weekly menu app designed to help users plan their meals, manage an inventory of ingredients, create recipes, and generate grocery lists. With this app, users can:
 - Plan meals for the week.
-- Managing generate grocery lists dynamically.
+- Manage generate grocery lists dynamically.
 - Manage an inventory of ingredients.
 - Add, update, or delete recipes.
 
