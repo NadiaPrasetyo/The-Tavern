@@ -2905,7 +2905,6 @@ th {
 .tutorial-main {
   display: flex;
   flex-direction: row;
-  background-color: var(--color-green-light);
 
   .faq-item {
     background-color: var(--color-green-light2);
@@ -2919,6 +2918,15 @@ th {
   padding: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+}
+
+.tutorial-page{
+  background-color: var(--color-green-light);
+  overflow: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none !important; 
+  }
 }
 
 .tutorial-btn.active {
@@ -2938,7 +2946,7 @@ th {
   display: flex;
   flex-direction: column;
   top:15vh;
-  height: 85vh; 
+  height: 85vh;
   width: 50%;
   padding: 20px;
   .faq-item{
@@ -3415,7 +3423,7 @@ th {
   }
 
   /* Tutorial page MEDIA */
-    
+
   .contact-us {
     width: 100%;
     flex-direction: column;

@@ -231,7 +231,7 @@ function Tutorial() {
                 </div>
             </header>
 
-            <main className="tutorial-main">
+            <div className="tutorial-main">
                 <div className='help-column'>
                     <h1>Help</h1>
 
@@ -307,7 +307,7 @@ function Tutorial() {
                     </div>
                 </div>
 
-            </main>
+            </div>
 
             <footer>
                 <p>Footer</p>
