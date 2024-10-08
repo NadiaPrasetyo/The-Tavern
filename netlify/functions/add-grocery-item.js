@@ -14,6 +14,11 @@ const handler = async (req) => {
       return { statusCode: 409, body: JSON.stringify({ message: "Item already exist" }) };
     }
 
+    const empty = await collection.findOne({ Username: Username, Name: '' });
+    if (empty) {
+      await collection.deleteOne({ Username: Username, Name: '' });
+    }
+
     // Add the item to the grocery list
     await collection.insertOne(JSON.parse(req.body));
     // console.log(JSON.parse(req.body));

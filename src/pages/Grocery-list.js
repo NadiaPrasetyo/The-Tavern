@@ -288,8 +288,12 @@ function Grocery({userdata}) {
     });
   };
 
-  function addToInventory(item) {
+  function addToInventory(item, category) {
     // Add the specified grocery item to the inventory and remove it from the grocery list
+    if (item === '') {
+      removeItem(category, '');
+      return;
+    }
 
     const addToInventory = async (e) => {
       const response = await fetch('/api/add-to-inventory', {
@@ -391,8 +395,8 @@ function Grocery({userdata}) {
                             <input type="checkbox" id={item.Name} name={item.Name} value={item.Name} />
                             <span className="checkmark"></span>
                             <span className='itemName'>{item.Name}</span>
-                            <a onClick={(e) => isTouchDevice? e.stopPropagation() : addToInventory(item.Name)}
-                              onTouchStart={(e) => { e.stopPropagation(); addToInventory(item.Name); }}
+                            <a onClick={(e) => isTouchDevice? e.stopPropagation() : addToInventory(item.Name, category)}
+                              onTouchStart={(e) => { e.stopPropagation(); addToInventory(item.Name, category); }}
                               > add to Inventory</a>
                             <a className="removeItem" onClick={() => removeItem(item.Category, item.Name)}> remove from Grocery</a>
                           </label>
