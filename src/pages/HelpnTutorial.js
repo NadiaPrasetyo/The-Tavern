@@ -2,59 +2,13 @@ import '../App.css';
 import React, { useState } from 'react';
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { Donate } from 'react-kofi-overlay'
+import FAQ from '../components/FAQ';
+import Contacts from '../components/Contacts';
 
 function Tutorial() {
-    const [selectedQuestion, setSelectedQuestion] = useState(null);
     const [selectedTutorial, setSelectedTutorial] = useState(null);
 
     const isSmallScreen = window.matchMedia('(max-width: 480px)').matches;
-
-    const FAQ = [
-        {
-            question: 'Q: How do I change my password?',
-            answer: 'A: You can change your password by going to the Settings page.'
-        },
-        {
-            question: 'Q: How do I change my username?',
-            answer: 'A: You cannot change your username as it is your unique identifier.'
-        },
-        {
-            question: 'Q: How do I change my email?',
-            answer: 'A: You can change your email by going to the Settings page.'
-        },
-        {
-            question: 'Q: How do I change to dark mode?',
-            answer: 'A: You can change to dark mode by going to the Preferences page.'
-        },
-        {
-            question: 'Q: How do I change the first day of the week?',
-            answer: 'A: You can change the first day of the week by going to the Preferences page.'
-        },
-        {
-            question: 'Q: How do I report a bug?',
-            answer: 'A: You can report a bug by clicking on the "Report Bug" button below.'
-        },
-        {
-            question: 'Q: How do I support the developers?',
-            answer: 'A: You can support the developers by donating on Ko-fi. The link is below.'
-        },
-        {
-            question: 'Q: How do I contact the developers?',
-            answer: 'A: You can contact the developers by emailing us at thetavern.dev@gmail.com'
-        },
-        {
-            question: 'Q: How do I delete my account?',
-            answer: 'A: You can delete your account by going to the Options page.'
-        },
-        {
-            question: 'Q: How do I log out?',
-            answer: 'A: You can log out by clicking the hamburger menu on the top right or you can go to the Options page.'
-        },
-        {
-            question: 'Q: How do I change my displayed name?',
-            answer: 'A: You can change your displayed name by going to the Settings page.'
-        },
-    ];
 
     const Tutorial = [
         // Home Questions
@@ -213,25 +167,9 @@ function Tutorial() {
             question: 'How do I add items to the grocery list?',
             answer: 'You can add items to the grocery list by going to the Grocery list page and adding it manually from each category or adding a category first. Alternatively, you can add grocery items from Home quick grocery list, Inventory add to grocery, or Recipe Info in the Weekly Menu page.'
         },
-        
+
 
     ];
-
-    const handleToggle = (index) => {
-        const selected = document.getElementById(`faq-answer-${index}`);
-        if (selectedQuestion === index) {
-            setSelectedQuestion(null); // Close the answer
-            selected.style.height = '0'; // Set height to 0
-        } else {
-            const opened = document.querySelector('.faq-answer.show');
-            if (opened) {
-                opened.style.height = '0'; // Close the previously opened answer
-            }
-
-            setSelectedQuestion(index); // Open the answer
-            selected.style.height = `${selected.scrollHeight}px`; // Set height dynamically based on content
-        }
-    };
 
     const handleTutorialToggle = (index) => {
         const selected = document.getElementById(`tut-answer-${index}`);
@@ -250,97 +188,87 @@ function Tutorial() {
     }
 
     return (
-        <div className="tutorial-page">
-
+        <div className='App'>
             <header className="landingHeader">
-                <a href="/"><img src="Tavern-logo-small.png" alt="Tavern Logo"/></a>
+                <a href="/"><img src="Tavern-logo-small.png" alt="Tavern Logo" /></a>
                 <div className="headerButtons">
                     <a className="tutorial-btn active" href="/tutorial"> Help & Tutorial </a>
                     <a className="loginOrRegisterButton" href="/Login"> Login/Register </a>
                 </div>
             </header>
+            <main className='login'>
 
-            <div className="tutorial-main">
-                <div className='help-column'>
-                    <h1>Help</h1>
+                <div className="tutorial-page">
 
-                    <div className="pref contact-us">
-                        <h2>Contact Us</h2>
-                        {/* thetavern.dev@gmail.com */}
-                        <p>Email:</p>
-                        <a href="mailto:thetavern.dev@gmail.com">thetavern.dev@gmail.com</a>
-                    </div>
 
-                    <div className="pref FAQ">
-                        <h2>FAQ</h2>
-                        <div className="faq-divider accordian">
-                            {FAQ.map((item, index) => (
-                                <div className='faq-item' key={index}>
-                                    <div className='faq-title' onClick={() => handleToggle(index)}>
-                                        <p className='faq-question'>{item.question}</p>
-                                        <span className='expand-toggle'><MdKeyboardArrowDown /></span>
-                                    </div>
-                                    <div id={`faq-answer-${index}`}
-                                        className={`faq-answer ${selectedQuestion === index ? 'show' : ''}`}> {item.answer}</div>
+                    <div className="tutorial-main">
+                        <div className='help-column'>
+                            <h1>Help</h1>
+
+                            {/* Contacts */}
+
+                            <Contacts />
+
+                            {/* FAQ */}
+
+                            <FAQ />
+
+                            {/* Kofi donations */}
+                            <div className="pref kofi-donations">
+                                <h2>Support Us</h2>
+                                <Donate
+                                    username="thetaverndevs"
+                                    classNames={{
+                                        donateBtn: 'donateBtn',
+                                        profileLink: 'myProfileLink',
+                                    }}
+                                    styles={{
+                                        panel: {
+                                            marginRight: isSmallScreen ? '0' : '4rem',
+                                            height: isSmallScreen ? '620px' : 'calc(min(600px, 95%))',
+                                            bottom: '0',
+                                        },
+                                        closeBtn: {
+                                            translate: isSmallScreen ? "33% -40%" : "33% -33%",
+                                        },
+                                    }}>
+                                    {/* add image of kofi logo */}
+                                    <img className='kofi-logo' src="kofi-logo.webp" alt="Ko-fi logo" />
+                                    <p>Support us on Ko-fi</p>
+                                </Donate>
+                            </div>
+
+                        </div>
+
+                        <div className='tutorial-column'>
+                            <h1>Tutorial</h1>
+                            <div className="pref FAQ">
+                                <div className="faq-divider accordian">
+                                    {Tutorial.map((item, index) => (
+                                        <div className='faq-item' key={index}>
+                                            <div className='faq-title' onClick={() => handleTutorialToggle(index)}>
+                                                <p className='faq-question'>{item.question}</p>
+                                                <span className='expand-toggle'><MdKeyboardArrowDown /></span>
+                                            </div>
+                                            <div id={`tut-answer-${index}`}
+                                                className={`tut-answer ${selectedTutorial === index ? 'show' : ''}`}> {item.answer}</div>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
+
+
+                            </div>
                         </div>
 
 
                     </div>
+                    <div className='bottom-padding'></div>
 
-                    {/* Kofi donations */}
-                    <div className="pref kofi-donations">
-                        <h2>Support Us</h2>
-                        <Donate
-                            username="thetaverndevs"
-                            classNames={{
-                                donateBtn: 'donateBtn',
-                                profileLink: 'myProfileLink',
-                            }}
-                            styles={{
-                                panel: {
-                                    marginRight: isSmallScreen ? '0' : '4rem',
-                                    height: isSmallScreen ? '620px' : 'calc(min(600px, 95%))',
-                                    bottom: '0',
-                                },
-                                closeBtn: {
-                                    translate: isSmallScreen ? "33% -40%" : "33% -33%",
-                                },
-                            }}>
-                            {/* add image of kofi logo */}
-                            <img className='kofi-logo' src="kofi-logo.webp" alt="Ko-fi logo" />
-                            <p>Support us on Ko-fi</p>
-                        </Donate>
-                    </div>
-
+                    <footer>
+                        <p>Footer</p>
+                    </footer>
                 </div>
-
-                <div className='tutorial-column'>
-                    <h1>Tutorial</h1>
-                    <div className="pref FAQ">
-                        <div className="faq-divider accordian">
-                            {Tutorial.map((item, index) => (
-                                <div className='faq-item' key={index}>
-                                    <div className='faq-title' onClick={() => handleTutorialToggle(index)}>
-                                        <p className='faq-question'>{item.question}</p>
-                                        <span className='expand-toggle'><MdKeyboardArrowDown /></span>
-                                    </div>
-                                    <div id={`tut-answer-${index}`}
-                                        className={`tut-answer ${selectedTutorial === index ? 'show' : ''}`}> {item.answer}</div>
-                                </div>
-                            ))}
-                        </div>
-
-
-                    </div>
-                </div>
-
-            </div>
-
-            <footer>
-                <p>Footer</p>
-            </footer>
+            </main>
         </div>
     );
 }

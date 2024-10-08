@@ -2936,6 +2936,7 @@ th {
 .tutorial-main {
   display: flex;
   flex-direction: row;
+  align-items: start;
 
   .faq-item {
     background-color: var(--color-green-light2);
@@ -2954,10 +2955,14 @@ th {
 .tutorial-page{
   background-color: var(--color-green-light);
   overflow: auto;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none !important; 
+  scrollbar-width: auto;
+  scrollbar-color: var(--color-brown-medium3) var(--color-transparent);
+
+  a {
+    color: var(--text-color);
+    font-size: 1rem;
   }
+
 }
 
 .tutorial-btn.active {
@@ -2969,17 +2974,35 @@ th {
   flex-direction: column;
   justify-content: center;
   width: 50%;
-  padding: 20px;
+  padding: 5vw;
+
+  .pref {
+    width: 100%;
+  }
+
+}
+
+.social-media {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+
+  .sosmed {
+    display: flex;
+    flex-direction: row;
+  }
 }
 
 .tutorial-column {
   position: relative;
   display: flex;
   flex-direction: column;
-  top:15vh;
-  height: 85vh;
   width: 50%;
-  padding: 20px;
+  padding: 5vw 5vw 10vw 5vw;
+  .pref {
+    width: 100%;
+  }
+
   .faq-item{
     background-color: var(--color-offwhite2);
   }
@@ -3085,6 +3108,14 @@ th {
 
   .pref {
     width: 90vw;
+  }
+
+  .help-column{
+    width: 90%;
+  }
+
+  .tutorial-column{
+    width: 90%;
   }
 
   .dropdown {
