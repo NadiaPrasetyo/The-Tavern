@@ -144,6 +144,8 @@ body {
   --bookmark-inactive: var(--color-green-light);
   --bookmark-active: var(--color-green-muted-solid);
   --delete-popup: var(--color-offwhite);
+  --forgot-password-popup: var(--color-green-pop);
+  --tutorial-items: var(--color-offwhite2);
 }
 
 /*Dark Mode */
@@ -167,6 +169,8 @@ body.dark {
   --bookmark-inactive: #394238;
   --bookmark-active: #5c754f;
   --delete-popup: rgb(31, 31, 31);
+  --forgot-password-popup: #51764590;
+  --tutorial-items: #2f2f2f;
 
 }
 
@@ -480,7 +484,7 @@ footer {
 }
 
 .forget-password {
-  background-color: var(--color-green-pop) !important;
+  background-color: var(--forgot-password-popup) !important;
 }
 
 #Reset-component {
@@ -2964,7 +2968,7 @@ th {
 }
 
 .tutorial-page{
-  background-color: var(--color-green-light);
+  background-color: var(--color-login-bg);
   overflow: auto;
   scrollbar-width: auto;
   scrollbar-color: var(--color-brown-medium3) var(--color-transparent);
@@ -3015,7 +3019,7 @@ th {
   }
 
   .faq-item{
-    background-color: var(--color-offwhite2);
+    background-color: var(--tutorial-items);
   }
 }
 
