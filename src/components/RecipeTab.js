@@ -381,9 +381,10 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
   };
 
   /**
-   * @TODO Comments continue later
+   * Function to remove a favourite recipe
+   * @param {dictionary} recipe
+   * @returns true if successful, false otherwise
    */
-  // Remove a recipe from favourites using a delete request
   const removeFavourite = async (recipe) => {
     try {
       const response = await fetch('/api/remove-favorite-recipe', {
@@ -399,10 +400,10 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
 
       const data = await response.json();
 
-      if (response.status === 404) {
+      if (response.status === 404) { // if the recipe is not found
         console.log(data.message);
         return false;
-      } else if (response.status === 200) {
+      } else if (response.status === 200) { // if successful
         console.log(data.message);
         return true;
       }
@@ -412,19 +413,22 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
     }
   };
 
-  // Toggle a recipe as a favorite
+  /**
+   * Function to toggle a favourite recipe
+   * @param {dictionary} recipe
+   */
   const toggleFavourite = async (recipe) => {
     const updatedFavourites = new Set(favouriteSet);
 
-    if (favouriteSet.has(recipe.Name)) {
+    if (favouriteSet.has(recipe.Name)) { // Check if the recipe is already a favourite
       const removeSuccess = await removeFavourite(recipe); // Update backend and check for success
-      if (removeSuccess) {
+      if (removeSuccess) { // If successful, remove the recipe from the favourites
         updatedFavourites.delete(recipe.Name);
         setFavouriteSet(updatedFavourites); // Only update the state if successful
       }
     } else {
       const addSuccess = await addFavourite(recipe); // Update backend and check for success
-      if (addSuccess) {
+      if (addSuccess) { // If successful, add the recipe to the favourites
         updatedFavourites.add(recipe.Name);
         setFavouriteSet(updatedFavourites); // Only update the state if successful
       }
@@ -445,11 +449,11 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
       });
 
       const data = await response.json();
-      if (!data.favourites) {
+      if (!data.favourites) { // if favourites is undefined, set it to an empty array
         data.favourites = [];
       }
-      setFavouriteRecipes(data.favourites);
-      const favSet = new Set(data.favourites.map((recipe) => recipe.Name));
+      setFavouriteRecipes(data.favourites); // Set the favourite recipes
+      const favSet = new Set(data.favourites.map((recipe) => recipe.Name)); // Create a set of favourite recipes
       setFavouriteSet(favSet);
       setRecipeList(data.favourites);
       
@@ -462,7 +466,15 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
 
   // RECOMENDATION FUNCTIONS
 
-  // Get all recommendation recipes
+  /**
+   * Function to fetch recommendations based on the current page, search query, includedTags, excludedTags, includedIngredients, and excludedIngredients
+   * @param {int} page
+   * @param {string} query
+   * @param {Array} includedTags
+   * @param {Array} excludedTags
+   * @param {Array} includedIngredients
+   * @param {Array} excludedIngredients
+   */
   const fetchRecommendations = async (page, query, includedTags = [], excludedTags = [], includedIngredients = [], excludedIngredients = []) => {
     setIsLoading(true);
     try {
@@ -483,7 +495,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
         }),
       });
 
-      const data = await response.json();
+      const data = await response.json(); // Get the response data
 
       // if data.recipes is undefined, set it to an empty array
       if (!data.recipes) {
@@ -491,7 +503,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
         setRecommendationMessage('No recommendations');
       }
 
-      if (data.recipes.length === 0) {
+      if (data.recipes.length === 0) { // if no recipes are found
         setRecommendationMessage(data.message);
       }
 
@@ -500,7 +512,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
       setAvailableIngredients(data.ingredients.sort()); // Set the available ingredients for filtering
       setAvailableTags(data.tags.sort()); // Set the available tags for filtering
 
-      setRecipeList(data.recipes);
+      setRecipeList(data.recipes); // Set the recipes returned from the menu
 
     } catch (error) {
       console.error("Error getting recommendations:", error);
@@ -508,17 +520,19 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    if (isOpenRecommendation) {
+  useEffect(() => { // Fetch recommendations on initial load, when the search query changes, or when the page changes, and when the filters change
+    if (isOpenRecommendation) { // Only fetch recommendations when the recommendation tab is open
       fetchRecommendations(recipePageRecommendation, debouncedSearchQuery, includedTags, excludedTags, includedIngredients, excludedIngredients);
     }
   }, [recipePageRecommendation, debouncedSearchQuery, isOpenRecommendation, includedTags, excludedTags, includedIngredients, excludedIngredients]);
 
-  // Toggle the recommendation info modal
-
+  /**
+   * Function to toggle the info popup for the recommendation
+   * @param {Event} e 
+   */
   const toggleRecInfo = (e) => {
-    e.stopPropagation();
-    setIsVisibleRecPopUp(!isVisibleRecPopUp);
+    e.stopPropagation(); // Prevent the event from bubbling up
+    setIsVisibleRecPopUp(!isVisibleRecPopUp); // Toggle the recommendation info popup
   }
 
 
@@ -531,7 +545,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
     };
 
     document.addEventListener('click', handleClickOutside);
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', (e) => { // Close the popup when pressing the escape key
       if (e.key === 'Escape') {
         setIsVisibleRecPopUp(false);
       }
@@ -544,7 +558,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
       }
     }, 5000); 
 
-    return () => {
+    return () => { // Cleanup
       document.removeEventListener('click', handleClickOutside);
       document.removeEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
@@ -553,10 +567,9 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
       });
       clearTimeout(timeoutId); // Clear the timeout on cleanup
     };
-  }, [isVisibleRecPopUp]);
+  }, [isVisibleRecPopUp]); // Run the effect when isVisibleRecPopUp changes
 
   // Get a random recipe
-
   const getRandomRecipe = async () => {
     setIsLoading(true);
     try {
@@ -574,8 +587,8 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
         return;
       }
 
-      setRandomRecipe(data.recipe[0]);
-      setRecipeList(data.recipe);
+      setRandomRecipe(data.recipe[0]); // Set the random recipe
+      setRecipeList(data.recipe); // Set the recipe list
 
     }
     catch (error) {
@@ -592,7 +605,8 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
       <div className='book-container background' onClick={toggleBook}>
         <div className="book-container" onClick={toggleBook}>
           <div className="book-content">
-            {currentPage === 1 &&
+            {/* Browse recipes (default) */}
+            {currentPage === 1 && 
               <div className='browse-recipe'>
                 <div className='tab-title'>BROWSE RECIPES</div>
                 <div className='search-bar-container' onClick={(e) => e.stopPropagation()}>
@@ -656,6 +670,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
                 </div>
               </div>
             }
+            {/* Recommendation tab */}
             {currentPage === 2 &&
               <div className='recommendation-tab'>
                 <div className='tab-title'>RECOMMENDATION</div>
@@ -723,6 +738,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
                 </div>
               </div>
             }
+            {/* Random tab */}
             {currentPage === 3 &&
               <div className='random-tab'>
                 <div className='tab-title'>RANDOM</div>
@@ -759,6 +775,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
                 </div>
               </div>
             }
+            {/* Favourites tab */}
             {currentPage === 4 &&
               <div className='favourite-tab'>
                 <div className='tab-title'>FAVOURITES</div>
