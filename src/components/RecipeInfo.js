@@ -3,8 +3,21 @@ import { IoMdClose } from "react-icons/io";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import '../App.css'; 
 
-const RecipeInfo = ({ isOpen, onClose, recipe, highlighted, setHighlighted, inInventory, inGroceryList, fromRecipeTab }) => {
-  const [infoPopUp, setInfoPopUp] = useState(false);
+/**
+ * RECIPE INFO COMPONENT of the application
+ * @param {object} props the properties of the component
+ * @returns the recipe info component
+ */
+const RecipeInfo = ({ isOpen, // Boolean to check if the modal is open
+  onClose, // Function to close the modal
+  recipe, // The recipe dictionary
+  highlighted, // The highlighted ingredients 
+  setHighlighted, // Function to set the highlighted ingredients
+  inInventory, // The ingredients in the inventory
+  inGroceryList, // The ingredients in the grocery list
+  fromRecipeTab // Boolean to check if the recipe is from the recipe tab 
+}) => {
+  const [infoPopUp, setInfoPopUp] = useState(false); // State variable for the info popup for highlight message
   
   const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
   // Close the modal when the Esc key is pressed
