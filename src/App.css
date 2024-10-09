@@ -2627,7 +2627,7 @@ th {
   mix-blend-mode: multiply;
   z-index: 500;
   transition: transform 0.5s ease; /* Smooth transition for movement */
-  pointer-events: all; /* Allow pointer events for images */
+  pointer-events: none; /* Does not allow pointer events for images */
 }
 
 .artifactContainer{
