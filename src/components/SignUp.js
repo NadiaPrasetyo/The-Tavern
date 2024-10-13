@@ -38,7 +38,7 @@ function SignUp() {
       }),
     });
 
-    const data = await response.json();
+    const data = await response.json(); 
 
     if (response.status === 200) {
       setMessage(data.message); // Set the message
