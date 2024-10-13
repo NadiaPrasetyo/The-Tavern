@@ -38,7 +38,7 @@ const handler = async (req) => {
     const hashedPassword = await argon2.hash(password);
     const newUser = await collection.insertOne({ name, username, email, password: hashedPassword });
 
-    const token = jwt.sign({ id: newUser._id }, SECRET_KEY, { expiresIn: "1h" });
+    const token = jwt.sign({ id: newUser.insertedId }, SECRET_KEY, { expiresIn: "1h" });
     return { statusCode: 200, body: JSON.stringify( { message: "Registration successful", token: token }) };
   } catch (error) {
     return { statusCode: 500, body: error.toString() }

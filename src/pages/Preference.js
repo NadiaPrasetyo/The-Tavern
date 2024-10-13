@@ -81,7 +81,7 @@ function Preference({userdata}) {
     });
 
     const data = await response.json();
-    console.log("Preferences Updated!" +data);
+    console.log(data.message);
   };
   // Apply the user's dark mode preference on initial load
   useEffect(() => {
@@ -100,17 +100,10 @@ function Preference({userdata}) {
 
   // save the preference to localstorage
   useEffect(() => {
-    const savePreference = () => {
-      updatePreference();
-      localStorage.setItem('isDarkMode', isDarkModeSwitch);
-      localStorage.setItem('firstDay', selectedDay);
-    };
+    updatePreference();
+    localStorage.setItem('isDarkMode', isDarkModeSwitch);
+    localStorage.setItem('firstDay', selectedDay);
     
-    // before unload, save the preference
-    window.addEventListener('beforeunload', savePreference);
-    return () => {
-      window.removeEventListener('beforeunload', savePreference);
-    }
   }, [isDarkModeSwitch, selectedDay]);
 
 

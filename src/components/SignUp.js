@@ -41,7 +41,7 @@ function SignUp() {
     const data = await response.json();
 
     if (response.status === 200) {
-      setMessage('Register successful'); // Set the message
+      setMessage(data.message); // Set the message
       sessionStorage.setItem('token', data.token); // Set the token in session storage
 
       localStorage.setItem('firstDay', 'Monday'); // Set the first day preference to Monday
