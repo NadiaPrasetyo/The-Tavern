@@ -597,6 +597,45 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
     setIsLoading(false);
   }
 
+  // ADDING RECIPE FUNCTIONS
+  const handleAddRecipe = (e) => {
+    e.preventDefault();
+    // get the form data
+    const form = e.target;
+    const formData = new FormData(form);
+    // correct the comma separated inputs to arrays, the rest stays as Strings
+    const tags = formData.get('tags').split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+    // add username to the tags of the new recipe
+    tags.push(username);
+    const ingredients = formData.get('ingredients').split(',').map(ing => ing.trim()).filter(ing => ing !== '');
+    const newRecipe = {
+      Name: formData.get('title'),
+      Ingredients: ingredients,
+      Tags: tags,
+      IngredientAmounts: formData.get('ingredientAmounts'),
+      Instructions: formData.get('instructions'),
+    };
+    // send the new recipe to the backend
+    fetch('/api/add-recipe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newRecipe),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data.message);
+      // clear the form
+      form.reset();
+      // popup alert to inform the user that the recipe was added successfully
+      alert('Recipe added successfully!');
+    })
+    .catch(error => {
+      console.error("Error adding recipe:", error);
+    });
+  };
+
   return (
     <>
     <DropDown isOpen={dropDownOpen} setIsOpen={setDropDownOpen} options={[{label: 'Okay'}]} message={'You already have the maximum amount of favorite recipes'}/>
@@ -805,6 +844,61 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
                   ) : (
                     <div className='no-result'>No favourite recipes found</div>
                   )}
+                </div>
+              </div>
+            }
+            {/* Add Recipe Tab */}
+            {currentPage === 5 &&
+              <div className='add-recipe-tab'>
+                <div className='tab-title'>CREATE YOUR OWN RECIPE</div>
+                <div className='recipe-containers custom-scroll' style={{ maxHeight: containerMaxHeight }} onClick={(e) => e.stopPropagation()}>
+                  {/* add recipe form */}
+                  <form>
+                    <div className="form-group">
+                      <label htmlFor="recipe-title">Title</label>
+                      <input
+                        type="text"
+                        id="recipe-title"
+                        name="title"
+                        placeholder="Enter recipe title"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="recipe-ingredients">List of ingredients (comma separated)</label>
+                      <textarea
+                        id="recipe-ingredients"
+                        name="ingredients"
+                        placeholder="e.g. tomato, onion, garlic"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="recipe-tags">Tags (comma separated)</label>
+                      <input
+                        type="text"
+                        id="recipe-tags"
+                        name="tags"
+                        placeholder="e.g. vegan, quick, dinner"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="recipe-ingredient-amounts">Ingredients Amounts (bullet points)</label>
+                      <textarea
+                        id="recipe-ingredient-amounts"
+                        name="ingredientAmounts"
+                        placeholder="e.g. - 2 cups flour&#10;- 1 tsp salt"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="recipe-instructions">Instructions (numbered steps)</label>
+                      <textarea
+                        id="recipe-instructions"
+                        name="instructions"
+                        placeholder="e.g. 1. Preheat oven to 180°C&#10;2. Mix ingredients..."
+                      />
+                    </div>
+                    <button type='submit' onClick={handleAddRecipe}>Add Recipe</button>
+                    <button type='reset'>Clear</button>
+                  </form>
                 </div>
               </div>
             }
