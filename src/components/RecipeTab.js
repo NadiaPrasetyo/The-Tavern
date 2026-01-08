@@ -9,6 +9,7 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 import { Droppable } from 'react-beautiful-dnd';
 import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
+import { FaPlus } from "react-icons/fa";
 import Recipe from './Recipe';
 import RecipeInfo from './RecipeInfo';
 import FilterPopup from './FilterPop';
@@ -52,6 +53,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
   const [isVisibleRecPopUp, setIsVisibleRecPopUp] = useState(false); // The recommendation info popup state
   const [dropDownOpen, setDropDownOpen] = useState(false); // The dropdown state (used as alert)
   const [randomRecipe, setRandomRecipe] = useState(null); // The random recipe 
+  const [successAlertOpen, setSuccessAlertOpen] = useState(false); // The info text for alerts
 
   const containerRef = useRef(null); // Reference to the container element
   const [containerMaxHeight, setContainerMaxHeight] = useState(0); // The maximum height of the container
@@ -355,7 +357,6 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Username: userdata.username,
           Name: recipe.Name,
           max_favourites: favouriteMax,
         }),
@@ -599,6 +600,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
 
   // ADDING RECIPE FUNCTIONS
   const handleAddRecipe = (e) => {
+    const username = userdata.username;
     e.preventDefault();
     // get the form data
     const form = e.target;
@@ -615,6 +617,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
       IngredientAmounts: formData.get('ingredientAmounts'),
       Instructions: formData.get('instructions'),
     };
+    console.log(newRecipe);
     // send the new recipe to the backend
     fetch('/api/add-recipe', {
       method: 'POST',
@@ -629,7 +632,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
       // clear the form
       form.reset();
       // popup alert to inform the user that the recipe was added successfully
-      alert('Recipe added successfully!');
+      setSuccessAlertOpen(true);
     })
     .catch(error => {
       console.error("Error adding recipe:", error);
@@ -851,9 +854,10 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
             {currentPage === 5 &&
               <div className='add-recipe-tab'>
                 <div className='tab-title'>CREATE YOUR OWN RECIPE</div>
+                <DropDown isOpen={successAlertOpen} setIsOpen={setSuccessAlertOpen} options={[{label: 'Okay'}]} message={'Recipe added successfully!'}/>
                 <div className='recipe-containers custom-scroll' style={{ maxHeight: containerMaxHeight }} onClick={(e) => e.stopPropagation()}>
                   {/* add recipe form */}
-                  <form>
+                  <form onSubmit={handleAddRecipe}>
                     <div className="form-group">
                       <label htmlFor="recipe-title">Title</label>
                       <input
@@ -896,7 +900,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
                         placeholder="e.g. 1. Preheat oven to 180°C&#10;2. Mix ingredients..."
                       />
                     </div>
-                    <button type='submit' onClick={handleAddRecipe}>Add Recipe</button>
+                    <button type='submit'>Add Recipe</button>
                     <button type='reset'>Clear</button>
                   </form>
                 </div>
@@ -923,6 +927,9 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
         </div>
         <div onClick={() => changePage(4)} className={`bookmark ${currentPage === 4 ? 'bookmark-active' : 'bookmark-inactive'}`}>
           <MdOutlineStarPurple500 size={30} />
+        </div>
+        <div onClick={() => changePage(5)} className={`bookmark ${currentPage === 5 ? 'bookmark-active' : 'bookmark-inactive'}`}>
+          <FaPlus size={30} />
         </div>
       </div>
     </div>

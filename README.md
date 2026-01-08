@@ -102,3 +102,31 @@ This project is licensed under the MIT License.
 # Contributors
 - [Nadia Prasetyo]
 - [Natasha Prasetyo]
+
+
+# For Developers
+## Dependencies
+- Node.js
+- npm
+
+## Install
+`bash
+cd The-Tavern
+npm install
+
+npm install -g netlify-cli
+`
+
+## Running on Dev mode
+1. Create a .env file containing:
+`txt
+MONGODB_URI = "mongodb+srv://<username>:<db_password>@the-tavern.j8hrj.mongodb.net/?retryWrites=true&w=majority&appName=The-Tavern"
+JWT_SECRET_KEY = "<secret_key>"
+TEAM_EMAIL = "thetavern.dev@gmail.com"
+TEAM_EMAIL_APP_PASSWORD = "<secret_password>"
+`
+
+2. Run and test locally via netlify CLI:
+`bash
+netlify dev
+`
