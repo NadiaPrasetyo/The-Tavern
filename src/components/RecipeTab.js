@@ -10,6 +10,7 @@ import { Droppable } from 'react-beautiful-dnd';
 import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
 import { FaPlus } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
 import Recipe from './Recipe';
 import RecipeInfo from './RecipeInfo';
 import FilterPopup from './FilterPop';
@@ -613,7 +614,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
     const newRecipe = {
       Name: formData.get('title'),
       Ingredients: ingredients,
-      Tags: tags,
+      Tag: tags,
       IngredientAmounts: formData.get('ingredientAmounts'),
       Instructions: formData.get('instructions'),
     };
@@ -638,6 +639,29 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
       console.error("Error adding recipe:", error);
     });
   };
+
+  const handleClearMenu = (e) => {
+    e.preventDefault();
+    fetch('/api/clear-menu', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: userdata.username,
+      }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data.message);
+      // refresh page after clearing menu
+      window.location.reload();
+    })
+    .catch(error => {
+      console.error("Error clearing menu:", error);
+    });
+
+  }
 
   return (
     <>
@@ -857,7 +881,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
                 <DropDown isOpen={successAlertOpen} setIsOpen={setSuccessAlertOpen} options={[{label: 'Okay'}]} message={'Recipe added successfully!'}/>
                 <div className='recipe-containers custom-scroll' style={{ maxHeight: containerMaxHeight }} onClick={(e) => e.stopPropagation()}>
                   {/* add recipe form */}
-                  <form onSubmit={handleAddRecipe}>
+                  <form className='add-recipe-form' onSubmit={handleAddRecipe}>
                     <div className="form-group">
                       <label htmlFor="recipe-title">Title</label>
                       <input
@@ -906,6 +930,19 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
                 </div>
               </div>
             }
+            {/* CLEAR MENU */}
+            {currentPage === 6 &&
+              <div className='clear-menu-tab'>
+                <div className='tab-title'>CLEAR MENU</div>
+                <div className='clear-menu-text'>
+                  <p>Are you sure you want to clear your weekly menu?</p>
+                  <p id='clear-menu-warning'>THIS ACTION IS IRREVERSIBLE.</p>
+                  <button id="clear-menu-confirm" onClick={handleClearMenu}>Clear</button>
+                  <button onClick={() => changePage(1)}>Cancel</button>
+                </div>
+              </div>
+            }
+
             <div className='popup' onClick={(e) => e.stopPropagation()}>
               <FilterPopup isOpen={isFilterOpen} onClose={closeFilter} availableTags={availableTags} availableIngredients={availableIngredients} onFiltersChange={handleFiltersChange} />
               <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} fromRecipeTab={true}/>
@@ -930,6 +967,9 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
         </div>
         <div onClick={() => changePage(5)} className={`bookmark ${currentPage === 5 ? 'bookmark-active' : 'bookmark-inactive'}`}>
           <FaPlus size={30} />
+        </div>
+        <div onClick={() => changePage(6)} className={`bookmark ${currentPage === 6 ? 'bookmark-active' : 'bookmark-inactive'}`} id="clear-menu-bookmark">
+          <FaTrashAlt size={30} />
         </div>
       </div>
     </div>
