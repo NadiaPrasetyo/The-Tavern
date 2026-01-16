@@ -655,80 +655,73 @@ function QuickIngredient(){
  * displays the week calendar
  * and highlights the selected day
  */
-function WeekCalendar({ selectedDay, onDateClick }){
-  const firstDay = localStorage.getItem('firstDay') || 'Monday';  // Default to Monday if no firstDay set
+function WeekCalendar({ selectedDay, onDateClick }) {
+  const firstDay = localStorage.getItem('firstDay') || 'Monday'; // Default to Monday if no firstDay set
 
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const daysArranged = days.slice(days.indexOf(firstDay)).concat(days.slice(0, days.indexOf(firstDay)));
   const daysShortArranged = daysArranged.map(day => day.slice(0, 1));
 
-  // Get the dates of the week based on the firstDay
-  const today = new Date();
-  const day = today.getDay(); // 0 (Sunday) - 6 (Saturday)
-  const firstDayIndex = days.indexOf(firstDay);
-  const weekStart = new Date(today);
-  weekStart.setDate(today.getDate() - ((day + 6) % 7) + firstDayIndex);
-
-  // Adjust if the first day is after today (so we look at the previous week's first day)
-  if (firstDayIndex > day - 1) {
-    weekStart.setDate(today.getDate() - (day + 6 - firstDayIndex));
-  } else {
-    weekStart.setDate(today.getDate() - (day - 1 - firstDayIndex));
-  }
-
-  // Add ONLY the date numbers to the array
-  const dates = [];
-  for (let i = 0; i < 7; i++) {
-    const date = new Date(weekStart);
-    date.setDate(weekStart.getDate() + i);
-    dates.push(date);
-  }
-
-  // Function to handle clicks on a date and notify the parent component
-  const handleDateClick = (date) => {
-    onDateClick(date);  // Update the selected day in the parent component
+  // Map weekday names to ISO day numbers (Monday=1 ... Sunday=7)
+  const isoMap = {
+    Monday: 1,
+    Tuesday: 2,
+    Wednesday: 3,
+    Thursday: 4,
+    Friday: 5,
+    Saturday: 6,
+    Sunday: 7,
   };
 
-  // Function to highlight the selected date and trim the date to only show the day number
-  function trimDate(date) {
-    const isSelected = date.toDateString() === selectedDay.toDateString(); // Check if it's the selected date
+  // Today's ISO day (1..7)
+  const today = new Date();
+  const jsDay = today.getDay(); // 0 (Sunday) - 6 (Saturday)
+  const isoToday = jsDay === 0 ? 7 : jsDay;
 
+  const firstDayIso = isoMap[firstDay] || 1;
+
+  // Compute the week start by subtracting the difference - Date handles month/year rollovers
+  const diff = isoToday - firstDayIso;
+  const weekStart = new Date(today);
+  weekStart.setHours(0, 0, 0, 0);
+  weekStart.setDate(today.getDate() - diff);
+
+  // Build the 7-day array starting from weekStart
+  const dates = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(weekStart);
+    d.setDate(weekStart.getDate() + i);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  });
+
+  const handleDateClick = (date) => {
+    onDateClick(date);
+  };
+
+  function trimDate(date) {
+    const isSelected = selectedDay instanceof Date && date.toDateString() === selectedDay.toDateString();
     const style = {
-      background: isSelected ? '#79855b73' : 'transparent',  // Highlight selected date
+      background: isSelected ? '#79855b73' : 'transparent', // Highlight selected date
       borderRadius: '20px',
       paddingLeft: '3px',
       paddingRight: '3px',
     };
-
-    return <span style={style}>{date.toDateString().slice(8, 10)}</span>;
+    const dayNum = String(date.getDate()).padStart(2, '0');
+    return <span style={style}>{dayNum}</span>;
   }
-  
-  // /**
-  //  * Trim the date to only show the day number
-  //  * @param {number} index the index of the date
-  //  * @param {object} date the date object
-  //  * @returns the trimmed date to get the highlighted current day
-  //  */
-  // function trimDate(index, date) {
-  //   // Calculate the correct day index based on the first day of the week
-  //   const todayIndex = (day + 6 - firstDayIndex) % 7;
-  //   // If today, change the color to a different color
-  //   if (index === todayIndex) {
-  //     return <span style={{background: ' #79855b73', borderRadius: '20px', paddingLeft: '3px', paddingRight: '3px'}}>{date.toDateString().slice(8, 10)}</span>;
-  //   }
-  //   return date.toDateString().slice(8, 10);
-  // }
 
   return (
     <section className='weekCalendar'>
       <table>
-        <tr>
-          {daysShortArranged.map((day, index) => (
-            <th key={index}>{day}</th>
-          ))}
-        </tr>
+        <thead>
+          <tr>
+            {daysShortArranged.map((day, index) => (
+              <th key={index}>{day}</th>
+            ))}
+          </tr>
+        </thead>
         <tbody>
-        <tr>
+          <tr>
             {dates.map((date, index) => (
               <td key={index} onClick={() => handleDateClick(date)}>
                 {trimDate(date)}
@@ -737,7 +730,6 @@ function WeekCalendar({ selectedDay, onDateClick }){
           </tr>
         </tbody>
       </table>
-
     </section>
   );
 }
