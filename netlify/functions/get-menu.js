@@ -1,8 +1,5 @@
 const {database} = require('./db');
-
-function escapeRegex(string) {
-    return string.replace(/[-\/\\^$.*+?()[\]{}|]/g, '\\$&'); // Escape special characters
-  }
+const { ObjectId } = require('mongodb');
 
 const handler = async (req) => {
     const { username } = req.queryStringParameters; // Extract username from query params
@@ -12,99 +9,45 @@ const handler = async (req) => {
         const collection = database.collection('Menu'); // your menu collection
         const recipeCollection = database.collection('RecipeList'); // your recipe collection
     
-        // get the recipes names per day
+        // get the recipe IDs per day
         const [monday, tuesday, wednesday, thursday, friday, saturday, sunday] = await Promise.all([
-        collection.find({ Username: username, Day: "Monday" }, { Name: 1, _id: 0 }).toArray(),
-        collection.find({ Username: username, Day: "Tuesday" }, { Name: 1, _id: 0 }).toArray(),
-        collection.find({ Username: username, Day: "Wednesday" }, { Name: 1, _id: 0 }).toArray(),
-        collection.find({ Username: username, Day: "Thursday" }, { Name: 1, _id: 0 }).toArray(),
-        collection.find({ Username: username, Day: "Friday" }, { Name: 1, _id: 0 }).toArray(),
-        collection.find({ Username: username, Day: "Saturday" }, { Name: 1, _id: 0 }).toArray(),
-        collection.find({ Username: username, Day: "Sunday" }, { Name: 1, _id: 0 }).toArray()
+            collection.find({ Username: username, Day: "Monday" }, { RecipeId: 1, _id: 0 }).toArray(),
+            collection.find({ Username: username, Day: "Tuesday" }, { RecipeId: 1, _id: 0 }).toArray(),
+            collection.find({ Username: username, Day: "Wednesday" }, { RecipeId: 1, _id: 0 }).toArray(),
+            collection.find({ Username: username, Day: "Thursday" }, { RecipeId: 1, _id: 0 }).toArray(),
+            collection.find({ Username: username, Day: "Friday" }, { RecipeId: 1, _id: 0 }).toArray(),
+            collection.find({ Username: username, Day: "Saturday" }, { RecipeId: 1, _id: 0 }).toArray(),
+            collection.find({ Username: username, Day: "Sunday" }, { RecipeId: 1, _id: 0 }).toArray()
         ]);
         
-        // get the recipe details for each day
-    
-        const mondayRecipes = [];
-        for (const recipe of monday) {
-        // use regex to search for the recipe name for case insensitivity
-        const searchRegex = new RegExp(escapeRegex(recipe.Name), 'i');
-        const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
-        if (!recipeDetails) {
-            continue;
-        }
-        // add an id to the recipe with name + timestamp to avoid duplicates
-        recipeDetails.id = `${recipeDetails.Name}-${Date.now()}`;
-        mondayRecipes.push(recipeDetails);
-        }
-    
-        const tuesdayRecipes = [];
-        for (const recipe of tuesday) {
-        const searchRegex = new RegExp(escapeRegex(recipe.Name), 'i');
-        const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
-        if (!recipeDetails) {
-            continue;
-        }
-        recipeDetails.id = `${recipeDetails.Name}-${Date.now()}`;
-        tuesdayRecipes.push(recipeDetails);
-        }
-    
-        const wednesdayRecipes = [];
-        for (const recipe of wednesday) {
-        const searchRegex = new RegExp(escapeRegex(recipe.Name), 'i');
-        const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
-        if (!recipeDetails) {
-            continue;
-        }
-        recipeDetails.id = `${recipeDetails.Name}-${Date.now()}`;
-        wednesdayRecipes.push(recipeDetails);
-        }
-        
-        const thursdayRecipes = [];
-        for (const recipe of thursday) {
-        const searchRegex = new RegExp(escapeRegex(recipe.Name), 'i');
-        const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
-        if (!recipeDetails) {
-            continue;
-        }
-        recipeDetails.id = `${recipeDetails.Name}-${Date.now()}`;
-        thursdayRecipes.push(recipeDetails);
+        async function fetchRecipes(list) {
+            const results = [];
+            for (const item of list) {
+                let id = item.RecipeId;
+                let queryId = id;
+                try {
+                    queryId = typeof id === 'string' ? new ObjectId(id) : id;
+                } catch (e) {
+                    queryId = id; // fallback: use as-is
+                }
+                const recipeDetails = await recipeCollection.findOne({ _id: queryId });
+                if (!recipeDetails) continue;
+                recipeDetails.id = `${recipeDetails._id}-${Date.now()}`;
+                results.push(recipeDetails);
+            }
+            return results;
         }
 
-        const fridayRecipes = [];
-        for (const recipe of friday) {
-        const searchRegex = new RegExp(escapeRegex(recipe.Name), 'i');
-        const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
-        if (!recipeDetails) {
-            continue;
-        }
-        recipeDetails.id = `${recipeDetails.Name}-${Date.now()}`;
-        fridayRecipes.push(recipeDetails);
-        }
+        const [mondayRecipes, tuesdayRecipes, wednesdayRecipes, thursdayRecipes, fridayRecipes, saturdayRecipes, sundayRecipes] = await Promise.all([
+            fetchRecipes(monday),
+            fetchRecipes(tuesday),
+            fetchRecipes(wednesday),
+            fetchRecipes(thursday),
+            fetchRecipes(friday),
+            fetchRecipes(saturday),
+            fetchRecipes(sunday)
+        ]);
 
-        const saturdayRecipes = [];
-        for (const recipe of saturday) {
-        const searchRegex = new RegExp(escapeRegex(recipe.Name), 'i');
-        const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
-        if (!recipeDetails) {
-            continue;
-        }
-        recipeDetails.id = `${recipeDetails.Name}-${Date.now()}`;
-        saturdayRecipes.push(recipeDetails);
-        }
-
-        const sundayRecipes = [];
-        for (const recipe of sunday) {
-        const searchRegex = new RegExp(escapeRegex(recipe.Name), 'i');
-        const recipeDetails = await recipeCollection.findOne({ Name: searchRegex });
-        if (!recipeDetails) {
-            continue;
-        }
-        recipeDetails.id = `${recipeDetails.Name}-${Date.now()}`;
-        sundayRecipes.push(recipeDetails);
-        }
-
-        // If everything is OK
         return {statusCode: 200, body: JSON.stringify({
             Monday: mondayRecipes,
             Tuesday: tuesdayRecipes,
