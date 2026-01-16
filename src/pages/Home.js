@@ -676,15 +676,21 @@ function WeekCalendar({ selectedDay, onDateClick }) {
   // Today's ISO day (1..7)
   const today = new Date();
   const jsDay = today.getDay(); // 0 (Sunday) - 6 (Saturday)
-  const isoToday = jsDay === 0 ? 7 : jsDay;
+  const isoToday = jsDay === 0 ? 7 : jsDay; //change Sunday from 0 to 7
 
-  const firstDayIso = isoMap[firstDay] || 1;
+  // First day of the week in ISO format
+  const firstDayIso = isoMap[firstDay] || 1; //5
 
   // Compute the week start by subtracting the difference - Date handles month/year rollovers
   const diff = isoToday - firstDayIso;
   const weekStart = new Date(today);
   weekStart.setHours(0, 0, 0, 0);
+  //if diff is negative, add 7 to it
+  if (diff < 0) {
+    weekStart.setDate(today.getDate() - (diff + 7));
+  } else {
   weekStart.setDate(today.getDate() - diff);
+  }
 
   // Build the 7-day array starting from weekStart
   const dates = Array.from({ length: 7 }, (_, i) => {
