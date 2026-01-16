@@ -1021,6 +1021,42 @@ th {
   }
 }
 
+/* USER MADE RECIPE */
+.user-made-recipe {
+  border: solid 1px var(--color-transparent);
+  padding: 10px;
+  font-size: calc(10px + 1vmin);
+  cursor: default;
+
+  .tag {
+    display: inline-block;
+    background-color: var(--color-brown-medium3);
+    color: var(--color-background);
+    border-radius: 12px;
+    padding: 5px 10px;
+    margin: 5px 5px 5px 0;
+    font-size: calc(5px + 1vmin);
+  }
+
+  .ing {
+    display: inline-block;
+    background-color: var(--color-green-muted);
+    color: var(--color-background);
+    border-radius: 12px;
+    padding: 5px 10px;
+    margin: 5px 5px 5px 0;
+    font-size: calc(5px + 1vmin);
+  }
+
+  .user-recipe-subtext{
+    /* bottom of the parent container */
+    width: calc(100% - 20px);
+    font-size: calc(5px + 1vmin);
+    font-style: italic;
+    color: var(--color-setting-input);
+  }
+}
+
 /* QUICK INGREDIENT AT HOME*/
 .quickIngredient {
   display: flex;

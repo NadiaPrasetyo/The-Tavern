@@ -615,6 +615,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
       Name: formData.get('title'),
       Ingredients: ingredients,
       Tag: tags,
+      Link: "None",
       IngredientAmounts: formData.get('ingredientAmounts'),
       Instructions: formData.get('instructions'),
     };

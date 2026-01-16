@@ -422,42 +422,74 @@ function findRecipe(RecipeName) {
 /**
  * QUICKRECIPE COMPONENT of the application
  * @param {string} source the source of the recipe
+ * @param {object} recipe the recipe object
  * @returns the quick recipe component
  * displays the recipe in an iframe
  */
-function QuickRecipe({ source }) {
+function QuickRecipe({ source, recipe }) {
   // If the source is empty, display a loading message
   if (source === "") {
-        return (
-          <section className='quickRecipe'>
-            <div className='iframeCannot'>
-              <p>Loading...</p>
-            </div>
-          </section>
-        );
-      }
+    return (
+      <section className='quickRecipe'>
+        <div className='iframeCannot'>
+          <p>Loading...</p>
+        </div>
+      </section>
+    );
+  }
+
+  //check if source includes preppykitchen.com
+  if (source.includes("preppykitchen.com")){
+    return(
+      <section className='quickRecipe'>
+        <div className= 'iframeCannot'>
+          <h4>Sorry</h4>
+          <p>We cannot show this recipe here <LiaGrinBeamSweat /></p>
+          <a href={source} target="_blank">Click here to open the recipe!</a>
+        </div>
+      </section>
+    );
+  }
+
+  if (source.includes("None")){
+    const name = recipe && recipe.Name ? recipe.Name : "Recipe";
+    const tagsArray = recipe && recipe.Tag
+      ? (Array.isArray(recipe.Tag) ? recipe.Tag : String(recipe.Tag).split(',').map(s => s.trim()))
+      : []; 
+    const ingredientsArray = recipe && recipe.Ingredients
+      ? (Array.isArray(recipe.Ingredients) ? recipe.Ingredients : String(recipe.Ingredients).split(',').map(s => s.trim()))
+      : [];
+    const ingredientAmounts = recipe && recipe.IngredientAmounts ? (Array.isArray(recipe.IngredientAmounts) ? recipe.IngredientAmounts.join(', ') : recipe.IngredientAmounts) : '';
+    const instructions = recipe && recipe.Instructions ? (Array.isArray(recipe.Instructions) ? recipe.Instructions.join('\n') : recipe.Instructions) : '';
+
+    return (
+      <section className='quickRecipe'>
+        <div className='user-made-recipe'>
+          <h2>{name}</h2>
+          <div className='user-recipe-subtext'>This is a user made recipe</div>
+          {tagsArray.length > 0 && tagsArray.map((t, i) => (
+            <span key={`tag-${i}`} className='tag'>{t}</span>
+          ))}
+          <br />
+          {ingredientsArray.length > 0 && ingredientsArray.map((ing, i) => (
+            <span key={`ing-${i}`} className='ing'>{ing}</span>
+          ))}
+          <h4>Ingredients</h4>
+          <p style={{ whiteSpace: 'pre-wrap' }}>{ingredientAmounts}</p>
+          <h4>Instructions</h4>
+          <p style={{ whiteSpace: 'pre-wrap' }}>{instructions}</p>
+        </div>
+      </section>
+    );
+  }
     
-      //check if source includes preppykitchen.com
-      if (source.includes("preppykitchen.com")){
-        return(
-          <section className='quickRecipe'>
-            <div className= 'iframeCannot'>
-              <h4>Sorry</h4>
-              
-              <p>We cannot show this recipe here <LiaGrinBeamSweat /></p>
-              <a href={source} target="_blank">Click here to open the recipe!</a>
-            </div>
-          </section>
-        );
-      }
-    
-      return(
-        <section className='quickRecipe'>
-          <div className='iframeContainer'>
-          <iframe  className='recipeiFrame' src={source} title="QuickRecipe" ></iframe>
-          </div>
-        </section>
-      );
+  return(
+    <section className='quickRecipe'>
+      <div className='iframeContainer'>
+      <iframe  className='recipeiFrame' src={source} title="QuickRecipe" ></iframe>
+      </div>
+    </section>
+  );
 }
 
 /**
@@ -728,6 +760,7 @@ function Home({userdata}) {
   };
 
   const [source, setSource] = useState("");  // State for iframe source
+  const [recipe, setRecipe] = useState(null);  // State for recipe data
   const [menu, setMenu] = useState([]);    // State for selected day's menu
   const [highlightedRecipe, setHighlightedRecipe] = useState(""); // Track highlighted recipe
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -764,6 +797,7 @@ function Home({userdata}) {
             findRecipe(menuData[0].Name).then((recipe) => {
               if (recipe.length > 0) {
                 setSource(recipe[0].Link);  // Set iframe source to the first recipe
+                setRecipe(recipe[0]);
               }
             });
           } else if (counter < MAX_RETRIES) {
@@ -775,6 +809,7 @@ function Home({userdata}) {
             getRandomRecipe().then((recipe) => {
               if (recipe.length > 0) {
                 setSource(recipe[0].Link);  // Set iframe source to a random recipe
+                setRecipe(recipe[0]);
               }
             });// If no menu is found after max retries, get a random recipe
           }
@@ -792,6 +827,7 @@ function Home({userdata}) {
     findRecipe(recipeName).then((recipe) => {
       if (recipe.length > 0) {
         setSource(recipe[0].Link);   // Update the iframe source
+        setRecipe(recipe[0]);
         setHighlightedRecipe(recipeName);  // Highlight clicked recipe
       }
     });
@@ -820,7 +856,7 @@ function Home({userdata}) {
         <WeekCalendar selectedDay={selectedDay} onDateClick={handleDateChange} />
 
         <GroceryList />
-        <QuickRecipe source={source} />
+        <QuickRecipe source={source} recipe={recipe} />
         <QuickIngredient />
       </main>   
 
