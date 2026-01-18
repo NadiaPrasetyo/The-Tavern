@@ -1371,7 +1371,35 @@ app.get('/api/get-all-grocery', async (req, res) => {
   }
 });
 
+// ADD RECIPE
+app.post('/api/add-recipe', async (req, res) => {
+  try {
+    const collection = database.collection('RecipeList'); // your recipes collection
+    await collection.insertOne(req.body);
+
+    // If everything is OK
+    res.status(200).json({ message: "Recipe added successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
+});
+
+// CLEAR MENU
+app.get('/api/clear-menu', async (req, res) => {
+  const { username } = JSON.parse(req.body);
+
+  try {
+    const collection = database.collection('Menu'); // your menu collection
+    await collection.deleteMany({ Username: username });
+
+    // If everything is OK
+    res.status(200).json({ message: "Menu cleared successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
 });

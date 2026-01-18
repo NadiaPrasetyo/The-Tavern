@@ -233,12 +233,11 @@ function Menu({userdata}) {
   };
   
 
-  // Autosave every 30 seconds if changes were made
+  // Autosave every 10 seconds if changes were made
   useEffect(() => {
     const interval = setInterval(() => {
       updateMenu(); // This will only update if hasChanges is true
-    }, 30000); // 30 seconds
-
+    }, 10000); // 10 seconds
     return () => clearInterval(interval); // Cleanup the interval on unmount
   }, [hasChanges, menu]);
 
@@ -286,6 +285,7 @@ function Menu({userdata}) {
 
     if (source.droppableId === 'RecipeList') {
       if (destination.droppableId === 'RecipeList') return;
+
       // if destination already has max recipes, return
       if (menu[destination.droppableId].length >= max_recipes_per_day) {
         // alert('Maximum number of recipes reached for '+ destination.droppableId);
@@ -341,6 +341,10 @@ function Menu({userdata}) {
       });
     }
     setHasChanges(true);
+    
+    setTimeout(() => {
+      updateMenu();
+    }, 1000);
   };
 
   const updateItems = (day, items) => {

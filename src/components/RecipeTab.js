@@ -9,6 +9,8 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 import { Droppable } from 'react-beautiful-dnd';
 import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
+import { FaPlus } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
 import Recipe from './Recipe';
 import RecipeInfo from './RecipeInfo';
 import FilterPopup from './FilterPop';
@@ -52,6 +54,7 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
   const [isVisibleRecPopUp, setIsVisibleRecPopUp] = useState(false); // The recommendation info popup state
   const [dropDownOpen, setDropDownOpen] = useState(false); // The dropdown state (used as alert)
   const [randomRecipe, setRandomRecipe] = useState(null); // The random recipe 
+  const [successAlertOpen, setSuccessAlertOpen] = useState(false); // The info text for alerts
 
   const containerRef = useRef(null); // Reference to the container element
   const [containerMaxHeight, setContainerMaxHeight] = useState(0); // The maximum height of the container
@@ -355,7 +358,6 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Username: userdata.username,
           Name: recipe.Name,
           max_favourites: favouriteMax,
         }),
@@ -597,6 +599,71 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
     setIsLoading(false);
   }
 
+  // ADDING RECIPE FUNCTIONS
+  const handleAddRecipe = (e) => {
+    const username = userdata.username;
+    e.preventDefault();
+    // get the form data
+    const form = e.target;
+    const formData = new FormData(form);
+    // correct the comma separated inputs to arrays, the rest stays as Strings
+    const tags = formData.get('tags').split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+    // add username to the tags of the new recipe
+    tags.push(username);
+    const ingredients = formData.get('ingredients').split(',').map(ing => ing.trim()).filter(ing => ing !== '');
+    const newRecipe = {
+      Name: formData.get('title'),
+      Ingredients: ingredients,
+      Tag: tags,
+      Link: "None",
+      IngredientAmounts: formData.get('ingredientAmounts'),
+      Instructions: formData.get('instructions'),
+    };
+    console.log(newRecipe);
+    // send the new recipe to the backend
+    fetch('/api/add-recipe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newRecipe),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data.message);
+      // clear the form
+      form.reset();
+      // popup alert to inform the user that the recipe was added successfully
+      setSuccessAlertOpen(true);
+    })
+    .catch(error => {
+      console.error("Error adding recipe:", error);
+    });
+  };
+
+  const handleClearMenu = (e) => {
+    e.preventDefault();
+    fetch('/api/clear-menu', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: userdata.username,
+      }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data.message);
+      // refresh page after clearing menu
+      window.location.reload();
+    })
+    .catch(error => {
+      console.error("Error clearing menu:", error);
+    });
+
+  }
+
   return (
     <>
     <DropDown isOpen={dropDownOpen} setIsOpen={setDropDownOpen} options={[{label: 'Okay'}]} message={'You already have the maximum amount of favorite recipes'}/>
@@ -808,6 +875,75 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
                 </div>
               </div>
             }
+            {/* Add Recipe Tab */}
+            {currentPage === 5 &&
+              <div className='add-recipe-tab'>
+                <div className='tab-title'>CREATE YOUR OWN RECIPE</div>
+                <DropDown isOpen={successAlertOpen} setIsOpen={setSuccessAlertOpen} options={[{label: 'Okay'}]} message={'Recipe added successfully!'}/>
+                <div className='recipe-containers custom-scroll' style={{ maxHeight: containerMaxHeight }} onClick={(e) => e.stopPropagation()}>
+                  {/* add recipe form */}
+                  <form className='add-recipe-form' onSubmit={handleAddRecipe}>
+                    <div className="form-group">
+                      <label htmlFor="recipe-title">Title</label>
+                      <input
+                        type="text"
+                        id="recipe-title"
+                        name="title"
+                        placeholder="Enter recipe title"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="recipe-ingredients">List of ingredients (comma separated)</label>
+                      <textarea
+                        id="recipe-ingredients"
+                        name="ingredients"
+                        placeholder="e.g. tomato, onion, garlic"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="recipe-tags">Tags (comma separated)</label>
+                      <input
+                        type="text"
+                        id="recipe-tags"
+                        name="tags"
+                        placeholder="e.g. vegan, quick, dinner"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="recipe-ingredient-amounts">Ingredients Amounts (bullet points)</label>
+                      <textarea
+                        id="recipe-ingredient-amounts"
+                        name="ingredientAmounts"
+                        placeholder="e.g. - 2 cups flour&#10;- 1 tsp salt"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="recipe-instructions">Instructions (numbered steps)</label>
+                      <textarea
+                        id="recipe-instructions"
+                        name="instructions"
+                        placeholder="e.g. 1. Preheat oven to 180°C&#10;2. Mix ingredients..."
+                      />
+                    </div>
+                    <button type='submit'>Add Recipe</button>
+                    <button type='reset'>Clear</button>
+                  </form>
+                </div>
+              </div>
+            }
+            {/* CLEAR MENU */}
+            {currentPage === 6 &&
+              <div className='clear-menu-tab'>
+                <div className='tab-title'>CLEAR MENU</div>
+                <div className='clear-menu-text'>
+                  <p>Are you sure you want to clear your weekly menu?</p>
+                  <p id='clear-menu-warning'>THIS ACTION IS IRREVERSIBLE.</p>
+                  <button id="clear-menu-confirm" onClick={handleClearMenu}>Clear</button>
+                  <button onClick={() => changePage(1)}>Cancel</button>
+                </div>
+              </div>
+            }
+
             <div className='popup' onClick={(e) => e.stopPropagation()}>
               <FilterPopup isOpen={isFilterOpen} onClose={closeFilter} availableTags={availableTags} availableIngredients={availableIngredients} onFiltersChange={handleFiltersChange} />
               <RecipeInfo isOpen={isInfoOpen} onClose={closeInfo} recipe={selectedRecipe} fromRecipeTab={true}/>
@@ -829,6 +965,12 @@ const RecipeTab = ({ userdata, setRecipeList, isOpenDrag, setIsOpenDrag,  }) => 
         </div>
         <div onClick={() => changePage(4)} className={`bookmark ${currentPage === 4 ? 'bookmark-active' : 'bookmark-inactive'}`}>
           <MdOutlineStarPurple500 size={30} />
+        </div>
+        <div onClick={() => changePage(5)} className={`bookmark ${currentPage === 5 ? 'bookmark-active' : 'bookmark-inactive'}`}>
+          <FaPlus size={30} />
+        </div>
+        <div onClick={() => changePage(6)} className={`bookmark ${currentPage === 6 ? 'bookmark-active' : 'bookmark-inactive'}`} id="clear-menu-bookmark">
+          <FaTrashAlt size={30} />
         </div>
       </div>
     </div>

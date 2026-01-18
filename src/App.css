@@ -31,6 +31,7 @@
   --color-green-hover: #5e7d4f9c;
   --color-green-muted-solid: #708871;
   --color-green-medium: #9fac7f;
+  --color-green-extra-light: #e7efcf;
   --color-green-light2: #799f73a8;
   /* Ingredient background color */
   --color-green-checkbox: #6fac6a93;
@@ -1020,6 +1021,42 @@ th {
   }
 }
 
+/* USER MADE RECIPE */
+.user-made-recipe {
+  border: solid 1px var(--color-transparent);
+  padding: 10px;
+  font-size: calc(10px + 1vmin);
+  cursor: default;
+
+  .tag {
+    display: inline-block;
+    background-color: var(--color-brown-medium3);
+    color: var(--color-background);
+    border-radius: 12px;
+    padding: 5px 10px;
+    margin: 5px 5px 5px 0;
+    font-size: calc(5px + 1vmin);
+  }
+
+  .ing {
+    display: inline-block;
+    background-color: var(--color-green-muted);
+    color: var(--color-background);
+    border-radius: 12px;
+    padding: 5px 10px;
+    margin: 5px 5px 5px 0;
+    font-size: calc(5px + 1vmin);
+  }
+
+  .user-recipe-subtext{
+    /* bottom of the parent container */
+    width: calc(100% - 20px);
+    font-size: calc(5px + 1vmin);
+    font-style: italic;
+    color: var(--color-setting-input);
+  }
+}
+
 /* QUICK INGREDIENT AT HOME*/
 .quickIngredient {
   display: flex;
@@ -1966,6 +2003,115 @@ th {
   border-bottom: 3px solid black;
   cursor: default;
 }
+
+/* ADD RECIPE TAB */
+.add-recipe-form {
+  display: block;
+  background-color: var(--color-green-extra-light);
+  padding: 1em;
+  .form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  input,
+  textarea {
+    padding: 8px;
+    border: transparent;
+    background-color: var(--color-green-light);
+    border-radius: 20px;
+    font-size: 1rem;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+  }
+
+  button[type="submit"] {
+    background-color: var(--button-browns);
+    color: var(--color-background);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button[type="submit"]:hover {
+    background-color: var(--button-browns-hover);
+  }
+
+  button[type="reset"]{
+    background-color: var(--color-red-light);
+    color: var(--color-background);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+  }
+
+  button[type="reset"]:hover {
+    background-color: var(--color-red-light2);
+  }
+}
+
+/* CLEAR MENU */
+.clear-menu-tab{
+  height: 90%;
+}
+
+.clear-menu-text {
+  background-color: var(--color-green-extra-light);
+  padding: 2vw;
+  min-height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  font-size: calc(10px + 2vmin);
+  cursor: default;
+
+  #clear-menu-warning {
+    color: var(--color-red-light);
+    font-size: calc(10px + 1vmin);
+    font-weight: bold;
+  }
+
+  button {
+    margin: 5px;
+    padding: 5px 10px;
+    background-color: var(--button-browns);
+    color: var(--color-background);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+  }
+
+  button:hover {
+    background-color: var(--button-browns-hover);
+  }
+
+  #clear-menu-confirm {
+    background-color: var(--color-red-light);
+  }
+
+  #clear-menu-confirm:hover {
+    background-color: var(--color-red-light2);
+  }
+}
+
+#clear-menu-bookmark {
+  background-color: var(--color-red-light2);
+}
+
+
 
 /* PREFERENCE */
 .pref {
